@@ -1,6 +1,7 @@
 name = "Li2Irrationality"
 version = "0.1.0"
 defaultTargets = ["Solution"]
+weakLeanArgs = ["-j1"]
 
 [leanOptions]
 autoImplicit = false
