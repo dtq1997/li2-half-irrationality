@@ -1,0 +1,17 @@
+name = "Li2Irrationality"
+version = "0.1.0"
+defaultTargets = ["Li2Half"]
+
+[leanOptions]
+autoImplicit = false
+
+[[require]]
+name = "mathlib"
+scope = "leanprover-community"
+rev = "5450b53e5ddc75d46418fabb605edbf36bd0beb6"
+
+[[lean_lib]]
+name = "Li2Unified"
+
+[[lean_lib]]
+name = "Li2Half"
