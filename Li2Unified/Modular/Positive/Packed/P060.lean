@@ -122,6 +122,11 @@ theorem arrowSix_det (a₀ a₁ a₂ b₀ b₁ b₂ z₀₀ z₀₁ z₁₁ c₀
   rw [hdet5]
   ring
 
+theorem arrowSix_symm (a₀ a₁ a₂ b₀ b₁ b₂ z₀₀ z₀₁ z₁₁ c₀ c₁ t : R) (k l : Fin 6) :
+    arrowSix a₀ a₁ a₂ b₀ b₁ b₂ z₀₀ z₀₁ z₁₁ c₀ c₁ t k l =
+      arrowSix a₀ a₁ a₂ b₀ b₁ b₂ z₀₀ z₀₁ z₁₁ c₀ c₁ t l k := by
+  fin_cases k <;> fin_cases l <;> rfl
+
 end
 end Li2Unified.ParameterFamily
 

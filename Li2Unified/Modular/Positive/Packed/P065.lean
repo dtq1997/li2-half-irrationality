@@ -109,8 +109,8 @@ def parameterEntryReferenceMatrix (lam : ℚ) (p : ℕ) :
 lemma parameterEntryReference_lowBlock_symm (lam : ℚ) (i j : Fin 2) : Li2Unified.ParameterFamily.fixedLowBlock lam i j = Li2Unified.ParameterFamily.fixedLowBlock lam j i := by
   fin_cases i <;> fin_cases j <;> rfl
 
-lemma parameterEntryReference_edgeBlock_symm (lam : ℚ) (k l : Fin 6) : fixedCornerBlock lam k l = fixedCornerBlock lam l k := by
-  fin_cases k <;> fin_cases l <;> rfl
+lemma parameterEntryReference_edgeBlock_symm (lam : ℚ) (k l : Fin 6) : fixedCornerBlock lam k l = fixedCornerBlock lam l k :=
+  Li2Unified.ParameterFamily.arrowSix_symm _ _ _ _ _ _ _ _ _ _ _ _ k l
 
 lemma parameterEntryReferenceMatrix_symm (lam : ℚ) (x y : PrimeBlockIndex p) :
     parameterEntryReferenceMatrix lam p x y = parameterEntryReferenceMatrix lam p y x := by
