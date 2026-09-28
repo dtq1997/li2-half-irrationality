@@ -226,7 +226,7 @@ end Li2Unified.Proofs.Potential
 end
 
 section
-/-! Real soundness of the reflection pilot's algebraic and endpoint steps.
+/-! Real soundness of the reflection checker's algebraic and endpoint steps.
 The checker supplies the Boolean enclosures; predecessor values and analytic
 endpoint bounds are explicit hypotheses. -/
 namespace Li2Unified.Proofs.Potential.KernelReflectionSelf

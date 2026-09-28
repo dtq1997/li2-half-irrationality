@@ -9,10 +9,10 @@ set_option backward.privateInPublic true
 section
 /-
 SPDX-License-Identifier: Apache-2.0
-Namespace/import-only port from mo271-Zeta5 f19a1960609f7d38e7b63fd2acb05e6f60a7b741,
+Namespace/import-only port from mo271/Zeta5 by Moritz Firsching (https://github.com/mo271/Zeta5), commit f19a1960609f7d38e7b63fd2acb05e6f60a7b741,
 Apery/ZeroMass.lean, source SHA256 da98dbebd42adefca6a958746ed38b036c56429bb266a13cd54978e33b6648bf.
 Upstream source is immutable. Mathematical bodies and hypotheses retained.
-See ../../../../../zeta5-irrationality-audit-2026-09-24/source/mo271-Zeta5/LICENSE.
+See licenses/LICENSE-Zeta5.txt.
 -/
 
 /-!

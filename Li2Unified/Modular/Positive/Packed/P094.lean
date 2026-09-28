@@ -131,7 +131,7 @@ end Li2Unified.Proofs.Contour
 end
 
 section
-/-! The actual positive-half determinant integral is bounded by the frozen
+/-! The actual positive-half determinant integral is bounded by the
 star partition function, with the original factorial and normalization. -/
 
 open Polynomial MeasureTheory Set

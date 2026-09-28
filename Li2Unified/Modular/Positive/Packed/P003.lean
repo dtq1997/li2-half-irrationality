@@ -9,7 +9,7 @@ set_option backward.privateInPublic true
 @[expose] public section
 
 section
-/-! Exact copy of the frozen residue-count core, isolated to avoid an import cycle.
+/-! Copy of the residue-count core, isolated to avoid an import cycle.
 The original Stage0 declarations remain in place; their definitions are definitionally equal. -/
 open Polynomial MeasureTheory
 open scoped BigOperators

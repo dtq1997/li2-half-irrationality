@@ -5,6 +5,8 @@ set_option backward.privateInPublic true
 
 @[expose] public section
 
+/- Adapted from Apery/Arith/BasisChange.lean in mo271/Zeta5 by Moritz Firsching (https://github.com/mo271/Zeta5, commit f19a1960609f7d38e7b63fd2acb05e6f60a7b741), Apache-2.0; see licenses/LICENSE-Zeta5.txt. -/
+
 /-! Generic polynomial Gram basis change, with basis vectors stored as rows. -/
 open Polynomial
 open scoped BigOperators

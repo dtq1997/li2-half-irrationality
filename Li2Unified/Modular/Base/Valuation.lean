@@ -10,6 +10,8 @@ set_option backward.privateInPublic true
 
 @[expose] public section
 
+/- Adapted from Apery/Arith/Val.lean in mo271/Zeta5 by Moritz Firsching (https://github.com/mo271/Zeta5, commit f19a1960609f7d38e7b63fd2acb05e6f60a7b741), Apache-2.0; see licenses/LICENSE-Zeta5.txt. -/
+
 /-!
 # A small `p`-adic valuation toolkit on `ℚ` and `ℚ[X]`
 

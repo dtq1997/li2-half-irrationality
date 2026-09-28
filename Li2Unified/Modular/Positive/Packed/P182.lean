@@ -142,7 +142,7 @@ namespace Li2Unified.Proofs.Arithmetic
 noncomputable section
 open Li2Unified.Instances.PosHalf.LayerComparison
 
-/-- The frozen energy-bridge conclusion follows from the one independent
+/-- The energy-bridge conclusion follows from the one independent
 distinct-center discrete logarithmic energy theorem. -/
 theorem star_actual_energy_bridge_of_discrete_energy
     (hgeneral : ∀ (h : ℕ), 0 < h → ∀ (x : Fin h → ℂ),

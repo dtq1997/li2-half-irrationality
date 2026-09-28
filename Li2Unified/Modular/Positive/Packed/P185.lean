@@ -14,10 +14,10 @@ set_option backward.privateInPublic true
 section
 /-
 SPDX-License-Identifier: Apache-2.0
-Port from mo271-Zeta5 f19a1960609f7d38e7b63fd2acb05e6f60a7b741,
+Port from mo271/Zeta5 by Moritz Firsching (https://github.com/mo271/Zeta5), commit f19a1960609f7d38e7b63fd2acb05e6f60a7b741,
 Apery/Kernel.lean, source SHA256 8556966a93a1c5d1243de9ef00c814bdf056f58f2f9ae7009d6947c6d3653e1b.
 Only namespace/imports and installed finite-sum API spelling adapted.
-Upstream license: ../../../../../zeta5-irrationality-audit-2026-09-24/source/mo271-Zeta5/LICENSE.
+Upstream license: licenses/LICENSE-Zeta5.txt.
 -/
 
 /-!
@@ -242,10 +242,10 @@ end
 section
 /-
 SPDX-License-Identifier: Apache-2.0
-Port from mo271-Zeta5 f19a1960609f7d38e7b63fd2acb05e6f60a7b741,
+Port from mo271/Zeta5 by Moritz Firsching (https://github.com/mo271/Zeta5), commit f19a1960609f7d38e7b63fd2acb05e6f60a7b741,
 Apery/EnergyLimit.lean, source SHA256 c515638dd5e92fcda9b1d5c6ee3265e047250cad858a2c3be51ffc4477ce5ac3.
 Only namespace/imports and installed finite-sum API spelling adapted.
-Upstream license: ../../../../../zeta5-irrationality-audit-2026-09-24/source/mo271-Zeta5/LICENSE.
+Upstream license: licenses/LICENSE-Zeta5.txt.
 -/
 
 /-!

@@ -8,9 +8,9 @@ set_option backward.privateInPublic true
 @[expose] public section
 /-
 SPDX-License-Identifier: Apache-2.0
-Adapted from Apery/CircleAtoms.lean in https://github.com/mo271/Zeta5,
+Adapted from Apery/CircleAtoms.lean in mo271/Zeta5 by Moritz Firsching (https://github.com/mo271/Zeta5),
 commit f19a1960609f7d38e7b63fd2acb05e6f60a7b741.
-See ../LICENSE-Zeta5 for the upstream Apache 2.0 license.
+See licenses/LICENSE-Zeta5.txt for the upstream Apache 2.0 license.
 Narrow imports and Li2 namespace; retain only the stated logarithmic
 integral tools; replace old circle fibers by fixed Mathlib countable preimages.
 -/

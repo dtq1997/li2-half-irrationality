@@ -7,7 +7,7 @@ set_option backward.privateInPublic true
 @[expose] public section
 
 section
-/-! The three literal star arms are integrable for the frozen product measure. -/
+/-! The three literal star arms are integrable for the product measure. -/
 
 open Polynomial MeasureTheory Set
 namespace Li2Unified.Proofs.Contour

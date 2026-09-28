@@ -1,0 +1,33 @@
+This repository contains a Lean 4 proof that Li₂(1/2) = ∑_{n ≥ 1} 2⁻ⁿ / n² is irrational.
+
+The Lean code was written with substantial assistance from AI systems
+(OpenAI Codex, Anthropic Claude).
+
+It includes code adapted from the following Apache-2.0 projects. Each adapted file
+names its source in a comment.
+
+mo271/Zeta5 (irrationality of ζ(5)), by Moritz Firsching
+  https://github.com/mo271/Zeta5, commit f19a1960609f7d38e7b63fd2acb05e6f60a7b741
+  Licence: licenses/LICENSE-Zeta5.txt
+  Li2Unified/Modular/Base/: Andreief, CircleLogTools, ClassBasis, Criterion, Gram,
+    IntegralPolynomials, NumeratorFunctional, SimplePoles, Valuation
+  Li2Unified/Modular/Positive/Packed/: sections of P183, P184, P185
+
+Prime Number Theorem and More, organised by Alex Kontorovich and Terence Tao
+  https://github.com/AlexKontorovich/PrimeNumberTheoremAnd,
+  commit d7f9e2bfdcc7e34dfb9328b7494a6d424ff50c96
+  Licence: licenses/LICENSE-PNT.txt
+  Li2Unified/Modular/Base/: DecayPNTConsequences, DecayPNTFourier, DecayPNTSmooth,
+    DecayPNTSobolev, DecayPNTWiener1, DecayPNTWiener2a, DecayPNTWiener2b,
+    DecayPNTWiener3, DecayPNTWiener4a, DecayPNTWiener4b, DecayPNTWiener5a,
+    DecayPNTWiener5b, DecayPNTWiener6a, DecayPNTWiener6b, DecayPNTWiener6c
+
+Residue theorem for rectangular contours, by Jeremy Tan
+  Mathlib draft pull request #39232,
+  https://github.com/leanprover-community/mathlib4/pull/39232,
+  commit cad38f70f5a649a40dbb3b334055a8e9aff69af5
+  Licence: licenses/LICENSE-Mathlib.txt
+  Li2Unified/Modular/Base/RectangleResidue
+
+The project depends on Mathlib (https://github.com/leanprover-community/mathlib4),
+pinned in lake-manifest.json.

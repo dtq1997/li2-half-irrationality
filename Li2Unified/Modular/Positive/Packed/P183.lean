@@ -109,10 +109,9 @@ end Li2Unified.Proofs.Contour
 end
 
 section
-/- Minimal source port from mo271-Zeta5 f19a1960609f7d38e7b63fd2acb05e6f60a7b741
-Apery/Gaussian.lean, source SHA256 0cf5a66486f68b8786c9bada90ce0ef7ba5b7d90a7748d4d2ddafc85593ea3c3.
-Only namespace changed at initial port; no original source modified.
-Target toolchain stays Lean4.30.0-rc2. Compilation/axioms required before use. -/
+/- Port of Apery/Gaussian.lean (source SHA256 0cf5a66486f68b8786c9bada90ce0ef7ba5b7d90a7748d4d2ddafc85593ea3c3)
+from mo271/Zeta5 by Moritz Firsching (https://github.com/mo271/Zeta5, commit f19a1960609f7d38e7b63fd2acb05e6f60a7b741), Apache-2.0; see licenses/LICENSE-Zeta5.txt.
+Only the namespace was changed. -/
 
 /-!
 # Gaussian identity and Fubini helpers for the logarithmic energy

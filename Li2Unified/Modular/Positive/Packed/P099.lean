@@ -11,7 +11,7 @@ set_option backward.privateInPublic true
 @[expose] public section
 
 section
-/-! The actual normalized positive-real product has the frozen ray potential
+/-! The actual normalized positive-real product has the ray potential
 with a fully explicit logarithmic error. -/
 
 open Polynomial MeasureTheory Set

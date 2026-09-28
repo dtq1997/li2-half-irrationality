@@ -11,7 +11,7 @@ set_option backward.privateInPublic true
 @[expose] public section
 
 section
-/-! The literal three-arm weight bound used by the frozen half-analytic stage. -/
+/-! The literal three-arm weight bound used by the half-analytic step. -/
 
 open Polynomial MeasureTheory Set
 namespace Li2Unified.Proofs.Contour

@@ -6,7 +6,7 @@ set_option backward.privateInPublic true
 @[expose] public section
 
 section
-/-! Pure integer-pair checker for the ray-007 reflection pilot.
+/-! Pure integer-pair checker for the reflection checker.
 The denominator is checked, not normalized. Each step reads stored predecessor
 bounds, so multiplication does not recursively expand the whole trace. -/
 namespace Li2Unified.Proofs.Potential.KernelReflectionSelf

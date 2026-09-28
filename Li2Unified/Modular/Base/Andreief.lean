@@ -14,7 +14,8 @@ set_option backward.privateInPublic true
 
 For real or complex valued functions `f i, g j : ℝ → 𝕜` with `f i * g j` integrable,
 `det (∫ f i g j dμ) = (1/n!) ∫ det (f i (x j)) det (g i (x j)) dμⁿ(x)`.
-Adapted from Apery.Andreief and generalized to RCLike codomain; this does not
+Adapted from Apery/Andreief.lean in mo271/Zeta5 by Moritz Firsching (https://github.com/mo271/Zeta5, commit f19a1960609f7d38e7b63fd2acb05e6f60a7b741), Apache-2.0; see licenses/LICENSE-Zeta5.txt.
+It is generalized to RCLike codomain; this does not
 identify the Li2 contour moments or prove their integrability.
 -/
 
