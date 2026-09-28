@@ -32,7 +32,7 @@ theorem coverFrom_contains {start finish : QPair} {boxes : List BoxCert}
       have hleft : (box.left.toRat : ℝ) = (start.toRat : ℝ) := by
         exact_mod_cast hleftQ
       by_cases hxr : x ≤ (box.right.toRat : ℝ)
-      · exact ⟨box, by simp, by simpa only [hleft] using hx.1, hxr⟩
+      · exact ⟨box, by simp, by simpa only [hleft] using! hx.1, hxr⟩
       · have hxr' : (box.right.toRat : ℝ) < x := lt_of_not_ge hxr
         have hnonempty : boxes ≠ [] := by
           intro he
@@ -97,7 +97,7 @@ theorem checkParts_length {p : Prepared} {a b : QPair}
       | nil => simp [checkParts] at hc
       | cons c cs =>
           simp only [checkParts, Bool.and_eq_true] at hc
-          simpa only [List.length_cons] using congrArg Nat.succ (ih hc.2)
+          simpa only [List.length_cons] using! congrArg Nat.succ (ih hc.2)
 
 theorem checkParts_coeff_valid {p : Prepared} {a b : QPair}
     {terms : List Term} {parts : List PartCert}
@@ -140,7 +140,7 @@ theorem checkParts_sound {steps : List Step} {p : Prepared}
           simp only [checkParts, Bool.and_eq_true] at hc
           have hs := add_le_add (checkPart_sound hp hc.1 hab hx) (ih hc.2)
           simp only [List.map_cons, List.sum_cons]
-          convert hs using 1 <;> ring
+          convert! hs using 1 <;> ring
 
 private theorem mapped_rat_sum_real {α : Type} (f : α → ℚ) (xs : List α) :
     (((xs.map f).sum : ℚ) : ℝ) = (xs.map (fun y => (f y : ℝ))).sum := by
@@ -199,7 +199,7 @@ theorem checkOne_sound {terms : List Term} {upper : QPair} {data : BoxData}
             qLE (qAdd data.box.alpha
               (qMul (qAbs data.box.beta) (radius data.box.left data.box.right)))
               upper = true) := by
-        simpa only [checkOne, hp, Bool.and_eq_true] using hc
+        simpa only [checkOne, hp, Bool.and_eq_true] using! hc
       obtain ⟨hu, hbox, hupper⟩ := hh
       obtain ⟨ha, hb, _, halpha, hbeta⟩ := checkBox_fields hbox
       have habs := qAbs_valid' hbeta

@@ -82,7 +82,7 @@ lemma outerWindow_intervals_partition (n : ℕ) (f : ℕ → ℝ) :
       ∑ p ∈ Finset.Ioc n (4*n), (f p) := by
   have hn : 0 ≤ (n : ℝ) := Nat.cast_nonneg n
   have h01 : n ≤ ⌊(4/3 : ℝ)*(n : ℝ)⌋₊ := by
-    simpa only [Nat.floor_natCast] using
+    simpa only [Nat.floor_natCast] using!
       Nat.floor_le_floor (show (n : ℝ) ≤ (4/3 : ℝ)*(n : ℝ) by linarith only [hn])
   have h12 : ⌊(4/3 : ℝ)*(n : ℝ)⌋₊ ≤ ⌊(3/2 : ℝ)*(n : ℝ)⌋₊ :=
     Nat.floor_le_floor (by linarith only [hn])
@@ -115,7 +115,7 @@ theorem outerPrimeBound_sum_nat_tendsto :
     Tendsto (fun n : ℕ =>
       (∑ p ∈ Finset.Ioc n (4*n), ((Li2.outerPrimeBound p n : ℝ)*cPrime p))/(n : ℝ)^2)
       atTop (𝓝 (7/2 : ℝ)) := by
-  simpa only [← outerWindowSum_eq_table] using outerWindowSum_nat_tendsto
+  simpa only [← outerWindowSum_eq_table] using! outerWindowSum_nat_tendsto
 
 end
 end Li2.PrimeSums

@@ -26,7 +26,7 @@ theorem primeDiscContribution_cube_factor_bound (hp4 : 3 < p)
   · have he : a = (⟨0,by omega⟩ : Fin p) := Fin.ext hz
     rw [he] at hT ⊢
     rw [primeDiscContribution_cube_zero]
-    simpa only [primeDiscCubeGain, Fin.val_mk, ite_true, Nat.add_zero, coeff_map, norm_pow] using
+    simpa only [primeDiscCubeGain, Fin.val_mk, ite_true, Nat.add_zero, coeff_map, norm_pow] using!
       primeDiscTest_U_substituted_factor_bound hp4 T (⟨0,by omega⟩ : Fin p) m
         (primeEta (p := p) (by omega) (by omega)) hT n
   · by_cases hl : a.val ≤ p-4
@@ -34,7 +34,7 @@ theorem primeDiscContribution_cube_factor_bound (hp4 : 3 < p)
           (primeEta (p := p) (by omega) (by omega))).map
           (algebraMap ℤ_[p] ℚ_[p])).coeff l‖ ≤ ‖(p:ℚ_[p])‖^m := by
         intro l
-        simpa only [coeff_map,norm_pow] using primeDiscTestScaled_factor_bound hp4 T a m
+        simpa only [coeff_map,norm_pow] using! primeDiscTestScaled_factor_bound hp4 T a m
           (primeEta (p := p) (by omega) (by omega)) hT l
       have he : C ((p:ℚ_[p])^3)*primeDiscContribution hp4 a T =
           C ((p:ℚ_[p])^1)*(C ((p:ℚ_[p])^2)*primeDiscContribution hp4 a T) := by
@@ -42,12 +42,12 @@ theorem primeDiscContribution_cube_factor_bound (hp4 : 3 < p)
         ring
       rw [he,primeDiscContribution_scaled_low hp4 a (by omega) hl,
         primeDiscCubeGain,if_neg hz,if_pos hl]
-      simpa only [Nat.add_comm] using fieldPolynomial_prime_power_bound _ 1 m h n
+      simpa only [Nat.add_comm] using! fieldPolynomial_prime_power_bound _ 1 m h n
     · have h : ∀ l, ‖((primeDiscTestScaled hp4 a T
           (primeEta (p := p) (by omega) (by omega))).map
           (algebraMap ℤ_[p] ℚ_[p])).coeff l‖ ≤ ‖(p:ℚ_[p])‖^m := by
         intro l
-        simpa only [coeff_map,norm_pow] using primeDiscTestScaled_factor_bound hp4 T a m
+        simpa only [coeff_map,norm_pow] using! primeDiscTestScaled_factor_bound hp4 T a m
           (primeEta (p := p) (by omega) (by omega)) hT l
       have he : C ((p:ℚ_[p])^3)*primeDiscContribution hp4 a T =
           C ((p:ℚ_[p])^2)*(C (p:ℚ_[p])*primeDiscContribution hp4 a T) := by
@@ -55,7 +55,7 @@ theorem primeDiscContribution_cube_factor_bound (hp4 : 3 < p)
         ring
       rw [he,primeDiscContribution_linear_high hp4 a (by omega),
         primeDiscCubeGain,if_neg hz,if_neg hl]
-      simpa only [Nat.add_comm] using fieldPolynomial_prime_power_bound _ 2 m h n
+      simpa only [Nat.add_comm] using! fieldPolynomial_prime_power_bound _ 2 m h n
 
 theorem primeOriginalBasisProduct_cube_disc_bound (hp4 : 3 < p)
     (i j : Fin (2*(p-1))) (a : Fin p) (n : ℕ) :
@@ -90,7 +90,7 @@ theorem primeNumerator_cube_bound_of_disc_bounds (hp4 : 3 < p)
   have h := fieldPolynomial_integral_weight_bound
     (C ((p:ℚ_[p])^3)*primeDiscContribution hp4 a T)
     ((-2:ℤ_[p])^a.val) _ (hdisc a) n
-  simpa only [PadicInt.coe_pow,PadicInt.coe_neg,PadicInt.coe_natCast] using h
+  simpa only [PadicInt.coe_pow,PadicInt.coe_neg,PadicInt.coe_natCast] using! h
 
 lemma primeJet_pair_disc_factor (a b : PrimeJet p) (c : Fin p) :
     ∃ E : ℤ[X], (primeJetPoly p a*primeJetPoly p b).comp (primeDiscSubstitution p c) =

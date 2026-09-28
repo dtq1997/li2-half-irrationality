@@ -59,12 +59,12 @@ lemma hasDerivAt_perpendicularPrimitive {b : ℝ} (hb : 0 < b) (x : ℝ) :
     <;> ring
   have hlog : HasDerivAt (fun t : ℝ => Real.log (t^2+b^2))
       (2*x/(x^2+b^2)) x := by
-    convert (((hasDerivAt_id x).pow 2).add_const (b^2)).log hQ using 1
+    convert! (((hasDerivAt_id x).pow 2).add_const (b^2)).log hQ using 1
     <;> norm_num
     <;> ring
   have hatan : HasDerivAt (fun t : ℝ => Real.arctan (t/b))
       (b/(x^2+b^2)) x := by
-    convert ((hasDerivAt_id x).div_const b).arctan using 1
+    convert! ((hasDerivAt_id x).div_const b).arctan using 1
     dsimp only [id_eq]
     rw [hquot]
     field_simp [hb0, hQ]
@@ -75,7 +75,7 @@ lemma hasDerivAt_perpendicularPrimitive {b : ℝ} (hb : 0 < b) (x : ℝ) :
       ((((hasDerivAt_id x).pow 2).const_mul Real.pi).div_const 4)
   have hh := h.add
     ((((hasDerivAt_const x (b^2)).sub ((hasDerivAt_id x).pow 2)).div_const 2).mul hatan)
-  convert hh using 1
+  convert! hh using 1
   <;> dsimp [perpendicularPrimitive, perpendicularSlice]
   <;> field_simp [hQ]
   <;> ring
@@ -109,7 +109,7 @@ lemma integral_integral_log_norm_perpendicular_from_zero {a b : ℝ}
     (ha : 0 ≤ a) (hb : 0 < b) :
     (∫ x in (0:ℝ)..a, ∫ y in (0:ℝ)..b, Real.log ‖(x:ℂ)+(y:ℂ)*Complex.I‖) =
       perpendicularPrimitive b a := by
-  simpa [perpendicularPrimitive] using
+  simpa [perpendicularPrimitive] using!
     integral_integral_log_norm_perpendicular hb (le_refl 0) ha
 
 end
@@ -173,7 +173,7 @@ lemma integral_log_norm_symmetric_perpendicular {x b : ℝ}
     simp only [f, Li2.log_norm_real_add_imag, neg_sq]
   have hneg : (∫ y in -b..(0:ℝ), f y) = ∫ y in (0:ℝ)..b, f y := by
     have h := intervalIntegral.integral_comp_neg (f := f) (a := (0:ℝ)) (b := b)
-    simpa only [heven, neg_zero] using h.symm
+    simpa only [heven, neg_zero] using! h.symm
   change (∫ y in -b..b, f y) = _
   rw [← intervalIntegral.integral_add_adjacent_intervals (hf (-b) 0) (hf 0 b), hneg]
   have hpos : (∫ y in (0:ℝ)..b, f y) = perpendicularSlice b x :=
@@ -210,12 +210,12 @@ lemma horizontal_ray_integral (r x : ℝ) :
     (∫ t in (0:ℝ)..r, Real.log ‖(t:ℂ)-(x:ℂ)‖) =
       logPrimitive (r-x)-logPrimitive (-x) := by
   simp_rw [log_norm_real_sub_real]
-  simpa only [zero_sub] using integral_log_shift 0 r x
+  simpa only [zero_sub] using! integral_log_shift 0 r x
 
 lemma horizontal_vertical_integral {r y : ℝ} (hr : 0 < r) (hy : 0 ≤ y) :
     (∫ t in (0:ℝ)..r, Real.log ‖(t:ℂ)-(y:ℂ)*Complex.I‖) =
       perpendicularSlice r y := by
-  convert integral_log_norm_perpendicular hr hy using 1
+  convert! integral_log_norm_perpendicular hr hy using 1
   apply intervalIntegral.integral_congr
   intro t _
   change Real.log ‖(t:ℂ)-(y:ℂ)*Complex.I‖ =
@@ -250,7 +250,7 @@ lemma horizontal_reflection_norm (t y : ℝ) :
     ‖(t:ℂ)-(-(y:ℂ))*Complex.I‖ = ‖(t:ℂ)-(y:ℂ)*Complex.I‖ := by
   have h := Complex.norm_conj ((t:ℂ)-(y:ℂ)*Complex.I)
   simpa only [map_sub, map_mul, Complex.conj_ofReal, Complex.conj_I, mul_neg, neg_mul]
-    using h
+    using! h
 
 lemma layer_potential_reflection (s : StarLayer) (y : ℝ) :
     (∫ x in s.left..s.right, Real.log ‖(x:ℂ)*s.direction-(-(y:ℂ))*Complex.I‖) =
@@ -303,10 +303,10 @@ theorem baseRay_eq_primitives (x : ℝ) :
       (logPrimitive (4+x)-logPrimitive x) := by
   have h1 : (∫ t in (0:ℝ)..1, Real.log (t+x)) =
       logPrimitive (1+x)-logPrimitive x := by
-    simpa only [sub_neg_eq_add, zero_add] using integral_log_shift 0 1 (-x)
+    simpa only [sub_neg_eq_add, zero_add] using! integral_log_shift 0 1 (-x)
   have h4 : (∫ t in (0:ℝ)..4, Real.log (t+x)) =
       logPrimitive (4+x)-logPrimitive x := by
-    simpa only [sub_neg_eq_add, zero_add] using integral_log_shift 0 4 (-x)
+    simpa only [sub_neg_eq_add, zero_add] using! integral_log_shift 0 4 (-x)
   simp only [baseRay, h1, h4]
 
 theorem baseVertical_eq_primitives (y : ℝ) (hy : 0 ≤ y) :
@@ -314,11 +314,11 @@ theorem baseVertical_eq_primitives (y : ℝ) (hy : 0 ≤ y) :
       3*perpendicularSlice 1 y-perpendicularSlice 4 y := by
   have h1 : (∫ t in (0:ℝ)..1,
       Real.log ‖(t:ℂ)+(y:ℂ)*Complex.I‖) = perpendicularSlice 1 y := by
-    simpa only [log_norm_coordinate_swap y] using
+    simpa only [log_norm_coordinate_swap y] using!
       (integral_log_norm_perpendicular (b:=1) (x:=y) (by norm_num) hy)
   have h4 : (∫ t in (0:ℝ)..4,
       Real.log ‖(t:ℂ)+(y:ℂ)*Complex.I‖) = perpendicularSlice 4 y := by
-    simpa only [log_norm_coordinate_swap y] using
+    simpa only [log_norm_coordinate_swap y] using!
       (integral_log_norm_perpendicular (b:=4) (x:=y) (by norm_num) hy)
   simp only [baseVertical, h1, h4]
 

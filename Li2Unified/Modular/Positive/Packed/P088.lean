@@ -31,9 +31,9 @@ private lemma arm_integrable (d : ℕ) (F : ℚ[X]) (b : Fin 3) :
       Li2.originalComplexQuotient d F (point v.1 v.2)) (armMeasure b) := by
   rw [armMeasure, (arm_embedding b).integrable_map_iff]
   fin_cases b
-  · simpa using ray_density_integrableOn d F
-  · simpa using up_density_integrableOn d F
-  · simpa using down_density_integrableOn d F
+  · simpa using! ray_density_integrableOn d F
+  · simpa using! up_density_integrableOn d F
+  · simpa using! down_density_integrableOn d F
 
 lemma actual_star_moment_integrable (d : ℕ) (F : ℚ[X]) :
     Integrable (fun v : Fin 3 × ℝ => density v.1 v.2 *
@@ -49,11 +49,11 @@ lemma starMoment_eq_arm_integrals (d : ℕ) (F : ℚ[X]) :
   unfold starMoment
   rw [contourMeasure_eq_arm_sum]
   rw [integral_sum_measure (by
-    simpa only [← contourMeasure_eq_arm_sum] using actual_star_moment_integrable d F)]
+    simpa only [← contourMeasure_eq_arm_sum] using! actual_star_moment_integrable d F)]
   rw [tsum_fintype]
   apply Finset.sum_congr rfl
   intro b _
-  simpa only [armMeasure] using
+  simpa only [armMeasure] using!
     (arm_embedding b).integral_map
       (fun v : Fin 3 × ℝ => density v.1 v.2 *
         Li2.originalComplexQuotient d F (point v.1 v.2))

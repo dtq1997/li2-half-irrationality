@@ -24,7 +24,7 @@ def QPair.toRat (q : QPair) : ℚ := (q.num : ℚ) / (q.den : ℚ)
 def I.toBounds (i : I) : RationalBounds := ⟨i.lo.toRat, i.hi.toRat⟩
 
 theorem qValid_pos {q : QPair} (h : qValid q = true) : 0 < q.den := by
-  exact of_decide_eq_true (by simpa only [qValid] using h)
+  exact of_decide_eq_true (by simpa only [qValid] using! h)
 
 theorem qLE_sound {a b : QPair}
     (ha : qValid a = true) (hb : qValid b = true)
@@ -32,7 +32,7 @@ theorem qLE_sound {a b : QPair}
   have ha' : (0 : ℚ) < a.den := by exact_mod_cast qValid_pos ha
   have hb' : (0 : ℚ) < b.den := by exact_mod_cast qValid_pos hb
   have hc : a.num * Int.ofNat b.den ≤ b.num * Int.ofNat a.den :=
-    of_decide_eq_true (by simpa only [qLE] using h)
+    of_decide_eq_true (by simpa only [qLE] using! h)
   have hc' : (a.num : ℚ) * (b.den : ℚ) ≤ (b.num : ℚ) * (a.den : ℚ) := by
     exact_mod_cast hc
   exact (div_le_div_iff₀ ha' hb').mpr hc'
@@ -43,7 +43,7 @@ theorem qLT_sound {a b : QPair}
   have ha' : (0 : ℚ) < a.den := by exact_mod_cast qValid_pos ha
   have hb' : (0 : ℚ) < b.den := by exact_mod_cast qValid_pos hb
   have hc : a.num * Int.ofNat b.den < b.num * Int.ofNat a.den :=
-    of_decide_eq_true (by simpa only [qLT] using h)
+    of_decide_eq_true (by simpa only [qLT] using! h)
   have hc' : (a.num : ℚ) * (b.den : ℚ) < (b.num : ℚ) * (a.den : ℚ) := by
     exact_mod_cast hc
   exact (div_lt_div_iff₀ ha' hb').mpr hc'
@@ -52,7 +52,7 @@ theorem qEq_sound {a b : QPair}
     (ha : qValid a = true) (hb : qValid b = true)
     (h : qEq a b = true) : a.toRat = b.toRat := by
   have h' : qLE a b = true ∧ qLE b a = true := by
-    simpa only [qEq, Bool.and_eq_true] using h
+    simpa only [qEq, Bool.and_eq_true] using! h
   exact le_antisymm (qLE_sound ha hb h'.1) (qLE_sound hb ha h'.2)
 
 theorem qLE_complete {a b : QPair}
@@ -87,17 +87,17 @@ theorem qValid_qAdd {a b : QPair}
     (ha : qValid a = true) (hb : qValid b = true) :
     qValid (qAdd a b) = true := by
   simp only [qValid, qAdd, decide_eq_true_eq]
-  exact Nat.mul_pos (qValid_pos ha) (qValid_pos hb)
+  exact decide_eq_true (Nat.mul_pos (qValid_pos ha) (qValid_pos hb))
 
 theorem qValid_qNeg {a : QPair} (ha : qValid a = true) :
     qValid (qNeg a) = true := by
-  simpa only [qValid, qNeg] using ha
+  simpa only [qValid, qNeg] using! ha
 
 theorem qValid_qMul {a b : QPair}
     (ha : qValid a = true) (hb : qValid b = true) :
     qValid (qMul a b) = true := by
   simp only [qValid, qMul, decide_eq_true_eq]
-  exact Nat.mul_pos (qValid_pos ha) (qValid_pos hb)
+  exact decide_eq_true (Nat.mul_pos (qValid_pos ha) (qValid_pos hb))
 
 theorem toRat_qMin (a b : QPair)
     (ha : qValid a = true) (hb : qValid b = true) :
@@ -229,7 +229,7 @@ lemma mulLogAbs_antitone_quarter {a x b : ℝ}
 
 lemma mulLogAbs_cross_zero {x r : ℝ} (hx : |x| ≤ r) (hr : r ≤ 1/4) :
     |mulLogAbs x| ≤ -r*Real.log r := by
-  simpa only [mulLogAbs, Real.log_abs] using abs_mul_log_le_radius x r hx hr
+  simpa only [mulLogAbs, Real.log_abs] using! abs_mul_log_le_radius x r hx hr
 
 end
 end Li2Unified.Proofs.Potential
@@ -307,7 +307,7 @@ theorem lookupExpr_cons (env : ExprEnv) (s : Step) (e : Expr) (id : ℕ) :
   by_cases h : s.id = id
   · simp [lookupExpr, List.find?, h]
   · have hb : (s.id == id) = false := by
-      simpa using (beq_eq_false_iff_ne.mpr h)
+      simpa using! (beq_eq_false_iff_ne.mpr h)
     simp [lookupExpr, List.find?, hb]
 
 theorem lookupExpr_cons_preserve (env : ExprEnv) (s : Step) (e : Expr)
@@ -338,7 +338,7 @@ theorem reifyGo_lookup_preserve {env final : ExprEnv} {ss : List Step}
           | none => simp [reifyGo, hfresh, hop] at h
           | some e =>
               have ht : reifyGo ((s, e) :: env) ss = some final := by
-                simpa [reifyGo, hfresh, hop] using h
+                simpa [reifyGo, hfresh, hop] using! h
               intro id ei hi
               exact ih ht id ei (lookupExpr_cons_preserve env s e hfresh hi)
 
@@ -389,7 +389,7 @@ theorem reifyOp_denote {x : ℝ} {env final : ExprEnv} {op : Op} {e : Expr}
       | some ea =>
           simp [reifyOp, ha] at hop
           subst e
-          simpa only [evalOp] using (hval a ea ha).symm
+          simpa only [evalOp] using! (hval a ea ha).symm
   | add a b =>
       cases ha : lookupExpr env a with
       | none => simp [reifyOp, ha] at hop
@@ -476,7 +476,7 @@ theorem reifyGo_stepSem {x : ℝ} {env final : ExprEnv} {steps : List Step}
           | none => simp [reifyGo, hfresh, hop] at h
           | some e =>
               have ht : reifyGo ((s, e) :: env) ss = some final := by
-                simpa [reifyGo, hfresh, hop] using h
+                simpa [reifyGo, hfresh, hop] using! h
               have hpres := reifyGo_lookup_preserve ht
               have hpres0 : ∀ id ei, lookupExpr env id = some ei →
                   lookupExpr final id = some ei := by
@@ -495,7 +495,7 @@ theorem reifyGo_stepSem {x : ℝ} {env final : ExprEnv} {steps : List Step}
 theorem reifyTrace_stepSem {x : ℝ} {steps : List Step} {env : ExprEnv}
     (h : reifyTrace steps = some env) :
     ∀ s ∈ steps, StepSem x (valuation x env) s := by
-  exact reifyGo_stepSem (by simpa only [reifyTrace] using h)
+  exact reifyGo_stepSem (by simpa only [reifyTrace] using! h)
 
 #print axioms valuation_of_lookupExpr
 #print axioms reifyTrace_stepSem
@@ -528,12 +528,12 @@ theorem F_hasDerivAt {r : ℝ} (hr : 0 < r) (t : ℝ) :
     field_simp [hr0]
   have hatan : HasDerivAt (fun s : ℝ => Real.arctan (s / r))
       (r / (r ^ 2 + t ^ 2)) t := by
-    convert ((hasDerivAt_id t).div_const r).arctan using 1
+    convert! ((hasDerivAt_id t).div_const r).arctan using 1
     dsimp only [id_eq]
     rw [hquot]
     field_simp [hr0, hq]
   have h := (((hlog.const_mul r).div_const 2).sub ((hasDerivAt_id t).mul hatan))
-  convert h using 1
+  convert! h using 1
   dsimp only [F, Pi.sub_apply, Pi.mul_apply, id_eq]
   field_simp [hr0, hq]
   <;> ring

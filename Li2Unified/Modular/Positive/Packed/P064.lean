@@ -33,13 +33,13 @@ private lemma near_mul {x x' y y' : ℚ_[p]} (hx : ‖x‖ ≤ 1) (hy : ‖y‖ 
   apply (IsUltrametricDist.norm_add_le_max _ _).trans
   apply max_le
   · rw [norm_mul]
-    simpa using mul_le_mul hxx hy (norm_nonneg _) (norm_nonneg _)
+    simpa using! mul_le_mul hxx hy (norm_nonneg _) (norm_nonneg _)
   · rw [norm_mul]
-    simpa using mul_le_mul hx' hyy (norm_nonneg _) (by norm_num : (0:ℝ) ≤ 1)
+    simpa using! mul_le_mul hx' hyy (norm_nonneg _) (by norm_num : (0:ℝ) ≤ 1)
 
 private lemma near_sq {x x' : ℚ_[p]} (hx : ‖x‖ ≤ 1)
     (hxx : ‖x-x'‖ ≤ ‖(p:ℚ_[p])‖) : ‖x^2-x'^2‖ ≤ ‖(p:ℚ_[p])‖ := by
-  simpa only [pow_two] using near_mul hx hx hxx hxx
+  simpa only [pow_two] using! near_mul hx hx hxx hxx
 
 private def zeroCoefficient (hp4 : 3 < p) : ℤ_[p] :=
   (primeLocalUnit p ⟨0,by omega⟩:ℤ_[p])^2 * primeDiscUnitConstant 0 (by omega)
@@ -59,7 +59,7 @@ private lemma zeroCoefficient_norm (hp4 : 3 < p) :
   have h := near_mul hc2 (PadicInt.norm_le_one (primeDiscUnitConstant (p := p) 0 (by omega)))
     (near_sq hc (primeLocalUnit_zero_norm hp4)) (primeDiscUnitConstant_zero_norm hp4)
   norm_num [show ((6:ℤ_[p]):ℚ_[p]) = 6 from rfl] at h
-  simpa [zeroCoefficient] using h
+  simpa [zeroCoefficient] using! h
 
 private lemma highCoefficient_norm (lam : ℚ)
     (hu : lam ≠ 0 ∧ padicValRat p lam = 0)
@@ -77,7 +77,7 @@ private lemma highCoefficient_norm (lam : ℚ)
     (parameterHighRationalWeight_norm lam hu hferm hp4 ell)
     (near_sq hc (primeHighRationalLocalUnit_norm hp4 ell))
   simpa only [highCoefficient,PadicInt.coe_mul,PadicInt.coe_pow,PadicInt.coe_intCast,
-    Rat.cast_mul,Rat.cast_pow] using h
+    Rat.cast_mul,Rat.cast_pow] using! h
 
 theorem parameterTopLeadingSum_norm (lam : ℚ)
     (hu : lam ≠ 0 ∧ padicValRat p lam = 0)
@@ -101,7 +101,7 @@ theorem parameterTopLeadingSum_norm (lam : ℚ)
       change (-2:ℚ)*(1/2)^2+(lam/2)*(-1)^2+(-2*lam^2/3)*(1/2)^2 = _
       ring
     rw [← he]
-    simpa only [w,PadicInt.coe_add,Rat.cast_add] using h
+    simpa only [w,PadicInt.coe_add,Rat.cast_add] using! h
   have hZ : ‖Z‖ ≤ 1 := zeroShapeUValue_norm_le_one lam hu hone hferm hp4 4
   have hH : ‖H‖ ≤ 1 := highShapeVValue_norm_le_one lam hu hone hferm hp4 2
   have hzZ := near_mul (PadicInt.norm_le_one z) hZ hz (by simp : ‖Z-Z‖ ≤ ‖(p:ℚ_[p])‖)

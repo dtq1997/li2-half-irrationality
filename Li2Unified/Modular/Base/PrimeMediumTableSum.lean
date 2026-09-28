@@ -61,7 +61,7 @@ theorem mediumWindowSum_nat_tendsto :
   have h := hbase.add hrows
   simp only [zero_mul, zero_add] at h
   rw [mediumWindowMass_eq] at h
-  simpa only [mediumWindowSum, add_div] using h
+  simpa only [mediumWindowSum, add_div] using! h
 
 end
 end Li2.PrimeSums

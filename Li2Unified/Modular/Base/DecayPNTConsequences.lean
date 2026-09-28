@@ -63,8 +63,7 @@ theorem WeakPNT'' : ψ ~[atTop] (fun x ↦ x) := by
     simp_rw [Chebyshev.psi_eq_sum_Icc]
     apply IsEquivalent.trans (v := fun x ↦ (⌊x⌋₊:ℝ))
     · rw [isEquivalent_iff_tendsto_one]
-      · convert Tendsto.comp WeakPNT' tendsto_nat_floor_atTop
-        infer_instance
+      · convert! Tendsto.comp WeakPNT' (tendsto_nat_floor_atTop (α := ℝ))
       rw [eventually_iff]
       simp only [ne_eq, Nat.cast_eq_zero, Nat.floor_eq_zero, not_lt, mem_atTop_sets, ge_iff_le,
         Set.mem_setOf_eq]
@@ -106,7 +105,7 @@ theorem chebyshev_asymptotic : θ ~[atTop] id := by
       rw [Pi.sub_apply, norm_eq_abs, norm_eq_abs, abs_of_nonneg (by bound : 0 ≤ 2 * √x * log x)]
       exact (abs_of_nonneg (sub_nonneg.mpr (Chebyshev.theta_le_psi x))).symm ▸
         Chebyshev.abs_psi_sub_theta_le_sqrt_mul_log (by linarith : 1 ≤ x)⟩
-  · simpa only [mul_assoc] using isLittleO_sqrt_mul_log.const_mul_left 2
+  · simpa only [mul_assoc] using! isLittleO_sqrt_mul_log.const_mul_left 2
 
 end Li2.PNT
 

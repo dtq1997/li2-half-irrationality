@@ -58,7 +58,7 @@ theorem primeJet_other_contribution_scaled_bound (hp4 : 3 < p) (a : Fin p)
     rw [primeDiscContribution_scaled_zero hp4 b hz T]
     apply fieldPolynomial_div_prime_bound _ 3
     intro k
-    simpa only [coeff_map,norm_pow] using primeDiscTest_U_substituted_factor_bound hp4 T b 4
+    simpa only [coeff_map,norm_pow] using! primeDiscTest_U_substituted_factor_bound hp4 T b 4
       (primeEta (p := p) (by omega) (by omega)) ht k
   · by_cases hl : b.val ≤ p-4
     · have hm : primeMultiplicity p b = 2 := primeMultiplicity_low hp4 b hl
@@ -69,7 +69,7 @@ theorem primeJet_other_contribution_scaled_bound (hp4 : 3 < p) (a : Fin p)
         (primeEta (p := p) (by omega) (by omega)) ht n
       have hc : ‖((primeDiscTestScaled hp4 b T (primeEta (p := p) (by omega) (by omega))).map
           (algebraMap ℤ_[p] ℚ_[p])).coeff n‖ ≤ ‖(p:ℚ_[p])‖^4 := by
-        simpa only [coeff_map,norm_pow] using h
+        simpa only [coeff_map,norm_pow] using! h
       exact hc.trans (pow_le_pow_of_le_one (norm_nonneg _) hn (by omega))
     · have hm : primeMultiplicity p b = 1 := by
         unfold primeMultiplicity
@@ -81,7 +81,7 @@ theorem primeJet_other_contribution_scaled_bound (hp4 : 3 < p) (a : Fin p)
         (primeEta (p := p) (by omega) (by omega)) ht n
       have hc : ‖((primeDiscTestScaled hp4 b T (primeEta (p := p) (by omega) (by omega))).map
           (algebraMap ℤ_[p] ℚ_[p])).coeff n‖ ≤ ‖(p:ℚ_[p])‖^2 := by
-        simpa only [coeff_map,norm_pow] using h
+        simpa only [coeff_map,norm_pow] using! h
       calc
         _ ≤ ‖(p:ℚ_[p])‖*‖(p:ℚ_[p])‖^2 := mul_le_mul_of_nonneg_left hc (norm_nonneg _)
         _ = _ := by ring

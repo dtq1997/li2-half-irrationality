@@ -41,7 +41,7 @@ theorem contains_reduced_log (r : ℚ) (hr : 0 < r) (h1 : r ≤ 1) (n : ℕ) :
   rw [abs_of_nonneg (by linarith : (0:ℝ) ≤ 1-r), he] at h
   have hs : |(logPartial r n:ℝ)+Real.log (r:ℝ)| ≤ (logError r n:ℝ) := by
     simpa only [logPartial, logError, Rat.cast_sum, Rat.cast_div, Rat.cast_pow,
-      Rat.cast_sub, Rat.cast_add, Rat.cast_one, Rat.cast_natCast, Rat.cast_ofNat, Nat.cast_add, Nat.cast_one] using h
+      Rat.cast_sub, Rat.cast_add, Rat.cast_one, Rat.cast_natCast, Rat.cast_ofNat, Nat.cast_add, Nat.cast_one] using! h
   change ((-logPartial r n-logError r n:ℚ):ℝ) ≤ Real.log (r:ℝ) ∧
     Real.log (r:ℝ) ≤ ((-logPartial r n+logError r n:ℚ):ℝ)
   push_cast
@@ -56,12 +56,12 @@ theorem contains_scaled_log (q r : ℚ) (k : ℤ) (n : ℕ)
     (hr : 0 < r) (h1 : r ≤ 1) (hq : q = (2:ℚ)^k*r) :
     (scaledLogBounds k r n).Contains (Real.log (q:ℝ)) := by
   have hq' : (q:ℝ) = (2:ℝ)^k*(r:ℝ) := by
-    simpa only [Rat.cast_mul, Rat.cast_zpow, Rat.cast_ofNat] using
+    simpa only [Rat.cast_mul, Rat.cast_zpow, Rat.cast_ofNat] using!
       congrArg (fun z : ℚ => (z : ℝ)) hq
   have hr' : (r:ℝ) ≠ 0 := by exact_mod_cast hr.ne'
   rw [hq', Real.log_mul (zpow_ne_zero k (by norm_num : (2:ℝ) ≠ 0)) hr',
     Real.log_zpow]
-  simpa only [scaledLogBounds, Rat.cast_intCast] using
+  simpa only [scaledLogBounds, Rat.cast_intCast] using!
     RationalBounds.contains_add
       (RationalBounds.contains_mul (RationalBounds.contains_point (k:ℚ)) contains_logTwo)
       (contains_reduced_log r hr h1 n)
@@ -75,10 +75,10 @@ theorem mul_log_antitone_quarter :
   apply antitoneOn_of_deriv_nonpos (convex_Icc (0:ℝ) (1/4))
     (Real.continuous_mul_log).continuousOn
   · intro x hx
-    have hx' : (0:ℝ) < x ∧ x < 1/4 := by simpa only [interior_Icc, Set.mem_Ioo] using hx
+    have hx' : (0:ℝ) < x ∧ x < 1/4 := by simpa only [interior_Icc, Set.mem_Ioo] using! hx
     exact (Real.hasDerivAt_mul_log hx'.1.ne').differentiableAt.differentiableWithinAt
   · intro x hx
-    have hx' : (0:ℝ) < x ∧ x < 1/4 := by simpa only [interior_Icc, Set.mem_Ioo] using hx
+    have hx' : (0:ℝ) < x ∧ x < 1/4 := by simpa only [interior_Icc, Set.mem_Ioo] using! hx
     rw [Real.deriv_mul_log hx'.1.ne']
     have hle := Real.log_le_log hx'.1 hx'.2.le
     linarith [Real.log_two_gt_d9]

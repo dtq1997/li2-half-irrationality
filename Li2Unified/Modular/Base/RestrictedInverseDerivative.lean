@@ -33,11 +33,11 @@ lemma inverseOneSubSeries_square (b : ℤ_[p]) :
   simpa only [pow_two] using (inverseOneSubSeries_add b 1 1).symm
 
 theorem inverseOneSubSeries_derivative_one (b : ℤ_[p]) :
-    PowerSeries.derivative (ℤ_[p]) (inverseOneSubSeries b 1) =
+    PowerSeries.derivative (R := ℤ_[p]) (inverseOneSubSeries b 1) =
       PowerSeries.C b*inverseOneSubSeries b 2 := by
   have h := inverseOneSubSeries_identity b 1
   rw [pow_one] at h
-  have hd := (PowerSeries.derivative (ℤ_[p])).leibniz_of_mul_eq_one h
+  have hd := (PowerSeries.derivative (R := ℤ_[p])).leibniz_of_mul_eq_one h
   simp only [map_sub, Derivation.map_one_eq_zero, Derivation.leibniz, PowerSeries.derivative_C,
     PowerSeries.derivative_X, smul_eq_mul, mul_one, mul_zero, add_zero, zero_sub,
     inverseOneSubSeries_square] at hd

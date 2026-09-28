@@ -36,7 +36,7 @@ lemma primeZeroBlockPoly_top (hp4 : 3 < p) :
 lemma primeZeroMoment_VG (hp4 : 3 < p) (k : Fin 5) :
     VG p (![-113/12,95/4,-253/4,2093/12,-17773/36] k : ℚ) 0 := by
   have hv36 : padicValRat p (36:ℚ) = 0 := by
-    rw [show (36:ℚ) = 6^2 by norm_num,padicValRat.pow (by norm_num),
+    rw [show (36:ℚ) = 6^2 by norm_num,padicValRat.pow,
       prime_six_valuation_zero hp4]
     norm_num
   have h36 : VG p (36:ℚ)⁻¹ 0 :=
@@ -115,9 +115,9 @@ theorem primeZero_rational_entry_leading (hp4 : 3 < p) (i j : Fin 3)
   apply fieldPolynomial_replace_leading_bound _ s t _ (by positivity) ?_ hst n
   intro l
   simpa only [primeZeroBlockPoly,primeZeroAugmentedIndex,Fin.val_mk,s,t,e,k,q,c,u]
-    using primeZero_original_entry_leading hp4
+    using! primeZero_original_entry_leading hp4
       (primeZeroAugmentedIndex hp4 i) (primeZeroAugmentedIndex hp4 j)
-      (by simpa only [primeZeroAugmentedIndex,Fin.val_mk] using hij) l
+      (by simpa only [primeZeroAugmentedIndex,Fin.val_mk] using! hij) l
 
 theorem primeZero_rational_entry_GV (hp4 : 3 < p) (i j : Fin 3)
     (hij : i.val+j.val < 4) :

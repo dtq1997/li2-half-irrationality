@@ -42,16 +42,16 @@ theorem pair_interval_eq_formula {s t : StarLayer}
   have hrt : (0:ℝ) ≤ t.radius := by exact_mod_cast (layerData_valid t ht).1
   cases hsv : s.vertical <;> cases htv : t.vertical
   · simpa [pairFormula, StarLayer.left, StarLayer.right,
-      StarLayer.direction, hsv, htv] using
+      StarLayer.direction, hsv, htv] using!
         horizontal_horizontal (s.radius : ℝ) (t.radius : ℝ) hrs hrt
   · simpa [pairFormula, StarLayer.left, StarLayer.right,
-      StarLayer.direction, hsv, htv] using
+      StarLayer.direction, hsv, htv] using!
         horizontal_vertical (s.radius : ℝ) (t.radius : ℝ) hrs hrt
   · simpa [pairFormula, StarLayer.left, StarLayer.right,
-      StarLayer.direction, hsv, htv] using
+      StarLayer.direction, hsv, htv] using!
         vertical_horizontal (t.radius : ℝ) (s.radius : ℝ) hrt hrs
   · simpa [pairFormula, StarLayer.left, StarLayer.right,
-      StarLayer.direction, hsv, htv] using
+      StarLayer.direction, hsv, htv] using!
         vertical_vertical (s.radius : ℝ) (t.radius : ℝ) hrs hrt
 
 theorem comparisonEnergy_eq_pairFormula_sum :
@@ -127,7 +127,7 @@ theorem logSecondExpr_denote (x : QPair) (hx : qValid x = true) :
     (logSecondExpr x).denote 0 = logSecondPrimitive (x.toRat : ℝ) := by
   by_cases hz : qEq x qZero = true
   · have hx0 : x.toRat = 0 := by
-      simpa only [qZero_toRat] using qEq_sound hx qValid_qZero hz
+      simpa only [qZero_toRat] using! qEq_sound hx qValid_qZero hz
     simp [logSecondExpr, hz, Expr.denote, qZero_toRat, hx0, logSecondPrimitive]
   · have habs : ((qAbs x).toRat : ℝ) = |(x.toRat : ℝ)| := by
       rw [qAbs_toRat x hx, Rat.cast_abs]
@@ -163,9 +163,9 @@ theorem pairExprQ_denote (s t : LayerQ)
   obtain ⟨⟨hsr, _⟩, hspos⟩ := hs
   obtain ⟨⟨htr, _⟩, htpos⟩ := ht
   have hs0 : s.radius.toRat ≠ 0 :=
-    ne_of_gt (by simpa only [qZero_toRat] using qLT_sound qValid_qZero hsr hspos)
+    ne_of_gt (by simpa only [qZero_toRat] using! qLT_sound qValid_qZero hsr hspos)
   have ht0 : t.radius.toRat ≠ 0 :=
-    ne_of_gt (by simpa only [qZero_toRat] using qLT_sound qValid_qZero htr htpos)
+    ne_of_gt (by simpa only [qZero_toRat] using! qLT_sound qValid_qZero htr htpos)
   have hsub := toRat_qSub _ _ hsr htr
   have hadd := toRat_qAdd _ _ hsr htr
   cases hsv : s.vertical <;> cases htv : t.vertical <;>

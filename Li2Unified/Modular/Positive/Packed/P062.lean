@@ -75,9 +75,9 @@ theorem parameterHigh_pair_scaled_GV (lam : ℚ) (hlam : |(lam:ℝ)| < 1)
   have hu : c ≠ 0 ∧ padicValRat p c = 0 := primeLocalUnit_unit p _
   have hi : VG p c⁻¹ 0 := rational_unit_inverse_VG c hu.1 hu.2
   have hraw : GV p (F-C ((p:ℚ)^(-1:ℤ)*(c^2*w*highShapeVValue lam 0))) 0 := by
-    simpa [F,c,w] using parameterHigh_rational_entry_GV lam hlam hunit hone hferm hp4 ell (0:Fin 2) (0:Fin 2) (by decide)
+    simpa [F,c,w] using! parameterHigh_rational_entry_GV lam hlam hunit hone hferm hp4 ell (0:Fin 2) (0:Fin 2) (by decide)
   have hs : GV p (C (c⁻¹*c⁻¹)*(F-C ((p:ℚ)^(-1:ℤ)*(c^2*w*highShapeVValue lam 0)))) 0 := by
-    simpa only [zero_add] using GV.C_mul (hi.mul hi) hraw
+    simpa only [zero_add] using! GV.C_mul (hi.mul hi) hraw
   have he : C (c⁻¹*c⁻¹)*(F-C ((p:ℚ)^(-1:ℤ)*(c^2*w*highShapeVValue lam 0))) =
       C (c⁻¹*c⁻¹)*F-C ((p:ℚ)^(-1:ℤ)*(w*highShapeVValue lam 0)) := by
     rw [mul_sub,← C_mul]
@@ -111,9 +111,9 @@ theorem parameterHigh_top_scaled_GV (lam : ℚ) (hlam : |(lam:ℝ)| < 1)
   have hu : c ≠ 0 ∧ padicValRat p c = 0 := primeLocalUnit_unit p _
   have hi : VG p c⁻¹ 0 := rational_unit_inverse_VG c hu.1 hu.2
   have hraw : GV p (F-C (c^2*w*q)) 1 := by
-    simpa [F,c,w,q] using parameterHigh_rational_entry_GV lam hlam hunit hone hferm hp4 ell (0:Fin 2) (1:Fin 2) (by decide)
+    simpa [F,c,w,q] using! parameterHigh_rational_entry_GV lam hlam hunit hone hferm hp4 ell (0:Fin 2) (1:Fin 2) (by decide)
   have hs : GV p (C c⁻¹*(F-C (c^2*w*q))) 1 := by
-    simpa only [zero_add] using GV.C_mul hi hraw
+    simpa only [zero_add] using! GV.C_mul hi hraw
   have he : C c⁻¹*(F-C (c^2*w*q)) = C c⁻¹*F-C (c*w*q) := by
     rw [mul_sub,← C_mul]
     congr 1
@@ -122,15 +122,15 @@ theorem parameterHigh_top_scaled_GV (lam : ℚ) (hlam : |(lam:ℝ)| < 1)
   rw [he] at hs
   have hc : VG p (c-v) 1 := by
     apply VG_of_padic_norm_pow_le _ 1
-    simpa only [c,v,Rat.cast_sub,Rat.cast_intCast,pow_one] using
+    simpa only [c,v,Rat.cast_sub,Rat.cast_intCast,pow_one] using!
       primeHighRationalLocalUnit_norm hp4 ell
   have hq : VG p q 0 := by
     apply VG_of_padic_norm_pow_le _ 0
-    simpa only [q,pow_zero] using highShapeVValue_norm_le_one lam hunit hone hferm hp4 (1:Fin 3)
+    simpa only [q,pow_zero] using! highShapeVValue_norm_le_one lam hunit hone hferm hp4 (1:Fin 3)
   have hcoeff : VG p (w*q) 0 := by
-    simpa only [zero_add] using (parameterHighRationalWeight_VG lam hunit hferm hp4 ell).mul hq
+    simpa only [zero_add] using! (parameterHighRationalWeight_VG lam hunit hferm hp4 ell).mul hq
   have hcorr : GV p (C ((c-v)*(w*q))) 1 := by
-    simpa only [add_zero] using GV.C (hc.mul hcoeff)
+    simpa only [add_zero] using! GV.C (hc.mul hcoeff)
   have he' : C c⁻¹*F-C (v*w*q) =
       (C c⁻¹*F-C (c*w*q))+C ((c-v)*(w*q)) := by
     simp only [C_mul,C_sub]
@@ -249,9 +249,9 @@ theorem parameterZero_rational_entry_leading (lam : ℚ) (hlam : |(lam:ℝ)| < 1
   apply fieldPolynomial_replace_leading_bound _ s t _ (by positivity) ?_ hst n
   intro l
   simpa only [primeZeroBlockPoly,primeZeroAugmentedIndex,Fin.val_mk,s,t,e,k,q,c,u]
-    using parameterZero_original_entry_leading lam hlam hu hone hferm hp4
+    using! parameterZero_original_entry_leading lam hlam hu hone hferm hp4
       (primeZeroAugmentedIndex hp4 i) (primeZeroAugmentedIndex hp4 j)
-      (by simpa only [primeZeroAugmentedIndex,Fin.val_mk] using hij) l
+      (by simpa only [primeZeroAugmentedIndex,Fin.val_mk] using! hij) l
 
 theorem parameterZero_rational_entry_GV (lam : ℚ) (hlam : |(lam:ℝ)| < 1)
     (hu : lam ≠ 0 ∧ padicValRat p lam = 0)
@@ -377,16 +377,16 @@ theorem parameterZero_top_scaled_GV (lam : ℚ) (hlam : |(lam:ℝ)| < 1)
     field_simp [hu.1] <;> ring
   rw [he] at hs
   have hleft : GV p (C c⁻¹*F-C ((p:ℚ)^((i.val:ℤ)-1)*(6*c*q))) (i.val:ℚ) := by
-    simpa only [zero_add] using hs
+    simpa only [zero_add] using! hs
   have hc : VG p (c-(-1/6:ℚ)) 1 := by
     apply VG_of_padic_norm_pow_le _ 1
     simpa only [c,Rat.cast_sub,Rat.cast_intCast,Rat.cast_div,Rat.cast_neg,
-      Rat.cast_one,Rat.cast_ofNat,pow_one] using primeLocalUnit_zero_norm (p := p) hp4
+      Rat.cast_one,Rat.cast_ofNat,pow_one] using! primeLocalUnit_zero_norm (p := p) hp4
   have h6 : VG p (6*c+1) 1 := by
     convert (VG.natCast (p := p) 6).mul hc using 1 <;> ring
   have hq : VG p q 0 := by
     apply VG_of_padic_norm_pow_le _ 0
-    simpa using zeroShapeUValue_norm_le_one lam hunit hone hferm hp4 _
+    simpa using! zeroShapeUValue_norm_le_one lam hunit hone hferm hp4 _
   have hcorr : GV p (C ((p:ℚ)^((i.val:ℤ)-1)*((6*c+1)*q))) (i.val:ℚ) := by
     have h := GV.C ((VG.primePow (p := p) ((i.val:ℤ)-1)).mul (h6.mul hq))
     convert h using 1 <;> push_cast <;> ring
@@ -477,7 +477,7 @@ theorem parameterNormalizedMatrix_low_cross_GV (lam : ℚ) (hlam : |(lam:ℝ)| <
     (primeLowBlockJet hp4 a i).2 (primeLowBlockJet hp4 b j).2
     (primeOriginalBlockEquiv_symm_jet hp4 _ (primeLowBlockJet hp4 a i) rfl)
     (primeOriginalBlockEquiv_symm_jet hp4 _ (primeLowBlockJet hp4 b j) rfl)).1
-  simpa only [primeBlockWeight_low,primeLowBlockJet,Fin.val_mk] using h
+  simpa only [primeBlockWeight_low,primeLowBlockJet,Fin.val_mk] using! h
 
 theorem parameterNormalizedMatrix_low_zero_GV (lam : ℚ) (hlam : |(lam:ℝ)| < 1)
     (hu : lam ≠ 0 ∧ padicValRat p lam = 0)
@@ -500,7 +500,7 @@ theorem parameterNormalizedMatrix_low_zero_GV (lam : ℚ) (hlam : |(lam:ℝ)| < 
     (primeOriginalBlockEquiv_symm_jet hp4 _ (primeZeroBlockJet hp4 j)
       (primeZeroEdgeSlot_encode hp4 j))).1
   simpa only [primeBlockWeight_low,primeBlockWeight_zeroSlot,
-    primeLowBlockJet,primeZeroBlockJet,Fin.val_mk] using h
+    primeLowBlockJet,primeZeroBlockJet,Fin.val_mk] using! h
 
 theorem parameterNormalizedMatrix_low_high_GV (lam : ℚ) (hlam : |(lam:ℝ)| < 1)
     (hu : lam ≠ 0 ∧ padicValRat p lam = 0)
@@ -524,7 +524,7 @@ theorem parameterNormalizedMatrix_low_high_GV (lam : ℚ) (hlam : |(lam:ℝ)| < 
     (primeOriginalBlockEquiv_symm_jet hp4 _ (primeHighBlockJet hp4 ell)
       (primeHighEdgeSlot_encode hp4 ell))).1
   simpa only [primeBlockWeight_low,primeBlockWeight_highSlot,
-    primeLowBlockJet,Fin.val_mk] using h
+    primeLowBlockJet,Fin.val_mk] using! h
 
 theorem parameterNormalizedMatrix_zero_high_GV (lam : ℚ) (hlam : |(lam:ℝ)| < 1)
     (hu : lam ≠ 0 ∧ padicValRat p lam = 0)
@@ -549,7 +549,7 @@ theorem parameterNormalizedMatrix_zero_high_GV (lam : ℚ) (hlam : |(lam:ℝ)| <
     (primeOriginalBlockEquiv_symm_jet hp4 _ (primeHighBlockJet hp4 ell)
       (primeHighEdgeSlot_encode hp4 ell))).1
   simpa only [primeBlockWeight_zeroSlot,primeBlockWeight_highSlot,
-    primeZeroBlockJet,Fin.val_mk] using h
+    primeZeroBlockJet,Fin.val_mk] using! h
 
 theorem parameterNormalizedMatrix_high_cross_GV (lam : ℚ) (hlam : |(lam:ℝ)| < 1)
     (hu : lam ≠ 0 ∧ padicValRat p lam = 0)
@@ -574,7 +574,7 @@ theorem parameterNormalizedMatrix_high_cross_GV (lam : ℚ) (hlam : |(lam:ℝ)| 
       (primeHighEdgeSlot_encode hp4 ell))
     (primeOriginalBlockEquiv_symm_jet hp4 _ (primeHighBlockJet hp4 m)
       (primeHighEdgeSlot_encode hp4 m))).1
-  simpa only [primeBlockWeight_highSlot] using h
+  simpa only [primeBlockWeight_highSlot] using! h
 
 theorem parameterNormalizedMatrix_top_low_GV (lam : ℚ) (hlam : |(lam:ℝ)| < 1)
     (hu : lam ≠ 0 ∧ padicValRat p lam = 0)
@@ -595,7 +595,7 @@ theorem parameterNormalizedMatrix_top_low_GV (lam : ℚ) (hlam : |(lam:ℝ)| < 1
     (primeLowBlockJet hp4 a i).2
     (primeOriginalBlockEquiv_symm_jet hp4 _ (primeLowBlockJet hp4 a i) rfl)).1
   simpa only [primeBlockWeight_top,primeBlockWeight_low,
-    primeLowBlockJet,Fin.val_mk] using h
+    primeLowBlockJet,Fin.val_mk] using! h
 
 theorem parameterNormalizedMatrix_low_edge_GV (lam : ℚ) (hlam : |(lam:ℝ)| < 1)
     (hu : lam ≠ 0 ∧ padicValRat p lam = 0)
@@ -611,7 +611,7 @@ theorem parameterNormalizedMatrix_low_edge_GV (lam : ℚ) (hlam : |(lam:ℝ)| < 
   · exact (parameterNormalizedMatrix_low_high_GV lam hlam hu hone hferm hp4 a i ell).mono (by linarith)
   · exact (parameterNormalizedMatrix_low_zero_GV lam hlam hu hone hferm hp4 a i j).mono (by linarith)
   · rw [parameterNormalizedMatrix_symm lam hp4 (Sum.inl (a,i)) (Sum.inr 5)]
-    simpa only [add_comm] using parameterNormalizedMatrix_top_low_GV lam hlam hu hone hferm hp4 a i
+    simpa only [add_comm] using! parameterNormalizedMatrix_top_low_GV lam hlam hu hone hferm hp4 a i
 
 
 end
@@ -668,14 +668,14 @@ theorem parameterLow_original_entry_leading (lam : ℚ) (hlam : |(lam:ℝ)| < 1)
       (parameterJet_actual_low_scaled_leading lam hu hone hferm hp4 a ha0 ha i j
         (parameterIntegralEta lam hu (parameterPowerRatio_integral lam hu hone hferm))) l
     simpa only [integralParameterInvPow,integralRational,Rat.cast_pow,Rat.cast_inv,PadicInt.coe_pow,PadicInt.coe_mul,PadicInt.coe_natCast,PadicInt.coe_intCast,
-      PadicInt.coe_neg,PadicInt.coe_natCast] using h
+      PadicInt.coe_neg,PadicInt.coe_natCast] using! h
   · intro b hb l
     have h := fieldPolynomial_integral_weight_bound
       (C ((p:ℚ_[p])^2)*parameterDiscContribution lam hu (parameterPowerRatio_integral lam hu hone hferm) hp4 b T) (integralParameterInvPow lam hu.1 hu.2 b.val) _
       (parameterJet_other_contribution_scaled_bound lam hu (parameterPowerRatio_integral lam hu hone hferm) hp4 a i j b hb) l
     have hw : ‖(C ((lam:ℚ_[p])⁻¹^b.val)*(C ((p:ℚ_[p])^2)*parameterDiscContribution lam hu (parameterPowerRatio_integral lam hu hone hferm) hp4 b T)).coeff l‖ ≤
         ‖(p:ℚ_[p])‖^3 := by
-      simpa only [integralParameterInvPow,integralRational,Rat.cast_pow,Rat.cast_inv,PadicInt.coe_pow,PadicInt.coe_neg,PadicInt.coe_natCast] using h
+      simpa only [integralParameterInvPow,integralRational,Rat.cast_pow,Rat.cast_inv,PadicInt.coe_pow,PadicInt.coe_neg,PadicInt.coe_natCast] using! h
     exact hw.trans (pow_le_pow_of_le_one (norm_nonneg _) hn hm)
 
 end

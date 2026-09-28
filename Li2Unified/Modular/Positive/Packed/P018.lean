@@ -1,4 +1,5 @@
 module
+public import Li2Unified.Modular.Base.RestrictedSeriesCompat
 public import Li2Unified.Modular.Positive.Packed.P015
 public import Li2Unified.Modular.Base.OriginalNumeratorClearing
 public import Li2Unified.Modular.Positive.Packed.P017
@@ -183,7 +184,7 @@ theorem generalOriginalPulled_eq_integral_of_cleared
       (fun k => (r k : ℚ_[p])) := by
   apply fieldPoleNumerator_injective (generalPoleCenters (p := p))
     generalPoleCenters_injective _ _
-    (PowerSeries.IsRestricted.smul 1 (originalPulledRegular_isRestricted m F a) c)
+    (Li2.restrictedSeries_smul 1 (originalPulledRegular_isRestricted m F a) c)
     (field_map_isRestricted g hg)
   rw [fieldPoleNumerator_smul, fieldPoleNumerator_integral]
   apply mul_left_cancel₀ (primeDiscPolynomialSeries_ne_zero (p := p) a.val m)

@@ -47,7 +47,7 @@ lemma bound_I1 (x : ℝ) (hx : 0 < x) (ψ : W21) (hcheby : cheby f) :
   have l1 : Summable fun i ↦ ‖f i / ↑i * 𝓕 (ψ : ℝ → ℂ) (1 / (2 * π) * Real.log (↑i / x))‖ := by
     exact summable_fourier x hx ψ hcheby
   apply (norm_tsum_le_tsum_norm l1).trans
-  simpa only [← Summable.tsum_const_smul _ l5] using
+  simpa only [← Summable.tsum_const_smul _ l5] using!
     Summable.tsum_mono l1 (by simpa using l5.const_smul (W21.norm ψ)) l6
 
 lemma bound_I1' {C : ℝ} (x : ℝ) (hx : 1 ≤ x) (ψ : W21) (hcheby : chebyWith C f) :
@@ -131,7 +131,7 @@ lemma limiting_cor_W21 (ψ : W21) (hf : ∀ (σ' : ℝ), 1 < σ' → Summable (n
     apply this.trans_lt
     apply (mul_le_mul (d := 1 + M) le_rfl (by simp) (by positivity) W21.norm_nonneg).trans_lt
     have : 0 < 1 + M := by positivity
-    convert (mul_lt_mul_iff_left₀ this).mpr hRψ using 1 ; field_simp
+    convert! (mul_lt_mul_iff_left₀ this).mpr hRψ using 1 ; field_simp
 
   -- Conclude the proof
   have S1_sub_1 x : 𝓕 (⇑ψ - ⇑(Ψ R)) x = 𝓕 (ψ : ℝ → ℂ) x - 𝓕 ⇑(Ψ R) x := by
@@ -152,7 +152,7 @@ lemma limiting_cor_W21 (ψ : W21) (hf : ∀ (σ' : ℝ), 1 < σ' → Summable (n
       simpa using this
     · have := summable_fourier x (by positivity) (Ψ R) ⟨_, hcheby⟩
       rw [summable_norm_iff] at this
-      simpa using this
+      simpa using! this
 
   have S2_sub : S2 x (ψ - Ψ R) = S2 x ψ - S2 x (Ψ R) := by
     simp only [S1_sub_1, S2] ; rw [integral_sub]

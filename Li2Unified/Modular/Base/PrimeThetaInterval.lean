@@ -53,14 +53,14 @@ lemma theta_scaled_tendsto {c : ℝ} (hc : 0 < c) :
       (fun x : ℝ => Chebyshev.theta (c*x)/x) := by
     filter_upwards [eventually_gt_atTop (0 : ℝ)] with x hx
     field_simp [hc.ne', hx.ne']
-  simpa only [mul_one] using (tendsto_congr' he).mp h
+  simpa only [mul_one] using! (tendsto_congr' he).mp h
 
 #check theta_scaled_tendsto
 
 lemma theta_interval_tendsto {a b : ℝ} (ha : 0 < a) (hb : 0 < b) :
     Tendsto (fun x : ℝ => (Chebyshev.theta (b*x)-Chebyshev.theta (a*x))/x)
       atTop (𝓝 (b-a)) := by
-  simpa only [← sub_div] using (theta_scaled_tendsto hb).sub (theta_scaled_tendsto ha)
+  simpa only [← sub_div] using! (theta_scaled_tendsto hb).sub (theta_scaled_tendsto ha)
 
 #check theta_interval_tendsto
 

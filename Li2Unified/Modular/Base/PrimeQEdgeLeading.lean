@@ -53,8 +53,8 @@ theorem primeNormalizedMatrix_scaled_det_GV (hp4 : 3 < p) :
   have hn := VG.round_half (p := p)
     (q := (C ((p:ℚ)^(2*(p-1)))*(primeNormalizedMatrix hp4).det -
       C (primeReferenceMainConstant p)).coeff n) (0:ℤ)
-    (by simpa using hhalf n)
-  simpa using hn
+    (by simpa using! hhalf n)
+  simpa using! hn
 
 def primeQEdgeScale (hp4 : 3 < p) : ℚ :=
   (p:ℚ)^(2*(p-1))*primeNormalizedDetScale hp4
@@ -67,7 +67,7 @@ lemma primeQEdgeScale_spec (hp4 : 3 < p) :
   unfold primeQEdgeScale
   refine ⟨mul_ne_zero (pow_ne_zero _ hpq) hu.1, ?_⟩
   rw [padicValRat.mul (pow_ne_zero _ hpq) hu.1,
-    padicValRat.pow hpq,padicValRat.self hp.out.one_lt,hu.2]
+    padicValRat.pow,padicValRat.self hp.out.one_lt,hu.2]
   push_cast
   ring
 
@@ -75,14 +75,14 @@ theorem primeQ_scaled_congruence (hp4 : 3 < p) :
     GV p (C (primeQEdgeScale hp4)*Q (p-1)-C (primeReferenceMainConstant p)) 1 := by
   have h := primeNormalizedMatrix_scaled_det_GV hp4
   rw [primeNormalizedMatrix_det_eq_Q hp4] at h
-  simpa only [primeQEdgeScale,← mul_assoc,← C_mul] using h
+  simpa only [primeQEdgeScale,← mul_assoc,← C_mul] using! h
 
 lemma primeQ_scaled_constant_unit (hp73 : 73 < p) :
     primeQEdgeScale (p := p) (by omega)*(Q (p-1)).coeff 0 ≠ 0 ∧
       padicValRat p (primeQEdgeScale (p := p) (by omega)*(Q (p-1)).coeff 0) = 0 := by
   have hc := primeReferenceMainConstant_unit (p := p) hp73
   apply unit_of_VG_sub hc.1 hc.2
-  simpa only [coeff_sub,coeff_C_mul,coeff_C_zero] using
+  simpa only [coeff_sub,coeff_C_mul,coeff_C_zero] using!
     primeQ_scaled_congruence (p := p) (by omega) 0
 
 theorem primeQ_ne_zero (hp73 : 73 < p) : Q (p-1) ≠ 0 := by
@@ -111,7 +111,7 @@ theorem primeQ_strict_edge (hp73 : 73 < p) :
   · exact Or.inl hqk
   · right
     have hvk : VG p (primeQEdgeScale hp4*(Q (p-1)).coeff k) 1 := by
-      simpa only [coeff_sub,coeff_C_mul,coeff_C_ne_zero hk,sub_zero] using
+      simpa only [coeff_sub,coeff_C_mul,coeff_C_ne_zero hk,sub_zero] using!
         primeQ_scaled_congruence (p := p) hp4 k
     have hb := hvk.resolve_left (mul_ne_zero hs.1 hqk)
     rw [padicValRat.mul hs.1 hqk,hs.2] at hb

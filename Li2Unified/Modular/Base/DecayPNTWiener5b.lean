@@ -134,7 +134,7 @@ lemma wiener_ikehara_smooth (hf : ∀ (σ' : ℝ), 1 < σ' → Summable (nterm f
     exact (contDiff_ofReal.comp this).mul (hsmooth.comp this)
   have h2 : HasCompactSupport h := by
     have : 2 * π ≠ 0 := by simp [pi_ne_zero]
-    simpa using (comp_exp_support hsupp hplus).comp_smul this |>.mul_left
+    simpa using! (comp_exp_support hsupp hplus).comp_smul this |>.mul_left
   obtain ⟨g, hg⟩ := fourier_surjection_on_schwartz (toSchwartz h h1 h2)
 
   have l1 {y} (hy : 0 < y) : y * Ψ y = 𝓕 g (1 / (2 * π) * Real.log y) := by

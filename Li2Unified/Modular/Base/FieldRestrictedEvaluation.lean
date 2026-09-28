@@ -19,7 +19,7 @@ def fieldRestrictedEval (x : ℤ_[p]) (f : PowerSeries ℚ_[p]) : ℚ_[p] :=
 
 theorem field_polynomial_isRestricted (P : (ℚ_[p])[X]) :
     PowerSeries.IsRestricted 1 (P : PowerSeries ℚ_[p]) := by
-  unfold PowerSeries.IsRestricted
+  rw [PowerSeries.isRestricted_iff']
   simp only [one_pow, mul_one]
   apply tendsto_const_nhds.congr'
   filter_upwards [eventually_ge_atTop (P.natDegree+1)] with n hn
@@ -28,7 +28,7 @@ theorem field_polynomial_isRestricted (P : (ℚ_[p])[X]) :
 theorem field_map_isRestricted (f : PowerSeries ℤ_[p])
     (hf : PowerSeries.IsRestricted 1 f) :
     PowerSeries.IsRestricted 1 (PowerSeries.map (algebraMap ℤ_[p] ℚ_[p]) f) := by
-  simpa only [PowerSeries.IsRestricted, PowerSeries.coeff_map, PadicInt.norm_def] using hf
+  simpa only [PowerSeries.isRestricted_iff', PowerSeries.coeff_map, PadicInt.norm_def] using! hf
 
 lemma fieldRestrictedEval_polynomial (x : ℤ_[p]) (P : (ℚ_[p])[X]) :
     fieldRestrictedEval x (P : PowerSeries ℚ_[p]) = P.eval (x:ℚ_[p]) := by

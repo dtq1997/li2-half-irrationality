@@ -54,7 +54,7 @@ lemma D_eval_neg_of_le {n j : ℕ} (h1 : 1 ≤ j) (h2 : j ≤ n) : (D n).eval (-
 def rscale (n K j : ℕ) : ℚ := (D n).eval (-(j:ℚ)) ^ 3 / eraseProd K j
 
 lemma padicValRat_neg_one_pow (p : ℕ) [Fact p.Prime] (m : ℕ) : padicValRat p ((-1:ℚ)^m) = 0 := by
-  rw [padicValRat.pow (by norm_num), padicValRat.neg]; simp
+  rw [padicValRat.pow, padicValRat.neg]; simp
 
 theorem rscale_val (p : ℕ) [hp : Fact p.Prime] {n K j : ℕ} (hnj : n < j) (hjK : j ≤ K)
     (hK : K < p^2) :
@@ -68,7 +68,7 @@ theorem rscale_val (p : ℕ) [hp : Fact p.Prime] {n K j : ℕ} (hnj : n < j) (hj
   have hD : (D n).eval (-(j:ℚ)) ≠ 0 := by
     rw [D_eval_neg_of_lt n j hnj]; exact mul_ne_zero hs1 (div_ne_zero h1 h2)
   have hE : eraseProd K j ≠ 0 := eraseProd_ne_zero (by omega) hjK
-  rw [rscale, padicValRat.div (pow_ne_zero _ hD) hE, padicValRat.pow hD,
+  rw [rscale, padicValRat.div (pow_ne_zero _ hD) hE, padicValRat.pow,
     D_eval_neg_of_lt n j hnj, eraseProd_eq (by omega) hjK,
     padicValRat.mul hs1 (div_ne_zero h1 h2), padicValRat.div h1 h2,
     padicValRat.mul (mul_ne_zero hs2 h1) h3, padicValRat.mul hs2 h1,

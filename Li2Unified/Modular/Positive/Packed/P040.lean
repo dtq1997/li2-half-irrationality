@@ -68,7 +68,7 @@ theorem smallTail_first_tendsto (δ : ℝ) (hδ : 0 < δ) :
   have h : Tendsto (fun n : ℕ =>
       (Chebyshev.theta (δ*(n:ℝ))-Chebyshev.theta 4)/(n:ℝ))
       atTop (𝓝 δ) := by
-    simpa only [sub_zero, ← sub_div] using htheta.sub
+    simpa only [sub_zero, ← sub_div] using! htheta.sub
       (tendsto_const_div_atTop_nhds_zero_nat (Chebyshev.theta 4))
   apply (tendsto_congr' ?_).mp h
   obtain ⟨N, hN⟩ := exists_nat_gt (4/δ)
@@ -76,7 +76,7 @@ theorem smallTail_first_tendsto (δ : ℝ) (hδ : 0 < δ) :
   have hnR : (N:ℝ) ≤ (n:ℝ) := by exact_mod_cast hn
   have h4 : (4:ℝ) ≤ δ*(n:ℝ) := by
     have hh : (4:ℝ) < δ*(N:ℝ) := by
-      simpa only [mul_comm] using (div_lt_iff₀ hδ).mp hN
+      simpa only [mul_comm] using! (div_lt_iff₀ hδ).mp hN
     nlinarith only [hh, hnR, hδ]
   rw [Li2.PrimeSums.logSum_eq_theta_sub h4]
 
@@ -88,7 +88,7 @@ theorem smallTailLogSum_tendsto (δ : ℝ) (hδ0 : 0 < δ) (hδ1 : δ ≤ 1) :
       Li2.PrimeSums.logSum 4 (δ*(n:ℝ))/(n:ℝ) +
       Li2.PrimeSums.primePowerExcess (7*n-2) (smallTailPrimes δ n)/(n:ℝ))
       atTop (𝓝 δ) := by
-    simpa only [add_zero] using (smallTail_first_tendsto δ hδ0).add htail
+    simpa only [add_zero] using! (smallTail_first_tendsto δ hδ0).add htail
   apply (tendsto_congr' ?_).mp h
   exact Filter.Eventually.of_forall (fun n => by
     dsimp only
@@ -110,7 +110,7 @@ theorem smallTailFallbackBound_tendsto (δ : ℝ) (hδ0 : 0 < δ) (hδ1 : δ ≤
     ring
   have h : Tendsto (fun n : ℕ => -4*(smallTailLogSum δ n/(n:ℝ)))
       atTop (𝓝 (-4*δ)) := by
-    simpa using (smallTailLogSum_tendsto δ hδ0 hδ1).const_mul (-4:ℝ)
+    simpa using! (smallTailLogSum_tendsto δ hδ0 hδ1).const_mul (-4:ℝ)
   apply (tendsto_congr' ?_).mp h
   filter_upwards [eventually_ge_atTop (1:ℕ)] with n hn
   have hn0 : (n:ℝ) ≠ 0 := by exact_mod_cast (show n ≠ 0 by omega)

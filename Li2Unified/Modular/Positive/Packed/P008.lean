@@ -112,7 +112,7 @@ lemma generalClassTwiceWeight_sum (n : ℕ) (hpn : p ≤ n) (a : Fin p) :
     have h := nonzero_class_twice_sum_identity (matchingCount n p a)
       (matchingCount (4*n) p a) htwo
     simpa only [CountsCore.multiplicity, if_neg ha, generalDiscBase,
-      if_neg ha, add_zero] using h
+      if_neg ha, add_zero] using! h
 
 
 private lemma sum_zero_class_indicator (v : ℤ) :

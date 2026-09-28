@@ -57,13 +57,13 @@ lemma hasDerivAt_logNormIntegralPrimitive {x : ℝ}
   have hlog : HasDerivAt
       (fun s : ℝ => Real.log (s ^ 2 + x ^ 2))
       (2 * t / (t ^ 2 + x ^ 2)) t := by
-    convert (((hasDerivAt_id t).pow 2).add_const (x ^ 2)).log hQ using 1
+    convert! (((hasDerivAt_id t).pow 2).add_const (x ^ 2)).log hQ using 1
     <;> norm_num
     <;> ring
   have hatan : HasDerivAt
       (fun s : ℝ => x * Real.arctan (s / x))
       (x ^ 2 / (t ^ 2 + x ^ 2)) t := by
-    convert (((hasDerivAt_id t).div_const x).arctan).const_mul x using 1
+    convert! (((hasDerivAt_id t).div_const x).arctan).const_mul x using 1
     dsimp only [id_eq]
     rw [hquot]
     field_simp [hx0, hQ]
@@ -71,7 +71,7 @@ lemma hasDerivAt_logNormIntegralPrimitive {x : ℝ}
   have h := ((((hasDerivAt_id t).div_const 2).mul hlog).sub
     (hasDerivAt_id t)).add hatan
   rw [log_norm_real_add_imag]
-  convert h using 1
+  convert! h using 1
   <;> dsimp [logNormIntegralPrimitive]
   <;> field_simp [hQ]
   <;> ring

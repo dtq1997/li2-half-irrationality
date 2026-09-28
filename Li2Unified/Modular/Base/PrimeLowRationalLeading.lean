@@ -31,7 +31,7 @@ lemma primeDiscUnitConstant_low_rational_norm (hp4 : 3 < p)
     rfl
   have had : padicValRat p (((a.val:ℤ)^2 : ℤ) : ℚ) = 0 := by
     simp only [Int.cast_pow,Int.cast_natCast]
-    rw [padicValRat.pow haq,hav]
+    rw [padicValRat.pow,hav]
     norm_num
   have haz : (a.val:ZMod p) ≠ 0 := by
     intro hz
@@ -46,10 +46,10 @@ lemma primeDiscUnitConstant_low_rational_norm (hp4 : 3 < p)
     (((a.val:ℤ)+1)*((a.val:ℤ)+2)*((a.val:ℤ)+3)) ((a.val:ℤ)^2)
     (pow_ne_zero 2 hai) had
     (by simpa only [Int.cast_mul,Int.cast_add,Int.cast_pow,Int.cast_natCast,
-      Int.cast_one,Int.cast_ofNat] using hr)
+      Int.cast_one,Int.cast_ofNat] using! hr)
   simpa only [primeLowRationalUnit,Rat.cast_div,Rat.cast_mul,Rat.cast_add,
     Rat.cast_pow,Rat.cast_natCast,Rat.cast_one,Rat.cast_ofNat,
-    Int.cast_mul,Int.cast_add,Int.cast_pow,Int.cast_natCast,Int.cast_one,Int.cast_ofNat] using h
+    Int.cast_mul,Int.cast_add,Int.cast_pow,Int.cast_natCast,Int.cast_one,Int.cast_ofNat] using! h
 
 lemma primeLowMoment_VG (hp4 : 3 < p) (k : Fin 3) :
     VG p (![95/4,-253/4,2093/12] k : ℚ) 0 := by
@@ -79,8 +79,8 @@ theorem fieldPolynomial_replace_leading_bound (F : (ℚ_[p])[X])
   apply max_le (hF n)
   by_cases hn : n = 0
   · subst n
-    simpa using hst
-  · simpa only [coeff_C,if_neg hn,norm_zero] using hB
+    simpa using! hst
+  · simpa only [coeff_C,if_neg hn,norm_zero] using! hB
 
 /-- Original entry after all discs, with both actual product units retained. -/
 theorem primeLow_rational_entry_leading (hp4 : 3 < p) (a : Fin p)
@@ -136,7 +136,7 @@ theorem primeLow_rational_entry_leading (hp4 : 3 < p) (a : Fin p)
     exact mul_le_mul_of_nonneg_left hdelta (by positivity)
   apply fieldPolynomial_replace_leading_bound _ s t _ (by positivity) ?_ hst n
   intro l
-  simpa only [s,k,q,c,u] using primeLow_original_entry_leading hp4 a ha0 ha i j l
+  simpa only [s,k,q,c,u] using! primeLow_original_entry_leading hp4 a ha0 ha i j l
 
 end
 end Li2

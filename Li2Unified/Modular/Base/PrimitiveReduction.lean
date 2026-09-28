@@ -84,7 +84,7 @@ theorem primitive_constant_reduction_of_scaled_congruence
     ∃ cbar : ZMod p, cbar ≠ 0 ∧ P.map (Int.castRingHom (ZMod p)) = C cbar := by
   have hcoeff (k : ℕ) : (P.coeff k : ℚ) = d * F.coeff k := by
     have h := congrArg (fun f : ℚ[X] => f.coeff k) hprop
-    simpa only [coeff_map, coeff_C_mul] using h
+    simpa only [coeff_map, coeff_C_mul] using! h
   have hzero : VG p (s * F.coeff 0 - c) 1 := by
     simpa only [coeff_sub, coeff_C_mul, coeff_C_zero] using hcong 0
   obtain ⟨hz, hvz⟩ := unit_of_VG_sub hc hcval hzero

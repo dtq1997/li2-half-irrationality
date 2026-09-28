@@ -135,7 +135,7 @@ theorem vertical_horizontal (r s : ℝ) (hr : 0 ≤ r) (hs : 0 ≤ s) :
     · have hy' : 0 ≤ -y := by linarith
       rw [abs_of_neg (lt_of_not_ge hy)]
       calc
-        f y = f (-y) := by simpa only [neg_neg] using heven (-y)
+        f y = f (-y) := by simpa only [neg_neg] using! heven (-y)
         _ = perpendicularSlice r (-y) := hinner (-y) hy'
   have hcont : Continuous (fun y : ℝ => perpendicularSlice r |y|) :=
     (continuous_perpendicularSlice hrpos).comp continuous_abs
@@ -145,7 +145,7 @@ theorem vertical_horizontal (r s : ℝ) (hr : 0 ≤ r) (hs : 0 ≤ s) :
     exact hcont.intervalIntegrable a b
   have hneg : (∫ y in -s..(0:ℝ), f y) = ∫ y in (0:ℝ)..s, f y := by
     have h := intervalIntegral.integral_comp_neg (f := f) (a := (0:ℝ)) (b := s)
-    simpa only [heven, neg_zero] using h.symm
+    simpa only [heven, neg_zero] using! h.symm
   calc
     _ = 2 * ∫ y in (0:ℝ)..s, f y := by
       rw [← intervalIntegral.integral_add_adjacent_intervals (hf (-s) 0) (hf 0 s), hneg]

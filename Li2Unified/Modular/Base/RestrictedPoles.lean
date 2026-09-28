@@ -58,15 +58,15 @@ def integralPoleNumerator (c : ι → ℤ_[p]) (f : PowerSeries ℤ_[p]) (r : ι
 theorem integralPoleNumerator_isRestricted (c : ι → ℤ_[p]) (f : PowerSeries ℤ_[p])
     (hf : PowerSeries.IsRestricted 1 f) (r : ι → ℤ_[p]) :
     PowerSeries.IsRestricted 1 (integralPoleNumerator c f r) :=
-  PowerSeries.IsRestricted.add 1
-    (PowerSeries.IsRestricted.mul 1 (polynomial_isRestricted _) hf) (polynomial_isRestricted _)
+  PowerSeries.isRestricted.add 1
+    (PowerSeries.isRestricted.mul 1 (polynomial_isRestricted _) hf) (polynomial_isRestricted _)
 
 theorem integralPoleNumerator_eval (c : ι → ℤ_[p]) (f : PowerSeries ℤ_[p])
     (hf : PowerSeries.IsRestricted 1 f) (r : ι → ℤ_[p]) (i : ι) :
     restrictedEval (c i) (integralPoleNumerator c f r) =
       r i*(integralPoleCofactor c i).eval (c i) := by
   unfold integralPoleNumerator restrictedEval
-  rw [restrictedMoment_add _ _ _ (PowerSeries.IsRestricted.mul 1 (polynomial_isRestricted _) hf)
+  rw [restrictedMoment_add _ _ _ (PowerSeries.isRestricted.mul 1 (polynomial_isRestricted _) hf)
     (polynomial_isRestricted _)]
   change restrictedEval (c i) ((integralPoleDenominator c : PowerSeries ℤ_[p])*f) +
     restrictedEval (c i) ((∑ j, C (r j)*integralPoleCofactor c j : (ℤ_[p])[X]) : PowerSeries ℤ_[p]) = _

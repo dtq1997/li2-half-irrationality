@@ -48,13 +48,13 @@ theorem parameter_tau_congr (lam : ℚ)
       (Nat.not_dvd_of_pos_of_lt (by omega) hbp)]
     rfl
   have hi : Li2.VG p ((b:ℚ)⁻¹^2) 0 := by
-    simpa using (Li2.rational_unit_inverse_VG (p := p) (b:ℚ)
+    simpa using! (Li2.rational_unit_inverse_VG (p := p) (b:ℚ)
       (by exact_mod_cast (by omega : b ≠ 0)) hv).pow 2
   have hup := parameter_power_unit lam hu
   have hl : Li2.VG p lam 0 := Or.inr (by rw [hu.2]; norm_num)
   have hlp : Li2.VG p (lam^p) 0 := Or.inr (by rw [hup.2]; norm_num)
   rw [← sub_div, div_eq_mul_inv, ← inv_pow]
-  simpa using (Li2.VG.pow_congr hlp hl hferm b).mul hi
+  simpa using! (Li2.VG.pow_congr hlp hl hferm b).mul hi
 
 theorem parameterG_congr (lam : ℚ)
     (hu : lam ≠ 0 ∧ padicValRat p lam = 0)
@@ -67,7 +67,7 @@ theorem parameterG_congr (lam : ℚ)
   apply Li2.VG.sum
   intro k _
   rw [← mul_sub]
-  simpa using (hf k).mul (parameter_all_moments_congr lam hu hone hferm k)
+  simpa using! (hf k).mul (parameter_all_moments_congr lam hu hone hferm k)
 
 theorem parameterU_congr (lam : ℚ)
     (hu : lam ≠ 0 ∧ padicValRat p lam = 0)
@@ -76,7 +76,7 @@ theorem parameterU_congr (lam : ℚ)
     (f : ℚ[X]) (hf : Li2.GV p f 0) :
     Li2.VG p (Li2.parameterU (lam^p) f-Li2.parameterU lam f) 1 := by
   apply parameterG_congr lam hu hone hferm
-  have hprod : Li2.GV p (X*f) 0 := by simpa using (Li2.GV.X (p := p)).mul hf
+  have hprod : Li2.GV p (X*f) 0 := by simpa using! (Li2.GV.X (p := p)).mul hf
   exact hprod.derivative
 
 theorem parameterV_congr (lam : ℚ)
@@ -113,10 +113,10 @@ theorem rationalPoleTerm_congr (lam : ℚ)
   apply Li2.GV.mul_congr
   · exact Li2.GV.X.sub
       (Li2.GV.C (Li2.parameterTau_VG (lam^p) hlp j hj))
-  · exact Li2.GV.C (by simpa using ha.mul (hi.pow j))
+  · exact Li2.GV.C (by simpa using! ha.mul (hi.pow j))
   · rw [← map_sub, ← mul_sub]
     exact Li2.GV.C (by
-      simpa using (ha.mul (parameter_inverse_pow_congr lam hu hferm j)))
+      simpa using! (ha.mul (parameter_inverse_pow_congr lam hu hferm j)))
   · have h := (Li2.GV.C (parameter_tau_congr lam hu hferm j hj)).neg
     convert h using 1 <;> simp only [map_neg, map_sub] <;> ring
 
@@ -133,7 +133,7 @@ theorem rationalPoleU_congr (lam : ℚ)
   apply Li2.GV.sum
   intro j _
   exact rationalPoleTerm_congr lam hu hferm (r j*(j.val:ℚ))
-    (by simpa using (hr j).mul (Li2.VG.natCast (p := p) j.val))
+    (by simpa using! (hr j).mul (Li2.VG.natCast (p := p) j.val))
     j.val (by omega)
 
 theorem rationalPoleV_congr (lam : ℚ)
@@ -194,7 +194,7 @@ theorem zeroShape_U_congr (lam : ℚ)
   have h := rationalPoleU_congr lam hu hone hferm hp4 _ _
     (Li2.zeroShapeRegular_integral k)
     (Li2.zeroShapeResidue_integral hp4 k)
-  simpa only [coeff_sub, coeff_zero_eq_eval_zero, eval_sub, zeroShapeUValue] using h 0
+  simpa only [coeff_sub, coeff_zero_eq_eval_zero, eval_sub, zeroShapeUValue] using! h 0
 
 theorem lowShape_V_congr (lam : ℚ)
     (hu : lam ≠ 0 ∧ padicValRat p lam = 0)
@@ -208,7 +208,7 @@ theorem lowShape_V_congr (lam : ℚ)
   have h := rationalPoleV_congr lam hu hone hferm hp4 _ _
     (Li2.zeroShapeRegular_integral ⟨k.val+2, by omega⟩)
     (Li2.zeroShapeResidue_integral hp4 ⟨k.val+2, by omega⟩)
-  simpa only [coeff_sub, coeff_zero_eq_eval_zero, eval_sub, lowShapeVValue] using h 0
+  simpa only [coeff_sub, coeff_zero_eq_eval_zero, eval_sub, lowShapeVValue] using! h 0
 
 theorem highShape_V_congr (lam : ℚ)
     (hu : lam ≠ 0 ∧ padicValRat p lam = 0)
@@ -221,7 +221,7 @@ theorem highShape_V_congr (lam : ℚ)
   have h := rationalPoleV_congr lam hu hone hferm hp4 _ _
     (Li2.highShapeRegular_integral k)
     (Li2.highShapeResidue_integral (p := p) k)
-  simpa only [coeff_sub, coeff_zero_eq_eval_zero, eval_sub, highShapeVValue] using h 0
+  simpa only [coeff_sub, coeff_zero_eq_eval_zero, eval_sub, highShapeVValue] using! h 0
 
 end
 end Li2Unified.LambdaLift
@@ -328,8 +328,8 @@ theorem parameterDiscPole_U_substituted_leading (z : ℚ) (hu : z ≠ 0 ∧ padi
           (C ((p:ℤ_[p])^2)*(X-C eta)) -
       C (primeDiscUnitConstant a ha*(parameterFourPoleU z hu hreg hp4 f r).eval 0)).coeff n‖ ≤ ‖(p:ℤ_[p])‖ := by
   have hs : ‖(p:ℤ_[p])^2‖ ≤ ‖(p:ℤ_[p])‖ := by
-    simpa only [pow_two] using integral_coeff_mul_norm_le (p:ℤ_[p]) (p:ℤ_[p])
-  simpa only [eval_mul, eval_C] using integralPolynomial_leading_substitution
+    simpa only [pow_two] using! integral_coeff_mul_norm_le (p:ℤ_[p]) (p:ℤ_[p])
+  simpa only [eval_mul, eval_C] using! integralPolynomial_leading_substitution
     _ (C (primeDiscUnitConstant a ha)*parameterFourPoleU z hu hreg hp4 f r) ((p:ℤ_[p])^2) eta
     ‖(p:ℤ_[p])‖ (norm_nonneg _) hs (parameterDiscPole_U_error z hu hreg hp4 a ha f hf r) n
 
@@ -343,8 +343,8 @@ theorem parameterDiscPole_V_substituted_leading (z : ℚ) (hu : z ≠ 0 ∧ padi
           (C ((p:ℤ_[p])^2)*(X-C eta)) -
       C (primeDiscUnitConstant a ha*(parameterFourPoleV z hu hreg hp4 f r).eval 0)).coeff n‖ ≤ ‖(p:ℤ_[p])‖ := by
   have hs : ‖(p:ℤ_[p])^2‖ ≤ ‖(p:ℤ_[p])‖ := by
-    simpa only [pow_two] using integral_coeff_mul_norm_le (p:ℤ_[p]) (p:ℤ_[p])
-  simpa only [eval_mul, eval_C] using integralPolynomial_leading_substitution
+    simpa only [pow_two] using! integral_coeff_mul_norm_le (p:ℤ_[p]) (p:ℤ_[p])
+  simpa only [eval_mul, eval_C] using! integralPolynomial_leading_substitution
     _ (C (primeDiscUnitConstant a ha)*parameterFourPoleV z hu hreg hp4 f r) ((p:ℤ_[p])^2) eta
     ‖(p:ℤ_[p])‖ (norm_nonneg _) hs (parameterDiscPole_V_error z hu hreg hp4 a ha f hf r) n
 theorem parameterDiscPole_U_substituted_rational (z : ℚ) (hu : z ≠ 0 ∧ padicValRat p z = 0)
@@ -365,7 +365,7 @@ theorem parameterDiscPole_U_substituted_rational (z : ℚ) (hu : z ≠ 0 ∧ pad
     rw [norm_mul]
     exact (mul_le_mul (PadicInt.norm_le_one _) hq (norm_nonneg _) (by norm_num)).trans_eq
       (one_mul _)
-  simpa only [PadicInt.coe_mul, mul_sub] using hmul
+  simpa only [PadicInt.coe_mul, mul_sub] using! hmul
 
 theorem parameterDiscPole_V_substituted_rational (z : ℚ) (hu : z ≠ 0 ∧ padicValRat p z = 0)
     (hreg : VG p (z/(1-z)) 0) (hp4 : 3 < p) (a : ℕ) (ha : a < p)
@@ -385,7 +385,7 @@ theorem parameterDiscPole_V_substituted_rational (z : ℚ) (hu : z ≠ 0 ∧ pad
     rw [norm_mul]
     exact (mul_le_mul (PadicInt.norm_le_one _) hq (norm_nonneg _) (by norm_num)).trans_eq
       (one_mul _)
-  simpa only [PadicInt.coe_mul, mul_sub] using hmul
+  simpa only [PadicInt.coe_mul, mul_sub] using! hmul
 
 end
 end Li2Unified.Proofs.PrimeEdge
@@ -416,7 +416,7 @@ theorem parameterDiscMonomial_zero_U_leading (lam : ℚ) (hu : lam ≠ 0 ∧ pad
   simp only [primeDiscBaseRegular, primeDiscBaseResidue, if_pos rfl]
   apply parameterDiscPole_U_substituted_rational
   · exact integralPoleMulRegular_isRestricted _ _ _ (polynomial_isRestricted _)
-      (PowerSeries.IsRestricted.zero 1) _
+      (PowerSeries.isRestricted_zero 1) _
   · exact parameterZeroShape_U_value_norm lam hu hone hferm hp4 k
 
 theorem parameterDiscMonomial_low_V_leading (lam : ℚ) (hu : lam ≠ 0 ∧ padicValRat p lam = 0)
@@ -432,7 +432,7 @@ theorem parameterDiscMonomial_low_V_leading (lam : ℚ) (hu : lam ≠ 0 ∧ padi
   simp only [primeDiscBaseRegular, primeDiscBaseResidue, if_neg (by omega : a.val ≠ 0), if_pos ha]
   apply parameterDiscPole_V_substituted_rational
   · exact integralPoleMulRegular_isRestricted _ _ _ (polynomial_isRestricted _)
-      (PowerSeries.IsRestricted.zero 1) _
+      (PowerSeries.isRestricted_zero 1) _
   · exact parameterLowShape_V_value_norm lam hu hone hferm hp4 k
 
 theorem parameterDiscMonomial_high_V_leading (lam : ℚ) (hu : lam ≠ 0 ∧ padicValRat p lam = 0)
@@ -449,7 +449,7 @@ theorem parameterDiscMonomial_high_V_leading (lam : ℚ) (hu : lam ≠ 0 ∧ pad
     if_neg (by omega : ¬a.val ≤ p-4)]
   apply parameterDiscPole_V_substituted_rational
   · exact integralPoleMulRegular_isRestricted _ _ _ (polynomial_isRestricted _)
-      (PowerSeries.IsRestricted.one 1) _
+      (PowerSeries.isRestricted_one 1) _
   · exact parameterHighShape_V_value_norm lam hu hone hferm hp4 k
 
 end

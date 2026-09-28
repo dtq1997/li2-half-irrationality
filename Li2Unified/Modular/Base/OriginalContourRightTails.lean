@@ -73,7 +73,7 @@ lemma originalRightContourKernel_norm_le (N : ℕ) (y : ℝ) :
 lemma continuous_originalRightContourKernel (N : ℕ) :
     Continuous (fun y : ℝ =>
       originalContourKernel ((N : ℂ) + originalContourPoint y)) := by
-  simpa only [originalContourKernel_nat_add] using
+  simpa only [originalContourKernel_nat_add] using!
     (continuous_const.mul continuous_originalContourKernel_vertical :
       Continuous (fun y : ℝ =>
         (-1 / 2 : ℂ) ^ N *

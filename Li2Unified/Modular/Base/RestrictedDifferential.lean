@@ -34,7 +34,7 @@ theorem restrictedV_summable (μ : ℕ → ℤ_[p]) (f : PowerSeries ℤ_[p])
 
 theorem restrictedU_derivative (μ : ℕ → ℤ_[p]) (f : PowerSeries ℤ_[p]) :
     restrictedU μ f = restrictedMoment μ
-      (PowerSeries.derivative (ℤ_[p]) (PowerSeries.X*f)) := by
+      (PowerSeries.derivative (R := ℤ_[p]) (PowerSeries.X*f)) := by
   unfold restrictedU restrictedMoment
   apply tsum_congr
   intro n
@@ -44,7 +44,7 @@ theorem restrictedU_derivative (μ : ℕ → ℤ_[p]) (f : PowerSeries ℤ_[p]) 
 
 theorem restrictedV_derivative (μ : ℕ → ℤ_[p]) (f : PowerSeries ℤ_[p])
     (hf : PowerSeries.IsRestricted 1 f) :
-    restrictedV μ f = restrictedMoment μ (PowerSeries.derivative (ℤ_[p]) f) := by
+    restrictedV μ f = restrictedMoment μ (PowerSeries.derivative (R := ℤ_[p]) f) := by
   have he := (restrictedV_summable μ f hf).sum_add_tsum_nat_add 1
   simp only [Finset.sum_range_one, derivativeMoments, mul_zero, zero_add] at he
   unfold restrictedV restrictedMoment derivativeMoments

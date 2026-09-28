@@ -19,6 +19,7 @@ def integralRationalUnit (d : ℚ) (hd : d ≠ 0) (hv : padicValRat p d = 0) : �
     (integralRational d⁻¹ (rational_unit_inverse_VG d hd hv))
     (by
       apply PadicInt.ext
+      rw [PadicInt.coe_mul, PadicInt.coe_one]
       simp [integralRational, hd])
 
 @[simp] lemma integralRationalUnit_coe (d : ℚ) (hd : d ≠ 0) (hv : padicValRat p d = 0) :

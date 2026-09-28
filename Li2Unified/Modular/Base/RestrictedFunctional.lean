@@ -22,7 +22,7 @@ def restrictedMoment (μ : ℕ → ℤ_[p]) (f : PowerSeries ℤ_[p]) : ℤ_[p] 
 lemma restricted_coeff_tendsto {f : PowerSeries ℤ_[p]}
     (hf : PowerSeries.IsRestricted 1 f) :
     Tendsto (fun n => ‖PowerSeries.coeff n f‖) atTop (𝓝 0) := by
-  simpa only [PowerSeries.IsRestricted, one_pow, mul_one] using hf
+  simpa only [one_pow, mul_one] using (PowerSeries.isRestricted_iff' _ _).mp hf
 
 lemma integral_coeff_mul_norm_le (a b : ℤ_[p]) : ‖a*b‖ ≤ ‖a‖ := by
   calc
@@ -60,7 +60,7 @@ theorem restrictedMoment_smul (μ : ℕ → ℤ_[p]) (f : PowerSeries ℤ_[p])
 
 theorem polynomial_isRestricted (P : (ℤ_[p])[X]) :
     PowerSeries.IsRestricted 1 (P : PowerSeries ℤ_[p]) := by
-  unfold PowerSeries.IsRestricted
+  rw [PowerSeries.isRestricted_iff']
   simp only [one_pow, mul_one]
   apply tendsto_const_nhds.congr'
   filter_upwards [eventually_ge_atTop (P.natDegree+1)] with n hn
@@ -76,8 +76,8 @@ theorem restrictedMoment_polynomial (μ : ℕ → ℤ_[p]) (P : (ℤ_[p])[X]) :
 
 theorem derivative_isRestricted (f : PowerSeries ℤ_[p])
     (hf : PowerSeries.IsRestricted 1 f) :
-    PowerSeries.IsRestricted 1 (PowerSeries.derivative (ℤ_[p]) f) := by
-  unfold PowerSeries.IsRestricted
+    PowerSeries.IsRestricted 1 (PowerSeries.derivative (R := ℤ_[p]) f) := by
+  rw [PowerSeries.isRestricted_iff']
   simp only [one_pow, mul_one, PowerSeries.coeff_derivative]
   have ht : Tendsto (fun n : ℕ => ‖PowerSeries.coeff (n+1) f‖) atTop (𝓝 0) :=
     (restricted_coeff_tendsto hf).comp (tendsto_add_atTop_nat 1)

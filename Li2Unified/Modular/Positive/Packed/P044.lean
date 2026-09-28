@@ -26,7 +26,7 @@ private theorem square_window_of_cutoff (N n p : ℕ)
   have hnp : (n:ℝ) < ((N:ℝ) + 1) * (p:ℝ) := by
     have hh : (n:ℝ) < (p:ℝ) * ((N:ℝ) + 1) :=
       (div_lt_iff₀ hd).mp (by
-        simpa only [one_div, one_mul, div_eq_mul_inv, mul_comm] using hfloor)
+        simpa only [one_div, one_mul, div_eq_mul_inv, mul_comm] using! hfloor)
     nlinarith
   have hnR : (4:ℝ) * ((N:ℝ) + 1) ^ 2 ≤ (n:ℝ) := by
     exact_mod_cast hn
@@ -42,7 +42,7 @@ private theorem square_window_of_cutoff (N n p : ℕ)
   have hsq : (4:ℝ) * (n:ℝ) < (p:ℝ) ^ 2 := by
     nlinarith
   have hsqNat : 4 * n < p ^ 2 := by exact_mod_cast hsq
-  simpa only [pow_two] using hsqNat
+  simpa only [pow_two] using! hsqNat
 
 /-- The two positive-half parameter factors are units at every prime at least five. -/
 private theorem posHalf_parameter_units (p : ℕ) [Fact p.Prime] (hp5 : 5 ≤ p) :
@@ -58,7 +58,7 @@ private theorem posHalf_parameter_units (p : ℕ) [Fact p.Prime] (hp5 : 5 ≤ p)
     omega
   rw [lambda_eq_inverse]
   exact ⟨inverseParameter_unit 2 (by norm_num) hp2,
-    inverseParameter_one_sub_unit 2 (by norm_num) hp2 (by simpa using hp1)⟩
+    inverseParameter_one_sub_unit 2 (by norm_num) hp2 (by simpa using! hp1)⟩
 
 /-- The full `ε` medium-prime rate follows by choosing one finite reciprocal
 cutoff after `ε`. The actual Gram estimate applies above the finite cutoff. -/
@@ -72,11 +72,11 @@ theorem posHalf_medium_eventually_actual (ε : ℝ) (hε : 0 < ε) :
     exists_finite_cutoff ε hε
   let δ : ℝ := 1/((N:ℝ)+1)
   have hδ0 : 0 < δ := by
-    simpa only [δ, Nat.cast_add, Nat.cast_one] using hδ0raw
+    simpa only [δ, Nat.cast_add, Nat.cast_one] using! hδ0raw
   have hδ1 : δ ≤ 1 := by
-    simpa only [δ, Nat.cast_add, Nat.cast_one] using hδ1raw
+    simpa only [δ, Nat.cast_add, Nat.cast_one] using! hδ1raw
   have hδbudget : 4*δ < ε/2 := by
-    simpa only [δ, Nat.cast_add, Nat.cast_one, mul_one_div] using hδbudgetRaw
+    simpa only [δ, Nat.cast_add, Nat.cast_one, mul_one_div] using! hδbudgetRaw
   have hε4 : 0 < ε/4 := by linarith
   have hsmall := posHalf_smallTail_eventually_delta δ (ε/4)
     hδ0 hδ1 hε4
@@ -104,7 +104,7 @@ theorem posHalf_medium_eventually_actual (ε : ℝ) (hε : 0 < ε) :
       have hnR : (0:ℝ) ≤ (n:ℝ) := Nat.cast_nonneg _
       nlinarith [hδ1]
     have := Nat.floor_le_floor hle
-    simpa only [Nat.floor_natCast] using this
+    simpa only [Nat.floor_natCast] using! this
   let f : ℕ → ℝ := fun p =>
     ((-padicValRat p (dtilde lambda n) : ℤ) : ℝ)*Real.log (p:ℝ)
   have hpart := medium_prime_two_interval_partition f n c hc4 hcn
@@ -126,14 +126,14 @@ theorem posHalf_medium_eventually_actual (ε : ℝ) (hε : 0 < ε) :
     obtain ⟨hpc, hpn⟩ := Finset.mem_Ioc.mp hpI
     have hp5 : 5 ≤ p := by omega
     have hcut : ⌊((1:ℝ)/((N:ℝ)+1))*(n:ℝ)⌋₊ < p := by
-      simpa only [c, δ] using hpc
+      simpa only [c, δ] using! hpc
     have hsq : 4*n < p*p := square_window_of_cutoff N n p hnSq hcut
     letI : Fact p.Prime := ⟨hp⟩
     exact actual_binomGram lambda n p (by norm_num [lambda]) hp5 hpn hsq
       (posHalf_parameter_units p hp5)
   have hs' := hs hne
   have hm' := hm (by omega : 0 < n)
-    (by simpa only [Instances.PosHalf.Qtilde] using hne) hgramN
+    (by simpa only [Instances.PosHalf.Qtilde] using! hne) hgramN
   have hbudget : (-523/840:ℝ)-ε ≤
       ((-523/840:ℝ)+(2/3:ℝ)/((N+1:ℕ):ℝ)^2-ε/4) +
       (-4*δ-ε/4) := by

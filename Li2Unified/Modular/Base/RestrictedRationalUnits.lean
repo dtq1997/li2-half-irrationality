@@ -23,7 +23,7 @@ lemma rescale_coeff_norm_le (b : ℤ_[p]) (f : PowerSeries ℤ_[p]) (n : ℕ) :
 
 theorem rescale_isRestricted (b : ℤ_[p]) (hb : ‖b‖ < 1) (f : PowerSeries ℤ_[p]) :
     PowerSeries.IsRestricted 1 (PowerSeries.rescale b f) := by
-  unfold PowerSeries.IsRestricted
+  rw [PowerSeries.isRestricted_iff']
   simp only [one_pow, mul_one]
   exact squeeze_zero (fun _ => norm_nonneg _) (rescale_coeff_norm_le b f)
     (tendsto_pow_atTop_nhds_zero_of_lt_one (norm_nonneg b) hb)

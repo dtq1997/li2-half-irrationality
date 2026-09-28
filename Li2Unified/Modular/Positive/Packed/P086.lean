@@ -75,7 +75,7 @@ private lemma upper_kappa_differentiableAt (y : ℝ) :
     have hr : 1 + Real.exp (2 * Real.pi * y) ≠ 0 := ne_of_gt (by positivity)
     have hc : (1 : ℂ) + (Real.exp (2 * Real.pi * y) : ℂ) ≠ 0 := by
       exact_mod_cast hr
-    simpa only [sub_neg_eq_add] using hc
+    simpa only [sub_neg_eq_add] using! hc
   have hd : DifferentiableAt ℂ
       (fun z : ℂ => 1 - Complex.exp (-(2 * (Real.pi : ℂ) * Complex.I) * z))
       (point ⟨1, by decide⟩ y) := by fun_prop
@@ -94,7 +94,7 @@ private lemma lower_kappa_differentiableAt (y : ℝ) :
     have hr : 1 + Real.exp (2 * Real.pi * y) ≠ 0 := ne_of_gt (by positivity)
     have hc : (1 : ℂ) + (Real.exp (2 * Real.pi * y) : ℂ) ≠ 0 := by
       exact_mod_cast hr
-    simpa only [sub_neg_eq_add] using hc
+    simpa only [sub_neg_eq_add] using! hc
   have hd : DifferentiableAt ℂ
       (fun z : ℂ => 1 - Complex.exp ((2 * (Real.pi : ℂ) * Complex.I) * z))
       (point ⟨2, by decide⟩ y) := by fun_prop
@@ -117,7 +117,7 @@ lemma upperKernel_deriv_upper_norm_le (y : ℝ) :
   have hpd : ‖deriv power z‖ ≤ Real.log 2 := by
     rw [power_deriv, norm_mul, norm_neg, Complex.norm_real, Real.norm_eq_abs,
       abs_of_nonneg hlog]
-    simpa only [mul_one] using mul_le_mul_of_nonneg_left hp hlog
+    simpa only [mul_one] using! mul_le_mul_of_nonneg_left hp hlog
   have hk : ‖kappaPlus z‖ ≤ Real.exp (-2 * Real.pi * y) :=
     kappaPlus_upper_norm_le y
   have hkd : ‖deriv kappaPlus z‖ ≤
@@ -133,7 +133,7 @@ lemma upperKernel_deriv_upper_norm_le (y : ℝ) :
   have h2 : ‖power z * deriv kappaPlus z‖ ≤
       2 * Real.pi * Real.exp (-2 * Real.pi * y) := by
     rw [norm_mul]
-    exact (mul_le_mul_of_nonneg_right hp (norm_nonneg _)).trans (by simpa using hkd)
+    exact (mul_le_mul_of_nonneg_right hp (norm_nonneg _)).trans (by simpa using! hkd)
   rw [hdiff]
   calc
     ‖deriv power z * kappaPlus z + power z * deriv kappaPlus z‖ ≤
@@ -155,7 +155,7 @@ lemma lowerKernel_deriv_lower_norm_le (y : ℝ) :
   have hpd : ‖deriv power z‖ ≤ Real.log 2 := by
     rw [power_deriv, norm_mul, norm_neg, Complex.norm_real, Real.norm_eq_abs,
       abs_of_nonneg hlog]
-    simpa only [mul_one] using mul_le_mul_of_nonneg_left hp hlog
+    simpa only [mul_one] using! mul_le_mul_of_nonneg_left hp hlog
   have hk : ‖kappaMinus z‖ ≤ Real.exp (-2 * Real.pi * y) :=
     kappaMinus_lower_norm_le y
   have hkd : ‖deriv kappaMinus z‖ ≤
@@ -171,7 +171,7 @@ lemma lowerKernel_deriv_lower_norm_le (y : ℝ) :
   have h2 : ‖power z * deriv kappaMinus z‖ ≤
       2 * Real.pi * Real.exp (-2 * Real.pi * y) := by
     rw [norm_mul]
-    exact (mul_le_mul_of_nonneg_right hp (norm_nonneg _)).trans (by simpa using hkd)
+    exact (mul_le_mul_of_nonneg_right hp (norm_nonneg _)).trans (by simpa using! hkd)
   rw [hdiff]
   calc
     ‖deriv power z * kappaMinus z + power z * deriv kappaMinus z‖ ≤

@@ -23,7 +23,7 @@ lemma psi_sub_theta_isLittleO_id :
     simp only [Real.norm_eq_abs, one_mul, abs_of_nonneg hnonneg]
     exact Chebyshev.abs_psi_sub_theta_le_sqrt_mul_log hx
   exact hO.trans_isLittleO (by
-    simpa only [mul_assoc] using Li2.PNT.isLittleO_sqrt_mul_log.const_mul_left (2 : ℝ))
+    simpa only [mul_assoc] using! Li2.PNT.isLittleO_sqrt_mul_log.const_mul_left (2 : ℝ))
 
 lemma psi_sub_theta_scaled_nat_tendsto_zero {c : ℝ} (hc : 0 < c) :
     Tendsto (fun n : ℕ =>
@@ -34,7 +34,7 @@ lemma psi_sub_theta_scaled_nat_tendsto_zero {c : ℝ} (hc : 0 < c) :
   have h : Tendsto (fun n : ℕ =>
       c*((Chebyshev.psi (c*(n : ℝ))-Chebyshev.theta (c*(n : ℝ)))/(c*(n : ℝ))))
       atTop (𝓝 (0 : ℝ)) := by
-    simpa only [mul_zero] using
+    simpa only [mul_zero] using!
       (psi_sub_theta_isLittleO_id.tendsto_div_nhds_zero.comp hs).const_mul c
   apply (tendsto_congr' ?_).mp h
   filter_upwards [eventually_ge_atTop (1 : ℕ)] with n hn
@@ -128,7 +128,7 @@ theorem primePowerExcess_seven_sub_two_tendsto_zero
       (primePowerExcess_le_psi_sub_theta (by omega : 0 < 7*n) (P n) (hP n))
     have hs' : primePowerExcess (7*n-2) (P n) ≤
         Chebyshev.psi (7*(n : ℝ))-Chebyshev.theta (7*(n : ℝ)) := by
-      simpa only [Nat.cast_mul, Nat.cast_ofNat] using hs
+      simpa only [Nat.cast_mul, Nat.cast_ofNat] using! hs
     exact div_le_div_of_nonneg_right hs' (Nat.cast_nonneg n)
 
 end

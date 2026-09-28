@@ -1,4 +1,5 @@
 module
+public import Li2Unified.Modular.Base.RestrictedSeriesCompat
 public import Li2Unified.Modular.Base.RestrictedPoleMultiplierError
 
 set_option backward.privateInPublic true
@@ -24,11 +25,11 @@ theorem restrictedPoleFunctional_multiplier_error (c : ι → ℤ_[p])
       C k*restrictedPoleFunctional μ w f r).coeff n‖ ≤ B := by
   have hsmall : PowerSeries.IsRestricted 1 (g-PowerSeries.C k) := by
     rw [sub_eq_add_neg]
-    exact PowerSeries.IsRestricted.add 1 hg
-      (PowerSeries.IsRestricted.neg 1 (PowerSeries.IsRestricted.C 1 k))
+    exact PowerSeries.isRestricted.add 1 hg
+      (PowerSeries.isRestricted.neg 1 (PowerSeries.isRestricted_C 1 k))
   obtain ⟨hreg,hres⟩ := integralPoleMultiplier_decomposition c hc g f hg hf r k
   rw [hreg, hres, restrictedPoleFunctional_add μ w _ _
-    (PowerSeries.IsRestricted.smul 1 hf k)
+    (Li2.restrictedSeries_smul 1 hf k)
     (integralPoleMulRegular_isRestricted c _ f hsmall hf r),
     restrictedPoleFunctional_smul μ w f hf r k, add_sub_cancel_left]
   exact restrictedPoleFunctional_coeff_bound μ w _ _ B hB

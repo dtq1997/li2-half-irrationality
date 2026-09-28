@@ -34,24 +34,24 @@ private theorem termH_hasDerivAt (c shift : QPair) (negative : Bool)
           (if negative then (-1 : ℝ) else 1))) x := by
   cases negative with
   | false =>
-      simpa [Term.eval] using
-        hasDerivAt_affineH (shift.toRat : ℝ) 1 (c.toRat : ℝ) x (by simpa using hu)
+      simpa [Term.eval] using!
+        hasDerivAt_affineH (shift.toRat : ℝ) 1 (c.toRat : ℝ) x (by simpa using! hu)
   | true =>
-      simpa [Term.eval] using
-        hasDerivAt_affineH (shift.toRat : ℝ) (-1) (c.toRat : ℝ) x (by simpa using hu)
+      simpa [Term.eval] using!
+        hasDerivAt_affineH (shift.toRat : ℝ) (-1) (c.toRat : ℝ) x (by simpa using! hu)
 
 private theorem termF_hasDerivAt (c r : QPair) (x : ℝ)
     (hr : 0 < (r.toRat : ℝ)) :
     HasDerivAt ((Term.F c r).eval)
       ((c.toRat : ℝ) * (-Real.arctan (x / (r.toRat : ℝ)))) x := by
-  simpa only [Term.eval] using (F_hasDerivAt hr x).const_mul (c.toRat : ℝ)
+  simpa only [Term.eval] using! (F_hasDerivAt hr x).const_mul (c.toRat : ℝ)
 
 private theorem scaledF_concaveOn_Icc (a b r c : ℝ)
     (hr : 0 < r) (hc : 0 ≤ c) :
     ConcaveOn ℝ (Set.Icc a b) (fun x : ℝ => c * F r x) := by
   have hf : ConcaveOn ℝ (Set.Icc a b) (F r) :=
     (F_concaveOn hr).subset (Set.subset_univ _) (convex_Icc a b)
-  simpa only [smul_eq_mul] using (ConcaveOn.smul hc hf)
+  simpa only [smul_eq_mul] using! (ConcaveOn.smul hc hf)
 
 private theorem scaledF_convexOn_Icc (a b r c : ℝ)
     (hr : 0 < r) (hc : c ≤ 0) :
@@ -64,16 +64,16 @@ private theorem scaledF_convexOn_Icc (a b r c : ℝ)
 
 private theorem coeff_nonneg {c : QPair} (hc : qValid c = true)
     (h : qLE qZero c = true) : 0 ≤ (c.toRat : ℝ) := by
-  simpa [qZero_toRat] using qLE_real qValid_qZero hc h
+  simpa [qZero_toRat] using! qLE_real qValid_qZero hc h
 
 private theorem coeff_nonpos {c : QPair} (hc : qValid c = true)
     (h : qLE c qZero = true) : (c.toRat : ℝ) ≤ 0 := by
-  simpa [qZero_toRat] using qLE_real hc qValid_qZero h
+  simpa [qZero_toRat] using! qLE_real hc qValid_qZero h
 
 private theorem coeff_zero {c : QPair} (hc : qValid c = true)
     (h : qEq c qZero = true) : (c.toRat : ℝ) = 0 := by
   have hq := qEq_sound hc qValid_qZero h
-  exact_mod_cast (by simpa only [qZero_toRat] using hq)
+  exact_mod_cast (by simpa only [qZero_toRat] using! hq)
 
 private theorem argument_affine_real (shift x : QPair) (negative : Bool)
     (hs : qValid shift = true) (hx : qValid x = true) :
@@ -90,7 +90,7 @@ private theorem argument_nonneg_real (shift x : QPair) (negative : Bool)
       (if negative then (-1 : ℝ) else 1) * (x.toRat : ℝ) := by
   have harg := argument_valid shift x negative hs hx
   have hreal : (0 : ℝ) ≤ ((argument shift x negative).toRat : ℝ) := by
-    simpa [qZero_toRat] using qLE_real qValid_qZero harg h
+    simpa [qZero_toRat] using! qLE_real qValid_qZero harg h
   rwa [argument_affine_real shift x negative hs hx] at hreal
 
 private theorem argument_nonpos_real (shift x : QPair) (negative : Bool)
@@ -100,7 +100,7 @@ private theorem argument_nonpos_real (shift x : QPair) (negative : Bool)
       (if negative then (-1 : ℝ) else 1) * (x.toRat : ℝ) ≤ 0 := by
   have harg := argument_valid shift x negative hs hx
   have hreal : ((argument shift x negative).toRat : ℝ) ≤ 0 := by
-    simpa [qZero_toRat] using qLE_real harg qValid_qZero h
+    simpa [qZero_toRat] using! qLE_real harg qValid_qZero h
   rwa [argument_affine_real shift x negative hs hx] at hreal
 
 private theorem convexGuard_data {t : Term} {a b : QPair}
@@ -121,7 +121,7 @@ theorem convexGuard_sound {t : Term} {a b : QPair}
   obtain ⟨ht, ha, hb, _⟩ := convexGuard_data h
   cases t with
   | constant e =>
-      simpa only [Term.eval] using
+      simpa only [Term.eval] using!
         (convexOn_const (e.denote 0) (convex_Icc (a.toRat : ℝ) (b.toRat : ℝ)))
   | linear e =>
       refine ⟨convex_Icc _ _, ?_⟩
@@ -156,7 +156,7 @@ theorem convexGuard_sound {t : Term} {a b : QPair}
           (convex_Icc (a.toRat : ℝ) (b.toRat : ℝ))
           (shift.toRat : ℝ) (if negative then (-1 : ℝ) else 1)
           (c.toRat : ℝ) hside (coeff_nonneg hc hcoeff)
-        cases negative <;> simpa [Term.eval] using hcore
+        cases negative <;> simpa [Term.eval] using! hcore
       · rcases hneg with ⟨⟨hcoeff, hleft⟩, hright⟩
         have hside : ∀ x ∈ Set.Icc (a.toRat : ℝ) (b.toRat : ℝ),
             (shift.toRat : ℝ) +
@@ -169,7 +169,7 @@ theorem convexGuard_sound {t : Term} {a b : QPair}
           (convex_Icc (a.toRat : ℝ) (b.toRat : ℝ))
           (shift.toRat : ℝ) (if negative then (-1 : ℝ) else 1)
           (c.toRat : ℝ) hside (coeff_nonpos hc hcoeff)
-        cases negative <;> simpa [Term.eval] using hcore
+        cases negative <;> simpa [Term.eval] using! hcore
   | F c r =>
       simp only [validTerm, Bool.and_eq_true] at ht
       obtain ⟨⟨hc, hr⟩, hrpos⟩ := ht
@@ -177,8 +177,8 @@ theorem convexGuard_sound {t : Term} {a b : QPair}
       simp only [convexGuard, Bool.and_eq_true] at hh
       have hcneg : (c.toRat : ℝ) ≤ 0 := coeff_nonpos hc hh.2
       have hrreal : 0 < (r.toRat : ℝ) := by
-        simpa [qZero_toRat] using qLT_real qValid_qZero hr hrpos
-      simpa only [Term.eval] using
+        simpa [qZero_toRat] using! qLT_real qValid_qZero hr hrpos
+      simpa only [Term.eval] using!
         scaledF_convexOn_Icc (a.toRat : ℝ) (b.toRat : ℝ)
           (r.toRat : ℝ) (c.toRat : ℝ) hrreal hcneg
 
@@ -188,7 +188,7 @@ theorem concaveGuard_sound {t : Term} {a b : QPair}
   obtain ⟨ht, ha, hb, _⟩ := concaveGuard_data h
   cases t with
   | constant e =>
-      simpa only [Term.eval] using
+      simpa only [Term.eval] using!
         (concaveOn_const (e.denote 0) (convex_Icc (a.toRat : ℝ) (b.toRat : ℝ)))
   | linear e =>
       refine ⟨convex_Icc _ _, ?_⟩
@@ -223,7 +223,7 @@ theorem concaveGuard_sound {t : Term} {a b : QPair}
           (convex_Icc (a.toRat : ℝ) (b.toRat : ℝ))
           (shift.toRat : ℝ) (if negative then (-1 : ℝ) else 1)
           (c.toRat : ℝ) hside (coeff_nonpos hc hcoeff)
-        cases negative <;> simpa [Term.eval] using hcore
+        cases negative <;> simpa [Term.eval] using! hcore
       · rcases hneg with ⟨⟨hcoeff, hleft⟩, hright⟩
         have hside : ∀ x ∈ Set.Icc (a.toRat : ℝ) (b.toRat : ℝ),
             (shift.toRat : ℝ) +
@@ -236,7 +236,7 @@ theorem concaveGuard_sound {t : Term} {a b : QPair}
           (convex_Icc (a.toRat : ℝ) (b.toRat : ℝ))
           (shift.toRat : ℝ) (if negative then (-1 : ℝ) else 1)
           (c.toRat : ℝ) hside (coeff_nonneg hc hcoeff)
-        cases negative <;> simpa [Term.eval] using hcore
+        cases negative <;> simpa [Term.eval] using! hcore
   | F c r =>
       simp only [validTerm, Bool.and_eq_true] at ht
       obtain ⟨⟨hc, hr⟩, hrpos⟩ := ht
@@ -244,8 +244,8 @@ theorem concaveGuard_sound {t : Term} {a b : QPair}
       simp only [concaveGuard, Bool.and_eq_true] at hh
       have hcpos : 0 ≤ (c.toRat : ℝ) := coeff_nonneg hc hh.2
       have hrreal : 0 < (r.toRat : ℝ) := by
-        simpa [qZero_toRat] using qLT_real qValid_qZero hr hrpos
-      simpa only [Term.eval] using
+        simpa [qZero_toRat] using! qLT_real qValid_qZero hr hrpos
+      simpa only [Term.eval] using!
         scaledF_concaveOn_Icc (a.toRat : ℝ) (b.toRat : ℝ)
           (r.toRat : ℝ) (c.toRat : ℝ) hrreal hcpos
 
@@ -262,10 +262,10 @@ theorem derivativeExpr_hasDerivAt {t : Term} {m : QPair}
     HasDerivAt (Term.eval t) ((derivativeExpr t m).denote 0) (m.toRat : ℝ) := by
   cases t with
   | constant e =>
-      simpa [Term.eval, derivativeExpr, Expr.denote, qZero_toRat] using
+      simpa [Term.eval, derivativeExpr, Expr.denote, qZero_toRat] using!
         (hasDerivAt_const (m.toRat : ℝ) (e.denote 0))
   | linear e =>
-      simpa [Term.eval, derivativeExpr, closeAt_denote, qZero_toRat] using
+      simpa [Term.eval, derivativeExpr, closeAt_denote, qZero_toRat] using!
         ((hasDerivAt_id (m.toRat : ℝ)).const_mul (e.denote 0))
   | H c shift negative =>
       simp only [validTerm, Bool.and_eq_true] at ht
@@ -276,12 +276,12 @@ theorem derivativeExpr_hasDerivAt {t : Term} {m : QPair}
           funext x
           simp [Term.eval, hc0]
         rw [hfun]
-        simpa [derivativeExpr, hz, Expr.denote, qZero_toRat, hc0] using
+        simpa [derivativeExpr, hz, Expr.denote, qZero_toRat, hc0] using!
           (hasDerivAt_const (m.toRat : ℝ) (0 : ℝ))
       · let u := argument shift m negative
         have hu : qValid u = true := argument_valid shift m negative hs hm
         have hpos : qLT qZero (qAbs u) = true := by
-          simpa [derivativeValid, hz, u] using hd
+          simpa [derivativeValid, hz, u] using! hd
         have habs : ((qAbs u).toRat : ℝ) = |(u.toRat : ℝ)| := by
           rw [qAbs_toRat u hu]
           norm_cast
@@ -290,7 +290,7 @@ theorem derivativeExpr_hasDerivAt {t : Term} {m : QPair}
           have hr : (0 : ℝ) < ((qAbs u).toRat : ℝ) := by
             have hqr : (qZero.toRat : ℝ) < ((qAbs u).toRat : ℝ) := by
               exact_mod_cast hq
-            simpa [qZero_toRat] using hqr
+            simpa [qZero_toRat] using! hqr
           rw [habs] at hr
           exact abs_pos.mp hr
         have harg : (u.toRat : ℝ) =
@@ -315,19 +315,19 @@ theorem derivativeExpr_hasDerivAt {t : Term} {m : QPair}
               simp [derivativeExpr, hz, Expr.denote, u, habs, qOne_toRat,
                 harg, toRat_qNeg]
               ring
-        simpa only [hvalue] using hbase
+        simpa only [hvalue] using! hbase
   | F c r =>
       simp only [validTerm, Bool.and_eq_true] at ht
       obtain ⟨⟨_, hr⟩, hrpos⟩ := ht
       have hrreal : 0 < (r.toRat : ℝ) := by
-        simpa [qZero_toRat] using qLT_real qValid_qZero hr hrpos
+        simpa [qZero_toRat] using! qLT_real qValid_qZero hr hrpos
       have hbase := termF_hasDerivAt c r (m.toRat : ℝ) hrreal
       have hquot : ((qDiv m r).toRat : ℝ) =
           (m.toRat : ℝ) / (r.toRat : ℝ) := by
         rw [toRat_qDiv_pos m r hrpos]
         push_cast
         rfl
-      simpa [derivativeExpr, Expr.denote, hquot, neg_mul] using hbase
+      simpa [derivativeExpr, Expr.denote, hquot, neg_mul] using! hbase
 
 end
 end Li2Unified.Proofs.Potential.CompactAffine

@@ -35,7 +35,7 @@ lemma fieldPolynomial_integral_weight_bound (F : (ℚ_[p])[X]) (c : ℤ_[p])
   rw [coeff_C_mul,norm_mul]
   calc
     _ ≤ 1*‖F.coeff n‖ := mul_le_mul_of_nonneg_right (PadicInt.norm_le_one c) (norm_nonneg _)
-    _ ≤ B := by simpa only [one_mul] using hF n
+    _ ≤ B := by simpa only [one_mul] using! hF n
 
 lemma fieldPolynomial_integral_weight_leading (F : (ℚ_[p])[X]) (c : ℤ_[p])
     (r : ℚ_[p]) (B : ℝ) (hF : ∀ n, ‖(F-C r).coeff n‖ ≤ B) (n : ℕ) :
@@ -80,14 +80,14 @@ theorem primeLow_original_entry_leading (hp4 : 3 < p) (a : Fin p)
       (primeJet_actual_low_scaled_leading hp4 a ha0 ha i j
         (primeEta (p := p) (by omega) (by omega))) l
     simpa only [PadicInt.coe_pow,PadicInt.coe_mul,PadicInt.coe_natCast,PadicInt.coe_intCast,
-      PadicInt.coe_neg,PadicInt.coe_natCast] using h
+      PadicInt.coe_neg,PadicInt.coe_natCast] using! h
   · intro b hb l
     have h := fieldPolynomial_integral_weight_bound
       (C ((p:ℚ_[p])^2)*primeDiscContribution hp4 b T) ((-2:ℤ_[p])^b.val) _
       (primeJet_other_contribution_scaled_bound hp4 a i j b hb) l
     have hw : ‖(C ((-2:ℚ_[p])^b.val)*(C ((p:ℚ_[p])^2)*primeDiscContribution hp4 b T)).coeff l‖ ≤
         ‖(p:ℚ_[p])‖^3 := by
-      simpa only [PadicInt.coe_pow,PadicInt.coe_neg,PadicInt.coe_natCast] using h
+      simpa only [PadicInt.coe_pow,PadicInt.coe_neg,PadicInt.coe_natCast] using! h
     exact hw.trans (pow_le_pow_of_le_one (norm_nonneg _) hn hm)
 
 end

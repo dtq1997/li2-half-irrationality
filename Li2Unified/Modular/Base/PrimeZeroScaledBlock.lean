@@ -121,11 +121,11 @@ theorem primeZero_top_scaled_GV (hp4 : 3 < p) (i : Fin 2) :
     field_simp [hu.1] <;> ring
   rw [he] at hs
   have hleft : GV p (C c⁻¹*F-C ((p:ℚ)^((i.val:ℤ)-1)*(6*c*q))) (i.val:ℚ) := by
-    simpa only [zero_add] using hs
+    simpa only [zero_add] using! hs
   have hc : VG p (c-(-1/6:ℚ)) 1 := by
     apply VG_of_padic_norm_pow_le _ 1
     simpa only [c,Rat.cast_sub,Rat.cast_intCast,Rat.cast_div,Rat.cast_neg,
-      Rat.cast_one,Rat.cast_ofNat,pow_one] using primeLocalUnit_zero_norm (p := p) hp4
+      Rat.cast_one,Rat.cast_ofNat,pow_one] using! primeLocalUnit_zero_norm (p := p) hp4
   have h6 : VG p (6*c+1) 1 := by
     convert (VG.natCast (p := p) 6).mul hc using 1 <;> ring
   have hq : VG p q 0 := primeZeroMoment_VG hp4 _

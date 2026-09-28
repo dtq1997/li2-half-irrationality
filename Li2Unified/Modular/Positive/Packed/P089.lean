@@ -61,7 +61,7 @@ theorem vertical_finite_ibp (H : ℂ → ℂ)
   let v' : ℝ → ℂ := fun y =>
     deriv (Li2.originalContourG d F) (Li2.originalContourPoint y) * Complex.I
   have hu (y : ℝ) : HasDerivAt u (u' y) y := by
-    simpa only [u, u', Function.comp_apply] using
+    simpa only [u, u', Function.comp_apply] using!
       ((hH y).differentiableAt.hasDerivAt.comp y (Li2.originalContourPoint_hasDerivAt y))
   have hv (y : ℝ) : HasDerivAt v (v' y) y := by
     exact Li2.originalContourG_comp_hasDerivAt d F y
@@ -102,7 +102,7 @@ theorem upperLeftUpper_finite_ibp (d : ℕ) (F : ℚ[X]) (T : ℝ) :
     (power (Li2.originalContourPoint y) * kappaPlus (Li2.originalContourPoint y)) *
       deriv (Li2.originalContourG d F) (Li2.originalContourPoint y)) = _
   rw [mul_comm Complex.I]
-  simpa only [mul_assoc] using
+  simpa only [mul_assoc] using!
     (intervalIntegral.integral_mul_const (a := (0 : ℝ)) (b := T) (μ := volume)
       Complex.I (fun y : ℝ =>
         (power (Li2.originalContourPoint y) * kappaPlus (Li2.originalContourPoint y)) *
@@ -124,7 +124,7 @@ theorem lowerLeftLower_finite_ibp (d : ℕ) (F : ℚ[X]) (T : ℝ) :
     (power (Li2.originalContourPoint y) * kappaMinus (Li2.originalContourPoint y)) *
       deriv (Li2.originalContourG d F) (Li2.originalContourPoint y)) = _
   rw [mul_comm Complex.I]
-  simpa only [mul_assoc] using
+  simpa only [mul_assoc] using!
     (intervalIntegral.integral_mul_const (a := -T) (b := (0 : ℝ)) (μ := volume)
       Complex.I (fun y : ℝ =>
         (power (Li2.originalContourPoint y) * kappaMinus (Li2.originalContourPoint y)) *

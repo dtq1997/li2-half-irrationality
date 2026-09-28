@@ -169,11 +169,11 @@ theorem posHalf_medium_eventually_of_gram (ε : ℝ) (hε : 0 < ε) :
     exists_finite_cutoff ε hε
   let δ : ℝ := 1/((N:ℝ)+1)
   have hδ0 : 0 < δ := by
-    simpa only [δ, Nat.cast_add, Nat.cast_one] using hδ0raw
+    simpa only [δ, Nat.cast_add, Nat.cast_one] using! hδ0raw
   have hδ1 : δ ≤ 1 := by
-    simpa only [δ, Nat.cast_add, Nat.cast_one] using hδ1raw
+    simpa only [δ, Nat.cast_add, Nat.cast_one] using! hδ1raw
   have hδbudget : 4*δ < ε/2 := by
-    simpa only [δ, Nat.cast_add, Nat.cast_one, mul_one_div] using hδbudgetRaw
+    simpa only [δ, Nat.cast_add, Nat.cast_one, mul_one_div] using! hδbudgetRaw
   have hε4 : 0 < ε/4 := by linarith
   have hsmall := posHalf_smallTail_eventually_delta δ (ε/4)
     hδ0 hδ1 hε4
@@ -200,7 +200,7 @@ theorem posHalf_medium_eventually_of_gram (ε : ℝ) (hε : 0 < ε) :
       have hnR : (0:ℝ) ≤ (n:ℝ) := Nat.cast_nonneg _
       nlinarith [hδ1]
     have := Nat.floor_le_floor hle
-    simpa only [Nat.floor_natCast] using this
+    simpa only [Nat.floor_natCast] using! this
   let f : ℕ → ℝ := fun p =>
     ((-padicValRat p (dtilde lambda n) : ℤ) : ℝ)*Real.log (p:ℝ)
   have hpart := medium_prime_two_interval_partition f n c hc4 hcn
@@ -226,7 +226,7 @@ theorem posHalf_medium_eventually_of_gram (ε : ℝ) (hε : 0 < ε) :
     · exact hp
   have hs' := hs hne
   have hm' := hm (by omega : 0 < n)
-    (by simpa only [Instances.PosHalf.Qtilde] using hne) hgramN
+    (by simpa only [Instances.PosHalf.Qtilde] using! hne) hgramN
   have hbudget : (-523/840:ℝ)-ε ≤
       ((-523/840:ℝ)+(2/3:ℝ)/((N+1:ℕ):ℝ)^2-ε/4) +
       (-4*δ-ε/4) := by

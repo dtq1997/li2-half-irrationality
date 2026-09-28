@@ -27,7 +27,7 @@ theorem VG_of_cube_padic_norm_bound (q : ℚ) (k : ℕ)
     have hs := (VG_of_padic_norm_pow_le ((p : ℚ)^3*q) k h).resolve_left
       (mul_ne_zero (pow_ne_zero 3 hpq) hq)
     have hpv : padicValRat p ((p : ℚ)^3) = (3 : ℤ) := by
-      simp [padicValRat.pow hpq, padicValRat.self hp.out.one_lt]
+      simp [padicValRat.pow, padicValRat.self hp.out.one_lt]
     rw [padicValRat.mul (pow_ne_zero 3 hpq) hq, hpv] at hs
     push_cast at hs
     linarith

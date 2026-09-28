@@ -29,7 +29,7 @@ lemma originalRightContourPoint_norm_le (N : ℕ) (y : ℝ) :
 lemma D_eval₂_complex_right_norm_ge_one (d N : ℕ) (y : ℝ) :
     1 ≤ ‖(D d).eval₂ (Rat.castHom ℂ) ((N : ℂ) + originalContourPoint y)‖ := by
   rw [D_eval₂_complex_product, norm_prod]
-  apply Finset.one_le_prod
+  apply Finset.one_le_prod₀
   intro j hj
   have hjR : (1 : ℝ) ≤ (j : ℝ) := by exact_mod_cast (Finset.mem_Icc.mp hj).1
   have hreal : 1 ≤ (((N : ℂ) + originalContourPoint y) + (j : ℂ)).re := by

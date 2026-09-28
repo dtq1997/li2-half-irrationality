@@ -71,7 +71,7 @@ lemma smallFallback_first_tendsto :
   have h : Tendsto (fun n : ℕ =>
       (Chebyshev.theta ((1/4 : ℝ)*(n : ℝ))-Chebyshev.theta 4)/(n : ℝ))
       atTop (𝓝 (1/4 : ℝ)) := by
-    simpa only [sub_zero, ← sub_div] using htheta.sub
+    simpa only [sub_zero, ← sub_div] using! htheta.sub
       (tendsto_const_div_atTop_nhds_zero_nat (Chebyshev.theta 4))
   apply (tendsto_congr' ?_).mp h
   filter_upwards [eventually_ge_atTop (16 : ℕ)] with n hn
@@ -87,7 +87,7 @@ lemma smallFallbackLogSum_tendsto :
       logSum 4 ((1/4 : ℝ)*(n : ℝ))/(n : ℝ) +
         primePowerExcess (7*n-2) (smallFallbackPrimes n)/(n : ℝ))
       atTop (𝓝 (1/4 : ℝ)) := by
-    simpa only [add_zero] using smallFallback_first_tendsto.add htail
+    simpa only [add_zero] using! smallFallback_first_tendsto.add htail
   apply (tendsto_congr' ?_).mp h
   exact Filter.Eventually.of_forall (fun n => by
     dsimp only
@@ -111,7 +111,7 @@ theorem smallFallbackWeightedBound_tendsto :
       atTop (𝓝 (-1 : ℝ)) := by
   have h : Tendsto (fun n : ℕ => -4*(smallFallbackLogSum n/(n : ℝ)))
       atTop (𝓝 (-1 : ℝ)) := by
-    simpa using smallFallbackLogSum_tendsto.const_mul (-4 : ℝ)
+    simpa using! smallFallbackLogSum_tendsto.const_mul (-4 : ℝ)
   apply (tendsto_congr' ?_).mp h
   filter_upwards [eventually_ge_atTop (16 : ℕ)] with n hn
   have hn0 : (n : ℝ) ≠ 0 := by exact_mod_cast (show n ≠ 0 by omega)

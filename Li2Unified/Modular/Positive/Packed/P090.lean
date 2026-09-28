@@ -52,9 +52,9 @@ lemma rayDensityFinite_eq (d : ℕ) (F : ℚ[X]) (N : ℕ) :
   calc
     rayDensityFinite d F N = ∫ t in (0 : ℝ)..(N : ℝ), f (1 / 2 + t) := hleft
     _ = ∫ x in (1 / 2 : ℝ)..((N : ℝ) + 1 / 2), f x := by
-      simpa only [add_zero, zero_add, add_comm] using hshift
+      simpa only [add_zero, zero_add, add_comm] using! hshift
     _ = _ := by
-      simpa only [f] using
+      simpa only [f] using!
         (intervalIntegral.integral_const_mul (a := (1 / 2 : ℝ))
           (b := (N : ℝ) + 1 / 2) (μ := volume)
           (Real.log 2 : ℂ)
@@ -111,7 +111,7 @@ open Li2Unified.Stage0.HalfAnalytic
 private lemma polynomial_exponential_decay (k : ℕ) :
     Tendsto (fun T : ℝ => T ^ k * Real.exp (-(2 * Real.pi) * T))
       atTop (𝓝 0) := by
-  simpa only [Real.rpow_natCast] using
+  simpa only [Real.rpow_natCast] using!
     tendsto_rpow_mul_exp_neg_mul_atTop_nhds_zero
       (k : ℝ) (2 * Real.pi) (by positivity)
 

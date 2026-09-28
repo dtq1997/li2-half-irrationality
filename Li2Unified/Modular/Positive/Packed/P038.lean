@@ -92,7 +92,7 @@ theorem parameter_profileWindowClosedSumN_le_valuation
   intro p hpI
   by_cases hp : p.Prime
   · letI : Fact p.Prime := ⟨hp⟩
-    simpa [cPrime, hp] using
+    simpa [cPrime, hp] using!
       parameter_dtilde_profile_weighted lam n p hn hne (hgram p hpI hp)
   · simp [cPrime, hp]
 

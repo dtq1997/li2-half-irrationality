@@ -123,13 +123,6 @@ theorem matchingCount_zero (n : ℕ) :
   rw [matchingCount]
   convert Nat.Ioc_filter_dvd_card_eq_div n p using 1
   congr 1
-  ext k
-  simp only [Finset.mem_filter, Finset.mem_Icc, Finset.mem_Ioc]
-  constructor
-  · rintro ⟨⟨h1, hn⟩, hmod⟩
-    exact ⟨⟨by omega, hn⟩, Nat.dvd_iff_mod_eq_zero.mpr hmod⟩
-  · rintro ⟨⟨h0, hn⟩, hdiv⟩
-    exact ⟨⟨by omega, hn⟩, Nat.dvd_iff_mod_eq_zero.mp hdiv⟩
 
 theorem matchingCount_le_triple_floor (n : ℕ) (hpn : p ≤ n)
     (a : Fin p) : matchingCount n p a ≤ (3 * n) / p := by

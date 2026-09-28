@@ -71,12 +71,12 @@ lemma originalContourKernel_hasDerivAt (y : ℝ) :
   have he : HasDerivAt originalContourPower
       (originalContourPower (originalContourPoint y) * (-(Real.log 2 : ℂ)))
       (originalContourPoint y) := by
-    simpa only [originalContourPower, mul_one] using
+    simpa only [originalContourPower, mul_one] using!
       ((hasDerivAt_id (originalContourPoint y)).const_mul (-(Real.log 2 : ℂ))).cexp
   have hs : HasDerivAt (fun z : ℂ => Complex.sin ((Real.pi : ℂ) * z))
       (Complex.cos ((Real.pi : ℂ) * originalContourPoint y) * (Real.pi : ℂ))
       (originalContourPoint y) := by
-    simpa only [mul_one] using
+    simpa only [mul_one] using!
       ((hasDerivAt_id (originalContourPoint y)).const_mul (Real.pi : ℂ)).csin
   have hk := (he.const_mul (Real.pi : ℂ)).fun_div hs (originalContour_sin_ne_zero y)
   change HasDerivAt (fun z : ℂ => (Real.pi : ℂ) * originalContourPower z /

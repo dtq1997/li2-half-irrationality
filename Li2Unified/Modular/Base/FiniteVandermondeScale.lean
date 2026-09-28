@@ -19,7 +19,7 @@ lemma integrable_pi_mul_scale_iff (h : ℕ) (c : ℝ) (hc : c ≠ 0)
     Integrable (fun x : Fin h → ℝ => f (fun i => c * x i))
         (Measure.pi fun _ : Fin h => (volume : Measure ℝ)) ↔
       Integrable f (Measure.pi fun _ : Fin h => (volume : Measure ℝ)) := by
-  simpa only [Pi.smul_apply, smul_eq_mul] using
+  simpa only [Pi.smul_apply, smul_eq_mul] using!
     (MeasureTheory.integrable_comp_smul_iff
       (Measure.pi fun _ : Fin h => (volume : Measure ℝ)) f hc)
 
@@ -32,7 +32,7 @@ theorem integral_pi_mul_scale (h : ℕ) (c : ℝ) (hc : 0 < c)
     (Measure.pi fun _ : Fin h => (volume : Measure ℝ))
     (fun x : Fin h → ℝ => f (c • x)) (R := c) hc.le
   simpa only [← mul_smul, mul_inv_cancel₀ hc.ne', one_smul,
-    Module.finrank_pi, Fintype.card_fin, Pi.smul_apply, smul_eq_mul] using hi
+    Module.finrank_pi, Fintype.card_fin, Pi.smul_apply, smul_eq_mul] using! hi
 
 theorem vandermonde_sq_mul_scale (h : ℕ) (c : ℝ) (x : Fin h → ℝ) :
     (∏ i : Fin h, ∏ j ∈ Finset.Ioi i, (c * x j - c * x i)) ^ 2 =
@@ -50,7 +50,6 @@ theorem vandermonde_sq_mul_scale (h : ℕ) (c : ℝ) (x : Fin h → ℝ) :
     rw [← Fin.sum_univ_eq_sum_range] at hs
     exact hs
   have hsquare := congrArg (fun z : ℝ => z ^ 2) hd
-  dsimp only at hsquare
   rw [mul_pow, ← pow_mul, hcount] at hsquare
   simpa only [Matrix.det_vandermonde] using hsquare
 

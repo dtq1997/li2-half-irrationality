@@ -33,7 +33,7 @@ theorem generalIndexedJet_disc_factor (n p : ℕ)
       (generalJetEquiv n p i).1).eval (Li2.primeCenter p (generalJetEquiv n p i).1)) +
       C (p : ℤ) * A, ?_⟩
     simpa only [generalIndexedJetPoly, generalJetPoly,
-      generalIndexedJetLocalOrder, if_pos rfl, Li2.primeDiscSubstitution] using hA
+      generalIndexedJetLocalOrder, if_pos rfl, ite_true, Li2.primeDiscSubstitution] using! hA
   · obtain ⟨A, hA⟩ := Li2.classBasisPoly_other_expansion
       (Li2.primeCenter p)
       (Li2Unified.Proofs.Hermite.CountsCore.multiplicity n p)

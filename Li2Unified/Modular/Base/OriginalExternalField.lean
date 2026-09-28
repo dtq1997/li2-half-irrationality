@@ -73,7 +73,7 @@ lemma hasDerivAt_originalExternalW (x : ℝ) :
       ((3 * Real.arctan x - Real.arctan (x / 4)) / 2) x := by
   have h := (((hasDerivAt_externalFieldH 1 (by norm_num) x).const_mul 3).sub
     (hasDerivAt_externalFieldH 4 (by norm_num) x)).div_const 2
-  simpa only [originalExternalW, div_one] using h
+  simpa only [originalExternalW, div_one] using! h
 
 lemma continuous_originalExternalW : Continuous originalExternalW :=
   continuous_iff_continuousAt.mpr fun x =>

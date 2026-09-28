@@ -47,7 +47,7 @@ theorem realLogTruncationError_integrable_and_integral {ε : ℝ} (hε : 0 < ε)
     have h := (intervalIntegral.intervalIntegrable_log' (a := -ε) (b := ε)).comp_sub_left x
     simpa only [sub_neg_eq_add, Real.log_abs] using h.symm
   have hconst : IntervalIntegrable (fun _ : ℝ => Real.log ε) volume (x - ε) (x + ε) :=
-    intervalIntegral.intervalIntegrable_const
+    intervalIntegrable_const
   have hdiff : IntervalIntegrable (fun t : ℝ => Real.log ε - Real.log |x - t|)
       volume (x - ε) (x + ε) := hconst.sub hlog
   have hdiffOn : IntegrableOn (fun t : ℝ => Real.log ε - Real.log |x - t|)

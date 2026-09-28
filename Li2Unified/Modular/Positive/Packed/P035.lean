@@ -42,7 +42,7 @@ theorem profileWindowClosedSum_eq_profile (n : ℕ) (hn : 0 < n) :
       intro A hA
       exact profileWindowCell_partition A n (Finset.mem_Ico.mp hA).1 f
     _ = ∑ p ∈ Finset.Ioc ⌊((1:ℝ)/200)*(n:ℝ)⌋₊ n, f p := by
-      simpa [show ((199:ℝ)+1)=200 by norm_num] using
+      simpa [show ((199:ℝ)+1)=200 by norm_num] using!
         profileWindowCells_partition 199 n (by decide) f
 
 end
@@ -88,7 +88,7 @@ theorem profileWindowClosedSumN_eq_profile (N n : ℕ)
       intro A hA
       exact profileWindowCell_partition A n (Finset.mem_Ico.mp hA).1 f
     _ = ∑ p ∈ Finset.Ioc ⌊((1:ℝ)/((N:ℝ)+1))*(n:ℝ)⌋₊ n, f p := by
-      simpa using profileWindowCells_partition N n hN f
+      simpa using! profileWindowCells_partition N n hN f
 
 end
 end Li2Unified.Proofs.Arithmetic

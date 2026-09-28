@@ -25,7 +25,7 @@ theorem integralPolynomial_rational_constant_bound
   rw [he, coeff_add]
   apply (IsUltrametricDist.norm_add_le_max _ _).trans
   apply max_le
-  · simpa only [coeff_map] using hF n
+  · simpa only [coeff_map] using! hF n
   · by_cases hn : n = 0
     · simpa [hn] using hv
     · simp [coeff_C, hn]

@@ -37,7 +37,7 @@ theorem pulledPoleRegular_isRestricted (j a : ℕ) :
     PowerSeries.IsRestricted 1 (pulledPoleRegular (p := p) j a) := by
   unfold pulledPoleRegular
   split_ifs with hm
-  · exact PowerSeries.IsRestricted.zero 1
+  · exact PowerSeries.isRestricted_zero 1
   · exact field_map_isRestricted _ (padicReciprocalSeries_isRestricted _ _ _ _)
 
 lemma primeMatchingPole_denominator (j a : ℕ) (hj : j ≤ 4*p-4) (ha : a < p)
@@ -69,19 +69,19 @@ lemma field_restricted_finset_sum {ι : Type*} (s : Finset ι) (f : ι → Power
     PowerSeries.IsRestricted 1 (∑ i ∈ s, f i) := by
   classical
   induction s using Finset.induction_on with
-  | empty => simp only [Finset.sum_empty]; exact PowerSeries.IsRestricted.zero 1
+  | empty => simp only [Finset.sum_empty]; exact PowerSeries.isRestricted_zero 1
   | insert a s ha ih =>
     rw [Finset.sum_insert ha]
-    exact PowerSeries.IsRestricted.add 1 (hf a (Finset.mem_insert_self _ _))
+    exact PowerSeries.isRestricted.add 1 (hf a (Finset.mem_insert_self _ _))
       (ih (fun i hi => hf i (Finset.mem_insert_of_mem hi)))
 
 theorem originalPulledRegular_isRestricted (m : ℕ) (F : ℚ[X]) (a : Fin p) :
     PowerSeries.IsRestricted 1 (originalPulledRegular m F a) := by
-  apply PowerSeries.IsRestricted.add 1
+  apply PowerSeries.isRestricted.add 1
   · exact field_polynomial_isRestricted _
   · apply field_restricted_finset_sum
     intro j _
-    exact PowerSeries.IsRestricted.mul 1 (PowerSeries.IsRestricted.C 1 _)
+    exact PowerSeries.isRestricted.mul 1 (PowerSeries.isRestricted_C 1 _)
       (pulledPoleRegular_isRestricted j a.val)
 
 end

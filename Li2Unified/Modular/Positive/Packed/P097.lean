@@ -83,7 +83,7 @@ private lemma shifted_log_sum_bounds (m : ℕ) (t : ℝ) (ht : 0 < t) :
   have hm := log_shift_monotoneOn t ht m
   have hm' : MonotoneOn (fun s : ℝ => Real.log (t + s))
       (Icc (0 : ℝ) ((0 : ℝ) + (m : ℝ))) := by
-    simpa only [zero_add] using hm
+    simpa only [zero_add] using! hm
   have hlo := hm'.integral_le_sum
   have hhi := hm'.sum_le_integral
   simp only [zero_add] at hlo hhi
@@ -92,10 +92,10 @@ private lemma shifted_log_sum_bounds (m : ℕ) (t : ℝ) (ht : 0 < t) :
         Real.log t =
       (∑ i ∈ Finset.range m, Real.log (t + (i : ℝ))) +
         Real.log (t + (m : ℝ)) := by
-    simpa only [Nat.cast_zero, add_zero] using
+    simpa only [Nat.cast_zero, add_zero] using!
       (sum_range_succ_telescope (fun i : ℕ => Real.log (t + (i : ℝ))) m)
   constructor
-  · simpa only [Nat.cast_succ] using hlo
+  · simpa only [Nat.cast_succ] using! hlo
   · linarith
 
 theorem originalD_log_real_eq_sum (m : ℕ) (t : ℝ) (ht : 0 < t) :
@@ -115,7 +115,7 @@ theorem originalD_log_real_eq_sum (m : ℕ) (t : ℝ) (ht : 0 < t) :
         ∑ i ∈ Finset.range m,
           Real.log ‖(t : ℂ) + (((i + 1 : ℕ) : ℝ) : ℂ)‖ := by
       rw [← Finset.Ico_add_one_right_eq_Icc]
-      simpa only [Nat.add_sub_cancel, Nat.add_comm 1] using
+      simpa only [Nat.add_sub_cancel, Nat.add_comm 1] using!
         (Finset.sum_Ico_eq_sum_range
           (fun j : ℕ => Real.log ‖(t : ℂ) + (j : ℂ)‖) 1 (m + 1))
     _ = _ := by

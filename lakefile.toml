@@ -1,6 +1,6 @@
 name = "Li2Irrationality"
 version = "0.1.0"
-defaultTargets = ["Li2Half"]
+defaultTargets = ["Solution"]
 
 [leanOptions]
 autoImplicit = false
@@ -8,10 +8,16 @@ autoImplicit = false
 [[require]]
 name = "mathlib"
 scope = "leanprover-community"
-rev = "5450b53e5ddc75d46418fabb605edbf36bd0beb6"
+rev = "c55e6e786f49471c72fbddbec5415808896aec1e"
 
 [[lean_lib]]
 name = "Li2Unified"
 
 [[lean_lib]]
 name = "Li2Half"
+
+[[lean_lib]]
+name = "Challenge"
+
+[[lean_lib]]
+name = "Solution"

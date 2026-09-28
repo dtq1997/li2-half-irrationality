@@ -20,7 +20,7 @@ def fieldRestrictedMoment (μ : ℕ → ℤ_[p]) (f : PowerSeries ℚ_[p]) : ℚ
 lemma field_restricted_coeff_tendsto {f : PowerSeries ℚ_[p]}
     (hf : PowerSeries.IsRestricted 1 f) :
     Tendsto (fun n => ‖PowerSeries.coeff n f‖) atTop (𝓝 0) := by
-  simpa only [PowerSeries.IsRestricted, one_pow, mul_one] using hf
+  simpa only [one_pow, mul_one] using (PowerSeries.isRestricted_iff' _ _).mp hf
 
 lemma field_integral_mul_norm_le (a : ℚ_[p]) (b : ℤ_[p]) : ‖a*(b:ℚ_[p])‖ ≤ ‖a‖ := by
   calc
@@ -57,7 +57,7 @@ theorem fieldRestrictedMoment_integral (μ : ℕ → ℤ_[p]) (f : PowerSeries �
   have h := (restrictedMoment_summable μ f hf).map_tsum
     PadicInt.Coe.ringHom PadicInt.isOpenEmbedding_coe.continuous
   simpa only [fieldRestrictedMoment, restrictedMoment, PowerSeries.coeff_map,
-    map_mul] using h.symm
+    map_mul] using! h.symm
 
 theorem fieldRestrictedMoment_polynomial (μ : ℕ → ℤ_[p]) (P : (ℚ_[p])[X]) :
     fieldRestrictedMoment μ (P : PowerSeries ℚ_[p]) = P.sum (fun n a => a*(μ n:ℚ_[p])) := by

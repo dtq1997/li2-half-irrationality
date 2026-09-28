@@ -43,7 +43,7 @@ theorem integrable_originalContour_scaled_norm_vandermonde (n : ℕ) (hn : 1 ≤
     hcomp.congr (Filter.Eventually.of_forall (fun x => originalContour_norm_integrand_scale n x))
   have hsmul : Integrable (fun x : Fin (2 * n) → ℝ =>
           (n : ℝ) ^ ((2 * n) * (2 * n - 1)) • G x) μ := by
-    simpa only [smul_eq_mul] using hconst
+    simpa only [smul_eq_mul] using! hconst
   exact (MeasureTheory.integrable_fun_smul_iff (μ := μ) (pow_ne_zero _ hnR.ne') G).mp hsmul
 
 theorem originalContour_norm_integral_scale (n : ℕ) (hn : 1 ≤ n) :

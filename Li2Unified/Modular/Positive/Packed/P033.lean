@@ -21,10 +21,10 @@ private theorem reciprocal_half_open_bounds (α β x : ℝ)
   have hx : 0 < x := (inv_pos.mpr hβ).trans hleft
   have hαx : α ≤ x⁻¹ := by
     have := (inv_le_inv₀ (inv_pos.mpr hα) hx).2 hright
-    simpa using this
+    simpa using! this
   have hxβ : x⁻¹ < β := by
     have := (inv_lt_inv₀ hx (inv_pos.mpr hβ)).2 hleft
-    simpa using this
+    simpa using! this
   exact ⟨hx, hαx, hxβ⟩
 
 private theorem window_left_reciprocal (A : ℝ) (hA : 1 ≤ A) (j : Fin 6) :

@@ -48,6 +48,7 @@ theorem padicParameterG_polynomial (z : ℚ) (hz : VG p (z/(1-z)) 0) (P : ℤ[X]
   intro k _
   simp only [coeff_map, Int.coe_castRingHom, PadicInt.coe_mul, PadicInt.coe_intCast,
     integralParameterMoment, integralRational, Rat.cast_mul, Rat.cast_intCast]
+  rfl
 
 end
 end Li2

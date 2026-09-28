@@ -1,4 +1,5 @@
 module
+public import Li2Unified.Modular.Base.RestrictedSeriesCompat
 public import Li2Unified.Modular.Positive.Packed.P052
 public import Li2Unified.Modular.Positive.Packed.P042
 public import Li2Unified.Modular.Base.DetCongruence
@@ -42,7 +43,7 @@ theorem parameterReferenceMatrix_det (lam : ℚ) (corner : Matrix (Fin 6) (Fin 6
         (∏ x : PrimeBlockIndex p, (p:ℚ)^primeReferenceColExponent x)) *
           (parameterReferenceCore lam p corner).det := by
     dsimp only [A]
-    rw [Matrix.det_mul_column]
+    erw [Matrix.det_mul_column]
     change
       (∏ x : PrimeBlockIndex p, (p:ℚ)^primeReferenceRowExponent x) *
         (Matrix.of (fun x y : PrimeBlockIndex p =>
@@ -50,7 +51,7 @@ theorem parameterReferenceMatrix_det (lam : ℚ) (corner : Matrix (Fin 6) (Fin 6
       ((∏ x : PrimeBlockIndex p, (p:ℚ)^primeReferenceRowExponent x) *
         (∏ x : PrimeBlockIndex p, (p:ℚ)^primeReferenceColExponent x)) *
           (parameterReferenceCore lam p corner).det
-    rw [Matrix.det_mul_row]
+    erw [Matrix.det_mul_row]
     ring
   have hpq : (p:ℚ) ≠ 0 := by exact_mod_cast hp.out.ne_zero
   have hr := primeReference_prod_zpow (p := p) Finset.univ
@@ -82,7 +83,7 @@ theorem parameterReferenceCore_unit (lam : ℚ) (corner : Matrix (Fin 6) (Fin 6)
     ⟨mul_ne_zero hx.1 hy.1,by rw [padicValRat.mul hx.1 hy.1,hx.2,hy.2,add_zero]⟩
   have hpow (x : ℚ) (hx : x ≠ 0 ∧ padicValRat p x = 0) (n : ℕ) :
       x^n ≠ 0 ∧ padicValRat p (x^n) = 0 :=
-    ⟨pow_ne_zero n hx.1,by rw [padicValRat.pow hx.1,hx.2,mul_zero]⟩
+    ⟨pow_ne_zero n hx.1,by rw [padicValRat.pow,hx.2,mul_zero]⟩
   rw [parameterReferenceCore_det lam p corner hlam.1 h1]
   have hprod := rational_prime_unit_finset_prod (p := p) Finset.univ
     (fun a : Fin (p-4) => (parameterLowWeight lam (a.val+1))^2) (by
@@ -122,9 +123,9 @@ theorem parameterDiscTest_U_coeff_bound (z : ℚ)
     ‖(parameterFourPoleU z hu hreg hp4 (primeDiscTestRegular hp4 a T) (primeDiscTestResidue hp4 a T)).coeff n‖ ≤ B := by
   apply parameterFourPoleU_coeff_bound z hu hreg hp4 _ _ B hB
   · apply integralPoleMulRegular_bound_left _ _ _ _ B hB
-    simpa only [Polynomial.coeff_coe] using hT
+    simpa only [Polynomial.coeff_coe] using! hT
   · apply integralPoleMulResidue_bound_left _ _ _ B
-    simpa only [Polynomial.coeff_coe] using hT
+    simpa only [Polynomial.coeff_coe] using! hT
 
 theorem parameterDiscTest_V_coeff_bound (z : ℚ)
     (hu : z ≠ 0 ∧ padicValRat p z = 0) (hreg : VG p (z/(1-z)) 0) (hp4 : 3 < p) (T : ℤ[X]) (a : Fin p)
@@ -132,9 +133,9 @@ theorem parameterDiscTest_V_coeff_bound (z : ℚ)
     ‖(parameterFourPoleV z hu hreg hp4 (primeDiscTestRegular hp4 a T) (primeDiscTestResidue hp4 a T)).coeff n‖ ≤ B := by
   apply parameterFourPoleV_coeff_bound z hu hreg hp4 _ _ B hB
   · apply integralPoleMulRegular_bound_left _ _ _ _ B hB
-    simpa only [Polynomial.coeff_coe] using hT
+    simpa only [Polynomial.coeff_coe] using! hT
   · apply integralPoleMulResidue_bound_left _ _ _ B
-    simpa only [Polynomial.coeff_coe] using hT
+    simpa only [Polynomial.coeff_coe] using! hT
 
 theorem parameterOriginalBasis_U_substituted_bound (z : ℚ)
     (hu : z ≠ 0 ∧ padicValRat p z = 0) (hreg : VG p (z/(1-z)) 0) (hp4 : 3 < p)
@@ -213,7 +214,7 @@ theorem parameterDiscTest_U_jet_error (z : ℚ) (hu : z ≠ 0 ∧ padicValRat p 
         (integralPoleMulResidue (primePoleCenters p)
           (q • ((X^k : (ℤ_[p])[X]) : PowerSeries ℤ_[p])) (primeDiscResidue hp4 a))).coeff n‖ ≤ B :=
     restrictedPoleFunctional_multiplier_difference _ primePoleCenters_injective _ _ _ _ _
-      (polynomial_isRestricted _) (PowerSeries.IsRestricted.smul 1 (polynomial_isRestricted _) q)
+      (polynomial_isRestricted _) (Li2.restrictedSeries_smul 1 (polynomial_isRestricted _) q)
       (primeDiscRegular_isRestricted hp4 a) _ B hB (integralDiscTest_series_error T a q k B he) n
   rw [parameterFourPoleU_multiplier_smul z hu hreg hp4 _ _ (polynomial_isRestricted _)
     (primeDiscRegular_isRestricted hp4 a),
@@ -233,7 +234,7 @@ theorem parameterDiscTest_V_jet_error (z : ℚ) (hu : z ≠ 0 ∧ padicValRat p 
         (integralPoleMulResidue (primePoleCenters p)
           (q • ((X^k : (ℤ_[p])[X]) : PowerSeries ℤ_[p])) (primeDiscResidue hp4 a))).coeff n‖ ≤ B :=
     restrictedPoleFunctional_multiplier_difference _ primePoleCenters_injective _ _ _ _ _
-      (polynomial_isRestricted _) (PowerSeries.IsRestricted.smul 1 (polynomial_isRestricted _) q)
+      (polynomial_isRestricted _) (Li2.restrictedSeries_smul 1 (polynomial_isRestricted _) q)
       (primeDiscRegular_isRestricted hp4 a) _ B hB (integralDiscTest_series_error T a q k B he) n
   rw [parameterFourPoleV_multiplier_smul z hu hreg hp4 _ _ (polynomial_isRestricted _)
     (primeDiscRegular_isRestricted hp4 a),
@@ -290,7 +291,7 @@ theorem parameterJet_same_U_substituted_error (z : ℚ) (hu : z ≠ 0 ∧ padicV
   dsimp only
   have h := integralPolynomial_comp_coeff_bound _ (C ((p:ℤ_[p])^2)*(X-C eta)) _
     (norm_nonneg _) (parameterJet_same_U_error z hu hreg hp4 a i j) n
-  simpa only [sub_comp,mul_comp,C_comp] using h
+  simpa only [sub_comp,mul_comp,C_comp] using! h
 
 theorem parameterJet_same_V_substituted_error (z : ℚ) (hu : z ≠ 0 ∧ padicValRat p z = 0)
     (hreg : VG p (z/(1-z)) 0) (hp4 : 3 < p) (a : Fin p)
@@ -305,7 +306,7 @@ theorem parameterJet_same_V_substituted_error (z : ℚ) (hu : z ≠ 0 ∧ padicV
   dsimp only
   have h := integralPolynomial_comp_coeff_bound _ (C ((p:ℤ_[p])^2)*(X-C eta)) _
     (norm_nonneg _) (parameterJet_same_V_error z hu hreg hp4 a i j) n
-  simpa only [sub_comp,mul_comp,C_comp] using h
+  simpa only [sub_comp,mul_comp,C_comp] using! h
 
 end
 end Li2Unified.Proofs.PrimeEdge
@@ -389,7 +390,7 @@ theorem parameterZeroShape_monomial_rational (z : ℚ) (hu : z ≠ 0 ∧ padicVa
   dsimp only
   apply parameterFourPoleUV_rational_of_cleared z hu hreg hp4
   · exact integralPoleMulRegular_isRestricted _ _ _ (polynomial_isRestricted _)
-      (by simpa using polynomial_isRestricted (p := p) (0:(ℤ_[p])[X])) _
+      (by simpa using! polynomial_isRestricted (p := p) (0:(ℤ_[p])[X])) _
   · rw [integralPoleNumerator_mul _ _ _ (polynomial_isRestricted _),
       primeZeroShape_cleared, zeroShape_cleared]
     simp [pow_succ]
@@ -409,7 +410,7 @@ theorem parameterHighShape_monomial_rational (z : ℚ) (hu : z ≠ 0 ∧ padicVa
   dsimp only
   apply parameterFourPoleUV_rational_of_cleared z hu hreg hp4
   · exact integralPoleMulRegular_isRestricted _ _ _ (polynomial_isRestricted _)
-      (by simpa using polynomial_isRestricted (p := p) (1:(ℤ_[p])[X])) _
+      (by simpa using! polynomial_isRestricted (p := p) (1:(ℤ_[p])[X])) _
   · rw [integralPoleNumerator_mul _ _ _ (polynomial_isRestricted _),
       primeHighShape_cleared, highShape_cleared]
     simp [pow_add, mul_assoc]
@@ -433,7 +434,7 @@ theorem parameterLowShape_monomial_rational (z : ℚ) (hu : z ≠ 0 ∧ padicVal
   dsimp only
   apply parameterFourPoleUV_rational_of_cleared z hu hreg hp4
   · exact integralPoleMulRegular_isRestricted _ _ _ (polynomial_isRestricted _)
-      (by simpa using polynomial_isRestricted (p := p) (0:(ℤ_[p])[X])) _
+      (by simpa using! polynomial_isRestricted (p := p) (0:(ℤ_[p])[X])) _
   · rw [integralPoleNumerator_mul _ _ _ (polynomial_isRestricted _),
       primeLowShape_cleared, zeroShape_cleared]
     simp [pow_add, mul_assoc]

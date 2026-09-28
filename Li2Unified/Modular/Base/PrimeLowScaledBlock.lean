@@ -27,7 +27,7 @@ theorem GV_of_square_padic_leading_bound (F : ℚ[X]) (r : ℚ) (k : ℕ)
     apply VG_of_padic_norm_pow_le _ (k+1)
     have hn := h n
     rw [← hmap] at hn
-    simpa only [coeff_map,Rat.coe_castHom] using hn
+    simpa only [coeff_map,Rat.coe_castHom] using! hn
   have hpq : (p:ℚ) ≠ 0 := by exact_mod_cast hp.out.ne_zero
   have hp2 : (p:ℚ)^(-2:ℤ)*(p:ℚ)^2 = 1 := by
     simp only [zpow_neg,zpow_ofNat]
@@ -107,7 +107,7 @@ theorem primeLow_block_scaled_GV (hp4 : 3 < p) (a : Fin (p-4)) (i j : Fin 2) :
   have hA : A.val ≤ p-4 := by have h := a.isLt; dsimp only [A]; omega
   have h := primeLow_original_scaled_GV hp4 A hA0 hA ii jj
   simpa only [A,ii,jj,primeLowBlockJet,Fin.val_mk,primeBlockWeight,
-    primeLowMoment_eq_lowBlock] using h
+    primeLowMoment_eq_lowBlock] using! h
 
 end
 end Li2

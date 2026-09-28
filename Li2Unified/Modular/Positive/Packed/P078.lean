@@ -203,7 +203,7 @@ theorem upperRightIntegral_tendsto_zero (d : ℕ) (F : ℚ[X]) (T : ℝ)
   have hlim : Tendsto
       (fun N : ℕ => (2 * T * C * (1 + T) ^ k) *
         ((1 + (N : ℝ)) ^ k * (1 / 2 : ℝ) ^ N)) atTop (𝓝 0) := by
-    simpa only [mul_zero] using hdecay.const_mul (2 * T * C * (1 + T) ^ k)
+    simpa only [mul_zero] using! hdecay.const_mul (2 * T * C * (1 + T) ^ k)
   apply squeeze_zero_norm' _ hlim
   filter_upwards [] with N
   have hC : 0 ≤ C := Li2.originalRightCoefficientNormSum_nonneg _

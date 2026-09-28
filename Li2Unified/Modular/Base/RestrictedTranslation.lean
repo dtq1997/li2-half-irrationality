@@ -31,7 +31,7 @@ theorem restrictedTranslate_summable (a : ℤ_[p]) (f : PowerSeries ℤ_[p])
   apply NonarchimedeanAddGroup.summable_of_tendsto_cofinite_zero
   rw [Nat.cofinite_eq_atTop, tendsto_zero_iff_norm_tendsto_zero]
   have ht : Tendsto (fun k : ℕ => ‖PowerSeries.coeff (n+k) f‖) atTop (𝓝 0) := by
-    simpa only [Nat.add_comm] using (restricted_coeff_tendsto hf).comp (tendsto_add_atTop_nat n)
+    simpa only [Nat.add_comm] using! (restricted_coeff_tendsto hf).comp (tendsto_add_atTop_nat n)
   exact squeeze_zero (fun _ => norm_nonneg _) (translate_term_norm_le a f n) ht
 
 theorem restrictedTranslate_coeff_bound (a : ℤ_[p]) (f : PowerSeries ℤ_[p]) (n : ℕ)
@@ -44,11 +44,11 @@ theorem restrictedTranslate_coeff_bound (a : ℤ_[p]) (f : PowerSeries ℤ_[p]) 
 
 theorem restrictedTranslate_isRestricted (a : ℤ_[p]) (f : PowerSeries ℤ_[p])
     (hf : PowerSeries.IsRestricted 1 f) : PowerSeries.IsRestricted 1 (restrictedTranslate a f) := by
-  rw [PowerSeries.IsRestricted.isRestricted_iff]
+  rw [PowerSeries.isRestricted_iff', Metric.tendsto_atTop]
   intro ε hε
-  obtain ⟨N, hN⟩ := (PowerSeries.IsRestricted.isRestricted_iff 1).mp hf (ε/2) (by linarith)
+  obtain ⟨N, hN⟩ := Metric.tendsto_atTop.mp (restricted_coeff_tendsto hf) (ε/2) (by linarith)
   refine ⟨N, fun n hn => ?_⟩
-  simp only [one_pow, mul_one, Real.norm_eq_abs, abs_norm] at hN ⊢
+  simp only [one_pow, mul_one, Real.dist_eq, sub_zero, abs_norm] at hN ⊢
   apply lt_of_le_of_lt (restrictedTranslate_coeff_bound a f n (ε/2) ?_) (by linarith)
   intro k
   exact (hN (n+k) (by omega)).le

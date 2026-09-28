@@ -35,9 +35,9 @@ lemma primeDiscRegular_isRestricted (hp4 : 3 < p) (a : Fin p) :
   apply integralPoleMulRegular_isRestricted _ _ _ (primeDiscUnit_isRestricted _ _)
   unfold primeDiscBaseRegular
   split_ifs
-  · exact PowerSeries.IsRestricted.zero 1
-  · exact PowerSeries.IsRestricted.zero 1
-  · exact PowerSeries.IsRestricted.one 1
+  · exact PowerSeries.isRestricted_zero 1
+  · exact PowerSeries.isRestricted_zero 1
+  · exact PowerSeries.isRestricted_one 1
 
 theorem original_disc_integral_cleared (hp4 : 3 < p) (a : Fin p) :
     primeDiscPolynomialSeries a.val (4*(p-1)) *
@@ -49,7 +49,7 @@ theorem original_disc_integral_cleared (hp4 : 3 < p) (a : Fin p) :
   · have ha : a = ⟨0,hp.out.pos⟩ := Fin.ext hz
     subst a
     simpa only [primeDiscRegular, primeDiscResidue, primeDiscBaseRegular, primeDiscBaseResidue,
-      primeDiscScale, if_pos rfl, Nat.cast_zero] using original_zero_integral_cleared hp4
+      primeDiscScale, if_pos rfl, ite_true, Nat.cast_zero] using! original_zero_integral_cleared hp4
   · by_cases hl : a.val ≤ p-4
     · simpa only [primeDiscRegular, primeDiscResidue, primeDiscBaseRegular, primeDiscBaseResidue,
         primeDiscScale, if_neg hz, if_pos hl] using original_low_integral_cleared hp4 a (by omega) hl

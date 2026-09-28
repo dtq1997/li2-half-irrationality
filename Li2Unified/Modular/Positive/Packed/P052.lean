@@ -72,7 +72,7 @@ theorem parameterLowWeight_unit (lam : ℚ) {p : ℕ} [Fact p.Prime]
   rw [he]
   refine ⟨mul_ne_zero (pow_ne_zero _ hu0) hw.1, ?_⟩
   rw [padicValRat.mul (pow_ne_zero _ hu0) hw.1,
-    padicValRat.pow hu0, huval, hw.2]
+    padicValRat.pow, huval, hw.2]
   simp
 
 #print axioms parameterReferenceCore_det

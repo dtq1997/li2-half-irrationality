@@ -21,7 +21,7 @@ lemma natLog_seven_sub_two_div_tendsto_zero (b : ℕ) :
       tendsto_natCast_atTop_atTop
   have hu : Tendsto (fun n : ℕ =>
       (Real.log (7*(n : ℝ))/(n : ℝ))/Real.log (b : ℝ)) atTop (𝓝 (0 : ℝ)) := by
-    simpa only [zero_div] using hlog.div_const (Real.log (b : ℝ))
+    simpa only [zero_div] using! hlog.div_const (Real.log (b : ℝ))
   refine tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds hu ?_ ?_
   · intro n
     positivity
@@ -32,7 +32,7 @@ lemma natLog_seven_sub_two_div_tendsto_zero (b : ℕ) :
         (Nat.log b (7*n-2) : ℝ) ≤ (Nat.log b (7*n) : ℝ) := by
           exact_mod_cast (Nat.log_mono_right (Nat.sub_le (7*n) 2))
         _ ≤ Real.log (7*(n : ℝ))/Real.log (b : ℝ) := by
-          simpa only [Real.logb, Nat.cast_mul, Nat.cast_ofNat] using (Real.natLog_le_logb (7*n) b)
+          simpa only [Real.logb, Nat.cast_mul, Nat.cast_ofNat] using! (Real.natLog_le_logb (7*n) b)
     calc
       (Nat.log b (7*n-2) : ℝ)/(n : ℝ) ≤
           (Real.log (7*(n : ℝ))/Real.log (b : ℝ))/(n : ℝ) :=
@@ -45,7 +45,7 @@ lemma natLog_error_square_tendsto_zero (b : ℕ) :
       atTop (𝓝 (0 : ℝ)) := by
   have h : Tendsto (fun n : ℕ => 4*((Nat.log b (7*n-2) : ℝ)/(n : ℝ)))
       atTop (𝓝 (0 : ℝ)) := by
-    simpa only [mul_zero] using (natLog_seven_sub_two_div_tendsto_zero b).const_mul (4 : ℝ)
+    simpa only [mul_zero] using! (natLog_seven_sub_two_div_tendsto_zero b).const_mul (4 : ℝ)
   apply (tendsto_congr' ?_).mp h
   filter_upwards [eventually_ge_atTop (1 : ℕ)] with n hn
   have hn0 : (n : ℝ) ≠ 0 := by exact_mod_cast (show n ≠ 0 by omega)
@@ -79,7 +79,7 @@ lemma A2_ratio_tendsto :
       atTop (𝓝 (8/3 : ℝ)) := by
   have hlo : Tendsto (fun n : ℕ => (8/3 : ℝ)-(4/3 : ℝ)/(n : ℝ))
       atTop (𝓝 (8/3 : ℝ)) := by
-    simpa only [sub_zero] using
+    simpa only [sub_zero] using!
       (tendsto_const_nhds (x := (8/3 : ℝ))).sub
         (tendsto_const_div_atTop_nhds_zero_nat (4/3 : ℝ))
   refine tendsto_of_tendsto_of_tendsto_of_le_of_le' hlo tendsto_const_nhds ?_ ?_
@@ -104,7 +104,7 @@ lemma S3_ratio_tendsto :
       atTop (𝓝 (9/4 : ℝ)) := by
   have hunit : Tendsto (fun n : ℕ => (1 : ℝ)/(n : ℝ)^2)
       atTop (𝓝 (0 : ℝ)) := by
-    simpa [div_pow] using (tendsto_const_div_atTop_nhds_zero_nat (1 : ℝ)).pow 2
+    simpa [div_pow] using! (tendsto_const_div_atTop_nhds_zero_nat (1 : ℝ)).pow 2
   have hrem : Tendsto (fun n : ℕ => ((n%2 : ℕ) : ℝ)/(n : ℝ)^2)
       atTop (𝓝 (0 : ℝ)) := by
     refine tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds hunit ?_ ?_
@@ -116,7 +116,7 @@ lemma S3_ratio_tendsto :
       exact div_le_div_of_nonneg_right hm (sq_nonneg (n : ℝ))
   have h : Tendsto (fun n : ℕ => (9/4 : ℝ)-(((n%2 : ℕ) : ℝ)/(n : ℝ)^2)/4)
       atTop (𝓝 (9/4 : ℝ)) := by
-    simpa only [zero_div, sub_zero] using
+    simpa only [zero_div, sub_zero] using!
       (tendsto_const_nhds (x := (9/4 : ℝ))).sub (hrem.div_const (4 : ℝ))
   apply (tendsto_congr' ?_).mp h
   filter_upwards [eventually_ge_atTop (1 : ℕ)] with n hn
@@ -142,13 +142,13 @@ lemma Qtilde_GV_threeAdicLowerBound {n : ℕ} (hn : 1 ≤ n) :
 lemma twoAdicLowerBound_tendsto :
     Tendsto (fun n : ℕ => (twoAdicLowerBound n : ℝ)/(n : ℝ)^2)
       atTop (𝓝 (8/3 : ℝ)) := by
-  simpa [twoAdicLowerBound, sub_div] using
+  simpa [twoAdicLowerBound, sub_div] using!
     A2_ratio_tendsto.sub (natLog_error_square_tendsto_zero 2)
 
 lemma threeAdicLowerBound_tendsto :
     Tendsto (fun n : ℕ => (threeAdicLowerBound n : ℝ)/(n : ℝ)^2)
       atTop (𝓝 (-(9/4 : ℝ))) := by
-  simpa [threeAdicLowerBound, sub_div, neg_div] using
+  simpa [threeAdicLowerBound, sub_div, neg_div] using!
     S3_ratio_tendsto.neg.sub (natLog_error_square_tendsto_zero 3)
 
 def twoThreeWeightedBound (n : ℕ) : ℝ :=

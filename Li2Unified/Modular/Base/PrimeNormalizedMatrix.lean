@@ -38,7 +38,7 @@ lemma primeNormalizedMatrix_GV_of_original [Fact p.Prime] (hp4 : 3 < p)
     right
     rw [(primeBlockUnitScale_unit hp4 y).2]
     norm_num
-  simpa only [primeNormalizedMatrix, zero_add] using GV.C_mul (hx.mul hy) h
+  simpa only [primeNormalizedMatrix, zero_add] using! GV.C_mul (hx.mul hy) h
 
 lemma rational_prime_unit_finset_prod [Fact p.Prime] {ι : Type*}
     (S : Finset ι) (u : ι → ℚ)
@@ -68,10 +68,10 @@ theorem primeNormalizedMatrix_det (hp4 : 3 < p) :
     ext x y
     simp only [primeNormalizedMatrix, Matrix.of_apply, B, Matrix.submatrix_apply, C_mul]
     ring
-  rw [he, Matrix.det_mul_column]
+  erw [he, Matrix.det_mul_column]
   change (∏ x : PrimeBlockIndex p, C (primeBlockUnitScale hp4 x)) *
     (Matrix.of (fun x y => C (primeBlockUnitScale hp4 y) * B x y)).det = _
-  rw [Matrix.det_mul_row]
+  erw [Matrix.det_mul_row]
   have hb : B.det = (Matrix.of (primeOriginalNumeratorEntry p (by omega))).det :=
     Matrix.det_submatrix_equiv_self (primeOriginalBlockEquiv hp4).symm _
   rw [hb, ← map_prod, ← mul_assoc, ← C_mul, ← pow_two]
@@ -101,7 +101,7 @@ theorem primeNormalizedDetScale_unit [Fact p.Prime] (hp4 : 3 < p) :
   have hne := mul_ne_zero hs.1 hb.1
   unfold primeNormalizedDetScale
   refine ⟨pow_ne_zero 2 hne, ?_⟩
-  rw [padicValRat.pow hne, padicValRat.mul hs.1 hb.1, hs.2, hb.2]
+  rw [padicValRat.pow, padicValRat.mul hs.1 hb.1, hs.2, hb.2]
   norm_num
 
 end

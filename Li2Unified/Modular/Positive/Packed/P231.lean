@@ -73,10 +73,10 @@ theorem energy_lower : (589/1000:ℝ) ≤ comparisonEnergy := by
 
 theorem potential_ray_compact : ∀ x : ℝ, 0 ≤ x → x ≤ 18 → psiRay x ≤ 19/10 := by
   intro x hx hx18
-  exact GeneratedPotential.ray_compact x ⟨hx, by simpa using hx18⟩
+  exact GeneratedPotential.ray_compact x ⟨hx, by simpa using! hx18⟩
 theorem potential_up_compact : ∀ y : ℝ, 0 ≤ y → y ≤ 2 → psiUp y ≤ 19/10 := by
   intro y hy hy2
-  exact GeneratedPotential.vertical_compact y ⟨hy, by simpa using hy2⟩
+  exact GeneratedPotential.vertical_compact y ⟨hy, by simpa using! hy2⟩
 theorem potential_reflection (y : ℝ) : psiDown y = psiUp y := by
   exact Li2Unified.Proofs.Potential.psi_reflection y
 theorem potential_ray_tail : ∀ x : ℝ, 18 ≤ x → psiRay x ≤ 19/10 := by
@@ -143,7 +143,7 @@ theorem irrational_value : Irrational value := by
 
 theorem irrational_literal_half :
     Irrational (∑' k : ℕ, (1/2:ℝ)^(k+1)/((k:ℝ)+1)^2) := by
-  simpa only [value_eq_series] using irrational_value
+  simpa only [value_eq_series] using! irrational_value
 
 #print axioms irrational_literal_half
 end

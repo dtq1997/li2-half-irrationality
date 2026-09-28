@@ -30,7 +30,6 @@ theorem primitiveQ_proportional (n : ℕ) :
   have hfac := congrArg (fun f : ℤ[X] => (f.map (algebraMap ℤ ℚ)).coeff k)
     R.eq_C_content_mul_primPart
   have hco : (b : ℚ) * (Q n).coeff k = (R.content : ℚ) * (R.primPart.coeff k : ℚ) := by
-    dsimp only at hfac
     rw [show R.map (algebraMap ℤ ℚ) = b • Q n from hmap] at hfac
     simpa using hfac
   simp only [primitiveQ, if_neg hn, coeff_map, coeff_C_mul]

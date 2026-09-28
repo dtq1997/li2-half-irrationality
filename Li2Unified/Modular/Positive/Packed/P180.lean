@@ -58,7 +58,7 @@ theorem star_pi_product (h : ℕ) (f : Fin 3 × ℝ → ℝ)
     infer_instance
   constructor
   · exact Integrable.fintype_prod (fun _ => hf)
-  · simpa only [Fintype.card_fin] using
+  · simpa only [Fintype.card_fin] using!
       (integral_fintype_prod_eq_pow (ι := Fin h) (μ := contourMeasure) f)
 
 /-- A fixed, integrable pointwise envelope for each rescaled star arm. -/
@@ -99,7 +99,7 @@ theorem star_envelope_product_integral (h n : ℕ) :
   have h := star_pi_product h
     (fun z => Real.exp ((n:ℝ)*(19/10:ℝ)) * starEnvelope z)
     (starEnvelope_integrable.const_mul _)
-  simpa only [integral_const_mul] using h
+  simpa only [integral_const_mul] using! h
 
 end
 end Li2Unified.Proofs.Arithmetic
@@ -143,7 +143,7 @@ theorem star_weight_potential_envelope (n : ℕ) (hn : 1 ≤ n)
   calc
     _ ≤ starPartitionWeightConstant * ((n:ℝ)+1)^12 * (1+y)^6 *
         Real.exp ((n:ℝ)*starArmBase b y) := by
-          simpa only [starArmBase] using hw
+          simpa only [starArmBase] using! hw
     _ = starPartitionWeightConstant * ((n:ℝ)+1)^12 *
         Real.exp (-4*(n:ℝ)*comparisonPotential (starAxisPoint (b,y))) *
         ((1+y)^6 * Real.exp ((n:ℝ)*starArmPsi b y)) := by
@@ -152,7 +152,7 @@ theorem star_weight_potential_envelope (n : ℕ) (hn : 1 ≤ n)
     _ ≤ _ := by
           apply mul_le_mul_of_nonneg_left _ hfac
           have hneg : -(1/10:ℝ)*|y| = -|y|/10 := by ring
-          simpa only [starEnvelope, hneg] using he
+          simpa only [starEnvelope, hneg] using! he
 
 end
 end Li2Unified.Proofs.Arithmetic
@@ -190,7 +190,7 @@ theorem star_product_potential_cancel (h : ℕ) (q A : ℝ)
       _ = (A/q)*g i := by rw [div_mul_eq_mul_div]
   have hprod : (∏ i : Fin h, w i * Real.exp (p i)) ≤
       ∏ i : Fin h, (A/q)*g i := by
-    apply Finset.prod_le_prod
+    apply Finset.prod_le_prod₀
     · intro i _
       exact mul_nonneg (hw i) (Real.exp_pos _).le
     · intro i _
@@ -262,7 +262,7 @@ theorem starPartitionDensity_scaled_bound (n : ℕ) (hn : 1 ≤ n)
     have hneg : -4*(n:ℝ)*comparisonPotential (starAxisPoint (v i)) =
         -(4*(n:ℝ)*comparisonPotential (starAxisPoint (v i))) := by ring
     rw [hneg] at h
-    simpa only [p, w, g, A] using h
+    simpa only [p, w, g, A] using! h
   have hproduct := star_product_potential_cancel (2*n) (Li2.Sn n:ℝ) A
     hSn w p g hw hbound
   have hdet := star_vandermonde_original_energy n hn v henergy
@@ -349,7 +349,7 @@ theorem starPartitionDensity_scaled_integrable (n : ℕ) (hn : 1 ≤ n) :
   have hnpos : (0:ℝ) < n := by exact_mod_cast (Nat.zero_lt_of_lt hn)
   have hf : Integrable (starPartitionDensity n)
       (Measure.pi fun _ : Fin (2*n) => contourMeasure) := by
-    simpa only [starPartitionDensity] using Proofs.Contour.star_partition_integrable n
+    simpa only [starPartitionDensity] using! Proofs.Contour.star_partition_integrable n
   have hm : Measurable (fun v : Fin (2*n) → Fin 3 × ℝ =>
       fun i => Proofs.Measure.starScale (n:ℝ) (v i)) := by
     unfold Proofs.Measure.starScale
@@ -414,7 +414,7 @@ theorem starPartition_explicit_bound (n : ℕ) (hn : 1 ≤ n)
         B * (∏ i : Fin (2*n),
           Real.exp ((n:ℝ)*(19/10:ℝ))*starEnvelope (v i)) := by
     filter_upwards [star_pi_coordinates_nonneg (2*n)] with v hv
-    simpa only [B] using
+    simpa only [B] using!
       starPartitionDensity_scaled_bound n hn v hv (henergy v)
   have hint : (∫ v : Fin (2*n) → Fin 3 × ℝ,
       starPartitionDensity n

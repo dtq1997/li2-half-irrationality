@@ -36,7 +36,6 @@ theorem original_scaled_product_log_upper (n : ℕ) (hn : 1 ≤ n) (x : ℝ) :
   rw [hi4] at hden
   have hv := originalExternalV_eq_log_integrals x
   have hvn := congrArg (fun t : ℝ => (n : ℝ) * t) hv
-  dsimp only at hvn
   simp only [abs_mul, abs_of_pos hnR] at hnum ⊢
   nlinarith only [hnum, hden, hs, hvn]
 

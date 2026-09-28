@@ -1,4 +1,5 @@
 module
+public import Li2Unified.Modular.Base.RestrictedSeriesCompat
 public import Li2Unified.Modular.Base.PrimeMonomialScaledLeading
 public import Li2Unified.Modular.Base.PrimeIntegralJetBounds
 
@@ -72,7 +73,7 @@ theorem primeDiscTest_U_jet_error (hp4 : 3 < p) (T : ℤ[X]) (a : Fin p)
         (integralPoleMulResidue (primePoleCenters p)
           (q • ((X^k : (ℤ_[p])[X]) : PowerSeries ℤ_[p])) (primeDiscResidue hp4 a))).coeff n‖ ≤ B :=
     restrictedPoleFunctional_multiplier_difference _ primePoleCenters_injective _ _ _ _ _
-      (polynomial_isRestricted _) (PowerSeries.IsRestricted.smul 1 (polynomial_isRestricted _) q)
+      (polynomial_isRestricted _) (Li2.restrictedSeries_smul 1 (polynomial_isRestricted _) q)
       (primeDiscRegular_isRestricted hp4 a) _ B hB (integralDiscTest_series_error T a q k B he) n
   rw [primePoleU_multiplier_smul hp4 _ _ (polynomial_isRestricted _)
     (primeDiscRegular_isRestricted hp4 a),
@@ -91,7 +92,7 @@ theorem primeDiscTest_V_jet_error (hp4 : 3 < p) (T : ℤ[X]) (a : Fin p)
         (integralPoleMulResidue (primePoleCenters p)
           (q • ((X^k : (ℤ_[p])[X]) : PowerSeries ℤ_[p])) (primeDiscResidue hp4 a))).coeff n‖ ≤ B :=
     restrictedPoleFunctional_multiplier_difference _ primePoleCenters_injective _ _ _ _ _
-      (polynomial_isRestricted _) (PowerSeries.IsRestricted.smul 1 (polynomial_isRestricted _) q)
+      (polynomial_isRestricted _) (Li2.restrictedSeries_smul 1 (polynomial_isRestricted _) q)
       (primeDiscRegular_isRestricted hp4 a) _ B hB (integralDiscTest_series_error T a q k B he) n
   rw [primePoleV_multiplier_smul hp4 _ _ (polynomial_isRestricted _)
     (primeDiscRegular_isRestricted hp4 a),

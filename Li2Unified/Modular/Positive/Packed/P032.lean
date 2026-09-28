@@ -25,7 +25,7 @@ private theorem profile_floors_closed_theta (A j b : ℕ) (x lo hi : ℝ)
       apply Int.floor_eq_iff.mpr
       constructor
       · exact_mod_cast hlo'
-      · simpa only [Int.cast_add, Int.cast_natCast, Int.cast_one] using hhi'
+      · simpa only [Int.cast_add, Int.cast_natCast, Int.cast_one] using! hhi'
     exact_mod_cast h
   have h1lo : (A:ℝ) ≤ (1:ℝ)/x := by
     rw [one_div]
@@ -58,7 +58,7 @@ private theorem profile_min_first_closed (A j : ℕ) (x : ℝ) (hx : 0 < x)
     min (1-(A:ℝ)*x) (4-((4*A+j:ℕ):ℝ)*x) = 1-(A:ℝ)*x := by
   have hm := mul_le_mul_of_nonneg_right hθ hx.le
   have hb : ((A:ℝ)+(j:ℝ)/3)*x ≤ 1 := by
-    simpa only [inv_mul_cancel₀ hx.ne'] using hm
+    simpa only [inv_mul_cancel₀ hx.ne'] using! hm
   apply min_eq_left
   push_cast
   nlinarith only [hb]
@@ -69,7 +69,7 @@ private theorem profile_min_second_closed (A j : ℕ) (x : ℝ) (hx : 0 < x)
       4-((4*A+j:ℕ):ℝ)*x := by
   have hm := mul_le_mul_of_nonneg_right hθ hx.le
   have hb : 1 ≤ ((A:ℝ)+(j:ℝ)/3)*x := by
-    simpa only [inv_mul_cancel₀ hx.ne'] using hm
+    simpa only [inv_mul_cancel₀ hx.ne'] using! hm
   apply min_eq_right
   push_cast
   nlinarith only [hb]
@@ -78,10 +78,10 @@ theorem profile_piece_zero_closed (A : ℕ) (x : ℝ) (hx : 0 < x)
     (hlo : (A:ℝ) ≤ x⁻¹) (hhi : x⁻¹ < (A:ℝ)+1/4) :
     profile x = (2*(A:ℝ)^2+3*(A:ℝ))*x-2*(A:ℝ)-5 := by
   obtain ⟨hf1, hf2, hf4⟩ :=
-    profile_floors_closed_theta A 0 0 x 0 (1/4) (by simpa using hlo) hhi
+    profile_floors_closed_theta A 0 0 x 0 (1/4) (by simpa using! hlo) hhi
       (by norm_num) (by norm_num) (by norm_num) (by norm_num)
       (by norm_num) (by norm_num)
-  have hmin := profile_min_first_closed A 0 x hx (by simpa using hlo)
+  have hmin := profile_min_first_closed A 0 x hx (by simpa using! hlo)
   dsimp [profile]
   rw [hf1, hf2, hf4, hmin]
   push_cast
@@ -107,7 +107,7 @@ theorem profile_piece_two_closed (A : ℕ) (x : ℝ) (hx : 0 < x)
     profile_floors_closed_theta A 1 0 x (1/3) (1/2) hlo hhi
       (by norm_num) (by norm_num) (by norm_num) (by norm_num)
       (by norm_num) (by norm_num)
-  have hmin := profile_min_first_closed A 1 x hx (by simpa using hlo)
+  have hmin := profile_min_first_closed A 1 x hx (by simpa using! hlo)
   dsimp [profile]
   rw [hf1, hf2, hf4, hmin]
   push_cast

@@ -91,10 +91,10 @@ theorem profileWindowOpenSum_tendsto :
               ring
         _ = _ := window_mass_eq_cell A hAr
     rw [hmass] at hsum
-    simpa only [Finset.sum_div] using hsum
+    simpa only [Finset.sum_div] using! hsum
   have houter := tendsto_finset_sum (Finset.Ico (1:ℕ) 200)
     (fun A hA => hrow A hA)
-  simpa only [profileWindowOpenSum, Finset.sum_div] using houter
+  simpa only [profileWindowOpenSum, Finset.sum_div] using! houter
 
 end
 end Li2Unified.Proofs.Arithmetic

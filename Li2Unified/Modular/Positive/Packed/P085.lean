@@ -21,11 +21,11 @@ lemma kappaPlus_deriv (z : ℂ)
   let c : ℂ := -(2 * (Real.pi : ℂ) * Complex.I)
   have he : HasDerivAt (fun w : ℂ => Complex.exp (c * w))
       (Complex.exp (c * z) * c) z := by
-    simpa only [mul_one] using ((hasDerivAt_id z).const_mul c).cexp
+    simpa only [mul_one] using! ((hasDerivAt_id z).const_mul c).cexp
   have hd : HasDerivAt (fun w : ℂ => 1 - Complex.exp (c * w))
       (-(Complex.exp (c * z) * c)) z := by
-    simpa using (hasDerivAt_const z (1 : ℂ)).sub he
-  have hi := hd.inv (by simpa only [c] using hz)
+    simpa using! (hasDerivAt_const z (1 : ℂ)).sub he
+  have hi := hd.inv (by simpa only [c] using! hz)
   have hfun : kappaPlus = (fun w : ℂ => (1 - Complex.exp (c * w))⁻¹) := by
     funext w
     simp only [kappaPlus, one_div, c]
@@ -45,11 +45,11 @@ lemma kappaMinus_deriv (z : ℂ)
   let c : ℂ := 2 * (Real.pi : ℂ) * Complex.I
   have he : HasDerivAt (fun w : ℂ => Complex.exp (c * w))
       (Complex.exp (c * z) * c) z := by
-    simpa only [mul_one] using ((hasDerivAt_id z).const_mul c).cexp
+    simpa only [mul_one] using! ((hasDerivAt_id z).const_mul c).cexp
   have hd : HasDerivAt (fun w : ℂ => 1 - Complex.exp (c * w))
       (-(Complex.exp (c * z) * c)) z := by
-    simpa using (hasDerivAt_const z (1 : ℂ)).sub he
-  have hi := hd.inv (by simpa only [c] using hz)
+    simpa using! (hasDerivAt_const z (1 : ℂ)).sub he
+  have hi := hd.inv (by simpa only [c] using! hz)
   have hfun : kappaMinus = (fun w : ℂ => (1 - Complex.exp (c * w))⁻¹) := by
     funext w
     simp only [kappaMinus, one_div, c]
@@ -80,7 +80,7 @@ private lemma plus_den_upper_ne (y : ℝ) :
     ne_of_gt (by positivity)
   have hc : (1 : ℂ) + ((Real.exp (2 * Real.pi * y) : ℝ) : ℂ) ≠ 0 := by
     exact_mod_cast h
-  simpa only [sub_neg_eq_add] using hc
+  simpa only [sub_neg_eq_add] using! hc
 
 private lemma minus_den_lower_ne (y : ℝ) :
     1 - Complex.exp ((2 * (Real.pi : ℂ) * Complex.I) *
@@ -90,7 +90,7 @@ private lemma minus_den_lower_ne (y : ℝ) :
     ne_of_gt (by positivity)
   have hc : (1 : ℂ) + ((Real.exp (2 * Real.pi * y) : ℝ) : ℂ) ≠ 0 := by
     exact_mod_cast h
-  simpa only [sub_neg_eq_add] using hc
+  simpa only [sub_neg_eq_add] using! hc
 
 lemma kappaPlus_deriv_upper_norm_le (y : ℝ) :
     ‖deriv kappaPlus (point ⟨1, by decide⟩ y)‖ ≤
@@ -119,7 +119,7 @@ lemma kappaPlus_deriv_upper_norm_le (y : ℝ) :
       ring
     _ ≤ 2 * Real.pi * Real.exp (-2 * Real.pi * y) := by
       apply mul_le_mul_of_nonneg_left _ (by positivity)
-      simpa only [show -2 * Real.pi * y = -(2 * Real.pi * y) by ring] using
+      simpa only [show -2 * Real.pi * y = -(2 * Real.pi * y) by ring] using!
         exp_ratio_bound (2 * Real.pi * y)
 
 lemma kappaMinus_deriv_lower_norm_le (y : ℝ) :
@@ -149,7 +149,7 @@ lemma kappaMinus_deriv_lower_norm_le (y : ℝ) :
       ring
     _ ≤ 2 * Real.pi * Real.exp (-2 * Real.pi * y) := by
       apply mul_le_mul_of_nonneg_left _ (by positivity)
-      simpa only [show -2 * Real.pi * y = -(2 * Real.pi * y) by ring] using
+      simpa only [show -2 * Real.pi * y = -(2 * Real.pi * y) by ring] using!
         exp_ratio_bound (2 * Real.pi * y)
 
 end

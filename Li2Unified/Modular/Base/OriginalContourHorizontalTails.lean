@@ -16,7 +16,7 @@ noncomputable section
 lemma D_eval₂_complex_norm_ge_one_of_re_nonneg (d : ℕ) {z : ℂ}
     (hz : 0 ≤ z.re) : 1 ≤ ‖(D d).eval₂ (Rat.castHom ℂ) z‖ := by
   rw [D_eval₂_complex_product, norm_prod]
-  apply Finset.one_le_prod
+  apply Finset.one_le_prod₀
   intro j hj
   have hjR : (1 : ℝ) ≤ (j : ℝ) := by exact_mod_cast (Finset.mem_Icc.mp hj).1
   have h := Complex.re_le_norm (z + (j : ℂ))

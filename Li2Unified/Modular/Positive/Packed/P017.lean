@@ -216,7 +216,7 @@ theorem numeratorFunctional_pulled_eval (lam : ℚ) (m : ℕ) (F : ℚ[X])
       ∑ a : Fin p, (lam : ℚ_[p])⁻¹ ^ a.val *
         parameterPulledValue lam hz (parameterPoleShiftY lam hz x) m F a := by
   have hnorm : ‖(lam : ℝ)‖ < 1 := by
-    simpa [Real.norm_eq_abs] using hlam
+    simpa [Real.norm_eq_abs] using! hlam
   have hpoly := Li2.parameterU_dissection lam hnorm hzne p
     (Fact.out : p.Prime).pos (F /ₘ Li2.D m)
   have hpolyCast := congrArg (fun q : ℚ => (q : ℚ_[p])) hpoly

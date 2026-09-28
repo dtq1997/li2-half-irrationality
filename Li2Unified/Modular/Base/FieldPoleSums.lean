@@ -18,10 +18,10 @@ lemma field_sum_isRestricted (s : Finset κ) (f : κ → PowerSeries ℚ_[p])
     PowerSeries.IsRestricted 1 (∑ i ∈ s, f i) := by
   classical
   induction s using Finset.induction_on with
-  | empty => simp only [Finset.sum_empty]; exact PowerSeries.IsRestricted.zero 1
+  | empty => simp only [Finset.sum_empty]; exact PowerSeries.isRestricted_zero 1
   | insert a s ha ih =>
     rw [Finset.sum_insert ha]
-    exact PowerSeries.IsRestricted.add 1 (hf a (Finset.mem_insert_self _ _))
+    exact PowerSeries.isRestricted.add 1 (hf a (Finset.mem_insert_self _ _))
       (ih (fun i hi => hf i (Finset.mem_insert_of_mem hi)))
 
 theorem fieldRestrictedMoment_sum (μ : ℕ → ℤ_[p]) (s : Finset κ)

@@ -180,7 +180,7 @@ theorem starProfileCurve_norm_le (h : ℕ) (x : Fin h → ℂ)
       have hc : ‖circleMap (x i) ε θ‖ ≤ ‖x i‖ + |ε| := by
         calc
           _ ≤ ‖x i‖ + ‖circleMap 0 ε θ‖ := by
-            simpa only [circleMap, zero_add] using
+            simpa only [circleMap, zero_add] using!
               (norm_add_le (x i) (circleMap 0 ε θ))
           _ = _ := by rw [norm_circleMap_zero]
       change ‖circleMap (x i) ε θ‖ ≤ _

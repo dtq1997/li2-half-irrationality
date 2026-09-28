@@ -35,7 +35,7 @@ lemma intervalIntegrable_log_add (a l r : ℝ) :
     IntervalIntegrable (fun t : ℝ => Real.log (t + a)) volume l r := by
   have h := (intervalIntegral.intervalIntegrable_log'
     (a := l + a) (b := r + a)).comp_add_right a
-  simpa [add_comm] using h
+  simpa [add_comm] using! h
 
 def rayLogIncrement (y δ t : ℝ) : ℝ :=
   Real.log (t + (y + δ)) - Real.log (t + y)
@@ -78,7 +78,7 @@ lemma rayLogIncrement_integral_le {y δ : ℝ}
     (intervalIntegrable_rayLogIncrement 0 δ 0 1)
   intro t ht
   have hlog := log_increment_antitone ht.1 hy hδ
-  simpa only [rayLogIncrement, zero_add, add_zero, add_assoc] using hlog
+  simpa only [rayLogIncrement, zero_add, add_zero, add_assoc] using! hlog
 
 lemma Vray_shift_le_integral {y δ : ℝ}
     (hy : 0 ≤ y) (hδ : 0 ≤ δ) :
@@ -106,11 +106,11 @@ lemma rayLogIncrement_zero_integral (δ : ℝ) :
   rw [rayLogIncrement_integral 0 δ 1]
   have hδ : (∫ t in (0 : ℝ)..1, Real.log (t + (0 + δ))) =
       logPrimitive (1 + δ) - logPrimitive δ := by
-    simpa only [zero_add, sub_neg_eq_add] using
+    simpa only [zero_add, sub_neg_eq_add] using!
       (Li2Unified.ParameterFamily.Energy.integral_log_shift 0 1 (-δ))
   have h0 : (∫ t in (0 : ℝ)..1, Real.log (t + 0)) =
       logPrimitive 1 - logPrimitive 0 := by
-    simpa only [zero_add, add_zero, sub_zero] using
+    simpa only [zero_add, add_zero, sub_zero] using!
       (Li2Unified.ParameterFamily.Energy.integral_log_shift 0 1 0)
   rw [hδ, h0]
   simp only [logPrimitive, Real.log_one, mul_zero, Real.log_zero, sub_zero]
@@ -119,7 +119,7 @@ lemma rayLogIncrement_zero_integral (δ : ℝ) :
 theorem Vray_shift_le {y δ : ℝ} (hy : 0 ≤ y) (hδ : 0 ≤ δ) :
     Vray (y + δ) - Vray y ≤
       2 * ((1 + δ) * Real.log (1 + δ) - δ * Real.log δ) := by
-  simpa only [rayLogIncrement_zero_integral] using
+  simpa only [rayLogIncrement_zero_integral] using!
     Vray_shift_le_integral hy hδ
 
 end
@@ -138,7 +138,7 @@ lemma ray_shift_entropy_le {δ : ℝ} (hδ : 0 < δ) (hδ1 : δ ≤ 1) :
     2 * ((1 + δ) * Real.log (1 + δ) - δ * Real.log δ) ≤
       2 * δ * (2 - Real.log δ) := by
   have hlog : Real.log (1 + δ) ≤ δ := by
-    simpa using Real.log_le_sub_one_of_pos (by positivity : 0 < 1 + δ)
+    simpa using! Real.log_le_sub_one_of_pos (by positivity : 0 < 1 + δ)
   have hm := mul_le_mul_of_nonneg_left hlog (by positivity : 0 ≤ 1 + δ)
   nlinarith [mul_nonneg hδ.le (sub_nonneg.mpr hδ1)]
 
@@ -165,7 +165,7 @@ lemma ray_half_step_error (n : ℕ) (hn : 1 ≤ n) (y : ℝ) (hy : 0 ≤ y) :
     have hp : 0 < (n : ℝ) + 1 := by positivity
     have h := Real.log_le_log (by positivity : (0 : ℝ) < 2 * (n : ℝ))
       (show 2 * (n : ℝ) ≤ ((n : ℝ) + 1) ^ 2 by nlinarith [sq_nonneg (n : ℝ)])
-    simpa only [Real.log_pow, Nat.cast_ofNat] using h
+    simpa only [Real.log_pow, Nat.cast_ofNat] using! h
   have hhalf : (1 / 2 : ℝ) ≤ Real.log ((n : ℝ) + 1) := by
     have h2 := Real.one_sub_inv_le_log_of_pos (by norm_num : (0 : ℝ) < 2)
     have hm := Real.log_le_log (by norm_num : (0 : ℝ) < 2)

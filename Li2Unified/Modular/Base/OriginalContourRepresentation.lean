@@ -25,7 +25,7 @@ def originalContourVerticalIntegral (d : ℕ) (F : ℚ[X]) (N : ℕ) : ℂ :=
 lemma tendsto_originalContourVerticalSegment (d : ℕ) (F : ℚ[X]) (N : ℕ) :
     Tendsto (originalContourVerticalSegment d F N) atTop
       (𝓝 (originalContourVerticalIntegral d F N)) := by
-  simpa only [originalContourVerticalSegment, originalContourVerticalIntegral] using
+  simpa only [originalContourVerticalSegment, originalContourVerticalIntegral] using!
     (MeasureTheory.intervalIntegral_tendsto_integral
       (integrable_originalRightKernel_mul_G_deriv d F N)
       (tendsto_neg_atTop_atBot : Tendsto (fun T : ℝ => -T) atTop atBot)
@@ -115,7 +115,7 @@ theorem neg_originalContourVerticalIntegral_zero_eq_functional (d : ℕ) (F : �
     -originalContourVerticalIntegral d F 0 = (2 * (Real.pi : ℂ)) *
       (((numeratorFunctional d F).eval₂ (Rat.castHom ℝ) li2NegHalf : ℝ) : ℂ) := by
   have hr : Tendsto (originalContourVerticalIntegral d F) atTop (𝓝 0) := by
-    simpa only [originalContourVerticalIntegral] using
+    simpa only [originalContourVerticalIntegral] using!
       originalRightKernel_G_deriv_integral_tendsto_zero d F
   have hl : Tendsto
       (fun N : ℕ => originalContourVerticalIntegral d F N - originalContourVerticalIntegral d F 0)

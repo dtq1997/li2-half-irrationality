@@ -48,7 +48,7 @@ lemma primeReference_GV_swap (hp4 : 3 < p) {x y : PrimeBlockIndex p} {δ : ℚ}
     GV p (primeNormalizedMatrix hp4 y x-primeReferenceMatrix p y x)
       (primeBlockWeight y+primeBlockWeight x+δ) := by
   rw [primeNormalizedMatrix_symm hp4 y x,primeReferenceMatrix_symm y x]
-  simpa only [add_comm] using h
+  simpa only [add_comm] using! h
 
 lemma primeReference_high_cross_zero (ell m : Fin 3) (hem : ell ≠ m) :
     edgeBlock (primeHighEdgeSlot ell) (primeHighEdgeSlot m) = 0 := by
@@ -66,9 +66,9 @@ theorem primeReference_low_GV (hp4 : 3 < p)
         primeBlockWeight (p := p) (Sum.inl (b,j)) + 1) := by
   by_cases hab : a = b
   · subst b
-    simpa only [primeNormalizedMatrix,primeReferenceMatrix,if_pos rfl] using
+    simpa only [primeNormalizedMatrix,primeReferenceMatrix,if_pos rfl] using!
       primeLow_block_scaled_GV hp4 a i j
-  · simpa only [primeReferenceMatrix,if_neg hab,sub_zero] using
+  · simpa only [primeReferenceMatrix,if_neg hab,sub_zero] using!
       primeNormalizedMatrix_low_cross_GV hp4 a b i j hab
 
 theorem primeReference_low_edge_GV (hp4 : 3 < p)
@@ -77,7 +77,7 @@ theorem primeReference_low_edge_GV (hp4 : 3 < p)
       primeReferenceMatrix p (Sum.inl (a,i)) (Sum.inr k))
       (primeBlockWeight (p := p) (Sum.inl (a,i)) +
         primeBlockWeight (p := p) (Sum.inr k) + 1/2) := by
-  simpa only [primeReferenceMatrix,sub_zero] using
+  simpa only [primeReferenceMatrix,sub_zero] using!
     primeNormalizedMatrix_low_edge_GV hp4 a i k
 
 theorem primeReference_high_high_GV (hp4 : 3 < p) (ell m : Fin 3) :
@@ -91,9 +91,9 @@ theorem primeReference_high_high_GV (hp4 : 3 < p) (ell m : Fin 3) :
     have he : primeEdgeIntegerWeight (primeHighEdgeSlot ell) +
         primeEdgeIntegerWeight (primeHighEdgeSlot ell) + 1 = -1 := by
       norm_num [primeEdgeIntegerWeight_highSlot]
-    simpa only [primeReferenceMatrix,he] using primeNormalizedMatrix_high_diag_GV hp4 ell
+    simpa only [primeReferenceMatrix,he] using! primeNormalizedMatrix_high_diag_GV hp4 ell
   · simpa only [primeReferenceMatrix,primeReference_high_cross_zero ell m hem,
-      mul_zero,C_0,sub_zero] using primeNormalizedMatrix_high_cross_GV hp4 ell m hem
+      mul_zero,C_0,sub_zero] using! primeNormalizedMatrix_high_cross_GV hp4 ell m hem
 
 theorem primeReference_zero_high_GV (hp4 : 3 < p) (i : Fin 2) (ell : Fin 3) :
     GV p (primeNormalizedMatrix hp4
@@ -102,7 +102,7 @@ theorem primeReference_zero_high_GV (hp4 : 3 < p) (i : Fin 2) (ell : Fin 3) :
       (primeBlockWeight (p := p) (Sum.inr (primeZeroEdgeSlot i)) +
         primeBlockWeight (p := p) (Sum.inr (primeHighEdgeSlot ell)) + 1) := by
   simpa only [primeReferenceMatrix,primeReference_zero_high_zero,
-    mul_zero,C_0,sub_zero] using primeNormalizedMatrix_zero_high_GV hp4 i ell
+    mul_zero,C_0,sub_zero] using! primeNormalizedMatrix_zero_high_GV hp4 i ell
 
 theorem primeReference_zero_zero_GV (hp4 : 3 < p) (i j : Fin 2) :
     GV p (primeNormalizedMatrix hp4
@@ -114,7 +114,7 @@ theorem primeReference_zero_zero_GV (hp4 : 3 < p) (i j : Fin 2) :
       primeEdgeIntegerWeight (primeZeroEdgeSlot j) + 1 = (i.val:ℤ)+(j.val:ℤ)-3 := by
     rw [primeEdgeIntegerWeight_zeroSlot,primeEdgeIntegerWeight_zeroSlot]
     ring
-  simpa only [primeNormalizedMatrix,primeReferenceMatrix,he] using
+  simpa only [primeNormalizedMatrix,primeReferenceMatrix,he] using!
     primeZero_pair_block_scaled_GV hp4 i j
 
 theorem primeReference_high_top_GV (hp4 : 3 < p) (ell : Fin 3) :
@@ -126,7 +126,7 @@ theorem primeReference_high_top_GV (hp4 : 3 < p) (ell : Fin 3) :
       primeEdgeIntegerWeight 5 + 1 = 0 := by
     rw [primeEdgeIntegerWeight_highSlot, show primeEdgeIntegerWeight 5 = 0 from rfl]
     norm_num
-  simpa only [primeReferenceMatrix,he,zpow_zero,one_mul] using
+  simpa only [primeReferenceMatrix,he,zpow_zero,one_mul] using!
     primeNormalizedMatrix_high_top_GV hp4 ell
 
 theorem primeReference_zero_top_GV (hp4 : 3 < p) (i : Fin 2) :
@@ -138,7 +138,7 @@ theorem primeReference_zero_top_GV (hp4 : 3 < p) (i : Fin 2) :
       primeEdgeIntegerWeight 5 + 1 = (i.val:ℤ)-1 := by
     rw [primeEdgeIntegerWeight_zeroSlot,show primeEdgeIntegerWeight 5 = 0 from rfl]
     ring
-  simpa only [primeNormalizedMatrix,primeReferenceMatrix,he] using
+  simpa only [primeNormalizedMatrix,primeReferenceMatrix,he] using!
     primeZero_top_block_scaled_GV hp4 i
 
 theorem primeReference_top_top_GV (hp4 : 3 < p) :
@@ -148,7 +148,7 @@ theorem primeReference_top_top_GV (hp4 : 3 < p) :
   have he : primeEdgeIntegerWeight 5+primeEdgeIntegerWeight 5+1 = 1 := by
     rw [show primeEdgeIntegerWeight 5 = 0 from rfl]
     norm_num
-  simpa only [primeReferenceMatrix,he,zpow_one] using primeTop_block_scaled_GV hp4
+  simpa only [primeReferenceMatrix,he,zpow_one] using! primeTop_block_scaled_GV hp4
 
 theorem primeReference_edge_GV (hp4 : 3 < p) (k l : Fin 6) :
     GV p (primeNormalizedMatrix hp4 (Sum.inr k) (Sum.inr l) -

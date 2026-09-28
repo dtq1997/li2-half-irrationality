@@ -97,7 +97,7 @@ theorem normalized_down_density_exp_bound (n : ℕ) (hn : 1 ≤ n)
   have he : A * Real.exp (-2 * Real.pi * t) ≤
       Real.exp ((n : ℝ) * Vvertical y + Real.log 2 - Real.log (n : ℝ) +
         (9 / 2 : ℝ) * Real.log ((n : ℝ) + 3 / 2 + t) + 11 / 4) := by
-    simpa only [point_down, A, z, t] using lower_ratio_exp_bound n hn y hy
+    simpa only [point_down, A, z, t] using! lower_ratio_exp_bound n hn y hy
   have hc : 0 ≤ (Real.log 2 + 2 * Real.pi) * (1 + t) := by positivity
   calc
     (Li2.Sn n : ℝ) * ‖density ⟨2, by decide⟩ t *

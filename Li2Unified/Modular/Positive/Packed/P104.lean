@@ -43,8 +43,8 @@ theorem actual_weight_uniform :
         (1 + t / (n : ℝ)) ^ 6 *
         Real.exp ((n : ℝ) * Vray ((1 / 2 + t) / (n : ℝ))) := by positivity
     have h' := mul_le_mul_of_nonneg_right hc hp
-    simpa only [Fin.val_zero, ↓reduceIte, mul_assoc] using h.trans (by
-      simpa only [mul_assoc] using h')
+    simpa only [Fin.val_zero, ↓reduceIte, mul_assoc] using! h.trans (by
+      simpa only [mul_assoc] using! h')
   · have h := up_density_uniform_bound n hn t ht
     have hc : verticalWeightConstant ≤ rayWeightConstant + verticalWeightConstant := by
       have hr : 0 ≤ rayWeightConstant := by
@@ -56,8 +56,8 @@ theorem actual_weight_uniform :
         (1 + t / (n : ℝ)) ^ 6 *
         Real.exp ((n : ℝ) * Vvertical (t / (n : ℝ))) := by positivity
     have h' := mul_le_mul_of_nonneg_right hc hp
-    simpa only [Fin.val_one, one_ne_zero, ↓reduceIte, mul_assoc] using h.trans (by
-      simpa only [mul_assoc] using h')
+    simpa only [Fin.val_one, one_ne_zero, ↓reduceIte, mul_assoc] using! h.trans (by
+      simpa only [mul_assoc] using! h')
   · have h := down_density_uniform_bound n hn t ht
     have hc : verticalWeightConstant ≤ rayWeightConstant + verticalWeightConstant := by
       have hr : 0 ≤ rayWeightConstant := by
@@ -69,8 +69,8 @@ theorem actual_weight_uniform :
         (1 + t / (n : ℝ)) ^ 6 *
         Real.exp ((n : ℝ) * Vvertical (t / (n : ℝ))) := by positivity
     have h' := mul_le_mul_of_nonneg_right hc hp
-    simpa only [Fin.val_two, Nat.reduceEqDiff, ↓reduceIte, mul_assoc] using h.trans (by
-      simpa only [mul_assoc] using h')
+    simpa only [Fin.val_two, Nat.reduceEqDiff, ↓reduceIte, mul_assoc] using! h.trans (by
+      simpa only [mul_assoc] using! h')
 
 end
 end Li2Unified.Proofs.Contour
@@ -158,23 +158,23 @@ theorem starPartitionPrefactor_le_exp (n : ℕ) (hn : 1 ≤ n) :
       Real.exp ((6 - 4 * Real.log 2) * (n : ℝ) ^ 2 +
         starPartitionErrorConstant * (n : ℝ) * Real.log ((n : ℝ) + 1)) := by
   have h := Real.exp_le_exp.mpr (starPartitionPrefactor_log_le n hn)
-  simpa only [Real.exp_log (starPartitionPrefactor_pos n hn)] using h
+  simpa only [Real.exp_log (starPartitionPrefactor_pos n hn)] using! h
 
 theorem star_n_log_eventually_le_square (K : ℝ) {δ : ℝ} (hδ : 0 < δ) :
     ∀ᶠ n : ℕ in atTop, K * (n : ℝ) * Real.log ((n : ℝ) + 1) ≤ δ * (n : ℝ) ^ 2 := by
   have hshift : Tendsto (fun n : ℕ => (n : ℝ) + 1) atTop atTop :=
     tendsto_atTop_add_const_right atTop 1 tendsto_natCast_atTop_atTop
   have hlog : Tendsto (fun n : ℕ => Real.log ((n : ℝ) + 1) / (n : ℝ)) atTop (𝓝 0) := by
-    simpa only [Function.comp_def, pow_one, one_mul, add_neg_cancel_right] using
+    simpa only [Function.comp_def, pow_one, one_mul, add_neg_cancel_right] using!
       (Real.tendsto_pow_log_div_mul_add_atTop 1 (-1) 1 one_ne_zero).comp hshift
   have hK : Tendsto (fun n : ℕ => K * (Real.log ((n : ℝ) + 1) / (n : ℝ))) atTop (𝓝 0) := by
-    simpa only [mul_zero] using hlog.const_mul K
+    simpa only [mul_zero] using! hlog.const_mul K
   have herr : ∀ᶠ n : ℕ in atTop, K * (Real.log ((n : ℝ) + 1) / (n : ℝ)) ≤ δ :=
     Filter.Tendsto.eventually_le_const hδ hK
   filter_upwards [herr, eventually_ge_atTop (1 : ℕ)] with n hnerr hn
   have hnpos : (0 : ℝ) < (n : ℝ) := by exact_mod_cast (show 0 < n by omega)
   have hlinear : K * Real.log ((n : ℝ) + 1) ≤ δ * (n : ℝ) :=
-    (div_le_iff₀ hnpos).mp (by simpa only [mul_div_assoc] using hnerr)
+    (div_le_iff₀ hnpos).mp (by simpa only [mul_div_assoc] using! hnerr)
   calc
     K * (n : ℝ) * Real.log ((n : ℝ) + 1) = (K * Real.log ((n : ℝ) + 1)) * (n : ℝ) := by ring
     _ ≤ (δ * (n : ℝ)) * (n : ℝ) := mul_le_mul_of_nonneg_right hlinear hnpos.le
@@ -223,8 +223,8 @@ theorem star_weight_uniform_fixed (n : ℕ) (hn : 1 ≤ n)
     have hp : 0 ≤ ((n:ℝ)+1)^6 * (1+t/(n:ℝ))^6 *
         Real.exp ((n:ℝ)*Vray ((1/2+t)/(n:ℝ))) := by positivity
     have h' := mul_le_mul_of_nonneg_right hc hp
-    simpa only [Fin.val_zero, ↓reduceIte, mul_assoc] using h.trans (by
-      simpa only [mul_assoc] using h')
+    simpa only [Fin.val_zero, ↓reduceIte, mul_assoc] using! h.trans (by
+      simpa only [mul_assoc] using! h')
   · have h := up_density_uniform_bound n hn t ht
     have hc : verticalWeightConstant ≤ starPartitionWeightConstant := by
       unfold starPartitionWeightConstant
@@ -236,8 +236,8 @@ theorem star_weight_uniform_fixed (n : ℕ) (hn : 1 ≤ n)
     have hp : 0 ≤ ((n:ℝ)+1)^6 * (1+t/(n:ℝ))^6 *
         Real.exp ((n:ℝ)*Vvertical (t/(n:ℝ))) := by positivity
     have h' := mul_le_mul_of_nonneg_right hc hp
-    simpa only [Fin.val_one, one_ne_zero, ↓reduceIte, mul_assoc] using h.trans (by
-      simpa only [mul_assoc] using h')
+    simpa only [Fin.val_one, one_ne_zero, ↓reduceIte, mul_assoc] using! h.trans (by
+      simpa only [mul_assoc] using! h')
   · have h := down_density_uniform_bound n hn t ht
     have hc : verticalWeightConstant ≤ starPartitionWeightConstant := by
       unfold starPartitionWeightConstant
@@ -249,8 +249,8 @@ theorem star_weight_uniform_fixed (n : ℕ) (hn : 1 ≤ n)
     have hp : 0 ≤ ((n:ℝ)+1)^6 * (1+t/(n:ℝ))^6 *
         Real.exp ((n:ℝ)*Vvertical (t/(n:ℝ))) := by positivity
     have h' := mul_le_mul_of_nonneg_right hc hp
-    simpa only [Fin.val_two, Nat.reduceEqDiff, ↓reduceIte, mul_assoc] using h.trans (by
-      simpa only [mul_assoc] using h')
+    simpa only [Fin.val_two, Nat.reduceEqDiff, ↓reduceIte, mul_assoc] using! h.trans (by
+      simpa only [mul_assoc] using! h')
 
 end
 end Li2Unified.Proofs.Arithmetic
@@ -282,7 +282,7 @@ lemma hasDerivAt_logSecondPrimitive (x : ℝ) (hx : x ≠ 0) :
     HasDerivAt logSecondPrimitive (logPrimitive x) x := by
   have h := (((hasDerivAt_id x).mul (Real.hasDerivAt_mul_log hx)).div_const 2).sub
     ((((hasDerivAt_id x).pow 2).const_mul 3).div_const 4)
-  convert h using 1 <;> simp only [logPrimitive, logSecondPrimitive, id_eq] <;> ring
+  convert! h using 1 <;> simp only [logPrimitive, logSecondPrimitive, id_eq] <;> ring
 
 lemma integral_logPrimitive_from_zero (b : ℝ) :
     (∫ x in (0:ℝ)..b, logPrimitive x) = logSecondPrimitive b := by
@@ -291,13 +291,13 @@ lemma integral_logPrimitive_from_zero (b : ℝ) :
       continuous_logSecondPrimitive.continuousOn
       (fun x hx => hasDerivAt_logSecondPrimitive x hx.1.ne')
       (continuous_logPrimitive.intervalIntegrable 0 b)
-    simpa [logSecondPrimitive] using h
+    simpa [logSecondPrimitive] using! h
   · have h := intervalIntegral.integral_eq_sub_of_hasDerivAt_of_le (le_of_not_ge hb)
       continuous_logSecondPrimitive.continuousOn
       (fun x hx => hasDerivAt_logSecondPrimitive x hx.2.ne)
       (continuous_logPrimitive.intervalIntegrable b 0)
     rw [intervalIntegral.integral_symm]
-    simpa [logSecondPrimitive] using congrArg Neg.neg h
+    simpa [logSecondPrimitive] using! congrArg Neg.neg h
 
 lemma integral_logPrimitive (a b : ℝ) :
     (∫ x in a..b, logPrimitive x) = logSecondPrimitive b-logSecondPrimitive a := by

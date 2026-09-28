@@ -54,7 +54,7 @@ lemma limiting_fourier_lim1_aux (hcheby : cheby f) (hx : 0 < x) (C : ℝ) (hC : 
     apply le_add_of_le_of_nonneg le_rfl
     positivity
   have l3 : a =O[atTop] (fun n => 1 / (n : ℝ)) := by
-    simpa [a] using IsBigO.mul l5 (isBigO_refl (fun n : ℕ => 1 / (n : ℝ)) _)
+    simpa [a, div_eq_mul_inv] using! IsBigO.mul l5 (isBigO_refl (fun n : ℕ => 1 / (n : ℝ)) _)
   have l4 : nnabla a =O[atTop] (fun n : ℕ => (n ^ 2 * (Real.log n) ^ 2)⁻¹) := by
     -- rewritten: Mathlib renamed `IsBigO.natCast` to `IsBigO.natCast_atTop`.
     convert (nnabla_bound C hx).natCast_atTop ; simp [nnabla, a]
@@ -106,7 +106,7 @@ theorem limiting_fourier_lim1 (hcheby : cheby f) (ψ : W21) (hx : 0 < x) :
     rw [norm_mul, ← nterm_eq_norm_term]
     refine mul_le_mul ?_ (hC _) (norm_nonneg _) (div_nonneg (norm_nonneg _) (Nat.cast_nonneg _))
     by_cases h : n = 0 <;> simp only [nterm, h, ↓reduceIte, CharP.cast_eq_zero, div_zero, le_refl]
-    have : 1 ≤ (n : ℝ) := by simpa using Nat.pos_iff_ne_zero.mpr h
+    have : 1 ≤ (n : ℝ) := by simpa using! Nat.pos_iff_ne_zero.mpr h
     refine div_le_div₀ (norm_nonneg _) le_rfl (by simpa [Nat.pos_iff_ne_zero]) ?_
     simpa using Real.rpow_le_rpow_of_exponent_le this hσ'.le
 
@@ -233,7 +233,7 @@ lemma limiting_fourier (hcheby : cheby f)
   have l2 := limiting_fourier_lim2 A ψ hx
   have l3 := limiting_fourier_lim3 hG ψ hx
   apply tendsto_nhds_unique_of_eventuallyEq (l1.sub l2) l3
-  simpa [eventuallyEq_nhdsWithin_iff] using Eventually.of_forall (limiting_fourier_aux hG' hf ψ hx)
+  simpa [eventuallyEq_nhdsWithin_iff] using! Eventually.of_forall (limiting_fourier_aux hG' hf ψ hx)
 
 set_option backward.isDefEq.respectTransparency false in
 lemma limiting_cor_aux {f : ℝ → ℂ} : Tendsto (fun x : ℝ ↦ ∫ t, f t * x ^ (t * I)) atTop (𝓝 0) := by

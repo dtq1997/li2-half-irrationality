@@ -29,7 +29,7 @@ noncomputable section
 lemma circle_fiber_null (c w : ℂ) (r a b : ℝ) (hr : r ≠ 0) :
     (volume.restrict (Ioc a b)) {t : ℝ | circleMap c r t = w} = 0 := by
   have h := (Set.countable_singleton w).preimage_circleMap c hr
-  simpa using h.measure_zero (volume.restrict (Ioc a b))
+  simpa using! h.measure_zero (volume.restrict (Ioc a b))
 
 lemma line_fiber_null (c v w : ℂ) (a b : ℝ) (hv : v ≠ 0) :
     (volume.restrict (Ioc a b)) {t : ℝ | c+(t:ℂ)*v = w} = 0 := by
@@ -38,16 +38,16 @@ lemma line_fiber_null (c v w : ℂ) (a b : ℝ) (hv : v ≠ 0) :
     apply Complex.ofReal_injective
     exact (mul_left_injective₀ hv) (add_left_cancel h)
   have h := (Set.countable_singleton w).preimage hi
-  simpa using h.measure_zero (volume.restrict (Ioc a b))
+  simpa using! h.measure_zero (volume.restrict (Ioc a b))
 
-lemma pair_collision_null (f g : ℝ → ℂ) (μ ν : Measure ℝ)
+lemma pair_collision_null (f g : ℝ → ℂ) (μ ν : Measure ℝ) [SFinite ν]
     (hf : Continuous f) (hg : Continuous g)
     (hnull : ∀ w : ℂ, ν {t : ℝ | g t = w} = 0) :
     (μ.prod ν) {p : ℝ × ℝ | f p.1 = g p.2} = 0 := by
   have hm : MeasurableSet {p : ℝ × ℝ | f p.1 = g p.2} :=
     (isClosed_eq (hf.comp continuous_fst) (hg.comp continuous_snd)).measurableSet
   apply Measure.measure_prod_null_of_ae_null hm
-  exact Filter.Eventually.of_forall (fun x => by simpa [eq_comm] using hnull (f x))
+  exact Filter.Eventually.of_forall (fun x => by simpa [eq_comm] using! hnull (f x))
 
 
 #eval show IO Unit from do
@@ -134,7 +134,7 @@ theorem starProfile_ae_ne (h : ℕ) (x : Fin h → ℂ) {ε : ℝ} (hε : 0 < ε
     (starProfileCurve h x ε k) (starProfileCurve h x ε l)
     μcirc μcirc (hcont k) (hcont l) (hfiber l)
   apply MeasureTheory.ae_iff.mpr
-  simpa only [not_not] using hpair
+  simpa only [not_not] using! hpair
 
 end
 end Li2Unified.Proofs.Contour
@@ -203,7 +203,7 @@ theorem integrable_angularLayerPairKernel {s t : StarLayer}
         Real.log ‖starLayerCurve s θ - starLayerCurve t φ‖ =
           Real.log ‖starLayerCurve t φ - starLayerCurve s θ‖ := by
       intro φ; rw [norm_sub_rev]
-    simpa only [hsymmetric] using h.const_mul
+    simpa only [hsymmetric] using! h.const_mul
       (starLayerAngularDensity s * starLayerAngularDensity t)
   have hrow_norm (θ : ℝ) :
       (∫ φ in (0 : ℝ)..2 * Real.pi,
@@ -231,8 +231,9 @@ theorem integrable_angularLayerPairKernel {s t : StarLayer}
           (fun z => |Real.log ‖starLayerCurve s θ - z‖|)
       _ = _ := by
         congr 1
-        exact (t.integral_eq hvt _
-          ((measurable_const.sub measurable_id).norm.log.abs)).symm
+        exact (t.integral_eq hvt (fun z => |Real.log ‖starLayerCurve s θ - z‖|)
+          (by simpa only [Real.norm_eq_abs] using!
+            ((measurable_const (a := starLayerCurve s θ)).sub measurable_id).norm.log.norm)).symm
   have hmt : t.measure ≤ comparisonMeasure := layer_measure_le layerData ht
   have hrow_le (θ : ℝ) :
       (∫ φ in (0 : ℝ)..2 * Real.pi,
@@ -246,7 +247,7 @@ theorem integrable_angularLayerPairKernel {s t : StarLayer}
       (starLayerCurve_norm_le s hvs θ).trans hr
     have hcomp : Integrable (fun z : ℂ =>
         |Real.log ‖starLayerCurve s θ - z‖|) comparisonMeasure := by
-      simpa only [norm_sub_rev] using
+      simpa only [norm_sub_rev] using!
         (integrable_log_comparisonMeasure (starLayerCurve s θ)).abs
     have hm :
         (∫ z : ℂ, |Real.log ‖starLayerCurve s θ - z‖| ∂t.measure) ≤
@@ -257,7 +258,7 @@ theorem integrable_angularLayerPairKernel {s t : StarLayer}
     have hc :
         (∫ z : ℂ, |Real.log ‖starLayerCurve s θ - z‖| ∂comparisonMeasure) ≤
           11 / 10 + Real.log (56 / 5 + ‖starLayerCurve s θ‖) := by
-      simpa only [norm_sub_rev] using
+      simpa only [norm_sub_rev] using!
         integral_abs_log_comparisonMeasure_le (starLayerCurve s θ)
     have hlog : Real.log (56 / 5 + ‖starLayerCurve s θ‖) ≤
         Real.log (112 / 5 : ℝ) :=

@@ -24,7 +24,7 @@ lemma integral_mul_log_one {b : ℝ} (hb : 1 ≤ b) :
         (fun t : ℝ => t ^ 2 / 2 * Real.log t - t ^ 2 / 4)
         (x * Real.log x) x := by
     have hx0 : x ≠ 0 := by linarith
-    convert ((((hasDerivAt_id x).fun_pow 2).div_const 2).mul
+    convert! ((((hasDerivAt_id x).fun_pow 2).div_const 2).mul
       (Real.hasDerivAt_log hx0)).sub
         (((hasDerivAt_id x).fun_pow 2).div_const 4) using 1
     <;> dsimp only [id_eq]

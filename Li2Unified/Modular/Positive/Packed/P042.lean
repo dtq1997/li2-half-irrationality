@@ -26,7 +26,7 @@ theorem parameterTau_VG_log (p : ℕ) [Fact p.Prime] (lam : ℚ)
   apply Li2.VG.sum
   intro a ha
   obtain ⟨ha1, ha2⟩ := Finset.mem_Icc.mp ha
-  have h1 : Li2.VG p (lam^a) 0 := by simpa using hlam.pow a
+  have h1 : Li2.VG p (lam^a) 0 := by simpa using! hlam.pow a
   have h2 := Li2.VG.inv_nat (p := p) (j := a) (n := N) ha1 (ha2.trans hjN)
   have h3 : Li2.VG p (((a:ℚ)^2)⁻¹) (2 * -(Nat.log p N : ℚ)) := by
     rw [← inv_pow]
@@ -56,7 +56,7 @@ theorem parameterU_VG_of_integer_values (p : ℕ) [Fact p.Prime]
     push_cast at this
     exact this.mono (by have := (Nat.cast_nonneg (Nat.log p e) : (0:ℚ) ≤ _); linarith)
   push_cast at hd
-  simpa using hq'.add ((Li2.VG.natCast (p := p) i).mul hd |>.mono (by simp))
+  simpa using! hq'.add ((Li2.VG.natCast (p := p) i).mul hd |>.mono (by simp))
 
 /-- Good-prime bound for every entry of the original parameter-family Gram matrix. -/
 theorem binomGram_entry_GV_good_fallback (p : ℕ) [Fact p.Prime]
@@ -92,7 +92,7 @@ theorem binomGram_entry_GV_good_fallback (p : ℕ) [Fact p.Prime]
         ∏ l ∈ (Finset.Icc 1 (4*n)).erase j, ((l:ℚ)-(j:ℚ))) 0 :=
       Li2.gramRes_VG p n a b hj1 hj2
     have hc : Li2.VG p ((j:ℚ)*lam⁻¹^j) 0 := by
-      simpa using (Li2.VG.natCast (p := p) j).mul (hinv.pow j)
+      simpa using! (Li2.VG.natCast (p := p) j).mul (hinv.pow j)
     have ht : Li2.VG p (Li2.parameterTau lam j) (-2 * L) :=
       parameterTau_VG_log p lam hlam (by omega : j ≤ 7*n-2)
     have hlin : Li2.GV p (X - C (Li2.parameterTau lam j)) (-2 * L) :=
@@ -140,7 +140,7 @@ noncomputable section
 lemma prime_not_dvd_prime_product (p : ℕ) (hp : p.Prime) (qs : List ℕ)
     (hq : ∀ q ∈ qs, q.Prime) (hne : ∀ q ∈ qs, p ≠ q) : ¬p ∣ qs.prod := by
   induction qs with
-  | nil => simpa using hp.not_dvd_one
+  | nil => simpa using! hp.not_dvd_one
   | cons q qs ih =>
     have hqprime := hq q (by simp)
     have hnq : ¬p ∣ q := by
@@ -198,7 +198,7 @@ lemma badPrimes_prime (p : ℕ) (hp : p ∈ badPrimes) : p.Prime := by
 lemma value_eq_series : value =
     ∑' k : ℕ, (1/2:ℝ)^(k+1)/((k:ℝ)+1)^2 := by norm_num [value, r, lambda]
 lemma summable_series : Summable (fun k : ℕ => (1/2:ℝ)^(k+1)/((k:ℝ)+1)^2) := by
-  simpa only [lambda, Rat.cast_div, Rat.cast_one, Rat.cast_ofNat] using summable_r lambda lambda_abs_lt_one
+  simpa only [lambda, Rat.cast_div, Rat.cast_one, Rat.cast_ofNat] using! summable_r lambda lambda_abs_lt_one
 lemma Q_natDegree_le (n : ℕ) : (Q n).natDegree ≤ 2*n := ParameterFamily.Q_natDegree_le lambda n
 lemma P_natDegree_le (n : ℕ) : (P n).natDegree ≤ 2*n := ParameterFamily.P_natDegree_le lambda n
 lemma P_isPrimitive (n : ℕ) (hn : Q n ≠ 0) : (P n).IsPrimitive :=
@@ -296,13 +296,13 @@ lemma good_prime_not_dvd_1 (p : ℕ) (hp : p.Prime) (hbad : p ∉ badPrimes) : �
 lemma lowBlockConstant_unit (p : ℕ) [hp : Fact p.Prime] (hbad : p ∉ badPrimes) :
     lowBlockConstant lambda ≠ 0 ∧ padicValRat p (lowBlockConstant lambda) = 0 := by
   rw [lowBlockConstant_value]
-  simpa using neg_fraction_unit p 275 2 (by norm_num) (by norm_num)
+  simpa using! neg_fraction_unit p 275 2 (by norm_num) (by norm_num)
     (good_prime_not_dvd_275 p hp.out hbad) (good_prime_not_dvd_2 p hp.out hbad)
 
 lemma cornerBlockConstant_unit (p : ℕ) [hp : Fact p.Prime] (hbad : p ∉ badPrimes) :
     cornerBlockConstant lambda ≠ 0 ∧ padicValRat p (cornerBlockConstant lambda) = 0 := by
   rw [cornerBlockConstant_value]
-  simpa using neg_fraction_unit p 28788 1 (by norm_num) (by norm_num)
+  simpa using! neg_fraction_unit p 28788 1 (by norm_num) (by norm_num)
     (good_prime_not_dvd_28788 p hp.out hbad) (good_prime_not_dvd_1 p hp.out hbad)
 
 end
@@ -369,7 +369,7 @@ theorem posHalf_smallTail_sum_lower (δ : ℝ) (n : ℕ)
     exact_mod_cast parameter_dtilde_GV_lower lambda n p hne hq
   have hlog : 0 ≤ Real.log (p:ℝ) :=
     Real.log_nonneg (by exact_mod_cast hpr.one_lt.le)
-  simpa [hpr] using mul_le_mul_of_nonneg_right hv hlog
+  simpa [hpr] using! mul_le_mul_of_nonneg_right hv hlog
 
 /-- At cutoff `1/200`, the small primes cost at most `4/200 + ε` in the
 quadratic exponent. -/

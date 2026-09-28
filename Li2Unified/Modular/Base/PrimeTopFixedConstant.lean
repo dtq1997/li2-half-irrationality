@@ -44,7 +44,7 @@ theorem primeTopLeadingSum_eq_integral (hp4 : 3 < p) :
 
 lemma prime_seventytwo_valuation_zero (hp4 : 3 < p) : padicValRat p (72:ℚ) = 0 := by
   rw [show (72:ℚ)=2^3*3^2 by norm_num,padicValRat.mul (by norm_num) (by norm_num),
-    padicValRat.pow (by norm_num : (2:ℚ) ≠ 0),padicValRat.pow (by norm_num : (3:ℚ) ≠ 0),
+    padicValRat.pow,padicValRat.pow,
     two_valuation_zero (by omega),three_valuation_zero (by omega)]
   norm_num
 
@@ -52,15 +52,15 @@ theorem primeTopLeadingSum_norm (hp4 : 3 < p) :
     ‖primeTopLeadingSum (p := p)-(-7609/72:ℚ_[p])‖ ≤ ‖(p:ℚ_[p])‖ := by
   have h := integral_norm_sub_rational_of_cleared_reduction
     (primeTopIntegralNumerator (p := p) hp4) (-7609) 1 (by decide) (by norm_num)
-    (by simpa using primeTopIntegralNumerator_reduction (p := p) hp4)
+    (by simpa using! primeTopIntegralNumerator_reduction (p := p) hp4)
   have hn : ‖(72:ℚ_[p])‖ = 1 := by
     have hu := PadicInt.norm_units (integralRationalUnit (p := p) (72:ℚ) (by norm_num)
       (prime_seventytwo_valuation_zero hp4))
     change ‖(((integralRationalUnit (p := p) (72:ℚ) (by norm_num)
       (prime_seventytwo_valuation_zero hp4):ℤ_[p]ˣ):ℤ_[p]):ℚ_[p])‖ = 1 at hu
-    simpa only [integralRationalUnit_coe,Rat.cast_ofNat] using hu
+    simpa only [integralRationalUnit_coe,Rat.cast_ofNat] using! hu
   rw [primeTopLeadingSum_eq_integral hp4,← sub_div,norm_div,hn,div_one]
-  simpa using h
+  simpa using! h
 
 end
 end Li2

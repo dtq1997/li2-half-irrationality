@@ -29,7 +29,7 @@ theorem parameterDiscContribution_cube_factor_bound (lam : ℚ)
   · have he : a = (⟨0,by omega⟩ : Fin p) := Fin.ext hz
     rw [he] at hT ⊢
     rw [parameterDiscContribution_cube_zero]
-    simpa only [primeDiscCubeGain, Fin.val_mk, ite_true, Nat.add_zero, coeff_map, norm_pow] using
+    simpa only [primeDiscCubeGain, Fin.val_mk, ite_true, Nat.add_zero, coeff_map, norm_pow] using!
       parameterDiscTest_U_substituted_factor_bound (lam^p) (parameter_power_unit lam hu) hreg hp4 T (⟨0,by omega⟩ : Fin p) m
         (parameterIntegralEta lam hu hreg) hT n
   · by_cases hl : a.val ≤ p-4
@@ -37,7 +37,7 @@ theorem parameterDiscContribution_cube_factor_bound (lam : ℚ)
           (parameterIntegralEta lam hu hreg)).map
           (algebraMap ℤ_[p] ℚ_[p])).coeff l‖ ≤ ‖(p:ℚ_[p])‖^m := by
         intro l
-        simpa only [coeff_map,norm_pow] using parameterDiscTestScaled_factor_bound (lam^p) (parameter_power_unit lam hu) hreg hp4 T a m
+        simpa only [coeff_map,norm_pow] using! parameterDiscTestScaled_factor_bound (lam^p) (parameter_power_unit lam hu) hreg hp4 T a m
           (parameterIntegralEta lam hu hreg) hT l
       have he : C ((p:ℚ_[p])^3)*parameterDiscContribution lam hu hreg hp4 a T =
           C ((p:ℚ_[p])^1)*(C ((p:ℚ_[p])^2)*parameterDiscContribution lam hu hreg hp4 a T) := by
@@ -45,12 +45,12 @@ theorem parameterDiscContribution_cube_factor_bound (lam : ℚ)
         ring
       rw [he,parameterDiscContribution_scaled_low lam hu hreg hp4 a (by omega) hl,
         primeDiscCubeGain,if_neg hz,if_pos hl]
-      simpa only [Nat.add_comm] using fieldPolynomial_prime_power_bound _ 1 m h n
+      simpa only [Nat.add_comm] using! fieldPolynomial_prime_power_bound _ 1 m h n
     · have h : ∀ l, ‖((parameterDiscTestScaled (lam^p) (parameter_power_unit lam hu) hreg hp4 a T
           (parameterIntegralEta lam hu hreg)).map
           (algebraMap ℤ_[p] ℚ_[p])).coeff l‖ ≤ ‖(p:ℚ_[p])‖^m := by
         intro l
-        simpa only [coeff_map,norm_pow] using parameterDiscTestScaled_factor_bound (lam^p) (parameter_power_unit lam hu) hreg hp4 T a m
+        simpa only [coeff_map,norm_pow] using! parameterDiscTestScaled_factor_bound (lam^p) (parameter_power_unit lam hu) hreg hp4 T a m
           (parameterIntegralEta lam hu hreg) hT l
       have he : C ((p:ℚ_[p])^3)*parameterDiscContribution lam hu hreg hp4 a T =
           C ((p:ℚ_[p])^2)*(C (p:ℚ_[p])*parameterDiscContribution lam hu hreg hp4 a T) := by
@@ -58,7 +58,7 @@ theorem parameterDiscContribution_cube_factor_bound (lam : ℚ)
         ring
       rw [he,parameterDiscContribution_linear_high lam hu hreg hp4 a (by omega),
         primeDiscCubeGain,if_neg hz,if_neg hl]
-      simpa only [Nat.add_comm] using fieldPolynomial_prime_power_bound _ 2 m h n
+      simpa only [Nat.add_comm] using! fieldPolynomial_prime_power_bound _ 2 m h n
 
 
 theorem parameterOriginalBasisProduct_cube_disc_bound (lam : ℚ)
@@ -100,7 +100,7 @@ theorem parameterNumerator_cube_bound_of_disc_bounds (lam : ℚ) (hlam : |(lam:�
   have h := fieldPolynomial_integral_weight_bound
     (C ((p:ℚ_[p])^3)*parameterDiscContribution lam hu hreg hp4 a T)
     (integralParameterInvPow lam hu.1 hu.2 a.val) _ (hdisc a) n
-  simpa only [integralParameterInvPow,integralRational,Rat.cast_pow,Rat.cast_inv,PadicInt.coe_pow,PadicInt.coe_neg,PadicInt.coe_natCast] using h
+  simpa only [integralParameterInvPow,integralRational,Rat.cast_pow,Rat.cast_inv,PadicInt.coe_pow,PadicInt.coe_neg,PadicInt.coe_natCast] using! h
 
 
 theorem parameterLow_cross_original_entry_bound (lam : ℚ) (hlam : |(lam:ℝ)| < 1)
@@ -567,7 +567,7 @@ lemma parameterNormalizedMatrix_GV_of_original [Fact p.Prime] (lam : ℚ) (hp4 :
     right
     rw [(primeBlockUnitScale_unit hp4 y).2]
     norm_num
-  simpa only [parameterNormalizedMatrix, zero_add] using GV.C_mul (hx.mul hy) h
+  simpa only [parameterNormalizedMatrix, zero_add] using! GV.C_mul (hx.mul hy) h
 
 
 end

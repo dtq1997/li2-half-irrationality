@@ -40,6 +40,7 @@ private lemma continuous_posLog_of_nonneg {X : Type*} [TopologicalSpace X] {f : 
 
 private lemma circle_abs_log_eq (x : ℝ) : |Real.log x| = 2 * log⁺ x - Real.log x := by
   rw [Real.posLog_def]
+  change |Real.log x| = 2 * max 0 (Real.log x) - Real.log x
   rcases le_total 0 (Real.log x) with h | h
   · rw [max_eq_right h, abs_of_nonneg h]; ring
   · rw [max_eq_left h, abs_of_nonpos h]; ring
@@ -106,7 +107,7 @@ theorem integrable_circle_pair_log (c d : ℂ) {ε : ℝ} (hε : 0 < ε) :
         (Ioc (0 : ℝ) (2 * π)) volume :=
       (intervalIntegrable_iff_integrableOn_Ioc_of_le hT).mp
         (hN.intervalIntegrable 0 (2 * π))
-    simpa only [intervalIntegral.integral_of_le hT] using hi
+    simpa only [IntegrableOn, intervalIntegral.integral_of_le hT] using hi
 
 theorem circle_pair_log_self (c : ℂ) {ε : ℝ} (hε : 0 < ε) :
     (∫ θ in (0 : ℝ)..2 * π, ∫ φ in (0 : ℝ)..2 * π,

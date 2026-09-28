@@ -75,10 +75,10 @@ theorem arctan_series_bounds (x : ℝ) (hx : 0 ≤ x) (h1 : x < 1) (k : ℕ) :
     (∑ i ∈ range (2*k), (-1:ℝ)^i * (x^(2*i+1) / ((2*i+1:ℕ):ℝ))) ≤ Real.arctan x ∧
     Real.arctan x ≤ ∑ i ∈ range (2*k+1),
       (-1:ℝ)^i * (x^(2*i+1) / ((2*i+1:ℕ):ℝ)) := by
-  have hs := Real.hasSum_arctan (x := x) (by simpa only [Real.norm_eq_abs, abs_of_nonneg hx] using h1)
+  have hs := Real.hasSum_arctan (x := x) (by simpa only [Real.norm_eq_abs, abs_of_nonneg hx] using! h1)
   have ht : Tendsto (fun n : ℕ => ∑ i ∈ range n,
       (-1:ℝ)^i * (x^(2*i+1) / ((2*i+1:ℕ):ℝ))) atTop (𝓝 (Real.arctan x)) := by
-    simpa only [div_eq_mul_inv, mul_assoc] using hs.tendsto_sum_nat
+    simpa only [div_eq_mul_inv, mul_assoc] using! hs.tendsto_sum_nat
   exact ⟨Antitone.alternating_series_le_tendsto ht (arctan_term_antitone x hx h1.le) k,
     Antitone.tendsto_le_alternating_series ht (arctan_term_antitone x hx h1.le) k⟩
 
@@ -121,7 +121,7 @@ theorem contains_small_arctan (r : ℚ) (hr : 0 ≤ r) (h1 : r < 1) (k : ℕ) :
   simpa only [RationalBounds.Contains, smallArctanBounds, arctanPartial,
     Rat.cast_sum, Rat.cast_mul, Rat.cast_div, Rat.cast_pow, Rat.cast_neg,
     Rat.cast_one, Rat.cast_natCast, Rat.cast_add, Rat.cast_ofNat, Nat.cast_add, Nat.cast_mul, Nat.cast_one,
-    Nat.cast_ofNat] using h
+    Nat.cast_ofNat] using! h
 
 def piBounds : RationalBounds := ⟨3141592/10^6,3141593/10^6⟩
 
@@ -136,10 +136,10 @@ theorem contains_arctan_half_add (q r : ℚ) (k : ℕ)
       (Real.arctan (q:ℝ)) := by
   have hr' : (r:ℝ) ≤ 1/2 := by
     have h : (r:ℝ) ≤ ((1/2:ℚ):ℝ) := by exact_mod_cast h1
-    simpa only [Rat.cast_div, Rat.cast_one, Rat.cast_ofNat] using h
+    simpa only [Rat.cast_div, Rat.cast_one, Rat.cast_ofNat] using! h
   have hq' : (q:ℝ) = ((1/2:ℝ)+r)/(1-(1/2)*r) := by
     simpa only [Rat.cast_div, Rat.cast_add, Rat.cast_sub, Rat.cast_mul,
-      Rat.cast_one, Rat.cast_ofNat] using congrArg (fun z : ℚ => (z : ℝ)) hq
+      Rat.cast_one, Rat.cast_ofNat] using! congrArg (fun z : ℚ => (z : ℝ)) hq
   have hsum := RationalBounds.contains_add
     (contains_small_arctan (1/2) (by norm_num) (by norm_num) k)
     (contains_small_arctan r hr (by linarith) k)
@@ -190,7 +190,7 @@ theorem contains_mulLogAbs_quarter {a logLo logHi : RationalBounds} {x : ℝ}
       (mulLogAbs x) := by
   have ha' : (0:ℝ) ≤ a.lower := by exact_mod_cast ha
   have hb' : (a.upper:ℝ) ≤ 1/4 := by
-    simpa using (Rat.cast_le.mpr hquarter : (a.upper:ℝ) ≤ ((1/4:ℚ):ℝ))
+    simpa using! (Rat.cast_le.mpr hquarter : (a.upper:ℝ) ≤ ((1/4:ℚ):ℝ))
   have h := mulLogAbs_antitone_quarter ha' hx.1 hx.2 hb'
   constructor
   · change ((a.upper*logHi.lower:ℚ):ℝ) ≤ mulLogAbs x
@@ -206,7 +206,7 @@ theorem contains_mulLogAbs_cross {x : ℝ} {r logLower : ℚ}
     (hlog : (logLower:ℝ) ≤ Real.log (r:ℝ)) :
     (RationalBounds.mk (r*logLower) (-r*logLower)).Contains (mulLogAbs x) := by
   have hr' : ((r:ℝ) ≤ 1/4) := by
-    simpa using (Rat.cast_le.mpr hrQuarter : (r:ℝ) ≤ ((1/4:ℚ):ℝ))
+    simpa using! (Rat.cast_le.mpr hrQuarter : (r:ℝ) ≤ ((1/4:ℚ):ℝ))
   have hr0 : (0:ℝ) ≤ r := by exact_mod_cast hr
   have h := mulLogAbs_cross_zero hx hr'
   have hb : -(r:ℝ)*Real.log (r:ℝ) ≤ -(r:ℝ)*(logLower:ℝ) := by
@@ -274,7 +274,7 @@ theorem log_sound {out a lo hi : I} {x : ℝ}
   have hpos : 0 < a.toBounds.lower := by
     have h := qLT_sound (by decide : qValid qZero = true) (validI_parts ha).1 hp
     simpa only [I.toBounds, qZero, QPair.toRat, Int.cast_zero, Nat.cast_one,
-      zero_div] using h
+      zero_div] using! h
   apply contains_of_encloses ?_ hc
   exact RationalBounds.contains_log hx hpos hlo.1 hhi.2
 
@@ -298,7 +298,7 @@ theorem h_positive_sound {out a logNode witness : I} {x : ℝ}
   have ha0 : 0 ≤ a.toBounds.lower := by
     have h := qLE_sound (by decide : qValid qZero = true) (validI_parts ha).1 hzero
     simpa only [I.toBounds, qZero, QPair.toRat, Int.cast_zero, Nat.cast_one,
-      zero_div] using h
+      zero_div] using! h
   apply contains_of_encloses ?_ hc
   apply contains_of_encloses ?_ hw
   rw [toBounds_mul a logNode ha hb]
@@ -313,7 +313,7 @@ theorem h_positive_from_product_bound {out a witness : I} {x : ℝ}
   have ha0 : 0 ≤ a.toBounds.lower := by
     have h := qLE_sound (by decide : qValid qZero = true) (validI_parts ha).1 hzero
     simpa only [I.toBounds, qZero, QPair.toRat, Int.cast_zero, Nat.cast_one,
-      zero_div] using h
+      zero_div] using! h
   have hx0 : 0 ≤ x := (by exact_mod_cast ha0 : (0 : ℝ) ≤ (a.toBounds.lower : ℝ)).trans hx.1
   apply contains_of_encloses ?_ hc
   rw [mulLogAbs_nonneg x hx0]
@@ -332,13 +332,13 @@ theorem h_quarter_sound {out a logLo logHi : I} {x : ℝ}
   have ha0 : 0 ≤ a.toBounds.lower := by
     have h := qLE_sound (by decide : qValid qZero = true) halo hzero
     simpa only [I.toBounds, qZero, QPair.toRat, Int.cast_zero, Nat.cast_one,
-      zero_div] using h
+      zero_div] using! h
   have haq : a.toBounds.upper ≤ 1 / 4 := by
     have h := qLE_sound hahi (by decide : qValid qQuarter = true) hquarter
-    simpa [I.toBounds, qQuarter, QPair.toRat] using h
+    simpa [I.toBounds, qQuarter, QPair.toRat] using! h
   have hbase := contains_mulLogAbs_quarter hx ha0 haq hlo hhi
   apply contains_of_encloses ?_ hc
-  simpa only [I.toBounds, toRat_qMul] using hbase
+  simpa only [I.toBounds, toRat_qMul] using! hbase
 
 theorem h_cross_sound {out a logRadius : I} {radius : QPair} {x : ℝ}
     (ha : validI a = true) (hr : qValid radius = true)
@@ -354,13 +354,13 @@ theorem h_cross_sound {out a logRadius : I} {radius : QPair} {x : ℝ}
   obtain ⟨halo, hahi, _⟩ := validI_parts ha
   have hr0 : 0 ≤ radius.toRat := by
     have h := qLE_sound (by decide : qValid qZero = true) hr hzero
-    simpa [qZero, QPair.toRat] using h
+    simpa [qZero, QPair.toRat] using! h
   have hrq : radius.toRat ≤ 1 / 4 := by
     have h := qLE_sound hr (by decide : qValid qQuarter = true) hquarter
-    simpa [qQuarter, QPair.toRat] using h
+    simpa [qQuarter, QPair.toRat] using! h
   have hl : -(radius.toRat) ≤ a.toBounds.lower := by
     have h := qLE_sound (qValid_qNeg hr) halo hleft
-    simpa only [I.toBounds, toRat_qNeg] using h
+    simpa only [I.toBounds, toRat_qNeg] using! h
   have hu : a.toBounds.upper ≤ radius.toRat := qLE_sound hahi hr hright
   have hxabs : |x| ≤ (radius.toRat : ℝ) := by
     apply abs_le.mpr
@@ -373,7 +373,7 @@ theorem h_cross_sound {out a logRadius : I} {radius : QPair} {x : ℝ}
       exact hx.2.trans huR
   have hbase := contains_mulLogAbs_cross hr0 hrq hxabs hlog.1
   apply contains_of_encloses ?_ hc
-  simpa only [I.toBounds, toRat_qMul, toRat_qNeg, neg_mul] using hbase
+  simpa only [I.toBounds, toRat_qMul, toRat_qNeg, neg_mul] using! hbase
 
 end
 end Li2Unified.Proofs.Potential.KernelReflectionSelf

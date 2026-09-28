@@ -66,8 +66,8 @@ theorem tendsto_of_trunc_error_bound (F : PowerSeries ℤ_[p] → ℤ_[p]) (f : 
     Tendsto (fun N => F (PowerSeries.trunc N f : PowerSeries ℤ_[p])) atTop (𝓝 (F f)) := by
   apply Metric.tendsto_atTop.mpr
   intro ε hε
-  obtain ⟨N, hN⟩ := (PowerSeries.IsRestricted.isRestricted_iff 1).mp hf (ε/2) (by linarith)
-  simp only [one_pow, mul_one, Real.norm_eq_abs, abs_norm] at hN
+  obtain ⟨N, hN⟩ := Metric.tendsto_atTop.mp (restricted_coeff_tendsto hf) (ε/2) (by linarith)
+  simp only [one_pow, mul_one, Real.dist_eq, sub_zero, abs_norm] at hN
   refine ⟨N, fun M hM => ?_⟩
   rw [dist_comm, dist_eq_norm]
   apply lt_of_le_of_lt (hbound M (ε/2) (by linarith) ?_) (by linarith)

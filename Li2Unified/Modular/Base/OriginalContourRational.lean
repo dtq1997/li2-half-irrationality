@@ -52,7 +52,7 @@ lemma originalContourPoint_add_nat_norm_ge_one (j : ℕ) (hj : 1 ≤ j) (y : ℝ
 lemma D_eval₂_complex_norm_ge_one (m : ℕ) (y : ℝ) :
     1 ≤ ‖(D m).eval₂ (Rat.castHom ℂ) (originalContourPoint y)‖ := by
   rw [D_eval₂_complex_product, norm_prod]
-  apply Finset.one_le_prod
+  apply Finset.one_le_prod₀
   intro j hj
   exact originalContourPoint_add_nat_norm_ge_one j (Finset.mem_Icc.mp hj).1 y
 

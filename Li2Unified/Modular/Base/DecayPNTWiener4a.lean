@@ -60,7 +60,7 @@ lemma pp_deriv_eq (a : ℝ) : deriv (pp a) = pp' a := by
   ext x ; exact pp_deriv a x |>.deriv
 
 lemma pp'_deriv (a x : ℝ) : HasDerivAt (pp' a) (a ^ 2 * 2) x := by
-  simpa using hasDerivAt_id x |>.add_const 1 |>.const_mul 2 |>.const_mul (a ^ 2)
+  simpa using! hasDerivAt_id x |>.add_const 1 |>.const_mul 2 |>.const_mul (a ^ 2)
 
 lemma pp'_deriv_eq (a : ℝ) : deriv (pp' a) = fun _ => a ^ 2 * 2 := by
   ext x ; exact pp'_deriv a x |>.deriv
@@ -89,13 +89,13 @@ lemma hh_deriv (a : ℝ) {t : ℝ} (ht : t ≠ 0) : HasDerivAt (hh a) (hh' a t) 
   have l5 : HasDerivAt (fun t : ℝ => log t) t⁻¹ t := Real.hasDerivAt_log ht
   have l4 : HasDerivAt (fun t : ℝ => a * log t) (a * t⁻¹) t := l5.const_mul _
   have l3 : HasDerivAt (fun t : ℝ => (a * log t) ^ 2) (2 * a ^ 2 * t⁻¹ * log t) t := by
-    convert l4.pow 2 using 1 ; ring
+    convert! l4.pow 2 using 1 ; ring
   have l2 : HasDerivAt (fun t : ℝ => 1 + (a * log t) ^ 2) (2 * a ^ 2 * t⁻¹ * log t) t :=
     l3.const_add _
   have l1 : HasDerivAt (fun t : ℝ => t * (1 + (a * log t) ^ 2))
       (1 + 2 * a ^ 2 * log t + a ^ 2 * log t ^ 2) t := by
-    convert (hasDerivAt_id' t).mul l2 using 1; field_simp; ring
-  convert l1.inv e1 using 1; simp only [hh', pp, hh]; field_simp; ring
+    convert! (hasDerivAt_id' t).mul l2 using 1; field_simp; ring
+  convert! l1.inv e1 using 1; simp only [hh', pp, hh]; field_simp; ring
 
 lemma hh_continuous (a : ℝ) : ContinuousOn (hh a) (Ioi 0) :=
   fun t (ht : 0 < t) => (hh_deriv a ht.ne.symm).continuousAt.continuousWithinAt
@@ -159,7 +159,7 @@ lemma cancel_aux {C : ℝ} {f g : ℕ → ℝ} (hf : 0 ≤ f) (hg : 0 ≤ g)
 
   have l1 (n : ℕ) :
       (g n - g (n + 1)) * ∑ i ∈ Finset.range (n + 1), f i ≤ (g n - g (n + 1)) * (C * (n + 1)) := by
-    apply mul_le_mul le_rfl (by simpa using hf' (n + 1)) (Finset.sum_nonneg' hf) ?_
+    apply mul_le_mul le_rfl (by simpa using! hf' (n + 1)) (Finset.sum_nonneg' hf) ?_
     simp only [sub_nonneg] ; apply hg' ; simp
   have l2 (x : ℕ) : C * (↑(x + 1) + 1) - C * (↑x + 1) = C := by simp ; ring
   have l3 (n : ℕ) : 0 ≤ cumsum f n := Finset.sum_nonneg' hf
@@ -193,12 +193,12 @@ lemma cancel_aux' {C : ℝ} {f g : ℕ → ℝ} (hf : 0 ≤ f) (hg : 0 ≤ g)
       := by
   have := cancel_aux hf hg hf' hg' n
   simp only [nsmul_eq_mul, ← Finset.mul_sum, sum_range_succ] at this
-  convert this using 1 ; unfold cumsum ; ring
+  convert! this using 1 ; unfold cumsum ; ring
 
 lemma cancel_main {C : ℝ} {f g : ℕ → ℝ} (hf : 0 ≤ f) (hg : 0 ≤ g)
     (hf' : ∀ n, cumsum f n ≤ C * n) (hg' : Antitone g) (n : ℕ) (hn : 2 ≤ n) :
     cumsum (f * g) n ≤ C * cumsum g n := by
-  convert cancel_aux' hf hg hf' hg' n using 1
+  convert! cancel_aux' hf hg hf' hg' n using 1
   match n with
   | n + 2 => simp only [cumsum_succ, Nat.cast_add, Nat.cast_ofNat, Nat.add_one_sub_one,
     add_tsub_cancel_right] ; ring
@@ -211,7 +211,7 @@ lemma cancel_main' {C : ℝ} {f g : ℕ → ℝ} (hf : 0 ≤ f) (hf0 : f 0 = 0) 
   | 1 => specialize hg 0 ; specialize hf' 1 ; simp only [cumsum, Finset.range_one,
     Finset.sum_singleton, hf0, Nat.cast_one, mul_one, Pi.zero_apply, Pi.mul_apply, zero_mul,
     ge_iff_le] at hf' hg ⊢ ; positivity
-  | n + 2 => convert cancel_aux' hf hg hf' hg' (n + 2) using 1 ; simp [cumsum_succ] ; ring
+  | n + 2 => convert! cancel_aux' hf hg hf' hg' (n + 2) using 1 ; simp [cumsum_succ] ; ring
 
 theorem sum_le_integral {x₀ : ℝ} {f : ℝ → ℝ} {n : ℕ} (hf : AntitoneOn f (Ioc x₀ (x₀ + n)))
     (hfi : IntegrableOn f (Icc x₀ (x₀ + n))) :
@@ -242,8 +242,9 @@ theorem sum_le_integral {x₀ : ℝ} {f : ℝ → ℝ} {n : ℕ} (hf : AntitoneO
   have l1 : f (x₀ + 1) ≤ ∫ x in x₀..x₀ + 1, f x := by
     rw [← l6] ; apply intervalIntegral.integral_mono_ae_restrict (by linarith) (by simp) l4
     apply eventually_of_mem _ l5
-    have : (Ioc x₀ (x₀ + 1))ᶜ ∩ Icc x₀ (x₀ + 1) = {x₀} := by simp [← diff_eq_compl_inter]
-    simp [ae, this]
+    change ∀ᵐ y ∂volume.restrict (Icc x₀ (x₀ + 1)), y ∈ Ioc x₀ (x₀ + 1)
+    rw [← Measure.restrict_congr_set (Ioc_ae_eq_Icc (μ := volume))]
+    exact ae_restrict_mem measurableSet_Ioc
 
   have l2 : AntitoneOn (fun x ↦ f (x₀ + x)) (Icc 1 ↑(n + 1)) := by
     intro u ⟨hu1, _⟩ v ⟨_, hv2⟩ huv ; push_cast at hv2
@@ -253,7 +254,7 @@ theorem sum_le_integral {x₀ : ℝ} {f : ℝ → ℝ} {n : ℕ} (hf : AntitoneO
     (by simpa using l2)
 
   simp only [Nat.cast_add, Nat.cast_one, intervalIntegral.integral_comp_add_left] at l3
-  convert _root_.add_le_add l1 l3
+  convert! _root_.add_le_add l1 l3
 
   have := @intervalIntegral.integral_comp_mul_add ℝ _ _ 1 (n + 1) 1 f one_ne_zero x₀
   rw [intervalIntegral.integral_add_adjacent_intervals]
@@ -280,11 +281,11 @@ lemma hh_integrable_aux (ha : 0 < a) (hb : 0 < b) (hc : 0 < c) :
   have l4 (x) : HasDerivAt (fun t => t / c) (1 / c) x := (hasDerivAt_id x).div_const c
   have l2 (x) (hx : 0 < x) : HasDerivAt (fun t => log (t / c)) x⁻¹ x := by
     have := @HasDerivAt.comp _ _ _ _ _ _ (fun t => t / c) _ _ _  (l3 (x / c) (by positivity)) (l4 x)
-    convert this using 1 ; field_simp
+    convert! this using 1 ; field_simp
   have l5 (x) (hx : 0 < x) := (l2 x hx).const_mul b
   have l1 (x) (hx : 0 < x) := (l5 x hx).arctan
   have l6 (x) (hx : 0 < x) : HasDerivAt g (g' x) x := by
-    convert (l1 x hx).const_mul (a * c / b) using 1
+    convert! (l1 x hx).const_mul (a * c / b) using 1
     simp only [g']
     field_simp
   have key (x) (hx : 0 < x) : HasDerivAt g₀ (g' x) x := by
@@ -341,7 +342,7 @@ lemma hh_integrable_aux (ha : 0 < a) (hb : 0 < b) (hc : 0 < c) :
     exact integrableOn_Ioi_deriv_of_nonneg k3 key k4 k1
   · have := integral_Ioi_of_hasDerivAt_of_nonneg k3 key k4 k1
     simp only [mul_inv_rev, inv_div, mul_neg, ↓reduceIte, sub_neg_eq_add, g', g₀] at this ⊢
-    convert this using 1 ; field_simp ; ring
+    convert! this using 1 ; field_simp ; ring
 
 lemma hh_integrable (ha : 0 < a) (hb : 0 < b) (hc : 0 < c) :
     IntegrableOn (fun t ↦ a * hh b (t / c)) (Ici 0) :=
@@ -354,7 +355,7 @@ lemma hh_integral (ha : 0 < a) (hb : 0 < b) (hc : 0 < c) :
 lemma hh_integral' : ∫ t in Ioi 0, hh (1 / (2 * π)) t = 2 * π ^ 2 := by
   have := hh_integral (a := 1) (b := 1 / (2 * π)) (c := 1)
     (by positivity) (by positivity) (by positivity)
-  convert this using 1 <;> simp ; ring
+  convert! this using 1 <;> simp ; ring
 
 end Li2.PNT
 

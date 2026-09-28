@@ -42,7 +42,7 @@ theorem starProfile_circle_layer_sum (h : ℕ) (x : Fin h → ℂ)
       (List.get_mem layerData j)).integral_prod_left
     apply (intervalIntegrable_iff_integrableOn_Ioc_of_le hT).2
     simpa only [F, μcirc, circleLayerPairKernel,
-      intervalIntegral.integral_of_le hT] using hi
+      intervalIntegral.integral_of_le hT] using! hi
   have hrow (θ : ℝ) :
       (∑ j : Fin layerData.length, F j θ) =
         (2 * Real.pi)⁻¹ * comparisonPotential (circleMap (x i) ε θ) := by
@@ -99,7 +99,7 @@ private lemma layerCircleCross_intervalIntegrable (s : StarLayer)
   have hi : Integrable (fun θ : ℝ => ∫ x in s.left..s.right,
       Real.log ‖(x : ℂ) * s.direction - circleMap c ε θ‖)
       (volume.restrict (Ioc 0 (2 * Real.pi))) := by
-    simpa only [intervalIntegral.integral_of_le hab] using hJ.swap.integral_prod_left
+    simpa only [intervalIntegral.integral_of_le hab] using! hJ.swap.integral_prod_left
   change IntervalIntegrable (fun θ : ℝ => (s.density : ℝ) *
     ∫ x in s.left..s.right,
       Real.log ‖(x : ℂ) * s.direction - circleMap c ε θ‖)
@@ -137,7 +137,7 @@ private lemma layerListCircleCross_integral_eq (ss : List StarLayer)
     have hsingleInt := layerCircleCross_intervalIntegrable s hs c hε
     have hsingleEq := layerCircleCross_integral_eq s hs c hε
     constructor
-    · simpa only [List.map_cons, List.sum_cons] using
+    · simpa only [List.map_cons, List.sum_cons] using!
         hsingleInt.add htailInt
     · simp only [List.map_cons, List.sum_cons]
       rw [intervalIntegral.integral_add hsingleInt htailInt,
@@ -163,7 +163,7 @@ theorem actual_circle_comparisonPotential_eq_truncation
       dsimp only
       rw [comparisonPotential_eq]
       rfl
-    _ = _ := by simpa only [layerCircleTrunc] using hsum
+    _ = _ := by simpa only [layerCircleTrunc] using! hsum
 
 end
 end Li2Unified.Proofs.Contour

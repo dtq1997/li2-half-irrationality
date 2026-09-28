@@ -25,7 +25,7 @@ lemma positive_residueTerm_ofReal (d : ℕ) (F : ℚ[X])
   have hbase : ((1 / 2 : ℝ) : ℂ) = (1 / 2 : ℂ) := by norm_num
   rw [Complex.ofReal_mul, Complex.ofReal_pow, hbase]
   congr 1
-  simpa only [Complex.ofReal_natCast] using
+  simpa only [Complex.ofReal_natCast] using!
     (Li2.originalContourG_deriv_ofReal d F (x := (m : ℝ)) (by exact_mod_cast hm))
 
 theorem hasSum_positive_residues (d : ℕ) (F : ℚ[X]) :
@@ -38,12 +38,12 @@ theorem hasSum_positive_residues (d : ℕ) (F : ℚ[X]) :
       ((numeratorFunctional lambda d F).eval₂ (Rat.castHom ℝ) value) := by
     rw [value, numeratorFunctional_real_derivative_series lambda lambda_abs_lt_one
       lambda_nonzero]
-    simpa only [lambda, Rat.cast_div, Rat.cast_one, Rat.cast_ofNat] using
+    simpa only [lambda, Rat.cast_div, Rat.cast_one, Rat.cast_ofNat] using!
       (summable_originalRealQuotient_derivative lambda lambda_abs_lt_one d F).hasSum
   have hc := Complex.hasSum_ofReal.mpr hr
   apply hc.congr_fun
   intro k
-  simpa only [Nat.cast_add, Nat.cast_one] using
+  simpa only [Nat.cast_add, Nat.cast_one] using!
     positive_residueTerm_ofReal d F (k + 1) (by omega)
 
 theorem numeratorFunctional_positive_complex_derivative_series (d : ℕ) (F : ℚ[X]) :

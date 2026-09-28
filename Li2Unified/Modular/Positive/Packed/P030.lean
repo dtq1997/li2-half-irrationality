@@ -60,10 +60,10 @@ theorem profileWindowClosedSumN_tendsto (N : ℕ) :
         (window_left_pos_N A hAr j)
         (window_left_lt_right_N A hAr j).le)
     rw [window_mass_eq_cell_N A hAr] at hsum
-    simpa only [Finset.sum_div] using hsum
+    simpa only [Finset.sum_div] using! hsum
   have houter := tendsto_finset_sum (Finset.Ico (1:ℕ) (N+1))
     (fun A hA => hrow A hA)
-  simpa only [profileWindowClosedSumN, Finset.sum_div] using houter
+  simpa only [profileWindowClosedSumN, Finset.sum_div] using! houter
 
 end
 end Li2Unified.Proofs.Arithmetic

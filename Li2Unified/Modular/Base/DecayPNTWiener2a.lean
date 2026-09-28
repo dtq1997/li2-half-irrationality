@@ -95,7 +95,7 @@ lemma summation_by_parts {E : Type*} [Ring E] {a A b : ℕ → E} (ha : a = nabl
 
 lemma summation_by_parts' {E : Type*} [Ring E] {a b : ℕ → E} {n : ℕ} :
     cumsum (a * b) (n + 1) = cumsum a (n + 1) * b n - cumsum (shift (cumsum a) * nabla b) n := by
-  simpa using summation_by_parts (a := a) (b := b) (A := cumsum a) (by simp)
+  simpa using! summation_by_parts (a := a) (b := b) (A := cumsum a) (by simp)
 
 lemma summation_by_parts'' {E : Type*} [Ring E] {a b : ℕ → E} :
     shift (cumsum (a * b)) = shift (cumsum a) * b - cumsum (shift (cumsum a) * nabla b) := by
@@ -153,7 +153,7 @@ lemma bounded_of_shift {u : ℕ → ℝ} (h : BoundedAtFilter atTop (shift u)) :
   refine ⟨C, N + 1, fun n hn => ?_⟩
   simp only [shift] at hC
   have r1 : n - 1 ≥ N := Nat.le_sub_one_of_lt hn
-  have r2 : n - 1 + 1 = n := Nat.sub_add_cancel <| NeZero.one_le.trans hn.le
+  have r2 : n - 1 + 1 = n := Nat.sub_add_cancel <| (by omega)
   simpa [r2] using hC (n - 1) r1
 
 lemma dirichlet_test' {a b : ℕ → ℝ} (ha : 0 ≤ a) (hb : 0 ≤ b)
@@ -161,7 +161,7 @@ lemma dirichlet_test' {a b : ℕ → ℝ} (ha : 0 ≤ a) (hb : 0 ≤ b)
     (h : Summable (shift (cumsum a) * nnabla b)) : Summable (a * b) := by
   have l1 : ∀ᶠ n in atTop, 0 ≤ (shift (cumsum a) * nnabla b) n := by
     filter_upwards [hbb] with n hb
-    exact mul_nonneg (by simpa [shift] using Finset.sum_nonneg' ha) (sub_nonneg.mpr hb)
+    exact mul_nonneg (by simpa [shift] using! Finset.sum_nonneg' ha) (sub_nonneg.mpr hb)
   rw [summable_iff_bounded (mul_nonneg ha hb)]
   rw [summable_iff_bounded' l1] at h
   apply bounded_of_shift

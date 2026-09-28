@@ -29,7 +29,7 @@ theorem integralPolynomial_prime_UV_leading
     simpa only [sub_eq_add_neg, norm_neg] using IsUltrametricDist.norm_add_le_max x (-y)
   apply (hsub _ _).trans
   apply max_le
-  · simpa only [coeff_map] using integral_coeff_mul_norm_le (p:ℤ_[p]) (U.coeff n)
+  · simpa only [coeff_map] using! integral_coeff_mul_norm_le (p:ℤ_[p]) (U.coeff n)
   · rw [norm_mul]
     exact (mul_le_mul (PadicInt.norm_le_one a) (hV n) (norm_nonneg _) (by norm_num)).trans_eq
       (one_mul _)

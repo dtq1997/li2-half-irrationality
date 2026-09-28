@@ -128,7 +128,7 @@ lemma inverseParameter_prime_pow_congr (q : ℕ) (hq : 0 < q) (hpq : ¬p ∣ q) 
       Li2.VG.intCast_of_dvd hdiv
   have hq0 : (q:ℚ) ≠ 0 := by exact_mod_cast hq.ne'
   have hval : padicValRat p ((q:ℚ)^p) = 0 := by
-    rw [padicValRat.pow hq0, nat_valuation_zero q hpq]
+    rw [padicValRat.pow, nat_valuation_zero q hpq]
     simp
   have hi : Li2.VG p ((q:ℚ)^p)⁻¹ 0 := by
     simpa using Li2.VG.inv (p := p) (pow_ne_zero _ hq0)
@@ -148,7 +148,7 @@ lemma inverseParameter_power_unit (q : ℕ) (hq : 0 < q) (hpq : ¬p ∣ q) :
     (inverseParameter q)^p ≠ 0 ∧ padicValRat p ((inverseParameter q)^p) = 0 := by
   obtain ⟨h0,hv⟩ := inverseParameter_unit (p := p) q hq hpq
   refine ⟨pow_ne_zero _ h0, ?_⟩
-  rw [padicValRat.pow h0, hv]
+  rw [padicValRat.pow, hv]
   simp
 
 lemma inverseParameter_power_one_sub_unit (q : ℕ) (hq : 1 < q)
@@ -198,7 +198,7 @@ lemma parameter_power_unit (lam : ℚ)
     (hu : lam ≠ 0 ∧ padicValRat p lam = 0) :
     lam^p ≠ 0 ∧ padicValRat p (lam^p) = 0 := by
   refine ⟨pow_ne_zero _ hu.1, ?_⟩
-  rw [padicValRat.pow hu.1, hu.2]
+  rw [padicValRat.pow, hu.2]
   simp
 
 lemma one_sub_parameter_power_unit (lam : ℚ)

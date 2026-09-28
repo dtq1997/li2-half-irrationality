@@ -97,7 +97,7 @@ theorem generalOriginalBasis_natDegree_lt (n : ℕ) (hpn : p ≤ n)
     rw [← hsize]
     refine Fin.cases ?_ ?_ j
     · simpa only [Function.comp_apply, Fin.cases_zero,
-        Li2.fullClassProduct_natDegree] using
+        Li2.fullClassProduct_natDegree] using!
         (Nat.lt_succ_self (generalJetSize n p))
     · intro k
       simpa only [Function.comp_apply, Fin.cases_succ] using
@@ -116,7 +116,7 @@ theorem generalOriginalBasis_independent (n : ℕ) (hpn : p ≤ n)
       (finCongr hsize)
       (fun i => (generalIndexedJetPoly n p i).map (Int.castRingHom (ZMod p)))
       (generalIndexedJetPoly_independent n p) v ?_
-    simpa only [generalOriginalBasis, dif_pos hd] using hv
+    simpa only [generalOriginalBasis, dif_pos hd] using! hv
   · have hd1 : Li2Unified.Proofs.Hermite.CountsCore.delta n p = 1 := by
       have := general_delta_le_one n hpn
       omega
@@ -127,7 +127,7 @@ theorem generalOriginalBasis_independent (n : ℕ) (hpn : p ≤ n)
       (finCongr hsize)
       (fun i => (generalAppendedBasis (p := p) n i).map (Int.castRingHom (ZMod p)))
       (generalAppendedBasis_independent n) v ?_
-    simpa only [generalOriginalBasis, dif_neg hd] using hv
+    simpa only [generalOriginalBasis, dif_neg hd] using! hv
 
 theorem generalOriginalBasis_det_unit (n : ℕ) (hpn : p ≤ n) :
     (Li2.coeffMat fun i =>

@@ -32,7 +32,7 @@ theorem fieldRestrictedV_integral (μ : ℕ → ℤ_[p]) (f : PowerSeries ℤ_[p
 
 theorem fieldRestrictedU_derivative (μ : ℕ → ℤ_[p]) (f : PowerSeries ℚ_[p]) :
     fieldRestrictedU μ f = fieldRestrictedMoment μ
-      (PowerSeries.derivative (ℚ_[p]) (PowerSeries.X*f)) := by
+      (PowerSeries.derivative (R := ℚ_[p]) (PowerSeries.X*f)) := by
   unfold fieldRestrictedU fieldRestrictedMoment
   apply tsum_congr
   intro n
@@ -42,7 +42,7 @@ theorem fieldRestrictedU_derivative (μ : ℕ → ℤ_[p]) (f : PowerSeries ℚ_
 
 theorem fieldRestrictedV_derivative (μ : ℕ → ℤ_[p]) (f : PowerSeries ℚ_[p])
     (hf : PowerSeries.IsRestricted 1 f) :
-    fieldRestrictedV μ f = fieldRestrictedMoment μ (PowerSeries.derivative (ℚ_[p]) f) := by
+    fieldRestrictedV μ f = fieldRestrictedMoment μ (PowerSeries.derivative (R := ℚ_[p]) f) := by
   have he := (fieldRestrictedMoment_summable (derivativeMoments μ) f hf).sum_add_tsum_nat_add 1
   simp only [Finset.sum_range_one, derivativeMoments, PadicInt.coe_zero, mul_zero, zero_add] at he
   unfold fieldRestrictedV fieldRestrictedMoment derivativeMoments

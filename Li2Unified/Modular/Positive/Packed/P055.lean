@@ -96,7 +96,7 @@ theorem parameterJet_actual_low_scaled_leading (lam : ℚ) (hu : lam ≠ 0 ∧ p
   · exact parameterJet_same_UV_substituted_error (lam^p) (parameter_power_unit lam hu) (parameterPowerRatio_integral lam hu hone hferm) hp4 a i j eta
   · intro k
     simpa only [parameterDiscMonomialScaled,Polynomial.map_sub,Polynomial.map_mul,Polynomial.map_C,
-      PadicInt.algebraMap_apply,PadicInt.coe_natCast] using
+      PadicInt.algebraMap_apply,PadicInt.coe_natCast] using!
       parameterDiscMonomial_low_scaled_leading lam hu hone hferm hp4 a ha0 ha
         ⟨i.val+j.val,primeLow_pair_lt_three hp4 a ha i j⟩ eta k
 
@@ -142,11 +142,11 @@ theorem parameterDiscTestScaled_factor_bound (z : ℚ)
       (C ((p:ℤ_[p])^2)*(X-C eta)))
     ((parameterFourPoleV z hu hreg hp4 (primeDiscTestRegular hp4 a T) (primeDiscTestResidue hp4 a T)).comp
       (C ((p:ℤ_[p])^2)*(X-C eta))) 0 0 (a.val:ℤ_[p]) 0 _
-    (by simpa only [C_0,zero_mul,sub_zero] using
+    (by simpa only [C_0,zero_mul,sub_zero] using!
       parameterDiscTest_U_substituted_factor_bound z hu hreg hp4 T a m eta hT)
-    (by simpa only [C_0,zero_mul,sub_zero] using
+    (by simpa only [C_0,zero_mul,sub_zero] using!
       parameterDiscTest_V_substituted_factor_bound z hu hreg hp4 T a m eta hT) n
-  simpa only [parameterDiscTestScaled,C_0,zero_mul,mul_zero,sub_zero] using h
+  simpa only [parameterDiscTestScaled,C_0,zero_mul,mul_zero,sub_zero] using! h
 
 end
 end Li2Unified.Proofs.PrimeEdge
@@ -346,7 +346,7 @@ lemma parameterDiscTestFieldUV_eq_div_scaled (z : ℚ)
     0 0 (a.val:ℚ_[p]) 0
   simpa only [parameterDiscTestFieldUV,parameterDiscTestScaled,Polynomial.map_sub,Polynomial.map_mul,
     Polynomial.map_C,Polynomial.map_comp,Polynomial.map_X,PadicInt.algebraMap_apply,
-    PadicInt.coe_natCast,PadicInt.coe_pow,C_0,zero_mul,mul_zero,sub_zero] using h.symm
+    PadicInt.coe_natCast,PadicInt.coe_pow,C_0,zero_mul,mul_zero,sub_zero] using! h.symm
 
 lemma parameterDiscContribution_scaled (lam : ℚ)
     (hu : lam ≠ 0 ∧ padicValRat p lam = 0)
@@ -423,34 +423,34 @@ theorem parameterJet_other_contribution_scaled_bound (lam : ℚ)
   by_cases hz : b.val = 0
   · have hm : primeMultiplicity p b = 2 := primeMultiplicity_low hp4 b (by omega)
     have ht : ∃ E : ℤ[X], T.comp (primeDiscSubstitution p b) = C ((p:ℤ)^4)*E := by
-      simpa only [hm] using hT
+      simpa only [hm] using! hT
     rw [parameterDiscContribution_scaled_zero lam hu hreg hp4 b hz T]
     apply fieldPolynomial_div_prime_bound _ 3
     intro k
-    simpa only [coeff_map,norm_pow] using parameterDiscTest_U_substituted_factor_bound (lam^p) (parameter_power_unit lam hu) hreg hp4 T b 4
+    simpa only [coeff_map,norm_pow] using! parameterDiscTest_U_substituted_factor_bound (lam^p) (parameter_power_unit lam hu) hreg hp4 T b 4
       (parameterIntegralEta lam hu hreg) ht k
   · by_cases hl : b.val ≤ p-4
     · have hm : primeMultiplicity p b = 2 := primeMultiplicity_low hp4 b hl
       have ht : ∃ E : ℤ[X], T.comp (primeDiscSubstitution p b) = C ((p:ℤ)^4)*E := by
-        simpa only [hm] using hT
+        simpa only [hm] using! hT
       rw [parameterDiscContribution_scaled_low lam hu hreg hp4 b (by omega) hl T]
       have h := parameterDiscTestScaled_factor_bound (lam^p) (parameter_power_unit lam hu) hreg hp4 T b 4
         (parameterIntegralEta lam hu hreg) ht n
       have hc : ‖((parameterDiscTestScaled (lam^p) (parameter_power_unit lam hu) hreg hp4 b T (parameterIntegralEta lam hu hreg)).map
           (algebraMap ℤ_[p] ℚ_[p])).coeff n‖ ≤ ‖(p:ℚ_[p])‖^4 := by
-        simpa only [coeff_map,norm_pow] using h
+        simpa only [coeff_map,norm_pow] using! h
       exact hc.trans (pow_le_pow_of_le_one (norm_nonneg _) hn (by omega))
     · have hm : primeMultiplicity p b = 1 := by
         unfold primeMultiplicity
         rw [if_neg (by omega)]
       have ht : ∃ E : ℤ[X], T.comp (primeDiscSubstitution p b) = C ((p:ℤ)^2)*E := by
-        simpa only [hm] using hT
+        simpa only [hm] using! hT
       rw [parameterDiscContribution_scaled_high lam hu hreg hp4 b (by omega) T,coeff_C_mul,norm_mul]
       have h := parameterDiscTestScaled_factor_bound (lam^p) (parameter_power_unit lam hu) hreg hp4 T b 2
         (parameterIntegralEta lam hu hreg) ht n
       have hc : ‖((parameterDiscTestScaled (lam^p) (parameter_power_unit lam hu) hreg hp4 b T (parameterIntegralEta lam hu hreg)).map
           (algebraMap ℤ_[p] ℚ_[p])).coeff n‖ ≤ ‖(p:ℚ_[p])‖^2 := by
-        simpa only [coeff_map,norm_pow] using h
+        simpa only [coeff_map,norm_pow] using! h
       calc
         _ ≤ ‖(p:ℚ_[p])‖*‖(p:ℚ_[p])‖^2 := mul_le_mul_of_nonneg_left hc (norm_nonneg _)
         _ = _ := by ring

@@ -107,7 +107,7 @@ theorem coeffMat_det_unit_of_independent {h p : ℕ} [hp : Fact p.Prime]
   set Mz : Matrix (Fin h) (Fin h) ℤ := fun a k => (Ez a).coeff k with hMz
   have hQ : coeffMat (fun a => (Ez a).map (Int.castRingHom ℚ)) = Mz.map (Int.castRingHom ℚ) := by
     ext a k
-    simp [coeffMat, hMz, coeff_map]
+    simp [coeffMat, hMz, coeff_map, Matrix.map, Matrix.of_apply]
   have hdetQ : (coeffMat fun a => (Ez a).map (Int.castRingHom ℚ)).det = (Mz.det : ℚ) := by
     rw [hQ, ← RingHom.mapMatrix_apply, ← RingHom.map_det]
     simp
@@ -129,7 +129,7 @@ theorem coeffMat_det_unit_of_independent {h p : ℕ} [hp : Fact p.Prime]
       rw [← ht]
       apply Finset.sum_congr rfl
       intro a _
-      simp [mul_comm]
+      simp [Matrix.map, Matrix.of_apply, hMz, mul_comm]
     · apply Finset.sum_eq_zero
       intro a _
       rw [coeff_eq_zero_of_natDegree_lt (by have := hdeg a; omega)]

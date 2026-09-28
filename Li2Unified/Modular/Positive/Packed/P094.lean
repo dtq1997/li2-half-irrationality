@@ -39,7 +39,7 @@ lemma star_monomial_product (n : ℕ) (i j : Fin (2 * n)) (v : Fin 3 × ℝ) :
 lemma integrable_star_monomial_product (n : ℕ) (i j : Fin (2 * n)) :
     Integrable (fun v : Fin 3 × ℝ => point v.1 v.2 ^ i.val *
       (starContourDensity n v * point v.1 v.2 ^ j.val)) contourMeasure := by
-  simpa only [star_monomial_product] using
+  simpa only [star_monomial_product] using!
     actual_star_moment_integrable (4 * n)
       ((Li2.D n) ^ 3 * X ^ (i.val + j.val))
 
@@ -198,14 +198,13 @@ theorem star_partition_integrable (n : ℕ) :
         Li2.originalComplexQuotient (4 * n) ((Li2.D n) ^ 3)
           (point (v k).1 (v k).2)‖))
       (Measure.pi fun _ : Fin (2 * n) => contourMeasure) := by
-  simpa only [star_vandermonde_integrand_norm] using
+  simpa only [star_vandermonde_integrand_norm] using!
     (integrable_star_vandermonde n).norm
 
 theorem Q_star_partition_bound (n : ℕ) :
     ‖(Instances.PosHalf.Q n).eval₂ (Rat.castHom ℂ) (value : ℂ)‖ ≤
       (1 / ((2 * n).factorial : ℝ)) * starPartition n := by
   have hnorm := congrArg (fun z : ℂ => ‖z‖) (Q_star_andreief n)
-  dsimp only at hnorm
   rw [norm_mul, norm_div, norm_one, Complex.norm_natCast] at hnorm
   rw [hnorm]
   refine (mul_le_mul_of_nonneg_left
@@ -230,7 +229,7 @@ theorem actual_Qtilde_star_bound (n : ℕ) :
     exact_mod_cast Li2.Qtilde_scale_pos n
   rw [positive_half_Qtilde_abs_scale]
   have hQ := mul_le_mul_of_nonneg_left (Q_star_partition_bound n) hs.le
-  simpa only [Rat.cast_div, Rat.cast_pow] using
+  simpa only [Rat.cast_div, Rat.cast_pow] using!
     (hQ.trans_eq (by ring :
       ((Li2.Sn n : ℝ) ^ (2 * n) / (Li2.Fn n : ℝ)) *
         ((1 / ((2 * n).factorial : ℝ)) * starPartition n) =

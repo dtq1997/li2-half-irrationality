@@ -51,7 +51,7 @@ theorem primeTop_original_entry_leading (hp4 : 3 < p) (n : ℕ) :
   have h := fieldPolynomial_integral_weight_leading
     (C ((p:ℚ_[p])^3)*primeDiscContribution hp4 a (primeProduct p*primeProduct p))
     ((-2:ℤ_[p])^a.val) _ _ (primeTop_disc_leading hp4 a) l
-  simpa only [PadicInt.coe_pow,PadicInt.coe_neg,PadicInt.coe_natCast] using h
+  simpa only [PadicInt.coe_pow,PadicInt.coe_neg,PadicInt.coe_natCast] using! h
 
 end
 end Li2

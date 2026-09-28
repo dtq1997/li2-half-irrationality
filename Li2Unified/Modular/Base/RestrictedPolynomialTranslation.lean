@@ -34,8 +34,8 @@ lemma translated_polynomial_mul_trunc_tendsto (a : ℤ_[p]) (P : (ℤ_[p])[X])
     (fun g => PowerSeries.coeff n (restrictedTranslate a ((P : PowerSeries ℤ_[p])*g))) f hf
   intro N B hB htail
   rw [← map_sub, ← restrictedTranslate_sub a _ _
-    (PowerSeries.IsRestricted.mul 1 (polynomial_isRestricted P) hf)
-    (PowerSeries.IsRestricted.mul 1 (polynomial_isRestricted P) (polynomial_isRestricted _)),
+    (PowerSeries.isRestricted.mul 1 (polynomial_isRestricted P) hf)
+    (PowerSeries.isRestricted.mul 1 (polynomial_isRestricted P) (polynomial_isRestricted _)),
     ← mul_sub]
   apply restrictedTranslate_coeff_bound
   intro k

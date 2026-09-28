@@ -30,10 +30,10 @@ theorem integralPolynomial_scaled_rational_leading
   rw [he,coeff_add]
   apply (IsUltrametricDist.norm_add_le_max _ _).trans
   apply max_le
-  · simpa only [coeff_map,norm_pow] using hFH n
+  · simpa only [coeff_map,norm_pow] using! hFH n
   · rw [coeff_C_mul,norm_mul]
     have hq : ‖(q:ℚ_[p])‖ ≤ ‖(p:ℚ_[p])‖^m := by
-      simpa only [norm_pow] using integral_coeff_mul_norm_le ((p:ℤ_[p])^m) c
+      simpa only [norm_pow] using! integral_coeff_mul_norm_le ((p:ℤ_[p])^m) c
     calc
       _ ≤ ‖(p:ℚ_[p])‖^m*‖(p:ℚ_[p])‖ :=
         mul_le_mul hq (hH n) (norm_nonneg _) (pow_nonneg (norm_nonneg _) m)

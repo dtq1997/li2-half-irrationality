@@ -15,7 +15,7 @@ theorem li2_one_half_irrational :
 
 ## Checking the proof
 
-The project uses Lean `v4.30.0-rc2` and a pinned Mathlib revision (see `lake-manifest.json`).
+The project uses Lean `v4.35.0-rc3` and a pinned Mathlib revision (see `lake-manifest.json`).
 
 ```sh
 lake exe cache get

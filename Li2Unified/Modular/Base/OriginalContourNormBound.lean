@@ -37,7 +37,7 @@ theorem integrable_originalContour_norm_vandermonde (n : ℕ) :
           (∏ i : Fin (2 * n), ∏ j ∈ Finset.Ioi i,
             (x j - x i)) ^ 2)
       (Measure.pi fun _ : Fin (2 * n) => (volume : Measure ℝ)) := by
-  simpa only [originalContour_real_vandermonde_integrand_norm] using
+  simpa only [originalContour_real_vandermonde_integrand_norm] using!
     (integrable_originalContour_real_vandermonde n).norm
 
 theorem Q_real_eval_abs_le_originalContour_norm_integral (n : ℕ) :
@@ -50,7 +50,6 @@ theorem Q_real_eval_abs_le_originalContour_norm_integral (n : ℕ) :
           ∂(Measure.pi fun _ : Fin (2 * n) => (volume : Measure ℝ)) := by
   have hnorm := congrArg (fun z : ℂ => ‖z‖)
     (Q_real_eval_originalContour_vandermonde n)
-  dsimp only at hnorm
   rw [Complex.norm_real, Real.norm_eq_abs, norm_mul, norm_div,
     norm_pow, norm_neg, norm_one, one_pow, Complex.norm_natCast] at hnorm
   rw [hnorm]

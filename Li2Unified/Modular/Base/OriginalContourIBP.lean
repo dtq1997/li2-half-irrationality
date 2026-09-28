@@ -135,22 +135,22 @@ lemma integrable_originalContourKernel_deriv_mul_G (d : ℕ) (F : ℚ[X]) :
 lemma originalContourPoint_hasDerivAt (y : ℝ) :
     HasDerivAt originalContourPoint Complex.I y := by
   have hr : HasDerivAt (fun x : ℝ => (x : ℂ)) (1 : ℂ) y := by
-    simpa only [Complex.ofRealCLM_apply, Complex.ofReal_one] using
+    simpa only [Complex.ofRealCLM_apply, Complex.ofReal_one] using!
       (Complex.ofRealCLM.hasDerivAt (x := y))
-  simpa only [originalContourPoint, one_mul] using
+  simpa only [originalContourPoint, one_mul] using!
     (hr.mul_const Complex.I).const_add (1 / 2 : ℂ)
 
 lemma originalContourKernel_comp_hasDerivAt (y : ℝ) :
     HasDerivAt (fun t : ℝ => originalContourKernel (originalContourPoint t))
       (deriv originalContourKernel (originalContourPoint y) * Complex.I) y := by
-  simpa only [Function.comp_apply] using
+  simpa only [Function.comp_apply] using!
     (originalContourKernel_hasDerivAt y).differentiableAt.hasDerivAt.comp y
       (originalContourPoint_hasDerivAt y)
 
 lemma originalContourG_comp_hasDerivAt (d : ℕ) (F : ℚ[X]) (y : ℝ) :
     HasDerivAt (fun t : ℝ => originalContourG d F (originalContourPoint t))
       (deriv (originalContourG d F) (originalContourPoint y) * Complex.I) y := by
-  simpa only [Function.comp_apply] using
+  simpa only [Function.comp_apply] using!
     (originalContourG_hasDerivAt_of_den_ne_zero d F
       (D_eval₂_complex_vertical_ne_zero d y)).differentiableAt.hasDerivAt.comp y
         (originalContourPoint_hasDerivAt y)
@@ -175,7 +175,7 @@ theorem integral_originalContourKernel_mul_G_deriv_eq_neg (d : ℕ) (F : ℚ[X])
     simp only [u', v, Pi.mul_apply]
     ring
   have huv : Integrable (u * v) := by
-    simpa only [u, v, Pi.mul_apply] using integrable_originalContourKernel_mul_G d F
+    simpa only [u, v, Pi.mul_apply] using! integrable_originalContourKernel_mul_G d F
   have h := MeasureTheory.integral_mul_deriv_eq_deriv_mul_of_integrable
     (u := u) (v := v) (u' := u') (v' := v')
     (fun y _ => originalContourKernel_comp_hasDerivAt y)

@@ -60,13 +60,19 @@ theorem integralUPole_eval (z : ℚ) (hz : z ≠ 0) (hv : padicValRat p z = 0)
     (j : ℕ) (hj : j < p) (y : ℤ_[p]) :
     (((integralUPole z hz hv j hj).eval y : ℤ_[p]) : ℚ_[p]) =
       (j:ℚ_[p])*(z:ℚ_[p])⁻¹^j*((y:ℚ_[p])-(parameterTau z j:ℚ_[p])) := by
-  simp [integralUPole, integralParameterInvPow, integralParameterTau, integralRational]
+  unfold integralUPole
+  rw [eval_mul, eval_C, eval_sub, eval_X, eval_C,
+    PadicInt.coe_mul, PadicInt.coe_mul, PadicInt.coe_natCast, PadicInt.coe_sub]
+  simp [integralParameterInvPow, integralParameterTau, integralRational]
 
 theorem integralVPole_eval (z : ℚ) (hz : z ≠ 0) (hv : padicValRat p z = 0)
     (j : ℕ) (hj : j < p) (y : ℤ_[p]) :
     (((integralVPole z hz hv j hj).eval y : ℤ_[p]) : ℚ_[p]) =
       -(z:ℚ_[p])⁻¹^j*((y:ℚ_[p])-(parameterTau z j:ℚ_[p])) := by
-  simp [integralVPole, integralParameterInvPow, integralParameterTau, integralRational]
+  unfold integralVPole
+  rw [eval_mul, eval_C, eval_sub, eval_X, eval_C,
+    PadicInt.coe_mul, PadicInt.coe_neg, PadicInt.coe_sub]
+  simp [integralParameterInvPow, integralParameterTau, integralRational]
 
 theorem integralUPole_zero (z : ℚ) (hz : z ≠ 0) (hv : padicValRat p z = 0)
     (h0 : 0 < p) : integralUPole z hz hv 0 h0 = 0 := by

@@ -70,7 +70,7 @@ lemma tendsto_S_S_zero {f : ℕ → ℝ} (hpos : 0 ≤ f) (hcheby : cheby f) :
     simp only [norm_real, norm_of_nonneg (hpos _), norm_div,
       norm_of_nonneg r2, Real.norm_natCast] at r1 ⊢
     apply div_le_div_of_nonneg_right r1 (by positivity)
-  simpa [← S_sub_S h2.2] using l2.trans_lt h1
+  simpa [← S_sub_S h2.2] using! l2.trans_lt h1
 
 theorem WienerIkeharaTheorem' {f : ℕ → ℝ} (hpos : 0 ≤ f)
     (hf : ∀ (σ' : ℝ), 1 < σ' → Summable (nterm f σ'))
@@ -83,7 +83,7 @@ theorem WienerIkeharaTheorem' {f : ℕ → ℝ} (hpos : 0 ≤ f)
   · have L0 : Ioc 0 1 ∈ 𝓝[>] (0 : ℝ) := inter_mem_nhdsWithin _ (Iic_mem_nhds zero_lt_one)
     apply eventually_of_mem L0
     · intro ε hε
-      simpa using WienerIkeharaInterval_discrete' hpos hf hcheby hG hG' hε.1 hε.2
+      simpa using! WienerIkeharaInterval_discrete' hpos hf hcheby hG hG' hε.1 hε.2
   · have : Tendsto (fun ε : ℝ => ε) (𝓝[>] 0) (𝓝 0) := nhdsWithin_le_nhds
     simpa using (this.const_sub 1).const_mul A
 

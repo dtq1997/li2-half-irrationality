@@ -18,7 +18,7 @@ noncomputable section
 theorem half_ray_compact (x : ℝ) (hx : 0 ≤ x ∧ x ≤ (18 : ℝ)) :
     Li2Unified.Stage0.HalfAnalytic.psiRay x ≤ (19/10 : ℝ) := by
   have hx' : x ∈ Set.Icc (qZero.toRat : ℝ) ((⟨18, 1⟩ : QPair).toRat : ℝ) := by
-    simpa [qZero, QPair.toRat] using hx
+    simpa [qZero, QPair.toRat] using! hx
   have h := checkAll_cover_sound_of_lt halfRayBoxes_checked halfRayBoxes_cover
     (by norm_num [qZero, QPair.toRat]) hx'
   rw [halfRayTerms_actual x hx.1] at h
@@ -28,7 +28,7 @@ theorem half_ray_compact (x : ℝ) (hx : 0 ≤ x ∧ x ≤ (18 : ℝ)) :
 theorem half_up_compact (x : ℝ) (hx : 0 ≤ x ∧ x ≤ (2 : ℝ)) :
     Li2Unified.Stage0.HalfAnalytic.psiUp x ≤ (19/10 : ℝ) := by
   have hx' : x ∈ Set.Icc (qZero.toRat : ℝ) ((⟨2, 1⟩ : QPair).toRat : ℝ) := by
-    simpa [qZero, QPair.toRat] using hx
+    simpa [qZero, QPair.toRat] using! hx
   have h := checkAll_cover_sound_of_lt halfUpBoxes_checked halfUpBoxes_cover
     (by norm_num [qZero, QPair.toRat]) hx'
   rw [halfUpTerms_actual x hx.1] at h
@@ -50,12 +50,12 @@ noncomputable section
 /-- Exact affine certificates cover the full compact interval. -/
 theorem ray_compact (x : ℝ) (hx : 0 ≤ x ∧ x ≤ (18/1:ℝ)) :
     Li2Unified.Stage0.HalfAnalytic.psiRay x ≤ (19/10:ℝ) := by
-  exact Li2Unified.Proofs.Potential.CompactAffine.half_ray_compact x (by simpa only [div_one] using hx)
+  exact Li2Unified.Proofs.Potential.CompactAffine.half_ray_compact x (by simpa only [div_one] using! hx)
 
 /-- Exact affine certificates cover the full compact interval. -/
 theorem vertical_compact (x : ℝ) (hx : 0 ≤ x ∧ x ≤ (2/1:ℝ)) :
     Li2Unified.Stage0.HalfAnalytic.psiUp x ≤ (19/10:ℝ) := by
-  exact Li2Unified.Proofs.Potential.CompactAffine.half_up_compact x (by simpa only [div_one] using hx)
+  exact Li2Unified.Proofs.Potential.CompactAffine.half_up_compact x (by simpa only [div_one] using! hx)
 end
 end Li2Unified.Instances.PosHalf.GeneratedPotential
 
@@ -94,9 +94,9 @@ private lemma up_spatial_bounds (y : ℝ) (hy : 0 ≤ y) :
 theorem starArm_spatial_bounds (b : Fin 3) (y : ℝ) (hy : 0 ≤ y) :
     starArmPsi b y ≤ 19/10 ∧ starArmPsi b y ≤ 19/10+9/5-y/10 := by
   fin_cases b
-  · simpa [starArmPsi] using ray_spatial_bounds y hy
-  · simpa [starArmPsi] using up_spatial_bounds y hy
-  · simpa [starArmPsi, psi_reflection] using up_spatial_bounds y hy
+  · simpa [starArmPsi] using! ray_spatial_bounds y hy
+  · simpa [starArmPsi] using! up_spatial_bounds y hy
+  · simpa [starArmPsi, psi_reflection] using! up_spatial_bounds y hy
 
 theorem starArm_exp_majorant (n : ℕ) (hn : 1 ≤ n)
     (b : Fin 3) (y : ℝ) (hy : 0 ≤ y) :
@@ -200,7 +200,7 @@ private def spatialMajorant (y : ℝ) : ℝ :=
   Real.exp (9/5:ℝ) * ((1+|y|)^6 * Real.exp (-|y|/10))
 
 private lemma integrable_spatialMajorant : Integrable spatialMajorant := by
-  convert (Li2.original_integrable_one_add_abs_pow_exp 6
+  convert! (Li2.original_integrable_one_add_abs_pow_exp 6
     (by norm_num : (0:ℝ)<1/10)).const_mul (Real.exp (9/5:ℝ)) using 1
   funext y
   unfold spatialMajorant
@@ -221,7 +221,7 @@ theorem starArm_integral_bound (n : ℕ) (hn : 1 ≤ n) (b : Fin 3) :
     rw [Real.norm_eq_abs, abs_of_nonneg (by
       unfold starSpatialIntegrand
       positivity)]
-    simpa only [spatialMajorant, starSpatialIntegrand] using
+    simpa only [spatialMajorant, starSpatialIntegrand] using!
       starArm_exp_majorant n hn b y hy.le
   refine ⟨hF, ?_⟩
   have hle : (∫ y in Ioi (0:ℝ), starSpatialIntegrand n b y) ≤
@@ -229,9 +229,9 @@ theorem starArm_integral_bound (n : ℕ) (hn : 1 ≤ n) (b : Fin 3) :
         Real.exp ((n:ℝ)*(19/10:ℝ)) * spatialMajorant y := by
     apply integral_mono_ae hF hM
     filter_upwards [ae_restrict_mem measurableSet_Ioi] with y hy
-    simpa only [spatialMajorant, starSpatialIntegrand] using
+    simpa only [spatialMajorant, starSpatialIntegrand] using!
       starArm_exp_majorant n hn b y hy.le
-  simpa only [integral_const_mul] using hle
+  simpa only [integral_const_mul] using! hle
 
 /-- Sum of the three actual spatial integrals. -/
 def starSpatialIntegral (n : ℕ) : ℝ :=

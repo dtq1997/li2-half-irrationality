@@ -27,7 +27,7 @@ theorem upperRightIntegral_diagonal_tendsto_zero (d : ℕ) (F : ℚ[X]) :
   have hlim : Tendsto (fun N : ℕ =>
       (2 * C * 2 ^ k) * ((1 + (N : ℝ)) ^ (k + 1) * (1 / 2 : ℝ) ^ N))
       atTop (𝓝 0) := by
-    simpa only [mul_zero] using hdecay.const_mul (2 * C * 2 ^ k)
+    simpa only [mul_zero] using! hdecay.const_mul (2 * C * 2 ^ k)
   apply squeeze_zero_norm' _ hlim
   filter_upwards [] with N
   have hN : 0 ≤ (N : ℝ) := Nat.cast_nonneg N
@@ -120,7 +120,7 @@ theorem upper_finiteRectangle_four_edges (d : ℕ) (F : ℚ[X])
     ring
   simpa only [upperBottomIntegral, upperTopIntegral, upperRightIntegral,
     upperLeftIntegral, hright, hleft, hbottom, smul_eq_mul,
-    sub_eq_add_neg] using h
+    sub_eq_add_neg] using! h
 
 theorem upper_diagonal_boundary_limit (d : ℕ) (F : ℚ[X]) :
     Tendsto (fun N : ℕ => upperBottomIntegral d F N (N : ℝ) -
@@ -135,7 +135,7 @@ theorem upper_diagonal_boundary_limit (d : ℕ) (F : ℚ[X]) :
         upperTopIntegral d F N (N : ℝ) -
         Complex.I * upperRightIntegral d F N (N : ℝ)) atTop
       (𝓝 ((numeratorFunctional lambda d F).eval₂ (Rat.castHom ℂ) (value : ℂ))) := by
-    simpa only [add_zero, mul_zero, sub_zero] using
+    simpa only [add_zero, mul_zero, sub_zero] using!
       (hseries.add htop).sub (tendsto_const_nhds.mul hright)
   apply (tendsto_congr' _).mpr hlim
   filter_upwards [eventually_ge_atTop (1 : ℕ)] with N hN
@@ -239,7 +239,7 @@ theorem plain_finiteRectangle_four_edges (d : ℕ) (F : ℚ[X])
     ring
   simpa only [plainBottomIntegral, plainRealIntegral, plainRightIntegral,
     plainLowerLeftIntegral, hright, hleft, hbottom, plainIntegrand,
-    smul_eq_mul, sub_eq_add_neg] using hzero
+    smul_eq_mul, sub_eq_add_neg] using! hzero
 
 end
 end Li2Unified.Proofs.Contour

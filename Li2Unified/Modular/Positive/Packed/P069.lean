@@ -88,10 +88,10 @@ noncomputable section
 lemma negativeLog_norm_real_sub_le (w : ℂ) (x : ℝ) (hx : x ≠ w.re) :
     negativeLog ‖(x:ℂ)-w‖ ≤ negativeLog (x-w.re) := by
   have hb : |x-w.re| ≤ ‖(x:ℂ)-w‖ := by
-    simpa only [Complex.sub_re, Complex.ofReal_re] using Complex.abs_re_le_norm ((x:ℂ)-w)
+    simpa only [Complex.sub_re, Complex.ofReal_re] using! Complex.abs_re_le_norm ((x:ℂ)-w)
   have ha : 0 < |x-w.re| := abs_pos.mpr (sub_ne_zero.mpr hx)
   have hl : Real.log (x-w.re) ≤ Real.log ‖(x:ℂ)-w‖ := by
-    simpa only [Real.log_abs] using Real.log_le_log ha hb
+    simpa only [Real.log_abs] using! Real.log_le_log ha hb
   exact max_le_max (neg_le_neg hl) le_rfl
 
 lemma ae_negativeLog_norm_real_sub_le (w : ℂ) :
@@ -125,11 +125,11 @@ lemma norm_imag_sub (w : ℂ) (x : ℝ) :
 
 lemma integrable_negativeLog_norm_imag_sub (w : ℂ) :
     Integrable (fun x : ℝ => negativeLog ‖(x:ℂ)*Complex.I-w‖) := by
-  simpa only [norm_imag_sub] using integrable_negativeLog_norm_real_sub (w/Complex.I)
+  simpa only [norm_imag_sub] using! integrable_negativeLog_norm_real_sub (w/Complex.I)
 
 lemma setIntegral_negativeLog_norm_imag_sub_le (w : ℂ) (s : Set ℝ) :
     (∫ x in s, negativeLog ‖(x:ℂ)*Complex.I-w‖) ≤ 2 := by
-  simpa only [norm_imag_sub] using setIntegral_negativeLog_norm_real_sub_le (w/Complex.I) s
+  simpa only [norm_imag_sub] using! setIntegral_negativeLog_norm_real_sub_le (w/Complex.I) s
 
 end
 end Li2Unified.ParameterFamily.Energy
@@ -169,7 +169,7 @@ lemma ae_norm (s : StarLayer) (R : ℝ) (hR : 0 ≤ R) (hr : (s.radius : ℝ) �
     filter_upwards [ae_restrict_mem measurableSet_Ioc] with x hx'
     have ha : |x| ≤ R := abs_le.mpr ⟨hl.trans hx'.1.le, hx'.2.trans hr⟩
     cases hv : s.vertical <;>
-      simpa [direction, hv, norm_mul, Complex.norm_real, Real.norm_eq_abs] using ha
+      simpa [direction, hv, norm_mul, Complex.norm_real, Real.norm_eq_abs] using! ha
   exact Measure.ae_smul_measure ((ae_map_iff hx.aemeasurable hm).2 ht) _
 
 lemma integrable_negativeLog (s : StarLayer) (w : ℂ) :
@@ -181,9 +181,9 @@ lemma integrable_negativeLog (s : StarLayer) (w : ℂ) :
   apply Integrable.smul_measure _ ENNReal.ofReal_ne_top
   apply (integrable_map_measure hg.aestronglyMeasurable hf.aemeasurable).2
   cases hv : s.vertical
-  · simpa [direction, hv] using
+  · simpa [direction, hv] using!
       (integrable_negativeLog_norm_real_sub w).restrict (s := Ioc s.left s.right)
-  · simpa [direction, hv] using
+  · simpa [direction, hv] using!
       (integrable_negativeLog_norm_imag_sub w).restrict (s := Ioc s.left s.right)
 
 lemma integral_negativeLog_le (s : StarLayer) (w : ℂ) (hd : 0 ≤ s.density) :
@@ -197,11 +197,11 @@ lemma integral_negativeLog_le (s : StarLayer) (w : ℂ) (hd : 0 ≤ s.density) :
     integral_map hf.aemeasurable hg.aestronglyMeasurable]
   have hb : (∫ x in Ioc s.left s.right, negativeLog ‖(x:ℂ)*s.direction-w‖) ≤ 2 := by
     cases hv : s.vertical
-    · simpa [direction, hv] using
+    · simpa [direction, hv] using!
         setIntegral_negativeLog_norm_real_sub_le w (Ioc s.left s.right)
-    · simpa [direction, hv] using
+    · simpa [direction, hv] using!
         setIntegral_negativeLog_norm_imag_sub_le w (Ioc s.left s.right)
-  simpa only [mul_comm] using mul_le_mul_of_nonneg_left hb hd'
+  simpa only [mul_comm] using! mul_le_mul_of_nonneg_left hb hd'
 
 end StarLayer
 
@@ -334,9 +334,9 @@ lemma integrable_log_comparison_prod :
       rw [Real.norm_eq_abs, abs_of_nonneg hn]
       have hlog : Real.log (56/5+‖w‖) ≤ Real.log (112/5:ℝ) :=
         Real.log_le_log (by linarith [norm_nonneg w]) (by linarith)
-      simpa only [Real.norm_eq_abs] using
+      simpa only [Real.norm_eq_abs] using!
         (integral_abs_log_comparisonMeasure_le w).trans (add_le_add le_rfl hlog)
-  simpa only [norm_sub_rev] using h
+  simpa only [norm_sub_rev] using! h
 
 lemma integral_comparisonMeasure (f : ℂ → ℝ) (hf : Measurable f)
     (hi : Integrable f comparisonMeasure) :

@@ -70,14 +70,14 @@ theorem primeHigh_original_entry_leading (hp4 : 3 < p) (a : Fin p)
         (algebraMap ℤ_[p] ℚ_[p])) ((-2:ℤ_[p])^a.val) _ _
       (primeAugmented_high_scaled_leading hp4 a ha i j
         (primeEta (p := p) (by omega) (by omega))) l
-    simpa only [PadicInt.coe_pow,PadicInt.coe_neg,PadicInt.coe_natCast] using h
+    simpa only [PadicInt.coe_pow,PadicInt.coe_neg,PadicInt.coe_natCast] using! h
   · intro b hb l
     have h := fieldPolynomial_integral_weight_bound
       (C (p:ℚ_[p])*primeDiscContribution hp4 b T) ((-2:ℤ_[p])^b.val) _
       (primeAugmented_other_contribution_linear_bound hp4 a i j b hb) l
     have hw : ‖(C ((-2:ℚ_[p])^b.val)*(C (p:ℚ_[p])*primeDiscContribution hp4 b T)).coeff l‖ ≤
         ‖(p:ℚ_[p])‖^2 := by
-      simpa only [PadicInt.coe_pow,PadicInt.coe_neg,PadicInt.coe_natCast] using h
+      simpa only [PadicInt.coe_pow,PadicInt.coe_neg,PadicInt.coe_natCast] using! h
     exact hw.trans (pow_le_pow_of_le_one (norm_nonneg _) hn (by omega))
 
 end

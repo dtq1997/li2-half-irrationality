@@ -48,9 +48,9 @@ theorem H_concaveOn_nonpos : ConcaveOn ℝ (Set.Iic (0 : ℝ)) H := by
   refine ⟨convex_Iic 0, ?_⟩
   intro x hx y hy a b ha hb hab
   have hx' : -x ∈ Set.Ici (0 : ℝ) := by
-    simpa only [Set.mem_Ici] using (neg_nonneg.mpr hx)
+    simpa only [Set.mem_Ici] using! (neg_nonneg.mpr hx)
   have hy' : -y ∈ Set.Ici (0 : ℝ) := by
-    simpa only [Set.mem_Ici] using (neg_nonneg.mpr hy)
+    simpa only [Set.mem_Ici] using! (neg_nonneg.mpr hy)
   have h := H_convexOn_nonneg.2 hx' hy' ha hb hab
   simp only [smul_eq_mul] at h ⊢
   have he : a * -x + b * -y = -(a*x+b*y) := by ring
@@ -145,15 +145,15 @@ theorem hasDerivAt_H (u : ℝ) (hu : u ≠ 0) :
     funext y
     simp only [H, Real.log_abs]
   rw [hH]
-  simpa only [Real.log_abs] using Real.hasDerivAt_mul_log hu
+  simpa only [Real.log_abs] using! Real.hasDerivAt_mul_log hu
 
 theorem hasDerivAt_affineH (r slope c m : ℝ) (hm : r + slope*m ≠ 0) :
     HasDerivAt (fun t : ℝ => c * H (r + slope*t))
       (c * ((Real.log |r + slope*m| + 1) * slope)) m := by
   have harg : HasDerivAt (fun t : ℝ => r + slope*t) slope m := by
-    convert (hasDerivAt_const m r).add ((hasDerivAt_id m).const_mul slope) using 1
+    convert! (hasDerivAt_const m r).add ((hasDerivAt_id m).const_mul slope) using 1
     ring
-  convert ((hasDerivAt_H (r + slope*m) hm).comp m harg).const_mul c using 1
+  convert! ((hasDerivAt_H (r + slope*m) hm).comp m harg).const_mul c using 1
 
 theorem hasDerivAt_affineH_midpoint (a b r slope c : ℝ)
     (hm : r + slope*((a+b)/2) ≠ 0) :
@@ -163,7 +163,7 @@ theorem hasDerivAt_affineH_midpoint (a b r slope c : ℝ)
 
 theorem H_cross_zero {u R : ℝ} (hu : |u| ≤ R) (hR : R ≤ 1/4) :
     |H u| ≤ -R * Real.log R := by
-  simpa only [H, mulLogAbs] using mulLogAbs_cross_zero hu hR
+  simpa only [H, mulLogAbs] using! mulLogAbs_cross_zero hu hR
 
 theorem affineH_cross_zero {r slope c t R : ℝ}
     (hu : |r + slope*t| ≤ R) (hR : R ≤ 1/4) :

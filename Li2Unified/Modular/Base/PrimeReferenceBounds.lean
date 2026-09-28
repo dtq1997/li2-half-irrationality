@@ -55,14 +55,14 @@ theorem primeReferenceMatrix_GV (hp4 : 3 < p) (x y : PrimeBlockIndex p) :
       have hb : VG p (lowBlock i j) 0 :=
         primeReference_rational_VG hp4 _ (primeReference_low_den i j)
       have h := GV.C (((VG.primePow (p := p) ((i.val:ℤ)+(j.val:ℤ)-2)).mul hw).mul hb)
-      convert h using 1 <;> simp only [primeBlockWeight_low] <;> push_cast <;> ring
-    · simpa only [primeReferenceMatrix,if_neg hab] using
+      convert! h using 1 <;> simp only [primeBlockWeight_low] <;> push_cast <;> ring
+    · simpa only [primeReferenceMatrix,if_neg hab] using!
         GV.zero (p := p) (primeBlockWeight (p := p) (Sum.inl (a,i)) +
           primeBlockWeight (p := p) (Sum.inl (b,j)))
-  · simpa only [primeReferenceMatrix] using
+  · simpa only [primeReferenceMatrix] using!
       GV.zero (p := p) (primeBlockWeight (p := p) (Sum.inl (a,i)) +
         primeBlockWeight (p := p) (Sum.inr l))
-  · simpa only [primeReferenceMatrix] using
+  · simpa only [primeReferenceMatrix] using!
       GV.zero (p := p) (primeBlockWeight (p := p) (Sum.inr k) +
         primeBlockWeight (p := p) (Sum.inl (b,j)))
   · simp only [primeReferenceMatrix]
@@ -78,7 +78,7 @@ theorem primeNormalizedMatrix_GV (hp4 : 3 < p) (x y : PrimeBlockIndex p) :
       (primeBlockWeight x+primeBlockWeight y) :=
     (primeReference_entry_GV hp4 x y).mono (by linarith)
   have h := hd.add (primeReferenceMatrix_GV hp4 x y)
-  simpa only [sub_add_cancel] using h
+  simpa only [sub_add_cancel] using! h
 
 end
 end Li2

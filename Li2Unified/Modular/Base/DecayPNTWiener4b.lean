@@ -95,7 +95,7 @@ lemma bound_sum_log {C : ℝ} (hf0 : f 0 = 0) (hf : chebyWith C f) {x : ℝ} (hx
     intro x (hx : 0 < x)
     apply hh_nonneg _ hx.le
   · have := (@hh_integrable 1 (1 / (2 * π)) 1 (by positivity) (by positivity) (by positivity))
-    simpa using this.mono_set Ioi_subset_Ici_self
+    simpa using! this.mono_set Ioi_subset_Ici_self
 
 lemma bound_sum_log0 {C : ℝ} (hf : chebyWith C f) {x : ℝ} (hx : 1 ≤ x) :
     ∑' i, ‖f i‖ / i * (1 + (1 / (2 * π) * log (i / x)) ^ 2)⁻¹ ≤

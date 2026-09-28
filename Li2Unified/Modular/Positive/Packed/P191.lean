@@ -30,14 +30,14 @@ lemma log_truncation_complex_real_le (ε : ℝ) (w : ℂ) (t : ℝ) (ht : t ≠ 
   have hr : 0 < |w.re - t| := abs_pos.mpr (sub_ne_zero.mpr ht.symm)
   have hb : |w.re - t| ≤ ‖(t : ℂ) - w‖ := by
     rw [abs_sub_comm]
-    simpa only [Complex.sub_re, Complex.ofReal_re] using Complex.abs_re_le_norm ((t : ℂ) - w)
+    simpa only [Complex.sub_re, Complex.ofReal_re] using! Complex.abs_re_le_norm ((t : ℂ) - w)
   exact log_truncation_sub_antitone ε hr hb
 
 theorem integral_log_truncated_real_le (w : ℂ) {ε a b : ℝ} (hε : 0 < ε) (hab : a ≤ b) :
     (∫ t in a..b, Real.log (max ε ‖(t : ℂ) - w‖)) ≤
       (∫ t in a..b, Real.log ‖(t : ℂ) - w‖) + 2 * ε := by
   have hraw : IntervalIntegrable (fun t : ℝ => Real.log ‖(t : ℂ) - w‖) volume a b := by
-    simpa only [zero_add, mul_one] using intervalIntegrable_log_line 0 1 w a b
+    simpa only [zero_add, mul_one] using! intervalIntegrable_log_line 0 1 w a b
   have hcut : IntervalIntegrable (fun t : ℝ => Real.log (max ε ‖(t : ℂ) - w‖)) volume a b :=
     ((continuous_const.max (Complex.continuous_ofReal.sub continuous_const).norm).log
       (fun t => (lt_of_lt_of_le hε (le_max_left _ _)).ne')).intervalIntegrable a b
@@ -64,7 +64,7 @@ theorem integral_log_truncated_real_le (w : ℂ) {ε a b : ℝ} (hε : 0 < ε) (
 theorem integral_log_truncated_imag_le (w : ℂ) {ε a b : ℝ} (hε : 0 < ε) (hab : a ≤ b) :
     (∫ t in a..b, Real.log (max ε ‖(t : ℂ) * Complex.I - w‖)) ≤
       (∫ t in a..b, Real.log ‖(t : ℂ) * Complex.I - w‖) + 2 * ε := by
-  simpa only [norm_imag_sub] using integral_log_truncated_real_le (w / Complex.I) hε hab
+  simpa only [norm_imag_sub] using! integral_log_truncated_real_le (w / Complex.I) hε hab
 
 end
 end Li2Unified.ParameterFamily.Energy
@@ -89,9 +89,9 @@ private lemma layer_truncated_integral_le (s : StarLayer) (hs : s.Valid)
         Real.log ‖(x : ℂ) * s.direction - w‖) + 2 * ε := by
   have hab := s.left_le_right hs.1
   cases hv : s.vertical
-  · simpa [StarLayer.direction, hv] using
+  · simpa [StarLayer.direction, hv] using!
       integral_log_truncated_real_le w hε hab
-  · simpa [StarLayer.direction, hv] using
+  · simpa [StarLayer.direction, hv] using!
       integral_log_truncated_imag_le w hε hab
 
 private lemma layerList_truncated_sum_le (ss : List StarLayer)

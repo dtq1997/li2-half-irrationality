@@ -50,7 +50,7 @@ theorem parameter_outerWindowSum_le_valuation (lam : ℚ) (n : ℕ)
       exact_mod_cast parameter_dtilde_GV_lower lam n p hne (houter p hpI hp)
     have hl : 0 ≤ Real.log (p:ℝ) :=
       Real.log_nonneg (by exact_mod_cast hp.one_lt.le)
-    simpa [cPrime, hp] using mul_le_mul_of_nonneg_right hv hl
+    simpa [cPrime, hp] using! mul_le_mul_of_nonneg_right hv hl
   · simp [cPrime, hp]
 
 theorem outerWindowSum_eventually_lower (ε : ℝ) (hε : 0 < ε) :
@@ -137,7 +137,7 @@ theorem binomMoment_VG (p : ℕ) [Fact p.Prime] (lam : ℚ) (h1 : lam ≠ 1)
     (hratio : Li2.VG p (lam/(1-lam)) 0) (k : ℕ) :
     Li2.VG p (binomMoment lam k) 0 := by
   induction k with
-  | zero => simpa only [binomMoment_zero] using hratio
+  | zero => simpa only [binomMoment_zero] using! hratio
   | succ k ih =>
     have hden : 1-lam ≠ 0 := sub_ne_zero.mpr (Ne.symm h1)
     have he : binomMoment lam (k+1) =
@@ -147,7 +147,7 @@ theorem binomMoment_VG (p : ℕ) [Fact p.Prime] (lam : ℚ) (h1 : lam ≠ 1)
       have hs := binomMoment_succ lam h1 k
       nlinarith
     rw [he]
-    simpa only [add_zero] using
+    simpa only [add_zero] using!
       hratio.mul (ih.add (Li2.binomPoly_eval_int_VG p (k+1) 1))
 
 /-- Integer values in a finite window bound `parameterG` at every good prime. -/
@@ -161,8 +161,8 @@ theorem parameterG_VG_of_integral_ratio (p : ℕ) [Fact p.Prime]
   intro k hk
   have hk' : k ≤ d := by simp at hk; omega
   have hc := Li2.newtonCoeff_VG p 0 r k
-    (fun i hi => by simpa using hv i (hi.trans hk'))
-  simpa using hc.mul (binomMoment_VG p lam h1 hratio k)
+    (fun i hi => by simpa using! hv i (hi.trans hk'))
+  simpa using! hc.mul (binomMoment_VG p lam h1 hratio k)
 
 end
 end Li2Unified.Proofs.Arithmetic

@@ -47,7 +47,7 @@ theorem integralPolynomial_UV_division_bound
         C ((a:ℚ_[p])/(p:ℚ_[p]))*K.map (algebraMap ℤ_[p] ℚ_[p]))).coeff n‖ ≤ ‖(p:ℚ_[p])‖^m := by
   have hb := fieldPolynomial_div_prime_bound
     (((C (p:ℤ_[p])*U-C a*V)-C q*(C (p:ℤ_[p])*H-C a*K)).map (algebraMap ℤ_[p] ℚ_[p]))
-    m (fun k => by simpa only [coeff_map,norm_pow] using he k) n
+    m (fun k => by simpa only [coeff_map,norm_pow] using! he k) n
   simpa only [Polynomial.map_sub,Polynomial.map_mul,Polynomial.map_C,
     PadicInt.algebraMap_apply,PadicInt.coe_natCast,polynomial_divide_scaled_UV] using hb
 

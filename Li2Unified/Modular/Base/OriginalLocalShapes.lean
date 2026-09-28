@@ -100,7 +100,7 @@ theorem numeratorPulledValue_low (hp4 : 3 < p) (Y : ℚ_[p]) (a : Fin p)
         (primePoleV hp4 g r).eval₂ (algebraMap ℤ_[p] ℚ_[p]) Y := by
   apply numeratorPulledValue_integral_of_cleared hp4 Y (4*(p-1)) (by omega)
   · exact integralPoleMulRegular_isRestricted _ _ _ (primeDiscUnit_isRestricted _ _)
-      (PowerSeries.IsRestricted.zero 1) _
+      (PowerSeries.isRestricted_zero 1) _
   · exact original_low_integral_cleared hp4 a ha0 ha
 
 theorem numeratorPulledValue_high (hp4 : 3 < p) (Y : ℚ_[p]) (a : Fin p)
@@ -116,7 +116,7 @@ theorem numeratorPulledValue_high (hp4 : 3 < p) (Y : ℚ_[p]) (a : Fin p)
   have h := numeratorPulledValue_integral_of_cleared hp4 Y (4*(p-1)) (by omega)
     ((D (p-1))^3) a 1 _
     (integralPoleMulRegular_isRestricted _ _ _ (primeDiscUnit_isRestricted _ _)
-      (PowerSeries.IsRestricted.one 1) _) _ (original_high_integral_cleared hp4 a ha)
+      (PowerSeries.isRestricted_one 1) _) _ (original_high_integral_cleared hp4 a ha)
   simpa only [one_mul] using h
 
 theorem numeratorPulledValue_zero (hp4 : 3 < p) (Y : ℚ_[p]) :
@@ -130,7 +130,7 @@ theorem numeratorPulledValue_zero (hp4 : 3 < p) (Y : ℚ_[p]) :
   have h := numeratorPulledValue_integral_of_cleared hp4 Y (4*(p-1)) (by omega)
     ((D (p-1))^3) ⟨0,hp.out.pos⟩ ((p:ℚ_[p])^3) _
     (integralPoleMulRegular_isRestricted _ _ _ (primeDiscUnit_isRestricted _ _)
-      (PowerSeries.IsRestricted.zero 1) _) _ (original_zero_integral_cleared hp4)
+      (PowerSeries.isRestricted_zero 1) _) _ (original_zero_integral_cleared hp4)
   simpa only [Nat.cast_zero, zero_div, zero_mul, sub_zero] using h
 
 end

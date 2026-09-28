@@ -20,7 +20,7 @@ noncomputable section
 
 lemma parameterInvPow_VG_two (lam : ℚ) (hmu : Li2.VG 2 lam⁻¹ 1) (m : ℕ) :
     Li2.VG 2 (lam⁻¹^m) (m:ℚ) := by
-  simpa using hmu.pow m
+  simpa using! hmu.pow m
 
 lemma parameterCst_VG_two (lam : ℚ) (hmu : Li2.VG 2 lam⁻¹ 1)
     {K N : ℕ} (hKN : K ≤ N) :
@@ -118,7 +118,7 @@ lemma parameterTailC_VG_two (lam : ℚ) (h1 : lam ≠ 1)
       have : ((4*n+1 : ℕ) : ℚ) ≤ m := by exact_mod_cast hm1
       push_cast at this ⊢
       linarith
-    simpa only [zero_add] using hres.mul hin
+    simpa only [zero_add] using! hres.mul hin
 
 section LocalBounds
 variable {n : ℕ} (hn : 1 ≤ n)
@@ -131,9 +131,9 @@ lemma parameterBhat_GV_two (lam : ℚ) (hmu : Li2.VG 2 lam⁻¹ 1)
   letI : Fact (Nat.Prime 2) := ⟨Nat.prime_two⟩
   have hL := Li2.L_nonneg hn
   have e1 : Li2.VG 2 (Li2.eps (4*n) m 1) (-(1:ℚ) * L) := by
-    simpa using Li2.eps_VG 2 (N := 7*n-2) hm (by omega) (k := 1) (by norm_num)
+    simpa using! Li2.eps_VG 2 (N := 7*n-2) hm (by omega) (k := 1) (by norm_num)
   have e2 : Li2.VG 2 (Li2.eps (4*n) m 2) (-(2:ℚ) * L) := by
-    simpa using Li2.eps_VG 2 (N := 7*n-2) hm (by omega) (k := 2) le_rfl
+    simpa using! Li2.eps_VG 2 (N := 7*n-2) hm (by omega) (k := 2) le_rfl
   have hC : Li2.VG 2 (parameterCst lam (4*n)) (-2 * L) :=
     parameterCst_VG_two lam hmu (by omega)
   have hm' := Li2.VG.natCast (p := 2) m
@@ -146,10 +146,10 @@ lemma parameterBhat_GV_two (lam : ℚ) (hmu : Li2.VG 2 lam⁻¹ 1)
   have t3 : Li2.VG 2 ((m:ℚ) * (Li2.eps (4*n) m 1 ^ 2 - Li2.eps (4*n) m 2))
       (-2 * L) := by
     have h := hm'.mul (t2.sub e2)
-    simpa using h
+    simpa using! h
   have t4 : Li2.VG 2 ((m:ℚ) * parameterCst lam (4*n)) (-2 * L) := by
     have h := hm'.mul hC
-    simpa using h
+    simpa using! h
   have tX : Li2.GV 2 (C (m:ℚ) * X) (-2 * L) :=
     (Li2.GV.mul (Li2.GV.C hm') Li2.GV.X).mono (by linarith)
   interval_cases t
@@ -162,7 +162,7 @@ lemma parameterBhat_GV_two (lam : ℚ) (hmu : Li2.VG 2 lam⁻¹ 1)
   · have g : Li2.GV 2 (parameterBhat lam (4*n) m 1) (-1 * L) := by
       simp only [parameterBhat]
       exact Li2.GV.C (((Li2.VG.one (p := 2)).neg.mono (by linarith)).sub
-        (by simpa using hm'.mul e1))
+        (by simpa using! hm'.mul e1))
     convert g using 2
     push_cast
     ring
@@ -211,12 +211,12 @@ lemma parameterWm_GV_two (lam : ℚ) (h1 : lam ≠ 1)
     have h1' := Li2.shiftBinom_eval_int 2 n 0
     have h2 := Li2.binomPoly_eval_int_VG 2 a 0
     simp only [Int.cast_zero] at h1' h2
-    simpa [Li2.ωw, parameterWm] using (h1'.pow 3).mul h2
+    simpa [Li2.ωw, parameterWm] using! (h1'.pow 3).mul h2
   · apply Li2.GV.C
     have hj := Li2.binom_JGV 2 a (Li2.nodeOf n μ)
       (Li2.log_le_L hn (d := a) (by have := a.isLt; omega))
-    simpa [Li2.ωw, parameterWm] using hj s.val (by omega)
-  · simpa [Li2.ωw, parameterWm] using
+    simpa [Li2.ωw, parameterWm] using! hj s.val (by omega)
+  · simpa [Li2.ωw, parameterWm] using!
       Li2.GV.C (parameterTailC_VG_two lam h1 hratio hmu hn a b' a.isLt b'.isLt)
 
 lemma parameterCmat_GV_two (lam : ℚ) (hmu : Li2.VG 2 lam⁻¹ 1)
@@ -228,7 +228,7 @@ lemma parameterCmat_GV_two (lam : ℚ) (hmu : Li2.VG 2 lam⁻¹ 1)
   · apply Li2.GV.C
     have h2 := Li2.binomPoly_eval_int_VG 2 b 0
     simp only [Int.cast_zero] at h2
-    simpa [Li2.κw, parameterCmat] using h2.neg
+    simpa [Li2.κw, parameterCmat] using! h2.neg
   · have hm : Li2.nodeOf n μ ∈ Finset.Icc 1 (4*n) := by
       simp only [Li2.nodeOf, Finset.mem_Icc]
       have := μ.isLt
@@ -312,13 +312,13 @@ theorem posHalf_Qtilde_GV_two (n : ℕ) (hn : 1 ≤ n) :
     rw [he]
     right
     have hv : padicValRat 2 (2:ℚ) = 1 := by
-      simpa using (padicValRat.self (p := 2) (by decide))
+      simpa using! (padicValRat.self (p := 2) (by decide))
     rw [hv]
     norm_num
   have hratio : Li2.VG 2 (lambda/(1-lambda)) 0 := by
     convert Li2.VG.one (p := 2) using 1
     norm_num [lambda]
-  simpa only [Instances.PosHalf.Qtilde] using
+  simpa only [Instances.PosHalf.Qtilde] using!
     parameterQtilde_GV_two hn lambda lambda_nonzero lambda_ne_one hratio hmu
 
 /-- The primitive scale pays at least the 2-adic ranked-slot valuation. -/
@@ -328,13 +328,13 @@ theorem posHalf_dtilde_two_lower (n : ℕ) (hn : 1 ≤ n)
       (-padicValRat 2 (dtilde lambda n) : ℚ) := by
   letI : Fact (Nat.Prime 2) := ⟨Nat.prime_two⟩
   obtain ⟨k, hk0, hkval, _⟩ :=
-    Qtilde_coeff_valuation_minimum lambda 2 (by simpa only [Instances.PosHalf.Qtilde] using hne)
+    Qtilde_coeff_valuation_minimum lambda 2 (by simpa only [Instances.PosHalf.Qtilde] using! hne)
   have hcoeff := (posHalf_Qtilde_GV_two n hn) k
   change Li2.VG 2 ((ParameterFamily.Qtilde lambda n).coeff k) _ at hcoeff
   rcases hcoeff with hzero | hbound
   · exact (hk0 hzero).elim
   · rw [hkval] at hbound
-    simpa only [Li2.PrimeSums.twoAdicLowerBound] using hbound
+    simpa only [Li2.PrimeSums.twoAdicLowerBound] using! hbound
 
 /-- The exact positive-half 2-adic content estimate, before the Stage0 wrapper. -/
 theorem posHalf_two_adic_content_raw :
@@ -346,7 +346,7 @@ theorem posHalf_two_adic_content_raw :
   have hlim : Tendsto
       (fun n : ℕ => ((Li2.PrimeSums.twoAdicLowerBound n : ℝ) * Real.log 2) /
         (n:ℝ)^2) atTop (𝓝 ((8/3:ℝ)*Real.log 2)) := by
-    simpa only [div_mul_eq_mul_div] using
+    simpa only [div_mul_eq_mul_div] using!
       (Li2.PrimeSums.twoAdicLowerBound_tendsto.mul_const (Real.log 2))
   have hlt : ((8/3:ℝ)*Real.log 2-ε) < ((8/3:ℝ)*Real.log 2) :=
     sub_lt_self _ hε
@@ -393,28 +393,28 @@ lemma parameter_factorial_val_zero (p m : ℕ) [Fact p.Prime] (hm : m < p) :
     padicValRat p ((m.factorial : ℚ)) = 0 := by
   rw [padicValRat.of_nat]
   have h := padicValNat_factorial_mul_add (p := p) (m := 0) hm
-  simpa using h
+  simpa using! h
 
 lemma parameter_factorial_inv_VG (p m : ℕ) [Fact p.Prime] (hm : m < p) :
     Li2.VG p ((m.factorial : ℚ)⁻¹) 0 := by
   have hfac : (m.factorial : ℚ) ≠ 0 := by exact_mod_cast Nat.factorial_ne_zero m
-  simpa using (Li2.VG.inv (p := p) (r := 0) hfac
+  simpa using! (Li2.VG.inv (p := p) (r := 0) hfac
     (by simp [parameter_factorial_val_zero p m hm]))
 
 lemma parameter_descPochhammer_GV (p m : ℕ) [Fact p.Prime] :
     Li2.GV p (descPochhammer ℚ m) 0 := by
   induction m with
-  | zero => simpa using Li2.GV.C (p := p) Li2.VG.one
+  | zero => simpa using! Li2.GV.C (p := p) Li2.VG.one
   | succ m ih =>
       rw [descPochhammer_succ_right]
       have hlinear : Li2.GV p (X - C (m:ℚ)) 0 :=
         Li2.GV.X.sub (Li2.GV.C (Li2.VG.natCast m))
-      simpa using ih.mul hlinear
+      simpa using! ih.mul hlinear
 
 lemma parameter_binomPoly_GV (p m : ℕ) [Fact p.Prime] (hm : m < p) :
     Li2.GV p (Li2.binomPoly m) 0 := by
   rw [Li2.binomPoly]
-  simpa using (Li2.GV.C_mul (parameter_factorial_inv_VG p m hm)
+  simpa using! (Li2.GV.C_mul (parameter_factorial_inv_VG p m hm)
     (parameter_descPochhammer_GV p m))
 
 lemma parameter_D_GV (p m : ℕ) [Fact p.Prime] :
@@ -424,7 +424,7 @@ lemma parameter_D_GV (p m : ℕ) [Fact p.Prime] :
     (r := fun _ : ℕ => (0:ℚ)) (fun j _ =>
       (Li2.GV.X.add (Li2.GV.C (Li2.VG.natCast j)) :
         Li2.GV p (X + C (j:ℚ)) 0))
-  simpa using h
+  simpa using! h
 
 lemma parameter_Sn_GV_large (p n : ℕ) [Fact p.Prime] (hpn : 4*n < p) :
     Li2.VG p (Li2.Sn n) 0 := by
@@ -432,7 +432,7 @@ lemma parameter_Sn_GV_large (p n : ℕ) [Fact p.Prime] (hpn : 4*n < p) :
   rw [Li2.Sn, div_eq_mul_inv, ← inv_pow]
   have hnum : Li2.VG p (((4*n).factorial : ℚ)) 0 := Li2.VG.natCast _
   have hden := (parameter_factorial_inv_VG p n hn).pow 3
-  simpa using hnum.mul hden
+  simpa using! hnum.mul hden
 
 /-- Every coefficient of the actual binomial Gram numerator is p-integral
 when p exceeds all poles. -/
@@ -446,7 +446,7 @@ theorem parameter_gramNum_GV_large (p n a b : ℕ) [Fact p.Prime]
     ((parameter_D_GV p n).pow 3)).mul
       (parameter_binomPoly_GV p a hap)).mul
       (parameter_binomPoly_GV p b hbp)
-  simpa using h
+  simpa using! h
 
 end
 end Li2Unified.Proofs.Arithmetic
@@ -469,7 +469,7 @@ private def pIntegralSubmodule (p : ℕ) [Fact p.Prime] : Submodule ℤ ℚ wher
   smul_mem' := by
     intro c q hq
     change Li2.VG p ((c:ℚ)*q) 0
-    simpa using (Li2.VG.intCast (p := p) c).mul hq
+    simpa using! (Li2.VG.intCast (p := p) c).mul hq
 
 /-- Polynomial long division by a monic polynomial preserves p-integral
 coefficients. This is the coefficient-level algebra, independent of the Li2
@@ -485,10 +485,10 @@ theorem parameter_GV_divByMonic (p : ℕ) [Fact p.Prime]
     apply Submodule.mul_le.mpr
     intro a ha b hb
     dsimp [M, pIntegralSubmodule] at ha hb ⊢
-    simpa using (ha.mul hb)
+    simpa using! (ha.mul hb)
   have hMpow (k : ℕ) : M^k ≤ M := by
     induction k with
-    | zero => simpa using (Submodule.one_le.mpr hOne)
+    | zero => simpa using! (Submodule.one_le.mpr hOne)
     | succ k ih =>
         rw [pow_succ]
         exact le_trans (mul_le_mul' ih le_rfl) hMmul

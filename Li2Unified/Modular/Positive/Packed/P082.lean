@@ -93,7 +93,7 @@ theorem plainRightIntegral_diagonal_tendsto_zero (d : ℕ) (F : ℚ[X]) :
   have hlim : Tendsto (fun N : ℕ =>
       (C * 2 ^ k) * ((1 + (N : ℝ)) ^ (k + 1) * (1 / 2 : ℝ) ^ N))
       atTop (𝓝 0) := by
-    simpa only [mul_zero] using hdecay.const_mul (C * 2 ^ k)
+    simpa only [mul_zero] using! hdecay.const_mul (C * 2 ^ k)
   apply squeeze_zero_norm' _ hlim
   filter_upwards [] with N
   have hN : 0 ≤ (N : ℝ) := Nat.cast_nonneg N
@@ -155,7 +155,7 @@ theorem three_arm_derivative_diagonal_limit (d : ℕ) (F : ℚ[X]) :
   have herror : Tendsto (fun N : ℕ =>
       lowerBottomIntegral d F N (N : ℝ) +
         Complex.I * plainRightIntegral d F N (N : ℝ)) atTop (𝓝 0) := by
-    simpa only [mul_zero, add_zero] using hlower.add (tendsto_const_nhds.mul hright)
+    simpa only [mul_zero, add_zero] using! hlower.add (tendsto_const_nhds.mul hright)
   have hsum := hupper.add herror
   have hrewritten : Tendsto (fun N : ℕ =>
       (upperBottomIntegral d F N (N : ℝ) -
@@ -163,7 +163,7 @@ theorem three_arm_derivative_diagonal_limit (d : ℕ) (F : ℚ[X]) :
       (lowerBottomIntegral d F N (N : ℝ) +
         Complex.I * plainRightIntegral d F N (N : ℝ))) atTop
       (𝓝 ((numeratorFunctional lambda d F).eval₂ (Rat.castHom ℂ) (value : ℂ))) := by
-    simpa only [add_zero] using hsum
+    simpa only [add_zero] using! hsum
   apply (tendsto_congr' _).mpr hrewritten
   filter_upwards [eventually_ge_atTop (1 : ℕ)] with N hN
   have hNR : (0 : ℝ) < (N : ℝ) := by exact_mod_cast (lt_of_lt_of_le Nat.zero_lt_one hN)
@@ -187,7 +187,7 @@ open Li2Unified.Stage0.HalfAnalytic
 lemma power_hasDerivAt (z : ℂ) :
     HasDerivAt power ((Real.log (1 / 2 : ℝ) : ℂ) * power z) z := by
   have h := ((hasDerivAt_id z).const_mul (Real.log (1 / 2 : ℝ) : ℂ)).cexp
-  convert h using 1 <;> simp only [power, id_eq, mul_one] <;> ring
+  convert! h using 1 <;> simp only [power, id_eq, mul_one] <;> ring
 
 lemma power_deriv (z : ℂ) :
     deriv power z = -(Real.log 2 : ℂ) * power z := by
@@ -212,18 +212,18 @@ theorem ray_finite_ibp (d : ℕ) (F : ℚ[X]) (N : ℕ) :
     dsimp [a] at hx'
     linarith
   have hcast (x : ℝ) : HasDerivAt (fun t : ℝ => (t : ℂ)) (1 : ℂ) x := by
-    simpa only [Complex.ofRealCLM_apply, Complex.ofReal_one] using
+    simpa only [Complex.ofRealCLM_apply, Complex.ofReal_one] using!
       (Complex.ofRealCLM.hasDerivAt (x := x))
   let u : ℝ → ℂ := fun x => power (x : ℂ)
   let v : ℝ → ℂ := fun x => Li2.originalContourG d F (x : ℂ)
   let u' : ℝ → ℂ := fun x => deriv power (x : ℂ)
   let v' : ℝ → ℂ := fun x => deriv (Li2.originalContourG d F) (x : ℂ)
   have hu (x : ℝ) : HasDerivAt u (u' x) x := by
-    simpa only [u, u', Function.comp_apply, mul_one] using
+    simpa only [u, u', Function.comp_apply, mul_one] using!
       ((power_hasDerivAt (x : ℂ)).differentiableAt.hasDerivAt.comp x (hcast x))
   have hv (x : ℝ) (hx : x ∈ Icc a b) : HasDerivAt v (v' x) x := by
-    have hz : 0 < (x : ℂ).re := by simpa using hpos x hx
-    simpa only [v, v', Function.comp_apply, mul_one] using
+    have hz : 0 < (x : ℂ).re := by simpa using! hpos x hx
+    simpa only [v, v', Function.comp_apply, mul_one] using!
       ((Li2.analyticAt_originalContourG d F hz).differentiableAt.hasDerivAt.comp
         x (hcast x))
   have hu' : IntervalIntegrable u' volume a b := by
@@ -235,13 +235,13 @@ theorem ray_finite_ibp (d : ℕ) (F : ℚ[X]) (N : ℕ) :
   have hv' : IntervalIntegrable v' volume a b := by
     apply ContinuousOn.intervalIntegrable_of_Icc hab
     intro x hx
-    have hz : 0 < (x : ℂ).re := by simpa using hpos x hx
+    have hz : 0 < (x : ℂ).re := by simpa using! hpos x hx
     exact ((Li2.analyticAt_originalContourG_deriv d F hz).continuousAt.comp
       (f := fun t : ℝ => (t : ℂ)) Complex.continuous_ofReal.continuousAt).continuousWithinAt
   have h := intervalIntegral.integral_mul_deriv_eq_deriv_mul
     (a := a) (b := b) (u := u) (v := v) (u' := u') (v' := v')
     (fun x hx => hu x)
-    (fun x hx => hv x (by simpa only [uIcc_of_le hab] using hx)) hu' hv'
+    (fun x hx => hv x (by simpa only [uIcc_of_le hab] using! hx)) hu' hv'
   change plainRealIntegral d F N = _
   dsimp only [u, v, u', v'] at h
   have hr : (∫ x in a..b, deriv power (x : ℂ) *
@@ -278,7 +278,7 @@ theorem ray_finite_ibp (d : ℕ) (F : ℚ[X]) (N : ℕ) :
           power (a : ℂ) * Li2.originalContourG d F (a : ℂ) - w) hr
       _ = _ := by ring
   have hhalf : (((1 / 2 : ℝ) : ℂ)) = (1 / 2 : ℂ) := by norm_num
-  simpa only [a, b, plainRealIntegral, plainIntegrand, hhalf] using h'
+  simpa only [a, b, plainRealIntegral, plainIntegrand, hhalf] using! h'
 
 end
 end Li2Unified.Proofs.Contour

@@ -159,7 +159,7 @@ theorem convex_affine_upper {f : ℝ → ℝ} {a b x alpha beta m : ℝ}
     apply (div_eq_iff (sub_ne_zero.mpr hab.ne')).2
     ring
   rw [hq] at h
-  convert h using 1 <;> ring
+  convert! h using 1 <;> ring
 
 /-- A slope interval permits an arbitrary rational slope in the tangent certificate. -/
 theorem tangent_affine_upper {f : ℝ → ℝ} {s : Set ℝ}
@@ -308,7 +308,7 @@ theorem checkTangent_sound {steps : List Step} {p : Prepared}
     constructor <;> linarith [hx.1, hx.2]
   have h := tangent_affine_upper (concaveGuard_sound hg) hmem hx
     hdiff hpoint.2 hder.1 hder.2 hr huR
-  simpa only [hmid] using h
+  simpa only [hmid] using! h
 
 end
 end Li2Unified.Proofs.Potential.CompactAffine
@@ -387,7 +387,7 @@ theorem checkCross_sound {t : Term} {a b alpha beta outer kU rho : QPair}
         hku, hku0, hku1, hrho, hrho0, hrho1, heq, hlogvalid,
         _hloghi, halo, hahi, hblo, hbhi, hupperleft, hupperright⟩ := hcheck
       have hterm : qValid c = true ∧ qValid shift = true := by
-        simpa only [validTerm, Bool.and_eq_true] using ht
+        simpa only [validTerm, Bool.and_eq_true] using! ht
       obtain ⟨hc, hs⟩ := hterm
       let logBound := KernelReflectionSelf.anchoredLogBounds k kU rho
       let upper := qMul (qAbs c) (qNeg (qMul outer logBound.lo))

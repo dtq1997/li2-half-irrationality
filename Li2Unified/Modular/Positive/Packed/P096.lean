@@ -44,13 +44,12 @@ theorem star_vandermonde_norm_sq_scale (h n : ℕ)
     rw [← Fin.sum_univ_eq_sum_range] at hs
     exact hs
   have hsquare := congrArg (fun z : ℂ => ‖z‖ ^ 2) hd
-  dsimp only at hsquare
   rw [norm_mul, norm_pow, mul_pow, ← pow_mul, hcount] at hsquare
   have hnorm : ‖(n : ℂ)‖ = (n : ℝ) := by simp
   rw [hnorm] at hsquare
   change ‖((Matrix.vandermonde (fun i : Fin h => (n : ℂ) * x i)).transpose).det‖ ^ 2 =
     (n : ℝ) ^ (h * (h - 1)) * ‖((Matrix.vandermonde x).transpose).det‖ ^ 2
-  simpa only [Matrix.det_transpose] using hsquare
+  simpa only [Matrix.det_transpose] using! hsquare
 
 theorem star_vandermonde_point_scale (n : ℕ) (hn : 1 ≤ n)
     (v : Fin (2 * n) → Fin 3 × ℝ) :

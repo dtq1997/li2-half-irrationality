@@ -193,15 +193,15 @@ theorem normScale_val (p : ℕ) [hp : Fact p.Prime] {n : ℕ} (hK : 4*n < p^2) :
   have hf : ∀ m : ℕ, (m.factorial : ℚ) ≠ 0 := fun m => by positivity
   have hS : Sn n ≠ 0 := (Sn_pos n).ne'
   have hF : Fn n ≠ 0 := (Fn_pos n).ne'
-  rw [padicValRat.div (pow_ne_zero _ hS) hF, padicValRat.pow hS, Sn,
-    padicValRat.div (hf _) (pow_ne_zero _ (hf _)), padicValRat.pow (hf _),
+  rw [padicValRat.div (pow_ne_zero _ hS) hF, padicValRat.pow, Sn,
+    padicValRat.div (hf _) (pow_ne_zero _ (hf _)), padicValRat.pow,
     padicValRat_factorial_small p hK, padicValRat_factorial_small p (by omega : n < p^2)]
   have hFv : padicValRat p (Fn n) = 2 * ∑ i ∈ Finset.range (2*n), ((i/p : ℕ) : ℤ) := by
     unfold Fn
     rw [padicValRat_prod_range p _ (fun i => pow_ne_zero _ (hf i)), Finset.mul_sum]
     apply Finset.sum_congr rfl
     intro i hi
-    rw [padicValRat.pow (hf i), padicValRat_factorial_small p (by
+    rw [padicValRat.pow, padicValRat_factorial_small p (by
       have := Finset.mem_range.mp hi; omega)]
     ring
   rw [hFv, normVal]

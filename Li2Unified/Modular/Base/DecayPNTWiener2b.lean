@@ -53,7 +53,7 @@ lemma log_mul_add_isBigO_log {a : ℝ} (ha : 0 < a) (b : ℝ) :
 
 lemma isBigO_log_mul_add {a : ℝ} (ha : 0 < a) (b : ℝ) :
     Real.log =O[atTop] (fun x => Real.log (a * x + b)) := by
-  convert (log_mul_add_isBigO_log (b := -b / a) (inv_pos.mpr ha)).comp_tendsto
+  convert! (log_mul_add_isBigO_log (b := -b / a) (inv_pos.mpr ha)).comp_tendsto
     (tendsto_mul_add_atTop (b := b) ha) using 1
   ext x
   simp only [Function.comp_apply]
@@ -136,7 +136,7 @@ lemma nnabla_mul_log_sq (a : ℝ) {b : ℝ} (hb : 0 < b) :
     filter_upwards [eventually_ge_atTop 1] with x hx using by field_simp
   have l5 : (fun n ↦ n * (Real.log n * (1 / n))) =O[atTop] (fun n ↦ (Real.log n) ^ 2) :=
     e2.trans_isBigO
-      (by simpa using (isLittleO_mul_add_sq 1 0).isBigO.comp_tendsto Real.tendsto_log_atTop)
+      (by simpa using! (isLittleO_mul_add_sq 1 0).isBigO.comp_tendsto Real.tendsto_log_atTop)
 
   simp_rw [l1, _root_.sq_sub_sq]
   exact ((l2.add l3).add (isBigO_refl (·) atTop |>.mul (l4.mul (nabla_log hb)) |>.trans l5))
@@ -199,7 +199,7 @@ lemma nnabla_bound_aux {x : ℝ} (hx : 0 < x) :
     gcongr
 
   have l6 : (fun n => d (n + 1) - d n) =O[atTop] (fun n => (Real.log n) ^ 2) := by
-    simpa [d, nabla] using (nnabla_mul_log_sq ((2 * π) ^ 2) hx)
+    simpa [d, nabla] using! (nnabla_mul_log_sq ((2 * π) ^ 2) hx)
 
   apply EventuallyEq.trans_isBigO l1
 

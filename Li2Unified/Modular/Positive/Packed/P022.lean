@@ -81,10 +81,10 @@ theorem generalPoleDiscFieldUV_scaled_coeff_bound (a : Fin p)
   let u : ℚ_[p] := ((U.comp G).map (algebraMap ℤ_[p] ℚ_[p])).coeff k
   let v : ℚ_[p] := ((V.comp G).map (algebraMap ℤ_[p] ℚ_[p])).coeff k
   have hu : ‖u‖ ≤ B := by
-    simpa only [u, coeff_map, PadicInt.norm_def] using
+    simpa only [u, coeff_map, PadicInt.norm_def] using!
       (integralPolynomial_comp_coeff_bound U G B hB hU k)
   have hv : ‖v‖ ≤ B := by
-    simpa only [v, coeff_map, PadicInt.norm_def] using
+    simpa only [v, coeff_map, PadicInt.norm_def] using!
       (integralPolynomial_comp_coeff_bound V G B hB hV k)
   have hp0 : (p : ℚ_[p]) ≠ 0 := by exact_mod_cast (Fact.out : p.Prime).ne_zero
   have hpNorm : ‖(p : ℚ_[p])‖ ≤ 1 := by

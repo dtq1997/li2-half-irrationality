@@ -102,7 +102,7 @@ theorem ray_ratio_exp_bound (n : ℕ) (hn : 1 ≤ n)
     simp [one_div, Real.log_inv]
   have hlow : -Real.log 2 ≤ Real.log t := by
     rw [← hhalf]
-    exact Real.log_le_log (by norm_num) (by simpa only [t] using ht)
+    exact Real.log_le_log (by norm_num) (by simpa only [t] using! ht)
   have hscalar : Real.log A - Real.log 2 * t ≤
       (n : ℝ) * Vray x + 2 * Real.log (n : ℝ) +
         3 * Real.log (1 + x) + 4 * Real.log 2 - 7 / 4 := by
@@ -113,7 +113,7 @@ theorem ray_ratio_exp_bound (n : ℕ) (hn : 1 ≤ n)
   rw [show Real.log A - Real.log 2 * t =
       Real.log A + -(Real.log 2 * t) by ring,
     Real.exp_add, Real.exp_log hA] at he
-  simpa [t, A, mul_comm, mul_left_comm, mul_assoc, div_eq_mul_inv] using he
+  simpa [t, A, mul_comm, mul_left_comm, mul_assoc, div_eq_mul_inv] using! he
 
 end
 end Li2Unified.Proofs.Contour

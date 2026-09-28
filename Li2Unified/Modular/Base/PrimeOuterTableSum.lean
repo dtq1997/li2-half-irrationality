@@ -56,7 +56,7 @@ theorem outerWindowLeadingSum_nat_tendsto :
       affineSum_nat_tendsto (outerWindowAlpha i) (outerWindowBeta i)
         (outerWindowLeft_pos i) (outerWindowLeft_le_right i))
   rw [outerWindowMass_eq] at h
-  simpa only [outerWindowLeadingSum, Finset.sum_div] using h
+  simpa only [outerWindowLeadingSum, Finset.sum_div] using! h
 
 theorem outerWindowCorrection_linear_tendsto :
     Tendsto (fun n : ℕ => outerWindowCorrection (n : ℝ)/(n : ℝ))
@@ -70,19 +70,19 @@ theorem outerWindowCorrection_linear_tendsto :
       (logSum_scaled_nat_tendsto (outerWindowLeft_pos i)
         (outerWindowLeft_le_right i)).const_mul (outerWindowGamma i))
   rw [outerWindowCorrectionMass_eq] at h
-  simpa only [outerWindowCorrection, Finset.sum_div, mul_div_assoc] using h
+  simpa only [outerWindowCorrection, Finset.sum_div, mul_div_assoc] using! h
 
 theorem outerWindowCorrection_square_tendsto_zero :
     Tendsto (fun n : ℕ => outerWindowCorrection (n : ℝ)/(n : ℝ)^2)
       atTop (𝓝 (0 : ℝ)) := by
   have h := outerWindowCorrection_linear_tendsto.div_atTop
     (tendsto_natCast_atTop_atTop : Tendsto (fun n : ℕ => (n : ℝ)) atTop atTop)
-  simpa only [div_div, pow_two] using h
+  simpa only [div_div, pow_two] using! h
 
 theorem outerWindowSum_nat_tendsto :
     Tendsto (fun n : ℕ => outerWindowSum (n : ℝ)/(n : ℝ)^2)
       atTop (𝓝 (7/2 : ℝ)) := by
-  simpa only [outerWindowSum, add_div, add_zero] using
+  simpa only [outerWindowSum, add_div, add_zero] using!
     outerWindowLeadingSum_nat_tendsto.add outerWindowCorrection_square_tendsto_zero
 
 def mediumOuterWindowSum (x : ℝ) : ℝ := mediumWindowSum x + outerWindowSum x
@@ -93,7 +93,7 @@ theorem mediumOuterWindowSum_nat_tendsto :
   have h := mediumWindowSum_nat_tendsto.add outerWindowSum_nat_tendsto
   have hmass : (-611741/356400 : ℝ)+7/2 = 635659/356400 := by norm_num
   rw [hmass] at h
-  simpa only [mediumOuterWindowSum, add_div] using h
+  simpa only [mediumOuterWindowSum, add_div] using! h
 
 end
 end Li2.PrimeSums

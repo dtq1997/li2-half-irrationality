@@ -104,7 +104,7 @@ def generalNonmatchingConstant (n : ℕ) (a : Fin p) : ℤ_[p] :=
 
 theorem generalNonmatchingQuotient_restricted (n : ℕ) (a : Fin p) :
     PowerSeries.IsRestricted 1 (generalNonmatchingQuotient n a) := by
-  exact PowerSeries.IsRestricted.mul 1
+  exact PowerSeries.isRestricted.mul 1
     (Li2.restricted_pow _ (Li2.polynomial_isRestricted _) 3)
     (Li2.nonmatchingDiscInverse_isRestricted a.val (4 * n) a.isLt)
 

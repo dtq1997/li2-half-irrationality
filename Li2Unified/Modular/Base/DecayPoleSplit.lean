@@ -101,7 +101,7 @@ lemma poleNode_VG (p : ℕ) [Fact p.Prime] {j m N : ℕ} (hjm : j ≠ m)
     rw [← inv_pow]; exact_mod_cast h2.pow 2
   have hpow : VG p ((-2:ℚ)^m) ((m:ℚ) * (padicValRat p (-2) : ℚ)) := by
     right
-    rw [padicValRat.pow (by norm_num)]
+    rw [padicValRat.pow]
     push_cast; rfl
   refine (((VG.natCast (p := p) j).mul hpow).mul h3).mono ?_
   linarith

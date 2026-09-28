@@ -73,7 +73,7 @@ theorem starLayer_angular_integral (s : StarLayer) (f : ℂ → ℝ) :
       starLayerCurve s θ =
         (((s.right - s.left) / (2 * Real.pi) * θ + s.left : ℝ) : ℂ) *
           s.direction :=
-    starLayerCurve_on s (by simpa only [uIcc_of_le hT] using hθ)
+    starLayerCurve_on s (by simpa only [uIcc_of_le hT] using! hθ)
   calc
     (∫ θ in (0 : ℝ)..2 * Real.pi,
       starLayerAngularDensity s * f (starLayerCurve s θ)) =
@@ -140,7 +140,7 @@ lemma integral_gaussian_sub {b : ℝ} (c : ℝ) :
 lemma integrable_gaussian_sub {b : ℝ} (hb : 0 < b) (c : ℝ) :
     Integrable (fun x : ℝ => Real.exp (-b * (x - c) ^ 2)) := by
   have := (integrable_exp_neg_mul_sq hb).comp_sub_right c
-  simpa using this
+  simpa using! this
 
 /-- Completing the square in one variable. -/
 lemma sq_add_sq_eq (a b x : ℝ) :

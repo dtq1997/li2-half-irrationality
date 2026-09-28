@@ -63,10 +63,10 @@ theorem integrable_log_pair_product {s t : StarLayer}
         · exact (integrable_log_comparisonMeasure w).abs
       have hlog : Real.log (56/5+‖w‖) ≤ Real.log (112/5:ℝ) :=
         Real.log_le_log (by linarith [norm_nonneg w]) (by linarith)
-      simpa only [Real.norm_eq_abs] using
+      simpa only [Real.norm_eq_abs] using!
         hbound.trans ((integral_abs_log_comparisonMeasure_le w).trans
           (add_le_add le_rfl hlog))
-  simpa only [norm_sub_rev] using hi
+  simpa only [norm_sub_rev] using! hi
 
 theorem pair_product_eq_interval {s t : StarLayer}
     (hs : s ∈ layerData) (ht : t ∈ layerData) :

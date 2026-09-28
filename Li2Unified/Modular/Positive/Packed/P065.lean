@@ -31,7 +31,7 @@ theorem parameterTop_fixed_entry_leading (lam : ℚ) (hlam : |(lam:ℝ)| < 1)
     intro k
     by_cases hk : k=0
     · subst k
-      simpa using parameterTopLeadingSum_norm (p := p) lam hu hone hferm hp4
+      simpa using! parameterTopLeadingSum_norm (p := p) lam hu hone hferm hp4
     · simp [coeff_C,hk]
   have hnew := fieldPolynomial_prime_power_bound
     (C (parameterTopLeadingSum (p := p) lam-((fixedCornerBlock lam 5 5:ℚ):ℚ_[p]))) 4 1 hc n
@@ -76,12 +76,12 @@ theorem parameterTop_block_scaled_GV (lam : ℚ) (hlam : |(lam:ℝ)| < 1)
       (primeProduct p*primeProduct p).map (Int.castRingHom ℚ)))
     (fixedCornerBlock lam 5 5) 4 (by
       intro n
-      simpa only [Rat.cast_div, Rat.cast_neg, Rat.cast_ofNat] using
+      simpa only [Rat.cast_div, Rat.cast_neg, Rat.cast_ofNat] using!
         parameterTop_fixed_entry_leading lam hlam hu hone hferm hp4 n)
   rw [show primeBlockWeight (p := p) (Sum.inr 5) = (1/2:ℚ) from rfl]
   norm_num only [show (1/2:ℚ)+(1/2:ℚ)+1 = 2 by norm_num]
   simpa only [neg_div, show ((4:ℕ):ℤ)-3 = 1 by norm_num, zpow_one,
-    show ((4:ℕ):ℚ)-2 = 2 by norm_num] using h
+    show ((4:ℕ):ℚ)-2 = 2 by norm_num] using! h
 
 
 end
@@ -135,7 +135,7 @@ lemma parameterEntryReference_GV_swap (lam : ℚ) (hlam : |(lam:ℝ)| < 1)
     GV p (parameterNormalizedMatrix lam hp4 y x-parameterEntryReferenceMatrix lam p y x)
       (primeBlockWeight y+primeBlockWeight x+δ) := by
   rw [parameterNormalizedMatrix_symm lam hp4 y x,parameterEntryReferenceMatrix_symm lam y x]
-  simpa only [add_comm] using h
+  simpa only [add_comm] using! h
 
 lemma parameterEntryReference_high_cross_zero (lam : ℚ) (ell m : Fin 3) (hem : ell ≠ m) :
     fixedCornerBlock lam (primeHighEdgeSlot ell) (primeHighEdgeSlot m) = 0 := by
@@ -156,9 +156,9 @@ theorem parameterEntryReference_low_GV (lam : ℚ) (hlam : |(lam:ℝ)| < 1)
         primeBlockWeight (p := p) (Sum.inl (b,j)) + 1) := by
   by_cases hab : a = b
   · subst b
-    simpa only [parameterNormalizedMatrix,parameterEntryReferenceMatrix,if_pos rfl] using
+    simpa only [parameterNormalizedMatrix,parameterEntryReferenceMatrix,if_pos rfl] using!
       parameterLow_block_scaled_GV lam hlam hu hone hferm hp4 a i j
-  · simpa only [parameterEntryReferenceMatrix,if_neg hab,sub_zero] using
+  · simpa only [parameterEntryReferenceMatrix,if_neg hab,sub_zero] using!
       parameterNormalizedMatrix_low_cross_GV lam hlam hu hone hferm hp4 a b i j hab
 
 theorem parameterEntryReference_low_edge_GV (lam : ℚ) (hlam : |(lam:ℝ)| < 1)
@@ -170,7 +170,7 @@ theorem parameterEntryReference_low_edge_GV (lam : ℚ) (hlam : |(lam:ℝ)| < 1)
       parameterEntryReferenceMatrix lam p (Sum.inl (a,i)) (Sum.inr k))
       (primeBlockWeight (p := p) (Sum.inl (a,i)) +
         primeBlockWeight (p := p) (Sum.inr k) + 1/2) := by
-  simpa only [parameterEntryReferenceMatrix,sub_zero] using
+  simpa only [parameterEntryReferenceMatrix,sub_zero] using!
     parameterNormalizedMatrix_low_edge_GV lam hlam hu hone hferm hp4 a i k
 
 theorem parameterEntryReference_high_high_GV (lam : ℚ) (hlam : |(lam:ℝ)| < 1)
@@ -187,9 +187,9 @@ theorem parameterEntryReference_high_high_GV (lam : ℚ) (hlam : |(lam:ℝ)| < 1
     have he : primeEdgeIntegerWeight (primeHighEdgeSlot ell) +
         primeEdgeIntegerWeight (primeHighEdgeSlot ell) + 1 = -1 := by
       norm_num [primeEdgeIntegerWeight_highSlot]
-    simpa only [parameterNormalizedMatrix,parameterEntryReferenceMatrix,he] using parameterHigh_pair_block_scaled_GV lam hlam hu hone hferm hp4 ell
+    simpa only [parameterNormalizedMatrix,parameterEntryReferenceMatrix,he] using! parameterHigh_pair_block_scaled_GV lam hlam hu hone hferm hp4 ell
   · simpa only [parameterEntryReferenceMatrix,parameterEntryReference_high_cross_zero lam ell m hem,
-      mul_zero,C_0,sub_zero] using parameterNormalizedMatrix_high_cross_GV lam hlam hu hone hferm hp4 ell m hem
+      mul_zero,C_0,sub_zero] using! parameterNormalizedMatrix_high_cross_GV lam hlam hu hone hferm hp4 ell m hem
 
 theorem parameterEntryReference_zero_high_GV (lam : ℚ) (hlam : |(lam:ℝ)| < 1)
     (hu : lam ≠ 0 ∧ padicValRat p lam = 0)
@@ -201,7 +201,7 @@ theorem parameterEntryReference_zero_high_GV (lam : ℚ) (hlam : |(lam:ℝ)| < 1
       (primeBlockWeight (p := p) (Sum.inr (primeZeroEdgeSlot i)) +
         primeBlockWeight (p := p) (Sum.inr (primeHighEdgeSlot ell)) + 1) := by
   simpa only [parameterEntryReferenceMatrix,parameterEntryReference_zero_high_zero lam,
-    mul_zero,C_0,sub_zero] using parameterNormalizedMatrix_zero_high_GV lam hlam hu hone hferm hp4 i ell
+    mul_zero,C_0,sub_zero] using! parameterNormalizedMatrix_zero_high_GV lam hlam hu hone hferm hp4 i ell
 
 theorem parameterEntryReference_zero_zero_GV (lam : ℚ) (hlam : |(lam:ℝ)| < 1)
     (hu : lam ≠ 0 ∧ padicValRat p lam = 0)
@@ -216,7 +216,7 @@ theorem parameterEntryReference_zero_zero_GV (lam : ℚ) (hlam : |(lam:ℝ)| < 1
       primeEdgeIntegerWeight (primeZeroEdgeSlot j) + 1 = (i.val:ℤ)+(j.val:ℤ)-3 := by
     rw [primeEdgeIntegerWeight_zeroSlot,primeEdgeIntegerWeight_zeroSlot]
     ring
-  simpa only [parameterNormalizedMatrix,parameterEntryReferenceMatrix,he] using
+  simpa only [parameterNormalizedMatrix,parameterEntryReferenceMatrix,he] using!
     parameterZero_pair_block_scaled_GV lam hlam hu hone hferm hp4 i j
 
 theorem parameterEntryReference_high_top_GV (lam : ℚ) (hlam : |(lam:ℝ)| < 1)
@@ -231,7 +231,7 @@ theorem parameterEntryReference_high_top_GV (lam : ℚ) (hlam : |(lam:ℝ)| < 1)
       primeEdgeIntegerWeight 5 + 1 = 0 := by
     rw [primeEdgeIntegerWeight_highSlot, show primeEdgeIntegerWeight 5 = 0 from rfl]
     norm_num
-  simpa only [parameterNormalizedMatrix,parameterEntryReferenceMatrix,he,zpow_zero,one_mul] using
+  simpa only [parameterNormalizedMatrix,parameterEntryReferenceMatrix,he,zpow_zero,one_mul] using!
     parameterHigh_top_block_scaled_GV lam hlam hu hone hferm hp4 ell
 
 theorem parameterEntryReference_zero_top_GV (lam : ℚ) (hlam : |(lam:ℝ)| < 1)
@@ -246,7 +246,7 @@ theorem parameterEntryReference_zero_top_GV (lam : ℚ) (hlam : |(lam:ℝ)| < 1)
       primeEdgeIntegerWeight 5 + 1 = (i.val:ℤ)-1 := by
     rw [primeEdgeIntegerWeight_zeroSlot,show primeEdgeIntegerWeight 5 = 0 from rfl]
     ring
-  simpa only [parameterNormalizedMatrix,parameterEntryReferenceMatrix,he] using
+  simpa only [parameterNormalizedMatrix,parameterEntryReferenceMatrix,he] using!
     parameterZero_top_block_scaled_GV lam hlam hu hone hferm hp4 i
 
 theorem parameterEntryReference_top_top_GV (lam : ℚ) (hlam : |(lam:ℝ)| < 1)
@@ -259,7 +259,7 @@ theorem parameterEntryReference_top_top_GV (lam : ℚ) (hlam : |(lam:ℝ)| < 1)
   have he : primeEdgeIntegerWeight 5+primeEdgeIntegerWeight 5+1 = 1 := by
     rw [show primeEdgeIntegerWeight 5 = 0 from rfl]
     norm_num
-  simpa only [parameterEntryReferenceMatrix,he,zpow_one] using parameterTop_block_scaled_GV lam hlam hu hone hferm hp4
+  simpa only [parameterEntryReferenceMatrix,he,zpow_one] using! parameterTop_block_scaled_GV lam hlam hu hone hferm hp4
 
 theorem parameterEntryReference_edge_GV (lam : ℚ) (hlam : |(lam:ℝ)| < 1)
     (hu : lam ≠ 0 ∧ padicValRat p lam = 0)

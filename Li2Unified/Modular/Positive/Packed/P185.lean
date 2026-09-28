@@ -38,7 +38,7 @@ lemma integral_exp_neg_mul' {k : ℝ} (hk : k ≠ 0) (c d : ℝ) :
   have h : ∀ x ∈ uIcc c d, HasDerivAt (fun x => -Real.exp (-k * x) / k) (Real.exp (-k * x)) x := by
     intro x _
     have h1 : HasDerivAt (fun x : ℝ => -k * x) (-k) x := by
-      simpa using (hasDerivAt_id x).const_mul (-k)
+      simpa using! (hasDerivAt_id x).const_mul (-k)
     have h2 := (h1.exp.neg).div_const k
     refine HasDerivAt.congr_deriv (HasDerivAt.congr_of_eventuallyEq h2
       (Filter.Eventually.of_forall fun _ => rfl)) ?_
@@ -233,7 +233,7 @@ lemma tendsto_Ltr {r : ℝ} (hr : 0 < r) :
     simp only [Function.comp_apply]
     ring_nf
   have := ((h1.add h2).mul_const |r ^ 2 - 1|).const_mul (1 / 2)
-  simpa using this
+  simpa using! this
 
 end Li2Unified.ParameterFamily.Energy
 
@@ -370,7 +370,7 @@ theorem star_comparison_integral_mu (f : ℂ → ℝ)
         f (starLayerCurve (layerData.get j) θ) ∂μcirc) =
       ∫ z : ℂ, f z ∂comparisonMeasure := by
   simpa only [μcirc, intervalIntegral.integral_of_le (by positivity :
-      (0 : ℝ) ≤ 2 * Real.pi)] using
+      (0 : ℝ) ≤ 2 * Real.pi)] using!
     star_comparison_integral_angular f hf hi
 
 theorem star_comparisonPotential_angular (w : ℂ) :
@@ -381,11 +381,11 @@ theorem star_comparisonPotential_angular (w : ℂ) :
       comparisonPotential w := by
   have hi : Integrable (fun z : ℂ => Real.log ‖w - z‖)
       comparisonMeasure := by
-    simpa only [norm_sub_rev] using integrable_log_comparisonMeasure w
+    simpa only [norm_sub_rev] using! integrable_log_comparisonMeasure w
   have h := star_comparison_integral_angular
     (fun z : ℂ => Real.log ‖w - z‖)
     ((measurable_const.sub measurable_id).norm.log) hi
-  simpa only [comparisonPotential, norm_sub_rev] using h
+  simpa only [comparisonPotential, norm_sub_rev] using! h
 
 theorem star_comparisonEnergy_angular :
     (∑ j : Fin layerData.length,
@@ -425,14 +425,14 @@ lemma starLayer_intervalIntegrable_pullback (s : StarLayer)
       f ((((c * θ + s.left : ℝ) : ℂ) * s.direction)))
       volume 0 (2 * Real.pi) := by
     have h := (hf.comp_add_right s.left).comp_mul_left (c := c)
-    simpa only [sub_self, zero_div, hend] using h
+    simpa only [sub_self, zero_div, hend] using! h
   apply hi.congr
   intro θ hθ
   dsimp only
   have hθ' : θ ∈ Icc 0 (2 * Real.pi) := by
     have hT : (0 : ℝ) ≤ 2 * Real.pi := by positivity
     have hu : θ ∈ Ioc 0 (2 * Real.pi) := by
-      simpa only [uIoc_of_le hT] using hθ
+      simpa only [uIoc_of_le hT] using! hθ
     exact ⟨hu.1.le, hu.2⟩
   rw [starLayerCurve_on s hθ']
 
@@ -442,7 +442,7 @@ lemma starLayer_intervalIntegrable_log (s : StarLayer)
       Real.log ‖starLayerCurve s θ - w‖) volume 0 (2 * Real.pi) := by
   apply starLayer_intervalIntegrable_pullback s hw
     (f := fun z => Real.log ‖z - w‖)
-  simpa only [zero_add] using
+  simpa only [zero_add] using!
     intervalIntegrable_log_line 0 s.direction w s.left s.right
 
 end

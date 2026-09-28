@@ -275,12 +275,12 @@ theorem hermite_parameter_units (p : ℕ) [Fact p.Prime] (hp5 : 5 ≤ p) :
     omega
   rw [lambda_eq_inverse]
   exact ⟨inverseParameter_unit 2 (by norm_num) hp2,
-    inverseParameter_one_sub_unit 2 (by norm_num) hp2 (by simpa using hp1)⟩
+    inverseParameter_one_sub_unit 2 (by norm_num) hp2 (by simpa using! hp1)⟩
 
 theorem two_adic_content :
     ∀ ε : ℝ, 0 < ε → ∀ᶠ n : ℕ in atTop, Instances.PosHalf.Qtilde n ≠ 0 →
       ((8/3:ℝ)*Real.log 2-ε)*(n:ℝ)^2 ≤ contentTerm n 2 := by
-  simpa only [contentTerm, dif_pos Nat.prime_two] using
+  simpa only [contentTerm, dif_pos Nat.prime_two] using!
     Li2Unified.Proofs.Arithmetic.posHalf_two_adic_content_raw
 
 theorem three_adic_good_fallback (n : ℕ) (hn : 1 ≤ n) :
@@ -290,7 +290,7 @@ theorem three_adic_good_fallback (n : ℕ) (hn : 1 ≤ n) :
 theorem three_adic_content :
     ∀ ε : ℝ, 0 < ε → ∀ᶠ n : ℕ in atTop, Instances.PosHalf.Qtilde n ≠ 0 →
       -ε*(n:ℝ)^2 ≤ contentTerm n 3 := by
-  simpa only [contentTerm, dif_pos (by decide : Nat.Prime 3)] using
+  simpa only [contentTerm, dif_pos (by decide : Nat.Prime 3)] using!
     Li2Unified.Proofs.Arithmetic.posHalf_three_adic_content_raw
 
 /-- Fixed epsilon away from zero first; small primes use the full log fallback. -/
@@ -331,7 +331,7 @@ theorem outer_prime_content :
 
 theorem beyond_pole_support (n p : ℕ) (hn : 1 ≤ n) (hp : p.Prime)
     (hpn : 4*n < p) (hne : Instances.PosHalf.Qtilde n ≠ 0) : 0 ≤ contentTerm n p := by
-  simpa only [contentTerm, dif_pos hp] using
+  simpa only [contentTerm, dif_pos hp] using!
     Li2Unified.Proofs.Arithmetic.posHalf_large_content_raw n p hn hp hpn hne
 
 theorem log_scale_content (n : ℕ) (hn : 1 ≤ n) (hne : Instances.PosHalf.Qtilde n ≠ 0) :

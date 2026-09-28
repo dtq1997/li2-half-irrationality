@@ -32,10 +32,10 @@ theorem integrable_starProfilePairKernel (h : ℕ) (x : Fin h → ℂ)
       | inl j =>
           have hi := (Li2.integrable_circle_pair_log (x i) (x j) hε).const_mul
             ((2 * Real.pi)⁻¹ * (2 * Real.pi)⁻¹)
-          simpa only [starProfileDensity, starProfileCurve] using hi
+          simpa only [starProfileDensity, starProfileCurve] using! hi
       | inr j =>
           simpa only [starProfileDensity, starProfileCurve, circleLayerPairKernel]
-            using integrable_circleLayerPairKernel (x i) ε
+            using! integrable_circleLayerPairKernel (x i) ε
               (List.get_mem layerData j)
   | inr i =>
       cases l with
@@ -52,7 +52,7 @@ theorem integrable_starProfilePairKernel (h : ℕ) (x : Fin h → ℂ)
             ring)
       | inr j =>
           simpa only [starProfileDensity, starProfileCurve, angularLayerPairKernel]
-            using integrable_angularLayerPairKernel
+            using! integrable_angularLayerPairKernel
               (List.get_mem layerData i) (List.get_mem layerData j)
 
 end
@@ -89,7 +89,7 @@ lemma integrable_weighted_log_of_integrable {ρ : ι → ℝ → ℝ} (γ : ι �
     (((hρ k).comp continuous_fst).mul ((hρ l).comp continuous_snd)).aestronglyMeasurable ?_
   filter_upwards [] with p
   rw [Real.norm_eq_abs, abs_of_nonneg (mul_nonneg (hρ0 k p.1) (hρ0 l p.2))]
-  simpa only [pow_two] using mul_le_mul (hρC k p.1) (hρC l p.2) (hρ0 l p.2) hC
+  simpa only [pow_two] using! mul_le_mul (hρC k p.1) (hρC l p.2) (hρ0 l p.2) hC
 
 lemma tendsto_weightedPairInt_Ltr {ρ : ι → ℝ → ℝ} {γ : ι → ℝ → ℂ}
     (hρ : ∀ k, Continuous (ρ k)) (hγ : ∀ k, Continuous (γ k)) (k l : ι)

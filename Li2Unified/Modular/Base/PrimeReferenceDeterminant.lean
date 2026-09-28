@@ -132,7 +132,7 @@ theorem primeReferenceMatrix_det (hp4 : 3 < p) :
         (∏ x : PrimeBlockIndex p, (p:ℚ)^primeReferenceColExponent x)) *
           (primeReferenceCore p).det := by
     dsimp only [A]
-    rw [Matrix.det_mul_column]
+    erw [Matrix.det_mul_column]
     change
       (∏ x : PrimeBlockIndex p, (p:ℚ)^primeReferenceRowExponent x) *
         (Matrix.of (fun x y : PrimeBlockIndex p =>
@@ -140,7 +140,7 @@ theorem primeReferenceMatrix_det (hp4 : 3 < p) :
       ((∏ x : PrimeBlockIndex p, (p:ℚ)^primeReferenceRowExponent x) *
         (∏ x : PrimeBlockIndex p, (p:ℚ)^primeReferenceColExponent x)) *
           (primeReferenceCore p).det
-    rw [Matrix.det_mul_row]
+    erw [Matrix.det_mul_row]
     ring
   have hpq : (p:ℚ) ≠ 0 := by exact_mod_cast hp.out.ne_zero
   have hr := primeReference_prod_zpow (p := p) Finset.univ
@@ -174,7 +174,7 @@ theorem primeReferenceMainConstant_unit (hp73 : 73 < p) :
     ⟨mul_ne_zero hx.1 hy.1,by rw [padicValRat.mul hx.1 hy.1,hx.2,hy.2,add_zero]⟩
   have hpow (x : ℚ) (hx : x ≠ 0 ∧ padicValRat p x = 0) (n : ℕ) :
       x^n ≠ 0 ∧ padicValRat p (x^n) = 0 :=
-    ⟨pow_ne_zero n hx.1,by rw [padicValRat.pow hx.1,hx.2,mul_zero]⟩
+    ⟨pow_ne_zero n hx.1,by rw [padicValRat.pow,hx.2,mul_zero]⟩
   have hdiv (x y : ℚ) (hx : x ≠ 0 ∧ padicValRat p x = 0)
       (hy : y ≠ 0 ∧ padicValRat p y = 0) :
       x/y ≠ 0 ∧ padicValRat p (x/y) = 0 :=

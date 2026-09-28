@@ -59,10 +59,10 @@ lemma restricted_finset_prod {ι : Type*} (s : Finset ι) (f : ι → PowerSerie
     PowerSeries.IsRestricted 1 (∏ i ∈ s, f i) := by
   classical
   induction s using Finset.induction_on with
-  | empty => simpa using PowerSeries.IsRestricted.one (R := ℤ_[p]) 1
+  | empty => simpa using PowerSeries.isRestricted_one (R := ℤ_[p]) 1
   | insert i s hi ih =>
     rw [Finset.prod_insert hi]
-    exact PowerSeries.IsRestricted.mul 1 (hf i (Finset.mem_insert_self _ _))
+    exact PowerSeries.isRestricted.mul 1 (hf i (Finset.mem_insert_self _ _))
       (ih fun j hj => hf j (Finset.mem_insert_of_mem hj))
 
 theorem nonmatchingDiscInverse_isRestricted (a m : ℕ) (ha : a < p) :

@@ -99,7 +99,7 @@ lemma deriv_scale {f : CS (n + 1) E} : (f.scale R).deriv = R⁻¹ • f.deriv.sc
   · simp [hR, scale, deriv]
   · simp only [scale, hR, ↓reduceDIte, smul_apply]
     exact ((f.hasDerivAt (R⁻¹ • v)).scomp v
-      (by simpa using (hasDerivAt_id v).const_smul R⁻¹)).deriv
+      (by simpa using! (hasDerivAt_id v).const_smul R⁻¹)).deriv
 
 lemma deriv_scale' {f : CS (n + 1) E} :
     (f.scale R).deriv v = R⁻¹ • f.deriv (R⁻¹ • v) := by
@@ -184,7 +184,10 @@ instance : Sub (W1 n E) where sub := sub
 lemma integrable_iteratedDeriv_Schwarz {f : 𝓢(ℝ, ℂ)} : Integrable (iteratedDeriv n f) := by
   induction n generalizing f with
   | zero => exact f.integrable
-  | succ n ih => simpa [iteratedDeriv_succ'] using ih (f := SchwartzMap.derivCLM ℝ ℂ f)
+  | succ n ih =>
+    have hd : (fun x => SchwartzMap.derivCLM ℝ ℂ f x) = _root_.deriv (fun x => f x) :=
+      funext (fun x => SchwartzMap.derivCLM_apply (𝕜 := ℝ) f x)
+    simpa only [iteratedDeriv_succ', ← hd] using ih (f := SchwartzMap.derivCLM ℝ ℂ f)
 
 noncomputable def of_Schwartz (f : 𝓢(ℝ, ℂ)) : W1 n ℂ where
   toFun := f
@@ -346,8 +349,14 @@ theorem W21_approximation (f : W21) (g : trunc) :
       (((f.hf.norm).const_mul _).add ((f.hf'.norm).const_mul _)).add f.hf''.norm
     have e4 : ∀ᵐ (a : ℝ), Tendsto (fun n ↦ F n a) atTop (𝓝 0) := by
       apply Eventually.of_forall ; intro v
-      have evg' : g' =ᶠ[𝓝 0] 0 := by convert ← g.zero.deriv ; exact deriv_const' _
-      have evg'' : g'' =ᶠ[𝓝 0] 0 := by convert ← evg'.deriv ; exact deriv_const' _
+      have evg' : g' =ᶠ[𝓝 0] 0 := by
+        change _root_.deriv (fun x => g x) =ᶠ[𝓝 (0 : ℝ)] (fun _ => (0 : ℝ))
+        have hz : (fun x : ℝ => g x) =ᶠ[𝓝 0] (fun _ => (1 : ℝ)) := g.zero
+        simpa only [deriv_const'] using hz.deriv
+      have evg'' : g'' =ᶠ[𝓝 0] 0 := by
+        change _root_.deriv (fun x => g' x) =ᶠ[𝓝 (0 : ℝ)] (fun _ => (0 : ℝ))
+        have hz : (fun x : ℝ => g' x) =ᶠ[𝓝 0] (fun _ => (0 : ℝ)) := evg'
+        simpa only [deriv_const'] using hz.deriv
       refine tendsto_norm_zero.comp <| (ZeroAtFilter.add ?_ ?_).add ?_
       · have eh'' v : ∀ᶠ R in atTop, h'' R v = 0 := by
           filter_upwards [(vR v).eventually evg'', eventually_ne_atTop 0] with R hR hR'
@@ -363,7 +372,7 @@ theorem W21_approximation (f : W21) (g : trunc) :
           simp [h', CS.deriv_scale', mul_comm R⁻¹, hR]
         apply tendsto_nhds_of_eventually_eq
         filter_upwards [eh' v] with R hR ; simp [hR]
-      · simpa [h] using ((g.tendsto_scale v).const_sub 1).ofReal.mul tendsto_const_nhds
+      · simpa [h, ZeroAtFilter] using ((g.tendsto_scale v).const_sub 1).ofReal.mul tendsto_const_nhds
     simpa [F] using tendsto_integral_filter_of_dominated_convergence bound e1 e2 e3 e4
 
 end Li2.PNT

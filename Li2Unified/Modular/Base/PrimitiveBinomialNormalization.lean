@@ -30,7 +30,7 @@ theorem P_eq_dtilde_Qtilde (n : ℕ) :
 lemma P_coeff_eq_dtilde (n k : ℕ) :
     ((P n).coeff k : ℚ) = dtilde n * (Qtilde n).coeff k := by
   have h := congrArg (fun F : ℚ[X] => F.coeff k) (P_eq_dtilde_Qtilde n)
-  simpa only [coeff_map, coeff_C_mul] using h
+  simpa only [coeff_map, coeff_C_mul] using! h
 
 lemma P_eq_zero_of_Q_eq_zero (n : ℕ) (hn : Q n = 0) : P n = 0 := by
   simp [P, primitiveQ, hn]
@@ -68,9 +68,8 @@ theorem P_aeval_eq_dtilde_Qtilde (n : ℕ) (x : ℝ) :
     aeval x (P n) = (dtilde n : ℝ) * aeval x (Qtilde n) := by
   have h := congrArg (fun F : ℚ[X] => F.eval₂ (algebraMap ℚ ℝ) x)
     (P_eq_dtilde_Qtilde n)
-  dsimp only at h
   rw [eval₂_map, eval₂_mul, eval₂_C] at h
-  simpa only [aeval_def, ← IsScalarTower.algebraMap_eq ℤ ℚ ℝ] using h
+  simpa only [aeval_def, ← IsScalarTower.algebraMap_eq ℤ ℚ ℝ] using! h
 
 lemma abs_P_aeval_eq_dtilde_Qtilde (n : ℕ) (x : ℝ) :
     |aeval x (P n)| = (dtilde n : ℝ) * |aeval x (Qtilde n)| := by

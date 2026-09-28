@@ -26,12 +26,12 @@ private lemma continuous_up_density_integrand (d : ℕ) (F : ℚ[X]) :
     apply continuous_iff_continuousAt.mpr
     intro t
     have hz : Complex.sin ((Real.pi : ℂ) * point ⟨1, by decide⟩ t) ≠ 0 := by
-      simpa only [point_up] using Li2.originalContour_sin_ne_zero t
+      simpa only [point_up] using! Li2.originalContour_sin_ne_zero t
     exact ((upperKernel_analyticAt_of_sin_ne hz).deriv).continuousAt.comp
       (f := fun s : ℝ => point ⟨1, by decide⟩ s) hp.continuousAt
   have hq : Continuous (fun t : ℝ =>
       Li2.originalComplexQuotient d F (point ⟨1, by decide⟩ t)) := by
-    simpa only [point_up] using Li2.continuous_originalComplexQuotient_vertical d F
+    simpa only [point_up] using! Li2.continuous_originalComplexQuotient_vertical d F
   change Continuous (fun t : ℝ =>
     ((Complex.I * point ⟨1, by decide⟩ t) *
       deriv (fun z => power z * kappaPlus z) (point ⟨1, by decide⟩ t)) *
@@ -49,12 +49,12 @@ private lemma continuous_down_density_integrand (d : ℕ) (F : ℚ[X]) :
     apply continuous_iff_continuousAt.mpr
     intro t
     have hz : Complex.sin ((Real.pi : ℂ) * point ⟨2, by decide⟩ t) ≠ 0 := by
-      simpa only [point_down] using Li2.originalContour_sin_ne_zero (-t)
+      simpa only [point_down] using! Li2.originalContour_sin_ne_zero (-t)
     exact ((lowerKernel_analyticAt_of_sin_ne hz).deriv).continuousAt.comp
       (f := fun s : ℝ => point ⟨2, by decide⟩ s) hp.continuousAt
   have hq : Continuous (fun t : ℝ =>
       Li2.originalComplexQuotient d F (point ⟨2, by decide⟩ t)) := by
-    simpa only [point_down] using
+    simpa only [point_down] using!
       (Li2.continuous_originalComplexQuotient_vertical d F).comp continuous_neg
   change Continuous (fun t : ℝ =>
     ((-Complex.I * point ⟨2, by decide⟩ t) *
@@ -78,7 +78,7 @@ lemma up_density_norm_le (d : ℕ) (F : ℚ[X]) (t : ℝ) (ht : 0 ≤ t) :
       Li2.originalCoefficientNormSum F * (1 + t) ^ F.natDegree := by
     change ‖Li2.originalComplexQuotient d F (point ⟨1, by decide⟩ t)‖ ≤ _
     rw [point_up]
-    simpa only [abs_of_nonneg ht] using
+    simpa only [abs_of_nonneg ht] using!
       Li2.originalComplexQuotient_vertical_polynomial_growth d F t
   have hd := upperKernel_deriv_upper_norm_le t
   change ‖(Complex.I * z * deriv (fun z => power z * kappaPlus z) z) *
@@ -108,7 +108,7 @@ lemma down_density_norm_le (d : ℕ) (F : ℚ[X]) (t : ℝ) (ht : 0 ≤ t) :
       Li2.originalCoefficientNormSum F * (1 + t) ^ F.natDegree := by
     change ‖Li2.originalComplexQuotient d F (point ⟨2, by decide⟩ t)‖ ≤ _
     rw [point_down]
-    simpa only [abs_neg, abs_of_nonneg ht] using
+    simpa only [abs_neg, abs_of_nonneg ht] using!
       Li2.originalComplexQuotient_vertical_polynomial_growth d F (-t)
   have hd := lowerKernel_deriv_lower_norm_le t
   change ‖(-Complex.I * z * deriv (fun z => power z * kappaMinus z) z) *
@@ -138,7 +138,7 @@ lemma up_density_integrableOn (d : ℕ) (F : ℚ[X]) :
     Li2.originalComplexQuotient d F (point ⟨1, by decide⟩ t)‖ ≤ _
   dsimp [C]
   rw [abs_of_pos ht]
-  simpa only [show -(2 * Real.pi) * t = -2 * Real.pi * t by ring] using
+  simpa only [show -(2 * Real.pi) * t = -2 * Real.pi * t by ring] using!
     up_density_norm_le d F t ht.le
 
 lemma down_density_integrableOn (d : ℕ) (F : ℚ[X]) :
@@ -157,7 +157,7 @@ lemma down_density_integrableOn (d : ℕ) (F : ℚ[X]) :
     Li2.originalComplexQuotient d F (point ⟨2, by decide⟩ t)‖ ≤ _
   dsimp [C]
   rw [abs_of_pos ht]
-  simpa only [show -(2 * Real.pi) * t = -2 * Real.pi * t by ring] using
+  simpa only [show -(2 * Real.pi) * t = -2 * Real.pi * t by ring] using!
     down_density_norm_le d F t ht.le
 
 end

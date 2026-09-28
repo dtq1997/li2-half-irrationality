@@ -19,13 +19,19 @@ theorem parameterUPole_eval₂ (z : ℚ) (hz : z ≠ 0) (hv : padicValRat p z = 
     (j : ℕ) (hj : j < p) (Y : ℚ_[p]) :
     (integralUPole z hz hv j hj).eval₂ (algebraMap ℤ_[p] ℚ_[p]) Y =
       (j:ℚ_[p])*(z:ℚ_[p])⁻¹^j*(Y-(parameterTau z j:ℚ_[p])) := by
-  simp [integralUPole, integralParameterInvPow, integralParameterTau, integralRational]
+  unfold integralUPole
+  rw [eval₂_mul, eval₂_C, eval₂_sub, eval₂_X, eval₂_C]
+  simp only [map_mul, map_neg, map_natCast, PadicInt.algebraMap_apply]
+  simp [integralParameterInvPow, integralParameterTau, integralRational]
 
 theorem parameterVPole_eval₂ (z : ℚ) (hz : z ≠ 0) (hv : padicValRat p z = 0)
     (j : ℕ) (hj : j < p) (Y : ℚ_[p]) :
     (integralVPole z hz hv j hj).eval₂ (algebraMap ℤ_[p] ℚ_[p]) Y =
       -(z:ℚ_[p])⁻¹^j*(Y-(parameterTau z j:ℚ_[p])) := by
-  simp [integralVPole, integralParameterInvPow, integralParameterTau, integralRational]
+  unfold integralVPole
+  rw [eval₂_mul, eval₂_C, eval₂_sub, eval₂_X, eval₂_C]
+  simp only [map_mul, map_neg, map_natCast, PadicInt.algebraMap_apply]
+  simp [integralParameterInvPow, integralParameterTau, integralRational]
 
 def fieldParameterFourPoleU (z : ℚ) (hu : z ≠ 0 ∧ padicValRat p z = 0)
     (hreg : VG p (z/(1-z)) 0) (hp4 : 3 < p) (f : PowerSeries ℚ_[p]) (r : Fin 4 → ℚ_[p]) : (ℚ_[p])[X] :=

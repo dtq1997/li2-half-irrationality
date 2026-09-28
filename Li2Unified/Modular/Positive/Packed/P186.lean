@@ -24,6 +24,7 @@ private lemma continuous_posLog_of_nonneg {X : Type*} [TopologicalSpace X] {f : 
 
 private lemma circle_abs_log_eq (x : ℝ) : |Real.log x| = 2 * log⁺ x - Real.log x := by
   rw [Real.posLog_def]
+  change |Real.log x| = 2 * max 0 (Real.log x) - Real.log x
   rcases le_total 0 (Real.log x) with h | h
   · rw [max_eq_right h, abs_of_nonneg h]; ring
   · rw [max_eq_left h, abs_of_nonpos h]; ring
@@ -111,7 +112,7 @@ theorem integrable_curve_circle_log {γ : ℝ → ℂ} (hγ : Continuous γ) (d 
         (Ioc a b) volume :=
       (intervalIntegrable_iff_integrableOn_Ioc_of_le hab).mp
         (hN.intervalIntegrable a b)
-    simpa only [intervalIntegral.integral_of_le hT] using hi
+    simpa only [intervalIntegral.integral_of_le hT] using! hi
 
 /-- Joint L1 precedes the exchange of the circle and curve parameters. -/
 theorem integral_circle_curve_log {γ : ℝ → ℂ} (hγ : Continuous γ)

@@ -24,10 +24,10 @@ lemma restricted_finset_sum {κ : Type*} (s : Finset κ)
     PowerSeries.IsRestricted 1 (∑ i ∈ s, f i) := by
   classical
   induction s using Finset.induction_on with
-  | empty => simpa only [Finset.sum_empty] using (PowerSeries.IsRestricted.zero (c := 1))
+  | empty => simpa only [Finset.sum_empty] using (PowerSeries.isRestricted_zero (c := 1))
   | insert a s ha ih =>
     rw [Finset.sum_insert ha]
-    exact PowerSeries.IsRestricted.add 1 (hf a (Finset.mem_insert_self _ _))
+    exact PowerSeries.isRestricted.add 1 (hf a (Finset.mem_insert_self _ _))
       (ih (fun i hi => hf i (Finset.mem_insert_of_mem hi)))
 
 def integralPoleMulRegular (c : ι → ℤ_[p]) (g f : PowerSeries ℤ_[p]) (r : ι → ℤ_[p]) :
@@ -41,10 +41,10 @@ theorem integralPoleMulRegular_isRestricted (c : ι → ℤ_[p])
     (g f : PowerSeries ℤ_[p]) (hg : PowerSeries.IsRestricted 1 g)
     (hf : PowerSeries.IsRestricted 1 f) (r : ι → ℤ_[p]) :
     PowerSeries.IsRestricted 1 (integralPoleMulRegular c g f r) := by
-  apply PowerSeries.IsRestricted.add 1 (PowerSeries.IsRestricted.mul 1 hg hf)
+  apply PowerSeries.isRestricted.add 1 (PowerSeries.isRestricted.mul 1 hg hf)
   apply restricted_finset_sum
   intro i _
-  exact PowerSeries.IsRestricted.mul 1 (PowerSeries.IsRestricted.C 1 _)
+  exact PowerSeries.isRestricted.mul 1 (PowerSeries.isRestricted_C 1 _)
     (restrictedDivDiff_isRestricted _ g hg)
 
 lemma integralPoleDivDiff_identity (c : ι → ℤ_[p])

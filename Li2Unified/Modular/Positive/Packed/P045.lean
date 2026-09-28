@@ -59,8 +59,8 @@ theorem parameterGamma_GV (p : ℕ) [Fact p.Prime] (lam : ℚ)
         exact (Li2.GV.X.mono (by norm_num)).sub (Li2.GV.C hv')
       · have hzero : Nat.log p j = 0 := Nat.log_of_lt (by omega)
         have hv : Li2.VG p (Li2.parameterTau lam j) 0 := by
-          simpa [hzero] using parameterTau_VG_log p lam hlam (le_refl j)
-        simpa using Li2.GV.X.sub (Li2.GV.C hv)
+          simpa [hzero] using! parameterTau_VG_log p lam hlam (le_refl j)
+        simpa using! Li2.GV.X.sub (Li2.GV.C hv)
     have h := (Li2.GV.C (hr.mul (hjv.mul hpow))).mul ht
     unfold Li2.wv
     rw [if_neg (by omega)]
@@ -122,7 +122,7 @@ lemma parameter_derivative_GV_integral (p : ℕ) [Fact p.Prime]
     {F : ℚ[X]} (hF : Li2.GV p F 0) : Li2.GV p F.derivative 0 := by
   intro k
   rw [coeff_derivative]
-  simpa using (hF (k+1)).mul (Li2.VG.natCast (p := p) (k+1))
+  simpa using! (hF (k+1)).mul (Li2.VG.natCast (p := p) (k+1))
 
 /-- At a parameter with integral Newton moments, U_X preserves every
 p-integral polynomial, with no logarithmic degree loss. -/
@@ -133,7 +133,7 @@ theorem parameterU_GV_integral (p : ℕ) [Fact p.Prime]
     Li2.VG p (Li2.parameterU lam q) 0 := by
   unfold Li2.parameterU
   have hXq : Li2.GV p (X*q) 0 := by
-    simpa using (Li2.GV.X.mul hq)
+    simpa using! (Li2.GV.X.mul hq)
   have hder := parameter_derivative_GV_integral p hXq
   exact parameterG_VG_of_integral_ratio p lam h1 hratio
     (le_refl _) 0 (fun i _ => Li2.VG.eval hder (Li2.VG.natCast i))
@@ -222,10 +222,10 @@ theorem parameter_raw_Q_GV (p : ℕ) [hp : Fact p.Prime]
     rcases lt_or_gt_of_ne hst with h | h
     · rw [key s t h.le ht]
       have := hpv.mul (Li2.VG.natCast (p := p) (t-s))
-      simpa [sub_eq_add_neg, add_comm, add_left_comm] using this
+      simpa [sub_eq_add_neg, add_comm, add_left_comm] using! this
     · rw [key t s h.le hs]
       have := (hpv.mul (Li2.VG.natCast (p := p) (s-t))).neg
-      simpa [sub_eq_add_neg, add_comm, add_left_comm] using this
+      simpa [sub_eq_add_neg, add_comm, add_left_comm] using! this
   · intro c t ht
     exact parameterGamma_GV p lam hlam hinv
       (by unfold Li2.jn; omega)

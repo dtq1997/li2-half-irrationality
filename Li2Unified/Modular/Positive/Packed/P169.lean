@@ -22,8 +22,8 @@ theorem qValid_qZero : qValid qZero = true := by decide
 
 theorem qLT_zero_num {a : QPair} (h : qLT qZero a = true) : 0 < a.num := by
   have hc : qZero.num * Int.ofNat a.den < a.num * Int.ofNat qZero.den :=
-    of_decide_eq_true (by simpa only [qLT] using h)
-  simpa [qZero] using hc
+    of_decide_eq_true (by simpa only [qLT] using! h)
+  simpa [qZero] using! hc
 
 theorem toRat_qInv_pos (a : QPair) (h : qLT qZero a = true) :
     (qInv a).toRat = a.toRat⁻¹ := by
@@ -60,7 +60,7 @@ theorem qValid_qSub {a b : QPair} (ha : qValid a = true)
 theorem toRat_qPow (a : QPair) (n : ℕ) :
     (qPow a n).toRat = a.toRat ^ n := by
   induction n with
-  | zero => simpa only [qPow, pow_zero] using qOne_toRat
+  | zero => simpa only [qPow, pow_zero] using! qOne_toRat
   | succ n ih => simp only [qPow, toRat_qMul, ih, pow_succ]
 
 theorem qValid_qPow {a : QPair} (ha : qValid a = true) (n : ℕ) :
@@ -74,7 +74,7 @@ theorem foldl_qAdd_valid (xs : List ℕ) (f : ℕ → QPair)
     (acc : QPair) (hacc : qValid acc = true) :
     qValid (xs.foldl (fun q i => qAdd q (f i)) acc) = true := by
   induction xs generalizing acc with
-  | nil => simpa using hacc
+  | nil => simpa using! hacc
   | cons i xs ih =>
       simp only [List.foldl_cons]
       apply ih
@@ -206,9 +206,9 @@ private theorem atanTerm_toRat (r : QPair) (i : ℕ) :
     rw [toRat_qDiv_pos _ _ (natDen_pos (2 * i)), toRat_qPow, natDen_toRat]
   by_cases h : i % 2 = 0
   · have hs : (-1 : ℚ) ^ i = 1 := by rw [← sign_of_mod_two]; simp [h]
-    simpa [atanTerm, h, hs] using hterm
+    simpa [atanTerm, h, hs] using! hterm
   · have hs : (-1 : ℚ) ^ i = -1 := by rw [← sign_of_mod_two]; simp [h]
-    simpa [atanTerm, h, hs, toRat_qNeg] using congrArg Neg.neg hterm
+    simpa [atanTerm, h, hs, toRat_qNeg] using! congrArg Neg.neg hterm
 
 theorem atanPartial_toRat (r : QPair) (hr : qValid r = true) (n : ℕ) :
     (atanPartial r n).toRat = ParameterFamily.arctanPartial r.toRat n := by

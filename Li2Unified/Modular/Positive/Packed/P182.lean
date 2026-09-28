@@ -7,7 +7,6 @@ public import Mathlib.Analysis.Complex.Basic
 public import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
 public import Mathlib.MeasureTheory.Integral.IntervalIntegral.Basic
 public import Mathlib.Tactic
-public import Mathlib
 
 set_option backward.privateInPublic true
 
@@ -202,7 +201,7 @@ def segmentCurve (a b : ℂ) (θ : ℝ) : ℂ :=
 lemma continuous_segmentCurve (a b : ℂ) : Continuous (segmentCurve a b) := by
   have ht : Continuous (fun θ : ℝ => clampUnit (θ/(2*Real.pi))) :=
     continuous_clampUnit.comp (continuous_id.div_const _)
-  simpa only [segmentCurve, Complex.real_smul] using
+  simpa only [segmentCurve, Complex.real_smul] using!
     ((Complex.continuous_ofReal.comp (continuous_const.sub ht)).mul continuous_const).add
       ((Complex.continuous_ofReal.comp ht).mul continuous_const)
 

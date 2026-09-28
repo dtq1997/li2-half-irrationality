@@ -163,6 +163,9 @@ lemma second_fourier_integrable_aux1 (hcont : Measurable ψ) (hsupp : Integrable
     -- TODO: find out why fun_prop does not play well with Multiplicative.ofAdd
     simp only [neg_mul, ofReal_exp, ofReal_neg, ofReal_mul, ofReal_sub, ofReal_one,
       Multiplicative.ofAdd, Equiv.coe_fn_mk, smul_eq_mul]
+    change Measurable (fun a : ℝ × ℝ =>
+      cexp (-((a.1 : ℂ) * ((σ' : ℂ) - 1))) *
+        ((𝐞 (-(a.2 * (a.1 / (2 * π)))) : ℂ) * ψ a.2))
     fun_prop
   · let f1 : ℝ → ENNReal := fun a1 ↦ ‖cexp (-(↑a1 * (↑σ' - 1)))‖ₑ
     let f2 : ℝ → ENNReal := fun a2 ↦ ‖ψ a2‖ₑ
@@ -307,7 +310,7 @@ set_option backward.isDefEq.respectTransparency false in
 lemma W21.integrable_fourier (ψ : W21) (hc : c ≠ 0) :
     Integrable fun u ↦ 𝓕 (ψ : ℝ → ℂ) (u / c) := by
   have l1 (C) : Integrable (fun u ↦ C / (1 + (u / c) ^ 2)) volume := by
-    simpa using (integrable_inv_one_add_sq.comp_div hc).const_mul C
+    simpa [div_eq_mul_inv] using! (integrable_inv_one_add_sq.comp_div hc).const_mul C
   have l2 : AEStronglyMeasurable (fun u ↦ 𝓕 (ψ : ℝ → ℂ) (u / c)) volume := by
     apply Continuous.aestronglyMeasurable ; fun_prop
   obtain ⟨C, h⟩ := decay_bounds_cor ψ
@@ -323,7 +326,7 @@ lemma continuous_LSeries_aux (hf : Summable (nterm f σ')) :
   have l1 i : Continuous fun x : ℝ ↦ term f (σ' + x * I) i := by
     by_cases h : i = 0
     · simpa [h] using continuous_const
-    · simpa [h] using continuous_const.div (continuous_const.cpow (by fun_prop) (by simp [h]))
+    · simpa [h] using! continuous_const.div (continuous_const.cpow (by fun_prop) (by simp [h]))
         (fun x => by simp [h])
   have l2 n (x : ℝ) : ‖term f (σ' + x * I) n‖ = nterm f σ' n := by
     by_cases h : n = 0

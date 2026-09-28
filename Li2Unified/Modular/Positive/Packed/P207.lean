@@ -24,7 +24,7 @@ theorem checkTriangleRow_lower {s : LayerQ} {tail : List LayerQ} {data : RowData
   | none => simp [checkTriangleRow, hp] at hc
   | some p =>
       have hcheck : checkExprPoint p (triangleRowExpr s tail) data.node data.bound = true := by
-        simpa only [checkTriangleRow, hp] using hc
+        simpa only [checkTriangleRow, hp] using! hc
       exact (checkExprPoint_sound hp hcheck).1
 
 theorem checkTriangleRow_lower_valid {s : LayerQ} {tail : List LayerQ} {data : RowData}
@@ -33,7 +33,7 @@ theorem checkTriangleRow_lower_valid {s : LayerQ} {tail : List LayerQ} {data : R
   | none => simp [checkTriangleRow, hp] at hc
   | some p =>
       have hcheck : checkExprPoint p (triangleRowExpr s tail) data.node data.bound = true := by
-        simpa only [checkTriangleRow, hp] using hc
+        simpa only [checkTriangleRow, hp] using! hc
       exact (validI_parts (checkExprPoint_valid hcheck)).1
 
 theorem checkTriangleRows_lower {ss : List LayerQ} {ds : List RowData}
@@ -49,8 +49,8 @@ theorem checkTriangleRows_lower {ss : List LayerQ} {ds : List RowData}
       | nil => simp [checkTriangleRows] at hc
       | cons d ds =>
           have hp : checkTriangleRow s ss d = true ∧ checkTriangleRows ss ds = true := by
-            simpa only [checkTriangleRows, Bool.and_eq_true] using hc
-          simpa only [List.map_cons, List.sum_cons, triangleValue] using
+            simpa only [checkTriangleRows, Bool.and_eq_true] using! hc
+          simpa only [List.map_cons, List.sum_cons, triangleValue] using!
             add_le_add (checkTriangleRow_lower hp.1) (ih hp.2)
 
 theorem checkTriangleRows_lower_valid {ss : List LayerQ} {ds : List RowData}
@@ -65,7 +65,7 @@ theorem checkTriangleRows_lower_valid {ss : List LayerQ} {ds : List RowData}
       | nil => simp [checkTriangleRows] at hc
       | cons d ds =>
           have hp : checkTriangleRow s ss d = true ∧ checkTriangleRows ss ds = true := by
-            simpa only [checkTriangleRows, Bool.and_eq_true] using hc
+            simpa only [checkTriangleRows, Bool.and_eq_true] using! hc
           intro d' hd'
           rcases List.mem_cons.mp hd' with rfl | hmem
           · exact checkTriangleRow_lower_valid hp.1

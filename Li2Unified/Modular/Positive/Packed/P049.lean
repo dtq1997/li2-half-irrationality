@@ -37,8 +37,8 @@ theorem parameter_binomGram_entry_GV_large (p : ℕ) [Fact p.Prime]
     have hdeg : q.natDegree ≤ 3*n+a+b-4*n := Li2.gramQuot_natDegree_le n a b
     have hu := parameterU_VG_of_integer_values p lam h1 hratio hdeg 0
       (fun i => by
-        simpa using (Li2.VG.eval hq (Li2.VG.intCast i)))
-    simpa [hlogE] using hu
+        simpa using! (Li2.VG.eval hq (Li2.VG.intCast i)))
+    simpa [hlogE] using! hu
   · apply Li2.GV.sum
     intro j hj
     obtain ⟨hj1, hj2⟩ := Finset.mem_Icc.mp hj
@@ -46,12 +46,12 @@ theorem parameter_binomGram_entry_GV_large (p : ℕ) [Fact p.Prime]
         ∏ l ∈ (Finset.Icc 1 (4*n)).erase j, ((l:ℚ)-(j:ℚ))) 0 :=
       Li2.gramRes_VG p n a b hj1 hj2
     have hc : Li2.VG p ((j:ℚ)*lam⁻¹^j) 0 := by
-      simpa using (Li2.VG.natCast (p := p) j).mul (hinv.pow j)
+      simpa using! (Li2.VG.natCast (p := p) j).mul (hinv.pow j)
     have ht : Li2.VG p (Li2.parameterTau lam j) 0 := by
-      simpa [hlogK] using parameterTau_VG_log p lam hlam hj2
+      simpa [hlogK] using! parameterTau_VG_log p lam hlam hj2
     have hlin : Li2.GV p (X - C (Li2.parameterTau lam j)) 0 :=
       Li2.GV.X.sub (Li2.GV.C ht)
-    simpa using (Li2.GV.C hres).mul ((Li2.GV.C hc).mul hlin)
+    simpa using! (Li2.GV.C hres).mul ((Li2.GV.C hc).mul hlin)
 
 end
 end Li2Unified.Proofs.Arithmetic
@@ -78,9 +78,9 @@ theorem parameter_Qtilde_GV_large (p : ℕ) [Fact p.Prime]
     (fun _ => (0:ℚ)) (fun _ => (0:ℚ)) (fun a b => by
       change Li2.GV p (numeratorFunctional lam (4*n)
         (Li2.gramNum n a b)) (0+0)
-      simpa using parameter_binomGram_entry_GV_large p lam h1 hratio hlam hinv
+      simpa using! parameter_binomGram_entry_GV_large p lam h1 hratio hlam hinv
         hn hpn a.isLt b.isLt)
-  simpa using hdet
+  simpa using! hdet
 
 /-- Primitive scale has no negative denominator contribution above all poles. -/
 theorem parameter_dtilde_large_val_nonneg (p : ℕ) [Fact p.Prime]

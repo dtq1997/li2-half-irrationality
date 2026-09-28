@@ -38,7 +38,7 @@ set_option backward.isDefEq.respectTransparency false in
 theorem hasDerivAt_e {u x : ℝ} : HasDerivAt (e u) (-2 * π * u * I * e u x) x := by
   have l2 : HasDerivAt (fun v => -v * u) (-u) x := by
     simpa only [neg_mul_comm] using hasDerivAt_mul_const (-u)
-  convert (hasDerivAt_fourierChar (-x * u)).scomp x l2 using 1
+  convert! (hasDerivAt_fourierChar (-x * u)).scomp x l2 using 1
   simp ; ring
 
 lemma fourierIntegral_deriv_aux2 (e : ℝ →ᵇ ℂ) {f : ℝ → ℂ} (hf : Integrable f) :

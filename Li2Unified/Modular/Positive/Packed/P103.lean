@@ -107,7 +107,7 @@ private lemma vertical_exp_bound_to_poly (n : ℕ) (hn : 1 ≤ n)
   calc
     W ≤ (Real.log 2 + 2 * Real.pi) * (1 + (n : ℝ) * y) *
         (Real.exp ((n : ℝ) * Vvertical y) * Real.exp E) := by
-      simpa only [hsplit] using hW
+      simpa only [hsplit] using! hW
     _ = (Real.log 2 + 2 * Real.pi) *
         ((1 + (n : ℝ) * y) * Real.exp E) *
         Real.exp ((n : ℝ) * Vvertical y) := by ring
@@ -153,7 +153,7 @@ theorem up_density_uniform_bound (n : ℕ) (hn : 1 ≤ n)
   have hy : 0 ≤ t / (n : ℝ) := div_nonneg ht hnR
   have h := normalized_up_density_poly_bound n hn (t / (n : ℝ)) hy
   have hty : (n : ℝ) * (t / (n : ℝ)) = t := mul_div_cancel₀ t hn0
-  simpa only [hty] using h
+  simpa only [hty] using! h
 
 theorem down_density_uniform_bound (n : ℕ) (hn : 1 ≤ n)
     (t : ℝ) (ht : 0 ≤ t) :
@@ -168,7 +168,7 @@ theorem down_density_uniform_bound (n : ℕ) (hn : 1 ≤ n)
   have hy : 0 ≤ t / (n : ℝ) := div_nonneg ht hnR
   have h := normalized_down_density_poly_bound n hn (t / (n : ℝ)) hy
   have hty : (n : ℝ) * (t / (n : ℝ)) = t := mul_div_cancel₀ t hn0
-  simpa only [hty] using h
+  simpa only [hty] using! h
 
 end
 end Li2Unified.Proofs.Contour

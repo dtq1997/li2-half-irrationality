@@ -69,7 +69,7 @@ theorem primeNormalizedMatrix_low_cross_GV (hp4 : 3 < p)
     (primeLowBlockJet hp4 a i).2 (primeLowBlockJet hp4 b j).2
     (primeOriginalBlockEquiv_symm_jet hp4 _ (primeLowBlockJet hp4 a i) rfl)
     (primeOriginalBlockEquiv_symm_jet hp4 _ (primeLowBlockJet hp4 b j) rfl)).1
-  simpa only [primeBlockWeight_low,primeLowBlockJet,Fin.val_mk] using h
+  simpa only [primeBlockWeight_low,primeLowBlockJet,Fin.val_mk] using! h
 
 theorem primeNormalizedMatrix_low_zero_GV (hp4 : 3 < p)
     (a : Fin (p-4)) (i j : Fin 2) :
@@ -87,7 +87,7 @@ theorem primeNormalizedMatrix_low_zero_GV (hp4 : 3 < p)
     (primeOriginalBlockEquiv_symm_jet hp4 _ (primeZeroBlockJet hp4 j)
       (primeZeroEdgeSlot_encode hp4 j))).1
   simpa only [primeBlockWeight_low,primeBlockWeight_zeroSlot,
-    primeLowBlockJet,primeZeroBlockJet,Fin.val_mk] using h
+    primeLowBlockJet,primeZeroBlockJet,Fin.val_mk] using! h
 
 theorem primeNormalizedMatrix_low_high_GV (hp4 : 3 < p)
     (a : Fin (p-4)) (i : Fin 2) (ell : Fin 3) :
@@ -106,7 +106,7 @@ theorem primeNormalizedMatrix_low_high_GV (hp4 : 3 < p)
     (primeOriginalBlockEquiv_symm_jet hp4 _ (primeHighBlockJet hp4 ell)
       (primeHighEdgeSlot_encode hp4 ell))).1
   simpa only [primeBlockWeight_low,primeBlockWeight_highSlot,
-    primeLowBlockJet,Fin.val_mk] using h
+    primeLowBlockJet,Fin.val_mk] using! h
 
 theorem primeNormalizedMatrix_zero_high_GV (hp4 : 3 < p)
     (i : Fin 2) (ell : Fin 3) :
@@ -126,7 +126,7 @@ theorem primeNormalizedMatrix_zero_high_GV (hp4 : 3 < p)
     (primeOriginalBlockEquiv_symm_jet hp4 _ (primeHighBlockJet hp4 ell)
       (primeHighEdgeSlot_encode hp4 ell))).1
   simpa only [primeBlockWeight_zeroSlot,primeBlockWeight_highSlot,
-    primeZeroBlockJet,Fin.val_mk] using h
+    primeZeroBlockJet,Fin.val_mk] using! h
 
 theorem primeNormalizedMatrix_high_cross_GV (hp4 : 3 < p)
     (ell m : Fin 3) (hem : ell ≠ m) :
@@ -146,7 +146,7 @@ theorem primeNormalizedMatrix_high_cross_GV (hp4 : 3 < p)
       (primeHighEdgeSlot_encode hp4 ell))
     (primeOriginalBlockEquiv_symm_jet hp4 _ (primeHighBlockJet hp4 m)
       (primeHighEdgeSlot_encode hp4 m))).1
-  simpa only [primeBlockWeight_highSlot] using h
+  simpa only [primeBlockWeight_highSlot] using! h
 
 theorem primeNormalizedMatrix_top_low_GV (hp4 : 3 < p)
     (a : Fin (p-4)) (i : Fin 2) :
@@ -162,7 +162,7 @@ theorem primeNormalizedMatrix_top_low_GV (hp4 : 3 < p)
     (primeLowBlockJet hp4 a i).2
     (primeOriginalBlockEquiv_symm_jet hp4 _ (primeLowBlockJet hp4 a i) rfl)).1
   simpa only [primeBlockWeight_top,primeBlockWeight_low,
-    primeLowBlockJet,Fin.val_mk] using h
+    primeLowBlockJet,Fin.val_mk] using! h
 
 theorem primeNormalizedMatrix_low_edge_GV (hp4 : 3 < p)
     (a : Fin (p-4)) (i : Fin 2) (k : Fin 6) :
@@ -175,7 +175,7 @@ theorem primeNormalizedMatrix_low_edge_GV (hp4 : 3 < p)
   · exact (primeNormalizedMatrix_low_high_GV hp4 a i ell).mono (by linarith)
   · exact (primeNormalizedMatrix_low_zero_GV hp4 a i j).mono (by linarith)
   · rw [primeNormalizedMatrix_symm hp4 (Sum.inl (a,i)) (Sum.inr 5)]
-    simpa only [add_comm] using primeNormalizedMatrix_top_low_GV hp4 a i
+    simpa only [add_comm] using! primeNormalizedMatrix_top_low_GV hp4 a i
 
 end
 end Li2

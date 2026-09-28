@@ -84,7 +84,7 @@ lemma padicValRat_two_neg_two : padicValRat 2 (-2 : ℚ) = 1 := by
 
 lemma negTwo_pow_VG (m : ℕ) : VG 2 ((-2:ℚ)^m) (m:ℚ) := by
   right
-  rw [padicValRat.pow (by norm_num), padicValRat_two_neg_two]
+  rw [padicValRat.pow, padicValRat_two_neg_two]
   simp
 
 section Bounds
@@ -271,8 +271,8 @@ lemma Wm_GV (a : Fin (2*n)) (i : Slot n) : GV 2 (Wm n a i) (ωw n i) := by
     simpa [ωw] using (h1.pow 3).mul h2
   · apply GV.C
     have hj := binom_JGV 2 a (nodeOf n μ) (log_le_L hn (d := a) (by have := a.isLt; omega))
-    simpa [ωw] using hj s.val (by omega)
-  · simpa [ωw] using GV.C (tailC_VG hn a b' a.isLt b'.isLt)
+    simpa [ωw] using! hj s.val (by omega)
+  · simpa [ωw] using! GV.C (tailC_VG hn a b' a.isLt b'.isLt)
 
 lemma Cmat_GV (i : Slot n) (b : Fin (2*n)) : GV 2 (Cmat n i b) (κw n i) := by
   letI : Fact (Nat.Prime 2) := ⟨Nat.prime_two⟩
@@ -303,7 +303,7 @@ lemma θw_le (x : Slot n) : θw n (slotRank n x) ≤ ωw n x + κw n x := by
   rcases x with _ | ⟨μ, s⟩ | b'
   · simp [θw, slotRank, ωw, κw]
   · simp only [θw, slotRank, ωw, κw, nodeOf]
-    rw [if_neg (by omega)]
+    erw [if_neg (by omega)]
     have hdiv : (1 + 3 * μ.val + s.val - 1) / 3 = μ.val := by have := s.isLt; omega
     rw [hdiv]
     have h1 : ((min (n + 1 + μ.val) (4*n+1) : ℕ) : ℚ) ≤ ((n + 1 + μ.val : ℕ) : ℚ) := by
@@ -311,7 +311,7 @@ lemma θw_le (x : Slot n) : θw n (slotRank n x) ≤ ωw n x + κw n x := by
     push_cast at h1 ⊢
     nlinarith
   · simp only [θw, slotRank, ωw, κw]
-    rw [if_neg (by omega)]
+    erw [if_neg (by omega)]
     have h1 : ((min (n + 1 + (1 + 9*n + b'.val - 1)/3) (4*n+1) : ℕ) : ℚ) ≤ ((4*n+1 : ℕ) : ℚ) := by
       exact_mod_cast min_le_right _ _
     linarith

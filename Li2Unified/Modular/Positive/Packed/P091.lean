@@ -23,13 +23,13 @@ private lemma shifted_poly_exp_decay (k : ℕ) :
       atTop (𝓝 0) := by
   have hbase : Tendsto (fun T : ℝ => T ^ k * Real.exp (-(2 * Real.pi) * T))
       atTop (𝓝 0) := by
-    simpa only [Real.rpow_natCast] using
+    simpa only [Real.rpow_natCast] using!
       tendsto_rpow_mul_exp_neg_mul_atTop_nhds_zero
         (k : ℝ) (2 * Real.pi) (by positivity)
   have hbound : Tendsto
       (fun T : ℝ => (2 : ℝ) ^ k * (T ^ k * Real.exp (-(2 * Real.pi) * T)))
       atTop (𝓝 0) := by
-    simpa only [mul_zero] using hbase.const_mul ((2 : ℝ) ^ k)
+    simpa only [mul_zero] using! hbase.const_mul ((2 : ℝ) ^ k)
   apply squeeze_zero_norm' _ hbound
   filter_upwards [eventually_ge_atTop (1 : ℝ)] with T hT
   have hT0 : 0 ≤ T := by linarith
@@ -55,7 +55,7 @@ lemma upper_actual_G_endpoint (m : ℕ) (F : ℚ[X]) :
   have hlim : Tendsto (fun T : ℝ =>
       C * ((1 + T) ^ (F.natDegree + 1) * Real.exp (-2 * Real.pi * T)))
       atTop (𝓝 0) := by
-    simpa only [mul_zero] using
+    simpa only [mul_zero] using!
       (shifted_poly_exp_decay (F.natDegree + 1)).const_mul C
   apply squeeze_zero_norm' _ hlim
   filter_upwards [eventually_ge_atTop (1 : ℝ)] with T hT
@@ -79,7 +79,7 @@ lemma upper_actual_G_endpoint (m : ℕ) (F : ℚ[X]) :
     change ‖Li2.originalComplexQuotient m F (point ⟨1, by decide⟩ T)‖ ≤
       Li2.originalCoefficientNormSum F * (1 + T) ^ F.natDegree
     rw [point_up]
-    simpa only [abs_of_nonneg hT0] using
+    simpa only [abs_of_nonneg hT0] using!
       Li2.originalComplexQuotient_vertical_polynomial_growth m F T
   calc
     ‖power z * kappaPlus z * Li2.originalContourG m F z‖ =
@@ -105,7 +105,7 @@ lemma lower_actual_G_endpoint (m : ℕ) (F : ℚ[X]) :
   have hlim : Tendsto (fun T : ℝ =>
       C * ((1 + T) ^ (F.natDegree + 1) * Real.exp (-2 * Real.pi * T)))
       atTop (𝓝 0) := by
-    simpa only [mul_zero] using
+    simpa only [mul_zero] using!
       (shifted_poly_exp_decay (F.natDegree + 1)).const_mul C
   apply squeeze_zero_norm' _ hlim
   filter_upwards [eventually_ge_atTop (1 : ℝ)] with T hT
@@ -129,7 +129,7 @@ lemma lower_actual_G_endpoint (m : ℕ) (F : ℚ[X]) :
     change ‖Li2.originalComplexQuotient m F (point ⟨2, by decide⟩ T)‖ ≤
       Li2.originalCoefficientNormSum F * (1 + T) ^ F.natDegree
     rw [point_down]
-    simpa only [abs_neg, abs_of_nonneg hT0] using
+    simpa only [abs_neg, abs_of_nonneg hT0] using!
       Li2.originalComplexQuotient_vertical_polynomial_growth m F (-T)
   calc
     ‖power z * kappaMinus z * Li2.originalContourG m F z‖ =

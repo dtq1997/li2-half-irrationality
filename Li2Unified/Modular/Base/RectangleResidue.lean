@@ -236,7 +236,7 @@ derivative `f' / f x` at `x`. -/
 theorem hasDerivAt_clog_neg_real {f : ℝ → ℂ} {x : ℝ} {f' : ℂ}
     (h₁ : HasDerivAt f f' x) (h₂ : -(f x) ∈ slitPlane) :
     HasDerivAt (fun t => log_neg (f t)) (f' / f x) x := by
-  simpa [div_eq_inv_mul, mul_comm] using (hasDerivAt_log_neg h₂).comp x h₁
+  simpa [div_eq_inv_mul, mul_comm] using! (hasDerivAt_log_neg h₂).comp x h₁
 
 /-- For points with positive imaginary part, `log_neg` agrees with `Complex.log`. -/
 theorem log_neg_eq_log_of_im_pos {ζ : ℂ} (him : 0 < ζ.im) :

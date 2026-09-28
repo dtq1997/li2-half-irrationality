@@ -97,15 +97,15 @@ theorem profileWindowCell_partition (A n : ℕ) (hA : 1 ≤ A) (f : ℕ → ℝ)
       (window_lt_partition A hAr j).le hnR)
   have h01 : b0 ≤ b1 := hle 5
   have h12 : b1 ≤ b2 := by simpa [b1, b2, profileWindowLeft,
-    profileWindowRight] using hle 4
+    profileWindowRight] using! hle 4
   have h23 : b2 ≤ b3 := by simpa [b2, b3, profileWindowLeft,
-    profileWindowRight] using hle 3
+    profileWindowRight] using! hle 3
   have h34 : b3 ≤ b4 := by simpa [b3, b4, profileWindowLeft,
-    profileWindowRight] using hle 2
+    profileWindowRight] using! hle 2
   have h45 : b4 ≤ b5 := by simpa [b4, b5, profileWindowLeft,
-    profileWindowRight] using hle 1
+    profileWindowRight] using! hle 1
   have h56 : b5 ≤ b6 := by simpa [b5, b6, profileWindowLeft,
-    profileWindowRight] using hle 0
+    profileWindowRight] using! hle 0
   let S (j : Fin 6) : ℝ :=
     ∑ p ∈ Finset.Ioc
       ⌊profileWindowLeft A j*(n:ℝ)⌋₊

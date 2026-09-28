@@ -73,6 +73,7 @@ theorem parameterLow_rational_entry_leading (lam : ℚ) (hlam : |(lam:ℝ)| < 1)
   have he : s-t = (p:ℚ_[p])^k * ((d:ℚ_[p])*(q:ℚ_[p])*
       ((u:ℚ_[p])-((primeLowRationalUnit a.val:ℚ):ℚ_[p]))) := by
     dsimp only [s,t,d,parameterLowRationalWeight]
+    simp only [PadicInt.coe_mul, PadicInt.coe_neg, PadicInt.coe_natCast, PadicInt.coe_pow, PadicInt.coe_intCast]
     simp only [integralParameterInvPow,integralRational,Rat.cast_inv,Rat.cast_mul,Rat.cast_pow,Rat.cast_neg,Rat.cast_ofNat,
       Rat.cast_natCast,Rat.cast_intCast,Int.cast_mul,PadicInt.coe_mul,
       PadicInt.coe_pow,PadicInt.coe_neg,PadicInt.coe_natCast,PadicInt.coe_intCast]
@@ -82,7 +83,7 @@ theorem parameterLow_rational_entry_leading (lam : ℚ) (hlam : |(lam:ℝ)| < 1)
     exact mul_le_mul_of_nonneg_left hdelta (by positivity)
   apply fieldPolynomial_replace_leading_bound _ s t _ (by positivity) ?_ hst n
   intro l
-  simpa only [s,k,q,c,u] using parameterLow_original_entry_leading lam hlam hu hone hferm hp4 a ha0 ha i j l
+  simpa only [s,k,q,c,u] using! parameterLow_original_entry_leading lam hlam hu hone hferm hp4 a ha0 ha i j l
 
 end
 end Li2Unified.Proofs.PrimeEdge
@@ -164,7 +165,7 @@ theorem parameterLow_block_scaled_GV (lam : ℚ) (hlam : |(lam:ℝ)| < 1)
   have hA : A.val ≤ p-4 := by have h := a.isLt; dsimp only [A]; omega
   have h := parameterLow_original_scaled_GV lam hlam hunit hone hferm hp4 A hA0 hA ii jj
   simpa only [A,ii,jj,primeLowBlockJet,Fin.val_mk,primeBlockWeight,
-    parameterLowMoment_eq_fixedLowBlock] using h
+    parameterLowMoment_eq_fixedLowBlock] using! h
 
 end
 end Li2Unified.Proofs.PrimeEdge
@@ -197,12 +198,12 @@ theorem parameterTop_zero_leading (lam : ℚ)
   have hm : primeMultiplicity p a = 2 := primeMultiplicity_low hp4 a (by simp [a])
   have ht : ∃ E : ℤ[X], (primeProduct p*primeProduct p).comp (primeDiscSubstitution p a) =
       C ((p:ℤ)^4)*X^4*(C (primeLocalUnit p a*primeLocalUnit p a)+C (p:ℤ)*E) := by
-    simpa only [hm] using primeProduct_square_expansion p a
+    simpa only [hm] using! primeProduct_square_expansion p a
   have h := parameterDiscTest_zero_U_leading lam hu hone hferm hp4 (primeProduct p*primeProduct p) 4 ⟨4,by decide⟩
     (primeLocalUnit p a*primeLocalUnit p a) (parameterIntegralEta lam hu (parameterPowerRatio_integral lam hu hone hferm)) ht n
   rw [parameterDiscContribution_cube_zero]
   simpa [parameterTopDiscLeading,a,PadicInt.coe_mul,PadicInt.coe_pow,PadicInt.coe_intCast,
-    PadicInt.coe_natCast,pow_two,mul_assoc] using h
+    PadicInt.coe_natCast,pow_two,mul_assoc] using! h
 
 theorem parameterTop_high_leading (lam : ℚ)
     (hu : lam ≠ 0 ∧ padicValRat p lam = 0)
@@ -213,7 +214,7 @@ theorem parameterTop_high_leading (lam : ℚ)
   have hm : primeMultiplicity p a = 1 := by unfold primeMultiplicity; rw [if_neg (by omega)]
   have ht : ∃ E : ℤ[X], (primeProduct p*primeProduct p).comp (primeDiscSubstitution p a) =
       C ((p:ℤ)^2)*X^2*(C (primeLocalUnit p a*primeLocalUnit p a)+C (p:ℤ)*E) := by
-    simpa only [hm] using primeProduct_square_expansion p a
+    simpa only [hm] using! primeProduct_square_expansion p a
   have h : ∀ l, ‖(C (p:ℚ_[p])*parameterDiscContribution lam hu (parameterPowerRatio_integral lam hu hone hferm) hp4 a (primeProduct p*primeProduct p) -
       C ((p:ℚ_[p])^2*parameterTopDiscLeading lam a)).coeff l‖ ≤ ‖(p:ℚ_[p])‖^3 := by
     intro l
@@ -226,7 +227,7 @@ theorem parameterTop_high_leading (lam : ℚ)
       have hz : a.val = 0 := by simp [he]
       omega
     simpa [parameterTopDiscLeading,ha0,if_neg (by omega : a.val ≠ 0),if_neg (by omega : ¬ a.val ≤ p-4),
-      PadicInt.coe_mul,PadicInt.coe_pow,PadicInt.coe_intCast,PadicInt.coe_natCast,pow_two,mul_assoc] using h
+      PadicInt.coe_mul,PadicInt.coe_pow,PadicInt.coe_intCast,PadicInt.coe_natCast,pow_two,mul_assoc] using! h
   have he : C ((p:ℚ_[p])^3)*parameterDiscContribution lam hu (parameterPowerRatio_integral lam hu hone hferm) hp4 a (primeProduct p*primeProduct p) -
       C ((p:ℚ_[p])^4*parameterTopDiscLeading lam a) =
       C ((p:ℚ_[p])^2)*(C (p:ℚ_[p])*parameterDiscContribution lam hu (parameterPowerRatio_integral lam hu hone hferm) hp4 a (primeProduct p*primeProduct p) -
@@ -248,12 +249,12 @@ theorem parameterTop_low_bound (lam : ℚ)
   have ht : ∃ F : ℤ[X], (primeProduct p*primeProduct p).comp (primeDiscSubstitution p a) =
       C ((p:ℤ)^4)*F := by
     refine ⟨X^4*(C (primeLocalUnit p a*primeLocalUnit p a)+C (p:ℤ)*E),?_⟩
-    simpa only [hm,mul_assoc] using hE
+    simpa only [hm,mul_assoc] using! hE
   have h : ∀ l, ‖(C ((p:ℚ_[p])^2)*parameterDiscContribution lam hu (parameterPowerRatio_integral lam hu hone hferm) hp4 a (primeProduct p*primeProduct p)).coeff l‖ ≤
       ‖(p:ℚ_[p])‖^4 := by
     intro l
     rw [parameterDiscContribution_scaled_low lam hu (parameterPowerRatio_integral lam hu hone hferm) hp4 a ha0 ha]
-    simpa only [coeff_map,norm_pow] using parameterDiscTestScaled_factor_bound (lam^p) (parameter_power_unit lam hu) (parameterPowerRatio_integral lam hu hone hferm) hp4 _ a 4
+    simpa only [coeff_map,norm_pow] using! parameterDiscTestScaled_factor_bound (lam^p) (parameter_power_unit lam hu) (parameterPowerRatio_integral lam hu hone hferm) hp4 _ a 4
       (parameterIntegralEta lam hu (parameterPowerRatio_integral lam hu hone hferm)) ht l
   have he : C ((p:ℚ_[p])^3)*parameterDiscContribution lam hu (parameterPowerRatio_integral lam hu hone hferm) hp4 a (primeProduct p*primeProduct p) =
       C ((p:ℚ_[p])^1)*(C ((p:ℚ_[p])^2)*parameterDiscContribution lam hu (parameterPowerRatio_integral lam hu hone hferm) hp4 a (primeProduct p*primeProduct p)) := by
@@ -273,7 +274,7 @@ theorem parameterTop_disc_leading (lam : ℚ)
     rw [he]
     exact parameterTop_zero_leading lam hu hone hferm hp4 n
   · by_cases hl : a.val ≤ p-4
-    · simpa only [parameterTopDiscLeading,if_neg hz,if_pos hl,mul_zero,C_0,sub_zero] using
+    · simpa only [parameterTopDiscLeading,if_neg hz,if_pos hl,mul_zero,C_0,sub_zero] using!
         parameterTop_low_bound lam hu hone hferm hp4 a (by omega) hl n
     · exact parameterTop_high_leading lam hu hone hferm hp4 a (by omega) n
 
@@ -322,7 +323,7 @@ theorem parameterTop_original_entry_leading (lam : ℚ) (hlam : |(lam:ℝ)| < 1)
   have h := fieldPolynomial_integral_weight_leading
     (C ((p:ℚ_[p])^3)*parameterDiscContribution lam hu (parameterPowerRatio_integral lam hu hone hferm) hp4 a (primeProduct p*primeProduct p))
     (integralParameterInvPow lam hu.1 hu.2 a.val) _ _ (parameterTop_disc_leading lam hu hone hferm hp4 a) l
-  simpa only [integralParameterInvPow,integralRational,Rat.cast_pow,Rat.cast_inv,PadicInt.coe_pow,PadicInt.coe_neg,PadicInt.coe_natCast] using h
+  simpa only [integralParameterInvPow,integralRational,Rat.cast_pow,Rat.cast_inv,PadicInt.coe_pow,PadicInt.coe_neg,PadicInt.coe_natCast] using! h
 
 end
 end Li2Unified.Proofs.PrimeEdge
@@ -355,7 +356,7 @@ theorem parameterTopLeadingSum_four (lam : ℚ) (hu : lam ≠ 0 ∧ padicValRat 
     apply Finset.sum_subset (Finset.subset_univ s)
     intro a _ ha
     have hn : ¬ (a.val=0 ∨ a.val=p-1 ∨ a.val=p-2 ∨ a.val=p-3) := by
-      simpa only [s,a0,a1,a2,a3,Finset.mem_insert,Finset.mem_singleton,Fin.ext_iff] using ha
+      simpa only [s,a0,a1,a2,a3,Finset.mem_insert,Finset.mem_singleton,Fin.ext_iff] using! ha
     have hz : a.val ≠ 0 := by omega
     have hl : a.val ≤ p-4 := by have := a.isLt; omega
     simp only [F,parameterTopDiscLeading,if_neg hz,if_pos hl,mul_zero]
@@ -382,6 +383,7 @@ theorem parameterTopLeadingSum_weighted (lam : ℚ) (hu : lam ≠ 0 ∧ padicVal
        (parameterHighDiscWeight (p := p) lam hu ⟨p-2,by omega⟩:ℚ_[p])*(primeLocalUnit p ⟨p-2,by omega⟩:ℚ_[p])^2 +
        (parameterHighDiscWeight (p := p) lam hu ⟨p-3,by omega⟩:ℚ_[p])*(primeLocalUnit p ⟨p-3,by omega⟩:ℚ_[p])^2)*(highShapeVValue lam 2:ℚ_[p]) := by
   rw [parameterTopLeadingSum_four lam hu hp4]
+  simp only [parameterHighDiscWeight, PadicInt.coe_mul, PadicInt.coe_neg, PadicInt.coe_natCast]
   simp only [parameterTopDiscLeading,Fin.val_mk,ite_true,
     if_neg (by omega : p-1 ≠ 0),if_neg (by omega : p-2 ≠ 0),if_neg (by omega : p-3 ≠ 0),
     if_neg (by omega : ¬ p-1 ≤ p-4),if_neg (by omega : ¬ p-2 ≤ p-4),if_neg (by omega : ¬ p-3 ≤ p-4),

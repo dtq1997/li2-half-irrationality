@@ -117,12 +117,12 @@ lemma gk_le_two_pi {γ : ι → ℝ → ℂ} (hγ : ∀ k, Continuous (γ k)) {t
   unfold gk
   have := intervalIntegral.integral_mono_on (μ := volume) (a := 0) (b := 2 * π)
     (f := fun θ => Real.exp (-(2 * t) * ‖γ k θ - u‖ ^ 2)) (g := fun _ => (1 : ℝ)) (by positivity)
-    (by apply Continuous.intervalIntegrable; fun_prop) intervalIntegral.intervalIntegrable_const
+    (by apply Continuous.intervalIntegrable; fun_prop) intervalIntegrable_const
     (fun θ _ => by
       apply Real.exp_le_one_iff.mpr
       have : 0 ≤ ‖γ k θ - u‖ ^ 2 := by positivity
       nlinarith)
-  simpa using this
+  simpa using! this
 
 lemma gk_le {γ : ι → ℝ → ℂ} (hγ : ∀ k, Continuous (γ k)) {R : ℝ} (hR : ∀ k θ, ‖γ k θ‖ ≤ R)
     {t : ℝ} (ht : 0 ≤ t) (k : ι) (u : ℂ) :
@@ -131,7 +131,7 @@ lemma gk_le {γ : ι → ℝ → ℂ} (hγ : ∀ k, Continuous (γ k)) {R : ℝ}
   have := intervalIntegral.integral_mono_on (μ := volume) (a := 0) (b := 2 * π)
     (f := fun θ => Real.exp (-(2 * t) * ‖γ k θ - u‖ ^ 2))
     (g := fun _ => Real.exp (2 * t * R ^ 2) * Real.exp (-t * ‖u‖ ^ 2)) (by positivity)
-    (by apply Continuous.intervalIntegrable; fun_prop) intervalIntegral.intervalIntegrable_const
+    (by apply Continuous.intervalIntegrable; fun_prop) intervalIntegrable_const
     (fun θ _ => exp_gauss_le ht (hR k θ))
   rw [intervalIntegral.integral_const] at this
   simp only [sub_zero, smul_eq_mul] at this
@@ -282,9 +282,9 @@ lemma pairInt_Ltr {γ : ι → ℝ → ℂ} (hγ : ∀ k, Continuous (γ k)) {a 
   unfold Gk
   have hi : ∀ θ, IntervalIntegrable (fun φ => Real.exp (-s * ‖γ k θ - γ l φ‖ ^ 2)) volume 0 (2 * π) :=
     fun θ => by apply Continuous.intervalIntegrable; fun_prop
-  simp_rw [intervalIntegral.integral_sub intervalIntegral.intervalIntegrable_const (hi _),
+  simp_rw [intervalIntegral.integral_sub intervalIntegrable_const (hi _),
     intervalIntegral.integral_const]
-  rw [intervalIntegral.integral_sub intervalIntegral.intervalIntegrable_const
+  rw [intervalIntegral.integral_sub intervalIntegrable_const
     (by apply Continuous.intervalIntegrable
         apply continuous_parametric_intervalIntegral_of_continuous'
         fun_prop),

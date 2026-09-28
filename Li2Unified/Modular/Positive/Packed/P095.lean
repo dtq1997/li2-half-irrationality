@@ -58,7 +58,7 @@ theorem starPartition_scaled (n : ℕ) (hn : 1 ≤ n) :
   have hnpos : (0:ℝ) < n := by exact_mod_cast (Nat.zero_lt_of_lt hn)
   exact star_integral_scale_pi (2*n) (n:ℝ) hnpos
     (starPartitionDensity n) (by
-      simpa only [starPartitionDensity] using
+      simpa only [starPartitionDensity] using!
         Proofs.Contour.star_partition_integrable n)
 
 end

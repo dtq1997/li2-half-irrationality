@@ -70,7 +70,7 @@ lemma integrable_originalContourWeight_mul_pow (k : ℕ) :
   apply hm.mono' (continuous_originalContourWeight.mul
     (continuous_originalContourPoint.pow k)).aestronglyMeasurable
   exact Filter.Eventually.of_forall (fun y => by
-    rw [Pi.mul_apply, norm_mul, norm_pow]
+    rw [Pi.mul_apply, Pi.pow_apply, norm_mul, norm_pow]
     have hp : ‖originalContourPoint y‖ ≤ 1 + |y| := by
       have h := originalContourPoint_norm_le y
       linarith

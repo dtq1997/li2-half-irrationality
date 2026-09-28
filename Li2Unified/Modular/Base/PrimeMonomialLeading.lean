@@ -30,9 +30,9 @@ lemma primeDiscBaseRegular_isRestricted (a : Fin p) :
     PowerSeries.IsRestricted 1 (primeDiscBaseRegular a) := by
   unfold primeDiscBaseRegular
   split_ifs
-  · exact PowerSeries.IsRestricted.zero 1
-  · exact PowerSeries.IsRestricted.zero 1
-  · exact PowerSeries.IsRestricted.one 1
+  · exact PowerSeries.isRestricted_zero 1
+  · exact PowerSeries.isRestricted_zero 1
+  · exact PowerSeries.isRestricted_one 1
 
 lemma primeDiscMonomial_nested (hp4 : 3 < p) (a : Fin p) (k : ℕ) :
     primeDiscMonomialRegular hp4 a k =
@@ -66,7 +66,7 @@ theorem primeDiscMonomial_zero_U_leading (hp4 : 3 < p) (k : Fin 5)
   simp only [primeDiscBaseRegular, primeDiscBaseResidue, if_pos rfl]
   apply primeDiscPole_U_substituted_rational
   · exact integralPoleMulRegular_isRestricted _ _ _ (polynomial_isRestricted _)
-      (PowerSeries.IsRestricted.zero 1) _
+      (PowerSeries.isRestricted_zero 1) _
   · exact primeZeroShape_U_value_norm hp4 k
 
 theorem primeDiscMonomial_low_V_leading (hp4 : 3 < p) (a : Fin p)
@@ -80,7 +80,7 @@ theorem primeDiscMonomial_low_V_leading (hp4 : 3 < p) (a : Fin p)
   simp only [primeDiscBaseRegular, primeDiscBaseResidue, if_neg (by omega : a.val ≠ 0), if_pos ha]
   apply primeDiscPole_V_substituted_rational
   · exact integralPoleMulRegular_isRestricted _ _ _ (polynomial_isRestricted _)
-      (PowerSeries.IsRestricted.zero 1) _
+      (PowerSeries.isRestricted_zero 1) _
   · exact primeLowShape_V_value_norm hp4 k
 
 theorem primeDiscMonomial_high_V_leading (hp4 : 3 < p) (a : Fin p)
@@ -95,7 +95,7 @@ theorem primeDiscMonomial_high_V_leading (hp4 : 3 < p) (a : Fin p)
     if_neg (by omega : ¬a.val ≤ p-4)]
   apply primeDiscPole_V_substituted_rational
   · exact integralPoleMulRegular_isRestricted _ _ _ (polynomial_isRestricted _)
-      (PowerSeries.IsRestricted.one 1) _
+      (PowerSeries.isRestricted_one 1) _
   · exact primeHighShape_V_value_norm hp4 k
 
 end

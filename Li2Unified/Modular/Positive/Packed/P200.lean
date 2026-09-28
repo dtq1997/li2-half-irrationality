@@ -21,7 +21,7 @@ theorem checkRow_lower {s : LayerQ} {data : RowData}
   | none => simp [checkRow, hp] at hc
   | some p =>
       have hcheck : checkExprPoint p (rowExpr s) data.node data.bound = true := by
-        simpa only [checkRow, hp] using hc
+        simpa only [checkRow, hp] using! hc
       exact (checkExprPoint_sound hp hcheck).1
 
 theorem checkRow_lower_valid {s : LayerQ} {data : RowData}
@@ -30,7 +30,7 @@ theorem checkRow_lower_valid {s : LayerQ} {data : RowData}
   | none => simp [checkRow, hp] at hc
   | some p =>
       have hcheck : checkExprPoint p (rowExpr s) data.node data.bound = true := by
-        simpa only [checkRow, hp] using hc
+        simpa only [checkRow, hp] using! hc
       have hv := checkExprPoint_valid hcheck
       simp only [validI, Bool.and_eq_true] at hv
       exact hv.1.1
@@ -49,8 +49,8 @@ theorem checkRows_lower {ss : List LayerQ} {ds : List RowData}
       | nil => simp [checkRows] at hc
       | cons d ds =>
           have hp : checkRow s d = true ∧ checkRows ss ds = true := by
-            simpa only [checkRows, Bool.and_eq_true] using hc
-          simpa only [List.map_cons, List.sum_cons] using
+            simpa only [checkRows, Bool.and_eq_true] using! hc
+          simpa only [List.map_cons, List.sum_cons] using!
             add_le_add (checkRow_lower hp.1) (ih hp.2)
 
 theorem checkRows_lower_valid {ss : List LayerQ} {ds : List RowData}
@@ -65,7 +65,7 @@ theorem checkRows_lower_valid {ss : List LayerQ} {ds : List RowData}
       | nil => simp [checkRows] at hc
       | cons d ds =>
           have hp : checkRow s d = true ∧ checkRows ss ds = true := by
-            simpa only [checkRows, Bool.and_eq_true] using hc
+            simpa only [checkRows, Bool.and_eq_true] using! hc
           intro d' hd'
           rcases List.mem_cons.mp hd' with rfl | hmem
           · exact checkRow_lower_valid hp.1

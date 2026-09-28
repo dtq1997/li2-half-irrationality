@@ -70,9 +70,9 @@ theorem primeHigh_pair_scaled_GV (hp4 : 3 < p) (ell : Fin 3) :
   have hu : c ≠ 0 ∧ padicValRat p c = 0 := primeLocalUnit_unit p _
   have hi : VG p c⁻¹ 0 := rational_unit_inverse_VG c hu.1 hu.2
   have hraw : GV p (F-C ((p:ℚ)^(-1:ℤ)*(c^2*w*8))) 0 := by
-    simpa [F,c,w] using primeHigh_rational_entry_GV hp4 ell (0:Fin 2) (0:Fin 2) (by decide)
+    simpa [F,c,w] using! primeHigh_rational_entry_GV hp4 ell (0:Fin 2) (0:Fin 2) (by decide)
   have hs : GV p (C (c⁻¹*c⁻¹)*(F-C ((p:ℚ)^(-1:ℤ)*(c^2*w*8)))) 0 := by
-    simpa only [zero_add] using GV.C_mul (hi.mul hi) hraw
+    simpa only [zero_add] using! GV.C_mul (hi.mul hi) hraw
   have he : C (c⁻¹*c⁻¹)*(F-C ((p:ℚ)^(-1:ℤ)*(c^2*w*8))) =
       C (c⁻¹*c⁻¹)*F-C ((p:ℚ)^(-1:ℤ)*(w*8)) := by
     rw [mul_sub,← C_mul]
@@ -103,9 +103,9 @@ theorem primeHigh_top_scaled_GV (hp4 : 3 < p) (ell : Fin 3) :
   have hu : c ≠ 0 ∧ padicValRat p c = 0 := primeLocalUnit_unit p _
   have hi : VG p c⁻¹ 0 := rational_unit_inverse_VG c hu.1 hu.2
   have hraw : GV p (F-C (c^2*w*q)) 1 := by
-    simpa [F,c,w,q] using primeHigh_rational_entry_GV hp4 ell (0:Fin 2) (1:Fin 2) (by decide)
+    simpa [F,c,w,q] using! primeHigh_rational_entry_GV hp4 ell (0:Fin 2) (1:Fin 2) (by decide)
   have hs : GV p (C c⁻¹*(F-C (c^2*w*q))) 1 := by
-    simpa only [zero_add] using GV.C_mul hi hraw
+    simpa only [zero_add] using! GV.C_mul hi hraw
   have he : C c⁻¹*(F-C (c^2*w*q)) = C c⁻¹*F-C (c*w*q) := by
     rw [mul_sub,← C_mul]
     congr 1
@@ -114,14 +114,14 @@ theorem primeHigh_top_scaled_GV (hp4 : 3 < p) (ell : Fin 3) :
   rw [he] at hs
   have hc : VG p (c-v) 1 := by
     apply VG_of_padic_norm_pow_le _ 1
-    simpa only [c,v,Rat.cast_sub,Rat.cast_intCast,pow_one] using
+    simpa only [c,v,Rat.cast_sub,Rat.cast_intCast,pow_one] using!
       primeHighRationalLocalUnit_norm hp4 ell
   have hq : VG p q 0 := by
-    simpa [q] using primeHighMoment_VG hp4 (1:Fin 3)
+    simpa [q] using! primeHighMoment_VG hp4 (1:Fin 3)
   have hcoeff : VG p (w*q) 0 := by
-    simpa only [zero_add] using (primeHighRationalWeight_VG hp4 ell).mul hq
+    simpa only [zero_add] using! (primeHighRationalWeight_VG hp4 ell).mul hq
   have hcorr : GV p (C ((c-v)*(w*q))) 1 := by
-    simpa only [add_zero] using GV.C (hc.mul hcoeff)
+    simpa only [add_zero] using! GV.C (hc.mul hcoeff)
   have he' : C c⁻¹*F-C (v*w*q) =
       (C c⁻¹*F-C (c*w*q))+C ((c-v)*(w*q)) := by
     simp only [C_mul,C_sub]
@@ -179,7 +179,7 @@ theorem primeNormalizedMatrix_high_diag_GV (hp4 : 3 < p) (ell : Fin 3) :
         C ((p:ℚ)^(-1:ℤ)*edgeBlock (primeHighEdgeSlot ell) (primeHighEdgeSlot ell)))
       (primeBlockWeight (p := p) (Sum.inr (primeHighEdgeSlot ell)) +
         primeBlockWeight (p := p) (Sum.inr (primeHighEdgeSlot ell)) + 1) := by
-  simpa only [primeNormalizedMatrix] using primeHigh_pair_block_scaled_GV hp4 ell
+  simpa only [primeNormalizedMatrix] using! primeHigh_pair_block_scaled_GV hp4 ell
 
 theorem primeNormalizedMatrix_high_top_GV (hp4 : 3 < p) (ell : Fin 3) :
     GV p
@@ -187,7 +187,7 @@ theorem primeNormalizedMatrix_high_top_GV (hp4 : 3 < p) (ell : Fin 3) :
         C (edgeBlock (primeHighEdgeSlot ell) 5))
       (primeBlockWeight (p := p) (Sum.inr (primeHighEdgeSlot ell)) +
         primeBlockWeight (p := p) (Sum.inr 5) + 1) := by
-  simpa only [primeNormalizedMatrix] using primeHigh_top_block_scaled_GV hp4 ell
+  simpa only [primeNormalizedMatrix] using! primeHigh_top_block_scaled_GV hp4 ell
 
 theorem primeNormalizedMatrix_top_high_GV (hp4 : 3 < p) (ell : Fin 3) :
     GV p
@@ -197,7 +197,7 @@ theorem primeNormalizedMatrix_top_high_GV (hp4 : 3 < p) (ell : Fin 3) :
         primeBlockWeight (p := p) (Sum.inr (primeHighEdgeSlot ell)) + 1) := by
   rw [primeNormalizedMatrix_symm hp4 (Sum.inr 5) (Sum.inr (primeHighEdgeSlot ell)),
     primeHigh_top_edge_symm]
-  simpa only [add_comm] using primeNormalizedMatrix_high_top_GV hp4 ell
+  simpa only [add_comm] using! primeNormalizedMatrix_high_top_GV hp4 ell
 
 end
 end Li2

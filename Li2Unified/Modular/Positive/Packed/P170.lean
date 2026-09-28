@@ -151,13 +151,13 @@ theorem contains_logAtom {q u rho : QPair} {k : ℤ}
     (anchoredLogBounds k u rho).toBounds.Contains (Real.log (q.toRat : ℝ)) := by
   rw [anchoredLogBounds_toBounds k u rho hu hu0 hrho hrho0]
   have hu0' : 0 < u.toRat := by
-    simpa [qZero_toRat] using qLT_sound qValid_qZero hu hu0
+    simpa [qZero_toRat] using! qLT_sound qValid_qZero hu hu0
   have hu1' : u.toRat ≤ 1 := by
-    simpa [qOne_toRat] using qLE_sound hu qValid_qOne hu1
+    simpa [qOne_toRat] using! qLE_sound hu qValid_qOne hu1
   have hrho0' : 0 < rho.toRat := by
-    simpa [qZero_toRat] using qLT_sound qValid_qZero hrho hrho0
+    simpa [qZero_toRat] using! qLT_sound qValid_qZero hrho hrho0
   have hrho1' : rho.toRat ≤ 1 := by
-    simpa [qOne_toRat] using qLE_sound hrho qValid_qOne hrho1
+    simpa [qOne_toRat] using! qLE_sound hrho qValid_qOne hrho1
   exact Li2Unified.Proofs.Potential.contains_anchored_log
     q.toRat u.toRat rho.toRat k hu0' hu1' hrho0' hrho1'
     (logAtom_ratio_sound hq hu hrho hrho0 heq)

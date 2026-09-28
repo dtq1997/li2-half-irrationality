@@ -22,7 +22,7 @@ theorem restrictedDivDiff_summable (c : ℤ_[p]) (f : PowerSeries ℤ_[p])
   apply NonarchimedeanAddGroup.summable_of_tendsto_cofinite_zero
   rw [Nat.cofinite_eq_atTop, tendsto_zero_iff_norm_tendsto_zero]
   have ht : Tendsto (fun k : ℕ => ‖PowerSeries.coeff (n+k+1) f‖) atTop (𝓝 0) := by
-    simpa only [Nat.add_comm, Nat.add_left_comm, Nat.add_assoc] using
+    simpa only [Nat.add_comm, Nat.add_left_comm, Nat.add_assoc] using!
       (restricted_coeff_tendsto hf).comp (tendsto_add_atTop_nat (n+1))
   exact squeeze_zero (fun _ => norm_nonneg _)
     (fun k => integral_coeff_mul_norm_le _ _) ht
@@ -37,11 +37,11 @@ theorem restrictedDivDiff_coeff_bound (c : ℤ_[p]) (f : PowerSeries ℤ_[p])
 
 theorem restrictedDivDiff_isRestricted (c : ℤ_[p]) (f : PowerSeries ℤ_[p])
     (hf : PowerSeries.IsRestricted 1 f) : PowerSeries.IsRestricted 1 (restrictedDivDiff c f) := by
-  rw [PowerSeries.IsRestricted.isRestricted_iff]
+  rw [PowerSeries.isRestricted_iff', Metric.tendsto_atTop]
   intro ε hε
-  obtain ⟨N, hN⟩ := (PowerSeries.IsRestricted.isRestricted_iff 1).mp hf (ε/2) (by linarith)
+  obtain ⟨N, hN⟩ := Metric.tendsto_atTop.mp (restricted_coeff_tendsto hf) (ε/2) (by linarith)
   refine ⟨N, fun n hn => ?_⟩
-  simp only [one_pow, mul_one, Real.norm_eq_abs, abs_norm] at hN ⊢
+  simp only [one_pow, mul_one, Real.dist_eq, sub_zero, abs_norm] at hN ⊢
   apply lt_of_le_of_lt (restrictedDivDiff_coeff_bound c f n (ε/2) ?_) (by linarith)
   intro k
   exact (hN (n+k+1) (by omega)).le

@@ -47,7 +47,7 @@ theorem rational_fermat (q : ℚ) (hq : Li2.VG p q 0) :
   have hdval : padicValRat p (q.den : ℚ) = 0 :=
     Li2Unified.ParameterFamily.nat_valuation_zero q.den hd
   have hdpval : padicValRat p ((q.den : ℚ) ^ p) = 0 := by
-    rw [padicValRat.pow hd0, hdval]
+    rw [padicValRat.pow, hdval]
     simp
   have hdi : Li2.VG p (q.den : ℚ)⁻¹ 0 :=
     Li2.rational_unit_inverse_VG _ hd0 hdval

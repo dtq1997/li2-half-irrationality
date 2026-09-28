@@ -37,7 +37,7 @@ theorem starProfile_discrete_log_bound {h : ℕ} (hh : 0 < h)
         | none => -1 | some _ => 1 / ((h : ℝ) * (2 * Real.pi))
       (∑ k : Option (Fin h), ∑ l : Option (Fin h),
         w k * w l * E k l) ≤ 0 := by
-    simpa only [E, starProfilePair] using
+    simpa only [E, starProfilePair] using!
       starProfileBlock_energy_nonpos hh x hε
   have h00 : E none none = comparisonEnergy :=
     starProfileBlock_none_none h x ε
@@ -45,7 +45,7 @@ theorem starProfile_discrete_log_bound {h : ℕ} (hh : 0 < h)
       (2 * Real.pi) *
         (comparisonPotential (x i) + 2 * (11 / 20 : ℝ) * ε) := by
     intro i
-    convert starProfileBlock_cross_le h x hε i using 1 <;> ring
+    convert! starProfileBlock_cross_le h x hε i using 1 <;> ring
   have hdiag : ∀ i : Fin h, E (some i) (some i) =
       (2 * Real.pi)^2 * Real.log ε :=
     starProfileBlock_circle_self h x hε
@@ -60,7 +60,7 @@ theorem starProfile_discrete_log_bound {h : ℕ} (hh : 0 < h)
     (by positivity) hε (by norm_num)
     x (fun i => comparisonPotential (x i)) comparisonEnergy E
     hEsym henergy h00 hcross hdiag hoff
-  convert hmain using 1 <;> ring
+  convert! hmain using 1 <;> ring
 
 end
 end Li2Unified.Proofs.Contour

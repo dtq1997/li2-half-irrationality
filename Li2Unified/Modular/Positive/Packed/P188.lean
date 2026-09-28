@@ -39,7 +39,7 @@ private lemma weighted_point_le {ρ : ι → ℝ → ℝ} {γ : ι → ℝ → �
   have he : Real.exp (-(2*t)*‖γ k θ-u‖^2) ≤ 1 := by
     apply Real.exp_le_one_iff.mpr
     nlinarith [sq_nonneg ‖γ k θ-u‖]
-  simpa only [mul_one] using mul_le_mul (hρC k θ) he (Real.exp_pos _).le hC
+  simpa only [mul_one] using! mul_le_mul (hρC k θ) he (Real.exp_pos _).le hC
 
 lemma weightedgk_le_two_pi {ρ : ι → ℝ → ℝ} {γ : ι → ℝ → ℂ} {C : ℝ}
     (hρ : ∀ k, Continuous (ρ k)) (hγ : ∀ k, Continuous (γ k))
@@ -48,8 +48,8 @@ lemma weightedgk_le_two_pi {ρ : ι → ℝ → ℝ} {γ : ι → ℝ → ℂ} {
   have h := intervalIntegral.integral_mono_on (μ := volume) (a := 0) (b := 2*π)
     (f := fun θ => ρ k θ * Real.exp (-(2*t)*‖γ k θ-u‖^2)) (g := fun _ => C)
     (by positivity) (by apply Continuous.intervalIntegrable; fun_prop)
-    intervalIntegral.intervalIntegrable_const (fun θ _ => weighted_point_le hC hρC ht k θ u)
-  simpa only [weightedgk, intervalIntegral.integral_const, sub_zero, smul_eq_mul] using h
+    intervalIntegrable_const (fun θ _ => weighted_point_le hC hρC ht k θ u)
+  simpa only [weightedgk, intervalIntegral.integral_const, sub_zero, smul_eq_mul] using! h
 
 lemma weightedgk_le_gaussian {ρ : ι → ℝ → ℝ} {γ : ι → ℝ → ℂ} {C R : ℝ}
     (hρ : ∀ k, Continuous (ρ k)) (hγ : ∀ k, Continuous (γ k))
@@ -60,7 +60,7 @@ lemma weightedgk_le_gaussian {ρ : ι → ℝ → ℝ} {γ : ι → ℝ → ℂ}
     (f := fun θ => ρ k θ * Real.exp (-(2*t)*‖γ k θ-u‖^2))
     (g := fun _ => C*(Real.exp (2*t*R^2)*Real.exp (-t*‖u‖^2)))
     (by positivity) (by apply Continuous.intervalIntegrable; fun_prop)
-    intervalIntegral.intervalIntegrable_const (fun θ _ =>
+    intervalIntegrable_const (fun θ _ =>
       mul_le_mul (hρC k θ) (exp_gauss_le ht (hR k θ)) (Real.exp_pos _).le hC)
   rw [intervalIntegral.integral_const] at h
   simp only [sub_zero, smul_eq_mul] at h

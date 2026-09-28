@@ -18,18 +18,18 @@ lemma affineInverseSeries_square (a : ℤ_[p]ˣ) (b : ℤ_[p]) :
   simp only [pow_one, map_pow]
 
 theorem affineInverseSeries_derivative_one (a : ℤ_[p]ˣ) (b : ℤ_[p]) :
-    PowerSeries.derivative (ℤ_[p]) (affineInverseSeries a b 1) =
+    PowerSeries.derivative (R := ℤ_[p]) (affineInverseSeries a b 1) =
       PowerSeries.C (-b)*affineInverseSeries a b 2 := by
   have h := affineInverseSeries_identity a b 1
   rw [pow_one] at h
-  have hd := (PowerSeries.derivative (ℤ_[p])).leibniz_of_mul_eq_one h
+  have hd := (PowerSeries.derivative (R := ℤ_[p])).leibniz_of_mul_eq_one h
   simp only [map_add, Derivation.leibniz, PowerSeries.derivative_C,
     PowerSeries.derivative_X, smul_eq_mul, mul_one, mul_zero, zero_add, add_zero,
     affineInverseSeries_square] at hd
   simpa only [map_neg, neg_mul, mul_neg, mul_comm] using hd
 
 theorem affineInverseSeries_X_derivative (a : ℤ_[p]ˣ) (b : ℤ_[p]) :
-    PowerSeries.derivative (ℤ_[p]) (PowerSeries.X*affineInverseSeries a b 1) =
+    PowerSeries.derivative (R := ℤ_[p]) (PowerSeries.X*affineInverseSeries a b 1) =
       PowerSeries.C (a:ℤ_[p])*affineInverseSeries a b 2 := by
   have h := affineInverseSeries_identity a b 1
   rw [pow_one] at h

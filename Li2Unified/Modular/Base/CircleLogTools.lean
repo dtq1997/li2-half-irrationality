@@ -1,5 +1,5 @@
 module
-public import Mathlib.Analysis.SpecialFunctions.Integrals.PosLogEqCircleAverage
+public import Mathlib.Analysis.SpecialFunctions.Integrals.PosLog
 public import Mathlib.Tactic.Positivity
 public import Mathlib.Tactic.Ring
 

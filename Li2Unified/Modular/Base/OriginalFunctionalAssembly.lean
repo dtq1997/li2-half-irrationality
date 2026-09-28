@@ -1,4 +1,5 @@
 module
+public import Li2Unified.Modular.Base.RestrictedSeriesCompat
 public import Li2Unified.Modular.Base.OriginalPulledFunctional
 public import Li2Unified.Modular.Base.FieldPoleSums
 
@@ -41,7 +42,7 @@ theorem original_fieldPoleFunctional (μ : ℕ → ℤ_[p]) (w : Fin 4 → (ℚ_
     (originalResidue m F j.val : ℚ_[p]) • pulledPoleRegular j.val a.val
   have hf : ∀ j, PowerSeries.IsRestricted 1 (f j) := by
     intro j
-    exact PowerSeries.IsRestricted.smul 1 (pulledPoleRegular_isRestricted (p := p) j.val a.val)
+    exact Li2.restrictedSeries_smul 1 (pulledPoleRegular_isRestricted (p := p) j.val a.val)
       (originalResidue m F j.val : ℚ_[p])
   have hq : PowerSeries.IsRestricted 1
       (rationalPolynomialSeries (p := p) ((F /ₘ D m).comp (C (p:ℚ)*X-C (a.val:ℚ)))) :=

@@ -67,7 +67,7 @@ lemma lower_bottom_integrand_norm_le (d : ℕ) (F : ℚ[X]) (N : ℕ)
           T ^ (Li2.originalContourGDerivativeNumerator d F).natDegree *
           Real.exp (-Real.pi * T)) := by
       apply mul_le_mul_of_nonneg_left _ (norm_nonneg _)
-      simpa only [z, Complex.ofReal_neg, neg_mul, sub_eq_add_neg] using hold
+      simpa only [z, Complex.ofReal_neg, neg_mul, sub_eq_add_neg] using! hold
     _ = _ := by rw [lowerMultiplier_norm_bottom]
 
 def lowerBottomIntegral (d : ℕ) (F : ℚ[X]) (N : ℕ) (T : ℝ) : ℂ :=
@@ -115,7 +115,7 @@ theorem lowerBottomIntegral_diagonal_tendsto_zero (d : ℕ) (F : ℚ[X]) :
   have hC : 0 ≤ C := Li2.originalRightCoefficientNormSum_nonneg _
   have hr : Tendsto (fun t : ℝ =>
       t ^ (2 * k + 1) * Real.exp (-(2 * Real.pi) * t)) atTop (𝓝 0) := by
-    simpa only [Real.rpow_natCast] using
+    simpa only [Real.rpow_natCast] using!
       tendsto_rpow_mul_exp_neg_mul_atTop_nhds_zero
         ((2 * k + 1 : ℕ) : ℝ) (2 * Real.pi) (by positivity)
   have hn : Tendsto (fun N : ℕ =>
@@ -125,7 +125,7 @@ theorem lowerBottomIntegral_diagonal_tendsto_zero (d : ℕ) (F : ℚ[X]) :
       (2 * C * 3 ^ k) *
         ((N : ℝ) ^ (2 * k + 1) * Real.exp (-(2 * Real.pi) * (N : ℝ))))
       atTop (𝓝 0) := by
-    simpa only [mul_zero] using hn.const_mul (2 * C * 3 ^ k)
+    simpa only [mul_zero] using! hn.const_mul (2 * C * 3 ^ k)
   apply squeeze_zero_norm' _ hlim
   filter_upwards [eventually_ge_atTop (1 : ℕ)] with N hN
   have hNR : (1 : ℝ) ≤ (N : ℝ) := by exact_mod_cast hN
@@ -214,7 +214,7 @@ theorem plainBottom_eq_upper_add_lower (d : ℕ) (F : ℚ[X]) (N : ℕ) (T : ℝ
         have hx0 : 0 < x := lt_of_lt_of_le (by norm_num) hx.1
         have hzre : 0 < (z x).re := by
           dsimp [z]
-          simpa using hx0
+          simpa using! hx0
         exact ((upperMultiplier_analyticAt (z x)).mul
           (Li2.analyticAt_originalContourKernel_of_sin_ne_zero (hsin x))).mul
           (Li2.analyticAt_originalContourG_deriv d F hzre))
@@ -236,7 +236,7 @@ theorem plainBottom_eq_upper_add_lower (d : ℕ) (F : ℚ[X]) (N : ℕ) (T : ℝ
         have hx0 : 0 < x := lt_of_lt_of_le (by norm_num) hx.1
         have hzre : 0 < (z x).re := by
           dsimp [z]
-          simpa using hx0
+          simpa using! hx0
         exact ((lowerMultiplier_analyticAt (z x)).mul
           (Li2.analyticAt_originalContourKernel_of_sin_ne_zero (hsin x))).mul
           (Li2.analyticAt_originalContourG_deriv d F hzre))

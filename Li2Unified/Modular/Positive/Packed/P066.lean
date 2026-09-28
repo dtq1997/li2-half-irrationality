@@ -26,7 +26,7 @@ theorem parameterMatrix_scaled_det_GV (lam : ℚ) (corner : Matrix (Fin 6) (Fin 
   have hM (x y : PrimeBlockIndex p) : GV p (M x y)
       (primeBlockWeight x + primeBlockWeight y) := by
     have h := ((herr x y).mono (by linarith)).add (hN x y)
-    simpa only [sub_add_cancel] using h
+    simpa only [sub_add_cancel] using! h
   have hd := det_sub_GV (p := p)
     M (parameterReferenceMatrix lam p corner)
     (primeBlockWeight (p := p)) (primeBlockWeight (p := p)) (1/2)
@@ -56,8 +56,8 @@ theorem parameterMatrix_scaled_det_GV (lam : ℚ) (corner : Matrix (Fin 6) (Fin 
   have hn := VG.round_half (p := p)
     (q := (C ((p:ℚ)^(2*(p-1)))*M.det -
       C ((parameterReferenceCore lam p corner).det)).coeff n) (0:ℤ)
-    (by simpa using hhalf n)
-  simpa using hn
+    (by simpa using! hhalf n)
+  simpa using! hn
 
 
 end

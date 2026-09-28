@@ -17,11 +17,11 @@ open Li2Unified.ParameterFamily
 
 theorem lookupStep_mem_id {env : List Step} {id : ℕ} {s : Step}
     (h : lookupStep env id = some s) : s ∈ env ∧ s.id = id := by
-  have hm : s ∈ env := List.mem_of_find?_eq_some (by simpa only [lookupStep] using h)
+  have hm : s ∈ env := List.mem_of_find?_eq_some (by simpa only [lookupStep] using! h)
   have hid : (s.id == id) = true :=
     List.find?_some (p := fun entry : Step => entry.id == id)
-      (by simpa only [lookupStep] using h)
-  exact ⟨hm, by simpa using hid⟩
+      (by simpa only [lookupStep] using! h)
+  exact ⟨hm, by simpa using! hid⟩
 
 theorem lookupStep_good {x : ℝ} {v : ℕ → ℝ} {env : List Step}
     (henv : EnvGood x v env) {id : ℕ} {s : Step}
@@ -29,7 +29,7 @@ theorem lookupStep_good {x : ℝ} {v : ℕ → ℝ} {env : List Step}
     validI s.out = true ∧ s.out.toBounds.Contains (v id) ∧
       v id = evalOp x v s.op := by
   obtain ⟨hm, hid⟩ := lookupStep_mem_id h
-  simpa only [hid, StepSem] using henv s hm
+  simpa only [hid, StepSem] using! henv s hm
 
 theorem lookup_good {x : ℝ} {v : ℕ → ℝ} {env : List Step}
     (henv : EnvGood x v env) {id : ℕ} {a : I}
@@ -56,7 +56,7 @@ theorem logArgument_sound {x : ℝ} {v : ℕ → ℝ} {env : List Step}
       cases op <;> simp [hs] at h
       case logAtom q' u rho k =>
         cases h
-        simpa only [evalOp] using hsem
+        simpa only [evalOp] using! hsem
 
 theorem atanArgument_sound {x : ℝ} {v : ℕ → ℝ} {env : List Step}
     (henv : EnvGood x v env) {id : ℕ} {q : QPair}
@@ -71,15 +71,15 @@ theorem atanArgument_sound {x : ℝ} {v : ℕ → ℝ} {env : List Step}
       cases op <;> simp [hs] at h
       case atanSmall q' k =>
         cases h
-        simpa only [evalOp] using hsem
+        simpa only [evalOp] using! hsem
       case atanHalf q' r k =>
         cases h
-        simpa only [evalOp] using hsem
+        simpa only [evalOp] using! hsem
       case atanInverse q' r j =>
         cases h
-        simpa only [evalOp] using hsem
+        simpa only [evalOp] using! hsem
       case «alias» j =>
-        have halias : v id = v j := by simpa only [evalOp] using hsem
+        have halias : v id = v j := by simpa only [evalOp] using! hsem
         cases ht : lookupStep env j with
         | none => simp [ht] at h
         | some t =>
@@ -88,13 +88,13 @@ theorem atanArgument_sound {x : ℝ} {v : ℕ → ℝ} {env : List Step}
             cases op' <;> simp [ht] at h
             case atanSmall q' k =>
               cases h
-              exact halias.trans (by simpa only [evalOp] using hsem')
+              exact halias.trans (by simpa only [evalOp] using! hsem')
             case atanHalf q' r k =>
               cases h
-              exact halias.trans (by simpa only [evalOp] using hsem')
+              exact halias.trans (by simpa only [evalOp] using! hsem')
             case atanInverse q' r k =>
               cases h
-              exact halias.trans (by simpa only [evalOp] using hsem')
+              exact halias.trans (by simpa only [evalOp] using! hsem')
 
 theorem hPositive_witness_sem {x : ℝ} {v : ℕ → ℝ} {env : List Step}
     (henv : EnvGood x v env) {a witness logId : ℕ} {w logStep : Step}
@@ -131,7 +131,7 @@ theorem hPositive_check_sound {x : ℝ} {v : ℕ → ℝ} {env : List Step}
           | mul left logId =>
               simp only [hwmul, Bool.and_eq_true] at hshape
               obtain ⟨hleft, hlogshape⟩ := hshape
-              have hleft' : left = a := by simpa using hleft
+              have hleft' : left = a := by simpa using! hleft
               subst left
               cases hlog : lookupStep env logId with
               | none => simp [hlog] at hlogshape
@@ -139,7 +139,7 @@ theorem hPositive_check_sound {x : ℝ} {v : ℕ → ℝ} {env : List Step}
                   cases hlogop : logStep.op with
                   | log arg lo hi =>
                       simp [hlog, hlogop] at hlogshape
-                      have harg : arg = a := by simpa using hlogshape
+                      have harg : arg = a := by simpa using! hlogshape
                       subst arg
                       have ha' := lookup_good henv ha
                       have hw' := (lookupStep_good henv hw).2.1
@@ -177,8 +177,8 @@ theorem log_check_sound {x : ℝ} {v : ℕ → ℝ} {env : List Step}
               have hai := lookup_good henv ha
               have hli := lookup_good henv hlo
               have hui := lookup_good henv hhi
-              have hloglo := logArgument_sound henv (by simpa using hlarg)
-              have hloghi := logArgument_sound henv (by simpa using huarg)
+              have hloglo := logArgument_sound henv (by simpa using! hlarg)
+              have hloghi := logArgument_sound henv (by simpa using! huarg)
               have hlbound : ilo.toBounds.Contains
                   (Real.log (ia.lo.toRat : ℝ)) := by
                 rw [← hloglo]
@@ -213,8 +213,8 @@ theorem atan_check_sound {x : ℝ} {v : ℕ → ℝ} {env : List Step}
               have hai := lookup_good henv ha
               have hli := lookup_good henv hlo
               have hui := lookup_good henv hhi
-              have hatanlo := atanArgument_sound henv (by simpa using hlarg)
-              have hatanhi := atanArgument_sound henv (by simpa using huarg)
+              have hatanlo := atanArgument_sound henv (by simpa using! hlarg)
+              have hatanhi := atanArgument_sound henv (by simpa using! huarg)
               have hlbound : ilo.toBounds.Contains
                   (Real.arctan (ia.lo.toRat : ℝ)) := by
                 rw [← hatanlo]
@@ -249,8 +249,8 @@ theorem hQuarter_check_sound {x : ℝ} {v : ℕ → ℝ} {env : List Step}
               have hai := lookup_good henv ha
               have hli := lookup_good henv hlo
               have hui := lookup_good henv hhi
-              have hloglo := logArgument_sound henv (by simpa using hlarg)
-              have hloghi := logArgument_sound henv (by simpa using huarg)
+              have hloglo := logArgument_sound henv (by simpa using! hlarg)
+              have hloghi := logArgument_sound henv (by simpa using! huarg)
               have hlbound : ilo.toBounds.Contains
                   (Real.log (ia.lo.toRat : ℝ)) := by
                 rw [← hloglo]
@@ -284,7 +284,7 @@ theorem hCross_check_sound {x : ℝ} {v : ℕ → ℝ} {env : List Step}
             hlogarg⟩, hc⟩ := hbody
           have hai := lookup_good henv ha
           have hri := lookup_good henv hradius
-          have hlog := logArgument_sound henv (by simpa using hlogarg)
+          have hlog := logArgument_sound henv (by simpa using! hlogarg)
           have hlbound : ilog.toBounds.Contains
               (Real.log (radius.toRat : ℝ)) := by
             rw [← hlog]
@@ -480,7 +480,7 @@ theorem atanInverse_check_sound {x : ℝ} {v : ℕ → ℝ} {env : List Step}
   | some inv =>
       simp only [hj, Bool.and_eq_true] at hmatch
       obtain ⟨harg, hc⟩ := hmatch
-      have hargsem := atanArgument_sound henv (by simpa using harg)
+      have hargsem := atanArgument_sound henv (by simpa using! harg)
       have hinv := lookupStep_good henv hj
       have har : inv.out.toBounds.Contains (Real.arctan (r.toRat : ℝ)) := by
         rw [← hargsem]
@@ -513,11 +513,11 @@ theorem checkGo_sound_of_step_sound {x : ℝ} {v : ℕ → ℝ}
   induction ss generalizing env with
   | nil =>
       intro henv _ _
-      simpa using henv
+      simpa using! henv
   | cons s ss ih =>
       intro henv hsem hcheck
       have hpair : checkStep env s = true ∧ checkGo (s :: env) ss = true := by
-        simpa only [checkGo, Bool.and_eq_true] using hcheck
+        simpa only [checkGo, Bool.and_eq_true] using! hcheck
       have hs : StepSem x v s := hsem s (by simp)
       obtain ⟨hvalid, hbound⟩ := hstep env s henv hs hpair.1
       have henv' : EnvGood x v (s :: env) :=
@@ -526,7 +526,7 @@ theorem checkGo_sound_of_step_sound {x : ℝ} {v : ℕ → ℝ}
         intro t ht
         exact hsem t (by simp [ht])
       have htail := ih (s :: env) henv' hsem' hpair.2
-      simpa only [List.reverse_cons, List.append_assoc, List.singleton_append] using htail
+      simpa only [List.reverse_cons, List.append_assoc, List.singleton_append] using! htail
 
 theorem checkStep_sound {x : ℝ} {v : ℕ → ℝ} {env : List Step}
     (hx : (⟨⟨135, 2048⟩, ⟨9, 128⟩⟩ : I).toBounds.Contains x)
@@ -566,7 +566,7 @@ theorem checkTrace_sound {x : ℝ} {v : ℕ → ℝ} {steps : List Step}
       validI s.out = true ∧ s.out.toBounds.Contains (v s.id) := by
     intro env s henv hs hc
     exact checkStep_sound hx henv hs hc
-  simpa only [checkTrace, List.append_nil] using
+  simpa only [checkTrace, List.append_nil] using!
     (checkGo_sound_of_step_sound hstep [] steps hnil hsem hcheck)
 
 theorem checkTrace_lookup_sound {x : ℝ} {v : ℕ → ℝ}
@@ -652,12 +652,12 @@ theorem checkGo_sound_of_step_sound {x : ℝ} {v : ℕ → ℝ} {domain : I}
   induction ss generalizing env with
   | nil =>
       intro henv _ _
-      simpa using henv
+      simpa using! henv
   | cons s ss ih =>
       intro henv hsem hcheck
       have hpair : checkStep domain env s = true ∧
           checkGo domain (s :: env) ss = true := by
-        simpa only [checkGo, Bool.and_eq_true] using hcheck
+        simpa only [checkGo, Bool.and_eq_true] using! hcheck
       have hs : StepSem x v s := hsem s (by simp)
       obtain ⟨hvalid, hbound⟩ := hstep env s henv hs hpair.1
       have henv' : EnvGood x v (s :: env) :=
@@ -666,7 +666,7 @@ theorem checkGo_sound_of_step_sound {x : ℝ} {v : ℕ → ℝ} {domain : I}
         intro t ht
         exact hsem t (by simp [ht])
       have htail := ih (s :: env) henv' hsem' hpair.2
-      simpa only [List.reverse_cons, List.append_assoc, List.singleton_append] using htail
+      simpa only [List.reverse_cons, List.append_assoc, List.singleton_append] using! htail
 
 theorem checkTrace_sound {x : ℝ} {v : ℕ → ℝ} {domain : I}
     {steps : List Step} (hx : domain.toBounds.Contains x)
@@ -681,7 +681,7 @@ theorem checkTrace_sound {x : ℝ} {v : ℕ → ℝ} {domain : I}
       validI s.out = true ∧ s.out.toBounds.Contains (v s.id) := by
     intro env s henv hs hc
     exact checkStep_sound hx henv hs hc
-  simpa only [checkTrace, List.append_nil] using
+  simpa only [checkTrace, List.append_nil] using!
     (checkGo_sound_of_step_sound hstep [] steps hnil hsem hcheck)
 
 theorem checkTrace_lookup_sound {x : ℝ} {v : ℕ → ℝ} {domain : I}

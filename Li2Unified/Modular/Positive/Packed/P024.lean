@@ -203,7 +203,7 @@ theorem actual_binomGram_of_unit_basis (lam : ℚ) (n : ℕ) (hK : 4*n < p^2)
   rw [original_gram_basis_change lam n E hE] at hraw
   have hu : VG p (((coeffMat E).det^2)⁻¹) 0 := by
     right
-    rw [padicValRat.inv, padicValRat.pow he, hev]
+    rw [padicValRat.inv, padicValRat.pow, hev]
     norm_num
   have hq := GV.C_mul hu hraw
   have heq : C (((coeffMat E).det^2)⁻¹) *

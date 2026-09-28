@@ -16,7 +16,7 @@ theorem primitive_scale_coeff_valuation_minimum (p : ℕ) [Fact p.Prime]
       ∀ j, F.coeff j ≠ 0 → padicValRat p (F.coeff k) ≤ padicValRat p (F.coeff j) := by
   have hcoeff (k : ℕ) : (T.coeff k : ℚ) = s * F.coeff k := by
     have h := congrArg (fun f : ℚ[X] => f.coeff k) hprop
-    simpa only [coeff_map, coeff_C_mul] using h
+    simpa only [coeff_map, coeff_C_mul] using! h
   obtain ⟨k, hk⟩ := primitive_exists_coeff_not_dvd (p := p) T hT
   have hkF : F.coeff k ≠ 0 := by
     intro hz

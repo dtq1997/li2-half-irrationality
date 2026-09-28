@@ -16,15 +16,19 @@ theorem primeUPole_eval₂ (hp2 : p ≠ 2) (j : ℕ) (hj : j < p) (Y : ℚ_[p]) 
     (primeUPole hp2 j hj).eval₂ (algebraMap ℤ_[p] ℚ_[p]) Y =
       (j:ℚ_[p])*(primeParameter p:ℚ_[p])⁻¹^j*
         (Y-(parameterTau (primeParameter p) j:ℚ_[p])) := by
-  simp [primeUPole, integralUPole, integralParameterInvPow, integralParameterTau,
-    integralRational]
+  simp only [primeUPole, integralUPole, eval₂_mul, eval₂_C, eval₂_sub, eval₂_X,
+    map_mul, map_neg, map_natCast, PadicInt.algebraMap_apply]
+  simp [integralParameterInvPow, integralParameterTau, integralRational]
 
 theorem primeVPole_eval₂ (hp2 : p ≠ 2) (j : ℕ) (hj : j < p) (Y : ℚ_[p]) :
     (primeVPole hp2 j hj).eval₂ (algebraMap ℤ_[p] ℚ_[p]) Y =
       -(primeParameter p:ℚ_[p])⁻¹^j*
         (Y-(parameterTau (primeParameter p) j:ℚ_[p])) := by
-  simp [primeVPole, integralVPole, integralParameterInvPow, integralParameterTau,
-    integralRational]
+  unfold primeVPole integralVPole
+  rw [eval₂_mul, eval₂_C, eval₂_sub, eval₂_X, eval₂_C, map_neg,
+    PadicInt.algebraMap_apply, PadicInt.algebraMap_apply]
+  simp [integralParameterInvPow, integralParameterTau, integralRational]
+
 
 theorem primePoleU_single_eval₂ (hp4 : 3 < p) (j : Fin 4) (Y : ℚ_[p]) :
     (primePoleU hp4 0 (Pi.single j 1)).eval₂ (algebraMap ℤ_[p] ℚ_[p]) Y =

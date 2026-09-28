@@ -19,18 +19,18 @@ lemma zeroShapeRegular_integral (k : Fin 5) : GV p (zeroShapeRegular k) 0 := by
   · simpa [zeroShapeRegular] using GV.zero (p := p) 0
   · simpa [zeroShapeRegular] using GV.zero (p := p) 0
   · simpa [zeroShapeRegular] using GV.C (p := p) VG.one
-  · simpa [zeroShapeRegular] using
+  · simpa [zeroShapeRegular, C_ofNat] using!
       (GV.X (p := p)).sub (GV.C (VG.natCast (p := p) 6))
 
 lemma highShapeRegular_integral (k : Fin 3) : GV p (highShapeRegular k) 0 := by
   fin_cases k
   · simpa [highShapeRegular] using GV.C (p := p) VG.one
-  · simpa [highShapeRegular] using
+  · simpa [highShapeRegular, C_ofNat] using!
       (GV.X (p := p)).sub (GV.C (VG.natCast (p := p) 3))
   · have hx2 : GV p (X^2:ℚ[X]) 0 := by simpa using (GV.X (p := p)).pow 2
     have h3x : GV p (C 3*X:ℚ[X]) 0 := by
       simpa using (GV.C (VG.natCast (p := p) 3)).mul GV.X
-    simpa [highShapeRegular] using (hx2.sub h3x).add (GV.C (VG.natCast (p := p) 7))
+    simpa [highShapeRegular, C_ofNat] using! (hx2.sub h3x).add (GV.C (VG.natCast (p := p) 7))
 
 lemma zeroShapeResidue_integral (hp4 : 3 < p) (k : Fin 5) (j : Fin 4) :
     VG p (zeroShapeResidue k j) 0 := by

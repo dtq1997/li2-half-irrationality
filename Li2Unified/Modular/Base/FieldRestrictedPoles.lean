@@ -57,15 +57,15 @@ def fieldPoleNumerator (c : ι → ℤ_[p]) (f : PowerSeries ℚ_[p]) (r : ι �
 theorem fieldPoleNumerator_isRestricted (c : ι → ℤ_[p]) (f : PowerSeries ℚ_[p])
     (hf : PowerSeries.IsRestricted 1 f) (r : ι → ℚ_[p]) :
     PowerSeries.IsRestricted 1 (fieldPoleNumerator c f r) :=
-  PowerSeries.IsRestricted.add 1
-    (PowerSeries.IsRestricted.mul 1 (field_polynomial_isRestricted _) hf) (field_polynomial_isRestricted _)
+  PowerSeries.isRestricted.add 1
+    (PowerSeries.isRestricted.mul 1 (field_polynomial_isRestricted _) hf) (field_polynomial_isRestricted _)
 
 theorem fieldPoleNumerator_eval (c : ι → ℤ_[p]) (f : PowerSeries ℚ_[p])
     (hf : PowerSeries.IsRestricted 1 f) (r : ι → ℚ_[p]) (i : ι) :
     fieldRestrictedEval (c i) (fieldPoleNumerator c f r) =
       r i*(fieldPoleCofactor c i).eval (c i : ℚ_[p]) := by
   unfold fieldPoleNumerator fieldRestrictedEval
-  rw [fieldRestrictedMoment_add _ _ _ (PowerSeries.IsRestricted.mul 1 (field_polynomial_isRestricted _) hf)
+  rw [fieldRestrictedMoment_add _ _ _ (PowerSeries.isRestricted.mul 1 (field_polynomial_isRestricted _) hf)
     (field_polynomial_isRestricted _)]
   change fieldRestrictedEval (c i) ((fieldPoleDenominator c : PowerSeries ℚ_[p])*f) +
     fieldRestrictedEval (c i) ((∑ j, C (r j)*fieldPoleCofactor c j : (ℚ_[p])[X]) : PowerSeries ℚ_[p]) = _

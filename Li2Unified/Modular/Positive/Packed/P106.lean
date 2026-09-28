@@ -24,16 +24,16 @@ lemma three_integrals_sub_four_le (f : ℝ → ℝ)
     rw [uIcc_of_le (by norm_num : (0:ℝ) ≤ 1)]
     exact hm.mono (by intro x hx; exact ⟨hx.1, by linarith [hx.2]⟩)
   have h4m : MonotoneOn f (uIcc 0 4) := by
-    simpa only [uIcc_of_le (by norm_num : (0:ℝ) ≤ 4)] using hm
+    simpa only [uIcc_of_le (by norm_num : (0:ℝ) ≤ 4)] using! hm
   have h1 : IntervalIntegrable f volume 0 1 := h1m.intervalIntegrable
   have h4 : IntervalIntegrable f volume 0 4 := h4m.intervalIntegrable
   have hs : IntervalIntegrable (fun t => f (4*t)) volume 0 1 := by
-    simpa using h4.comp_mul_left (c := (4:ℝ))
+    simpa using! h4.comp_mul_left (c := (4:ℝ))
   have hlo : f 0 ≤ ∫ t in (0:ℝ)..1, f t := by
     have h := intervalIntegral.integral_mono_on (by norm_num : (0:ℝ) ≤ 1)
       (intervalIntegrable_const : IntervalIntegrable (fun _ : ℝ => f 0) volume 0 1)
       h1 (fun t ht => hm ⟨le_rfl, by norm_num⟩ ⟨ht.1, by linarith [ht.2]⟩ ht.1)
-    simpa using h
+    simpa using! h
   have hcmp := intervalIntegral.integral_mono_on (by norm_num : (0:ℝ) ≤ 1) h1 hs
     (fun t ht => hm ⟨ht.1, by linarith [ht.2]⟩
       ⟨by linarith [ht.1], by linarith [ht.2]⟩ (by linarith [ht.1]))
@@ -90,14 +90,14 @@ lemma layer_ae_distance_ray (s : StarLayer) (x e : ℝ) (hx : 0 ≤ x) (he : 0 �
       ‖(t:ℂ)*s.direction-(x:ℂ)‖ ≤ x+e := by
     filter_upwards [ae_restrict_mem measurableSet_Ioc] with t ht
     cases hv : s.vertical
-    · have ht0 : 0 ≤ t := by simpa [StarLayer.left,hv] using ht.1.le
+    · have ht0 : 0 ≤ t := by simpa [StarLayer.left,hv] using! ht.1.le
       have htx : t ≤ x := ht.2.trans hr
       simp only [StarLayer.direction, hv, Bool.false_eq_true, ↓reduceIte, mul_one,
         ← Complex.ofReal_sub, Complex.norm_real, Real.norm_eq_abs, abs_of_nonpos (sub_nonpos.mpr htx)]
       linarith
     · have hte : |t| ≤ e := by
         apply abs_le.mpr
-        have hlo : -(s.radius:ℝ) ≤ t := by simpa [StarLayer.left,hv] using ht.1.le
+        have hlo : -(s.radius:ℝ) ≤ t := by simpa [StarLayer.left,hv] using! ht.1.le
         have hhi : t ≤ (s.radius:ℝ) := ht.2
         constructor <;> linarith [hvsmall hv, hhi]
       calc
@@ -127,11 +127,11 @@ lemma comparisonPotential_le_of_distance (w : ℂ) (R : ℝ) (hR : 1 ≤ R)
   have hh : ∀ᵐ z ∂comparisonMeasure, Real.log ‖z-w‖ ≤ Real.log R := by
     filter_upwards [h] with z hz
     by_cases he : z-w = 0
-    · simpa [he] using hlo
+    · simpa [he] using! hlo
     · exact Real.log_le_log (norm_pos_iff.mpr he) hz
   have hi := integral_mono_ae (integrable_log_comparisonMeasure w)
     (integrable_const (Real.log R)) hh
-  simpa [comparisonPotential] using hi
+  simpa [comparisonPotential] using! hi
 
 theorem comparisonPotential_ray_tail (x : ℝ) (hx : 18 ≤ x) :
     comparisonPotential (x:ℂ) ≤ Real.log (x+2/25) := by
@@ -189,12 +189,12 @@ theorem contains_point (q : ℚ) : (point q).Contains (q:ℝ) := ⟨le_rfl,le_rf
 
 theorem contains_add {a b : RationalBounds} {x y : ℝ}
     (hx : a.Contains x) (hy : b.Contains y) : (add a b).Contains (x+y) := by
-  simpa only [Contains, add, Rat.cast_add] using
+  simpa only [Contains, add, Rat.cast_add] using!
     And.intro (add_le_add hx.1 hy.1) (add_le_add hx.2 hy.2)
 
 theorem contains_neg {a : RationalBounds} {x : ℝ}
     (hx : a.Contains x) : (neg a).Contains (-x) := by
-  simpa only [Contains, neg, Rat.cast_neg] using
+  simpa only [Contains, neg, Rat.cast_neg] using!
     And.intro (neg_le_neg hx.2) (neg_le_neg hx.1)
 
 private lemma product_upper (a x b c : ℝ) (ha : a ≤ x) (hb : x ≤ b) :
@@ -214,20 +214,20 @@ private lemma product_corners (a x b c y d : ℝ)
     min (min (a*c) (a*d)) (min (b*c) (b*d)) ≤ x*y ∧
     x*y ≤ max (max (a*c) (a*d)) (max (b*c) (b*d)) := by
   have la : min (a*c) (a*d) ≤ a*y := by
-    simpa only [mul_comm] using product_lower c y d a hy.1 hy.2
+    simpa only [mul_comm] using! product_lower c y d a hy.1 hy.2
   have lb : min (b*c) (b*d) ≤ b*y := by
-    simpa only [mul_comm] using product_lower c y d b hy.1 hy.2
+    simpa only [mul_comm] using! product_lower c y d b hy.1 hy.2
   have ua : a*y ≤ max (a*c) (a*d) := by
-    simpa only [mul_comm] using product_upper c y d a hy.1 hy.2
+    simpa only [mul_comm] using! product_upper c y d a hy.1 hy.2
   have ub : b*y ≤ max (b*c) (b*d) := by
-    simpa only [mul_comm] using product_upper c y d b hy.1 hy.2
+    simpa only [mul_comm] using! product_upper c y d b hy.1 hy.2
   constructor
   · exact (min_le_min la lb).trans (product_lower a x b y hx.1 hx.2)
   · exact (product_upper a x b y hx.1 hx.2).trans (max_le_max ua ub)
 
 theorem contains_mul {a b : RationalBounds} {x y : ℝ}
     (hx : a.Contains x) (hy : b.Contains y) : (mul a b).Contains (x*y) := by
-  simpa only [Contains, mul, Rat.cast_min, Rat.cast_max, Rat.cast_mul] using
+  simpa only [Contains, mul, Rat.cast_min, Rat.cast_max, Rat.cast_mul] using!
     product_corners (a.lower:ℝ) x (a.upper:ℝ) (b.lower:ℝ) y (b.upper:ℝ) hx hy
 
 theorem contains_widen {a b : RationalBounds} {x : ℝ}
@@ -249,7 +249,7 @@ theorem contains_arctan {a b : RationalBounds} {x : ℝ}
     (hx : a.Contains x)
     (hl : (b.lower:ℝ) ≤ Real.arctan (a.lower:ℝ))
     (hu : Real.arctan (a.upper:ℝ) ≤ (b.upper:ℝ)) : b.Contains (Real.arctan x) :=
-  ⟨hl.trans (Real.arctan_le_arctan hx.1), (Real.arctan_le_arctan hx.2).trans hu⟩
+  ⟨hl.trans (Real.arctan_le_arctan_iff.mpr hx.1), (Real.arctan_le_arctan_iff.mpr hx.2).trans hu⟩
 
 end RationalBounds
 end Li2Unified.ParameterFamily

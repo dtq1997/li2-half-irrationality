@@ -77,10 +77,10 @@ theorem boundaryIntegral_upperKernel_mul_deriv
   let pp : ℂ → ℂ := fun z => ∑ m ∈ Finset.Icc 1 N, c m * (z - (m : ℂ))⁻¹
   let r : ℂ → ℂ := upperPatchedRemainder d F N
   have hreC : ∀ m ∈ Finset.Icc 1 N, (m : ℂ).re ∈ Set.Ioo a.re b.re := by
-    simpa only [Complex.natCast_re] using hre
+    simpa only [Complex.natCast_re] using! hre
   have himC : ∀ m ∈ Finset.Icc 1 N, (m : ℂ).im ∈ Set.Ioo a.im b.im := by
     intro m hm
-    simpa only [Complex.natCast_im] using And.intro hbot htop
+    simpa only [Complex.natCast_im] using! And.intro hbot htop
   have hpb (m : ℕ) (hm : m ∈ Finset.Icc 1 N) : IntervalIntegrable
       (fun x : ℝ => c m * ((x : ℂ) + a.im * Complex.I - (m : ℂ))⁻¹)
       volume a.re b.re :=

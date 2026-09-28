@@ -56,7 +56,7 @@ theorem finite_three_arm_ibp (d : ℕ) (F : ℚ[X]) (N : ℕ) (T : ℝ) :
         Li2.originalContourG d F (1 / 2 : ℂ) -
       downEndpoint d F T + downDensityFinite d F T := by
     rw [downDensityFinite_eq]
-    simpa only [h0, downEndpoint, sub_neg_eq_add] using
+    simpa only [h0, downEndpoint, sub_neg_eq_add] using!
       lowerLeftLower_finite_ibp d F T
   have hU : -(Complex.I * upperLeftUpperIntegral d F T) =
       -(upEndpoint d F T) +

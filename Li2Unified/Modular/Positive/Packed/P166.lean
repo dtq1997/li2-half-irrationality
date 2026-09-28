@@ -119,11 +119,11 @@ private lemma hasDerivAt_H {x : ℝ} (hx : x ≠ 0) :
     funext y
     simp only [H, Real.log_abs]
   rw [hf]
-  simpa only [Real.log_abs] using Real.hasDerivAt_mul_log hx
+  simpa only [Real.log_abs] using! Real.hasDerivAt_mul_log hx
 
 private lemma hasDerivAt_H_shift (r x : ℝ) (h : r - x ≠ 0) :
     HasDerivAt (fun t : ℝ => H (r-t)) (-(Real.log |r-x| + 1)) x := by
-  convert (hasDerivAt_H h).comp x
+  convert! (hasDerivAt_H h).comp x
     ((hasDerivAt_const x r).sub (hasDerivAt_id x)) using 1
   ring
 
@@ -137,7 +137,7 @@ private lemma hasDerivAt_rayVerticalAtom (r x : ℝ) (hr : 0 < r) :
     ne_of_gt (add_pos_of_nonneg_of_pos (sq_nonneg x) (sq_pos_of_pos hr))
   have hlog : HasDerivAt (fun t : ℝ => Real.log (t^2+r^2))
       (2*x/(x^2+r^2)) x := by
-    convert (((hasDerivAt_id x).pow 2).add_const (r^2)).log hQ using 1
+    convert! (((hasDerivAt_id x).pow 2).add_const (r^2)).log hQ using 1
     <;> norm_num
     <;> ring
   have hquot : 1+(x/r)^2 = (x^2+r^2)/r^2 := by
@@ -145,14 +145,14 @@ private lemma hasDerivAt_rayVerticalAtom (r x : ℝ) (hr : 0 < r) :
     ring
   have hatan : HasDerivAt (fun t : ℝ => Real.arctan (t/r))
       (r/(x^2+r^2)) x := by
-    convert ((hasDerivAt_id x).div_const r).arctan using 1
+    convert! ((hasDerivAt_id x).div_const r).arctan using 1
     dsimp only [id_eq]
     rw [hquot]
     field_simp [hr0,hQ]
     <;> ring
   have h := (((hlog.const_mul r).div_const 2).add
     ((hasDerivAt_id x).mul ((hasDerivAt_const x (Real.pi/2)).sub hatan)))
-  convert h using 1
+  convert! h using 1
   dsimp only [Pi.add_apply, Pi.mul_apply, Pi.sub_apply, id_eq]
   field_simp [hr0,hQ]
   <;> ring
@@ -163,7 +163,7 @@ private lemma hasDerivAt_rayHorizontalLayer (q : ℚ × ℚ) (x : ℝ)
       (fun t : ℝ => 4*(q.2:ℝ)*H ((q.1:ℝ)-t))
       (-4*(q.2:ℝ)*(Real.log |(q.1:ℝ)-x|+1)) x := by
   have h' : (q.1:ℝ)-x ≠ 0 := sub_ne_zero.mpr (Ne.symm h)
-  convert (hasDerivAt_H_shift (q.1:ℝ) x h').const_mul (4*(q.2:ℝ)) using 1
+  convert! (hasDerivAt_H_shift (q.1:ℝ) x h').const_mul (4*(q.2:ℝ)) using 1
   ring
 
 private lemma hasDerivAt_rayVerticalLayer (q : ℚ × ℚ) (x : ℝ)
@@ -174,7 +174,7 @@ private lemma hasDerivAt_rayVerticalLayer (q : ℚ × ℚ) (x : ℝ)
           t*(Real.pi/2-Real.arctan (t/(q.1:ℝ)))))
       (8*(q.2:ℝ)*(Real.pi/2-Real.arctan (x/(q.1:ℝ)))) x := by
   have hq' : (0:ℝ) < q.1 := by exact_mod_cast hq
-  convert (hasDerivAt_rayVerticalAtom (q.1:ℝ) x hq').const_mul (8*(q.2:ℝ)) using 1
+  convert! (hasDerivAt_rayVerticalAtom (q.1:ℝ) x hq').const_mul (8*(q.2:ℝ)) using 1
   · funext t
     simp only [pow_two]
     ring_nf
@@ -184,11 +184,11 @@ private lemma hasDerivAt_list_sum {α : Type} (L : List α)
     (h : ∀ q ∈ L, HasDerivAt (f q) (df q) x) :
     HasDerivAt (fun t => (L.map (fun q => f q t)).sum) ((L.map df).sum) x := by
   induction L with
-  | nil => simpa using (hasDerivAt_const x (0:ℝ))
+  | nil => simpa using! (hasDerivAt_const x (0:ℝ))
   | cons q qs ih =>
     have hq := h q (by simp)
     have hs := ih (fun a ha => h a (by simp [ha]))
-    simpa only [List.map_cons, List.sum_cons] using hq.add hs
+    simpa only [List.map_cons, List.sum_cons] using! hq.add hs
 
 set_option maxRecDepth 8192 in
 set_option maxHeartbeats 5000000 in
@@ -198,23 +198,23 @@ theorem hasDerivAt_rayExpr_proof (x : ℝ) (hx : 0 < x)
   have h1 : HasDerivAt (fun t : ℝ => H (1+t))
       (Real.log (1+x)+1) x := by
     have hpos : (0:ℝ) < 1+x := by linarith
-    convert (hasDerivAt_H hpos.ne').comp x
+    convert! (hasDerivAt_H hpos.ne').comp x
       ((hasDerivAt_const x (1:ℝ)).add (hasDerivAt_id x)) using 1
     simp [abs_of_pos hpos]
   have h4 : HasDerivAt (fun t : ℝ => H (4+t))
       (Real.log (4+x)+1) x := by
     have hpos : (0:ℝ) < 4+x := by linarith
-    convert (hasDerivAt_H hpos.ne').comp x
+    convert! (hasDerivAt_H hpos.ne').comp x
       ((hasDerivAt_const x (4:ℝ)).add (hasDerivAt_id x)) using 1
     simp [abs_of_pos hpos]
   have hxH : HasDerivAt H (Real.log x+1) x := by
-    simpa [abs_of_pos hx] using hasDerivAt_H hx.ne'
+    simpa [abs_of_pos hx] using! hasDerivAt_H hx.ne'
   have hbase : HasDerivAt
       (fun t : ℝ => 8*Real.log 2-4+3*H (1+t)-H (4+t)+
         (4*rayDensitySum-2)*H t-t*Real.log 2)
       (3*(Real.log (1+x)+1)-(Real.log (4+x)+1)+
         (4*rayDensitySum-2)*(Real.log x+1)-Real.log 2) x := by
-    convert ((((((hasDerivAt_const x (8*Real.log 2-4)).add
+    convert! ((((((hasDerivAt_const x (8*Real.log 2-4)).add
       (h1.const_mul 3)).sub h4).add
       (hxH.const_mul (4*rayDensitySum-2))).sub
       ((hasDerivAt_id x).mul_const (Real.log 2)))) using 1
@@ -238,7 +238,7 @@ theorem hasDerivAt_rayExpr_proof (x : ℝ) (hx : 0 < x)
       rcases hq with hq | hq <;> subst q <;> norm_num
     exact hasDerivAt_rayVerticalLayer q x hqpos
   have h := (hbase.add hhor).add hvert
-  convert h using 1
+  convert! h using 1
   simp only [rayDerivative]
   simp only [rayDensitySum, rayLayers, List.map_cons, List.map_nil,
     List.sum_cons, List.sum_nil]

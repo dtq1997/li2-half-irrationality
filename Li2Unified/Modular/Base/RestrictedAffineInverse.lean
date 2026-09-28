@@ -18,7 +18,7 @@ def affineInverseSeries (a : ℤ_[p]ˣ) (b : ℤ_[p]) (d : ℕ) : PowerSeries �
 
 lemma affineInverseSeries_isRestricted (a : ℤ_[p]ˣ) (b : ℤ_[p]) (hb : ‖b‖ < 1) (d : ℕ) :
     PowerSeries.IsRestricted 1 (affineInverseSeries a b d) := by
-  apply PowerSeries.IsRestricted.mul 1 (PowerSeries.IsRestricted.C 1 _)
+  apply PowerSeries.isRestricted.mul 1 (PowerSeries.isRestricted_C 1 _)
   apply inverseOneSubSeries_isRestricted
   apply lt_of_le_of_lt (integral_coeff_mul_norm_le _ _) (by simpa only [norm_neg] using hb)
 

@@ -37,7 +37,7 @@ private lemma continuousOn_ray_density_integrand (d : ℕ) (F : ℚ[X]) :
   intro t ht
   have hz : 0 < (point ⟨0, by decide⟩ t).re := by
     rw [point_ray]
-    simpa using (show 0 < (1 / 2 + t : ℝ) by linarith [Set.mem_Ioi.mp ht])
+    simpa using! (show 0 < (1 / 2 + t : ℝ) by linarith [Set.mem_Ioi.mp ht])
   have hp : ContinuousAt (fun s : ℝ => point ⟨0, by decide⟩ s) t := by
     have h : Continuous (fun s : ℝ => point ⟨0, by decide⟩ s) := by
       simp only [point_ray]

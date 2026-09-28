@@ -65,7 +65,7 @@ theorem primeZeroShape_cleared (hp4 : 3 < p) :
     integralPoleNumerator (primePoleCenters p) 0 (primeZeroShapeResidue hp4) =
       PowerSeries.X := by
   have hc : (2:(ℤ_[p])[X])*C (primeIntegralHalf hp4) = 1 := by
-    simpa using congrArg (C : ℤ_[p] → (ℤ_[p])[X]) (primeIntegralHalf_spec hp4)
+    simpa only [map_mul, C_ofNat, map_one] using! congrArg (C : ℤ_[p] → (ℤ_[p])[X]) (primeIntegralHalf_spec hp4)
   have hpoly : (∑ i, C (primeZeroShapeResidue hp4 i)*
       integralPoleCofactor (primePoleCenters p) i : (ℤ_[p])[X]) = X := by
     norm_num [Fin.sum_univ_succ, primeZeroShapeResidue,
@@ -80,7 +80,7 @@ theorem primeLowShape_cleared (hp4 : 3 < p) :
     integralPoleNumerator (primePoleCenters p) 0 (primeLowShapeResidue hp4) =
       PowerSeries.X^3 := by
   have hc : (2:(ℤ_[p])[X])*C (primeIntegralHalf hp4) = 1 := by
-    simpa using congrArg (C : ℤ_[p] → (ℤ_[p])[X]) (primeIntegralHalf_spec hp4)
+    simpa only [map_mul, C_ofNat, map_one] using! congrArg (C : ℤ_[p] → (ℤ_[p])[X]) (primeIntegralHalf_spec hp4)
   have hpoly : (∑ i, C (primeLowShapeResidue hp4 i)*
       integralPoleCofactor (primePoleCenters p) i : (ℤ_[p])[X]) = X^3 := by
     norm_num [Fin.sum_univ_succ, primeLowShapeResidue,

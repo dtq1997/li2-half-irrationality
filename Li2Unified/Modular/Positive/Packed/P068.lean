@@ -12,7 +12,7 @@ public import Li2Unified.Modular.Positive.Packed.P002
 public import Li2Unified.Modular.Base.PrimeReferenceDeterminant
 public import Li2Unified.Modular.Base.PrimeNormalizedMatrix
 public import Li2Unified.Modular.Base.PrimitiveReduction
-public import Mathlib.Analysis.SpecialFunctions.Integrability.LogMeromorphic
+public import Mathlib.Analysis.SpecialFunctions.Integrability.Log
 public import Mathlib.MeasureTheory.Function.L1Space.Integrable
 public import Mathlib.Analysis.Analytic.Linear
 public import Mathlib.Tactic
@@ -66,7 +66,7 @@ lemma frequently_allowed_indices (bad : Finset ℕ) (N : ℕ) :
   obtain ⟨p, hpbig, hp, hN, hbad⟩ := exists_allowed_prime bad N M
   refine ⟨p-1, hpbig, ?_⟩
   have hpos : 0 < p := hp.pos
-  simpa only [Nat.sub_add_cancel hpos] using And.intro hp (And.intro hN hbad)
+  simpa only [Nat.sub_add_cancel hpos] using! And.intro hp (And.intro hN hbad)
 
 /-- Explicit index reparametrization; n_j+1 are allowed primes. -/
 theorem exists_strictMono_prime_indices (bad : Finset ℕ) (N : ℕ) :
@@ -168,10 +168,10 @@ theorem actualMatrix_det_original_Q (p : ℕ) (hp4 : 3 < p) :
     ext x y
     simp only [actualMatrix, Matrix.of_apply, B, M, E, Matrix.submatrix_apply, C_mul]
     ring
-  rw [he, Matrix.det_mul_column]
+  erw [he, Matrix.det_mul_column]
   change (∏ x : Li2.PrimeBlockIndex p, C (Li2.primeBlockUnitScale hp4 x)) *
     (Matrix.of (fun x y => C (Li2.primeBlockUnitScale hp4 y) * B x y)).det = _
-  rw [Matrix.det_mul_row]
+  erw [Matrix.det_mul_row]
   have hb : B.det = M.det :=
     Matrix.det_submatrix_equiv_self (Li2.primeOriginalBlockEquiv hp4).symm _
   have hE : ∀ a, (E a).natDegree < 2*(p-1) := fun a =>
@@ -214,7 +214,7 @@ theorem actual_matrix_block_comparison
     (parameter_fermat p hbad) hp4 x y
   rw [Li2Unified.Proofs.PrimeEdge.parameterEntryReference_literal] at h
   simpa only [hM, lowWeight, Li2Unified.Proofs.PrimeEdge.parameterLowRationalWeight]
-    using h
+    using! h
 
 theorem scaled_original_Q_congruence
     (p : ℕ) [Fact p.Prime] (hp4 : 3 < p) (hbad : p ∉ badPrimes) :
@@ -231,8 +231,8 @@ theorem scaled_original_Q_congruence
       (Li2.primeBlockWeight x + Li2.primeBlockWeight y) :=
     parameterReferenceMatrix_GV_of_block_bounds lambda corner hp4
       (parameter_units p hbad).1
-      (by simpa only [lambda] using fixedLowBlock_half_VG p hp4)
-      (by simpa only [corner, lambda] using fixedCornerBlock_half_VG p hp4)
+      (by simpa only [lambda] using! fixedLowBlock_half_VG p hp4)
+      (by simpa only [corner, lambda] using! fixedCornerBlock_half_VG p hp4)
   have herr : ∀ x y, Li2.GV p (M x y - parameterReferenceMatrix lambda p corner x y)
       (Li2.primeBlockWeight x + Li2.primeBlockWeight y + 1/2) :=
     parameterNormalizedMatrix_reference_GV lambda lambda_abs_lt_one
@@ -244,7 +244,7 @@ theorem scaled_original_Q_congruence
   refine ⟨Li2.primeQEdgeScale hp4, (parameterReferenceCore lambda p corner).det,
     (Li2.primeQEdgeScale_spec hp4).1, hc.1, hc.2, ?_⟩
   rw [← hM, actualMatrix_det_original_Q] at hd
-  simpa only [Li2.primeQEdgeScale, C_mul, mul_assoc] using hd
+  simpa only [Li2.primeQEdgeScale, C_mul, mul_assoc] using! hd
 
 theorem edge_reduction : PrimeEdgeReduction lambda badPrimes 5 := by
   intro p hp hp5 hbad
@@ -254,7 +254,7 @@ theorem edge_reduction : PrimeEdgeReduction lambda badPrimes 5 := by
   have hQ : Instances.PosHalf.Q (p-1) ≠ 0 := by
     intro hz
     have hzero : Li2.VG p (-c) 1 := by
-      simpa [hz] using hcong 0
+      simpa [hz] using! hcong 0
     rcases hzero with hz | hv
     · exact hc (neg_eq_zero.mp hz)
     · rw [padicValRat.neg, hcv] at hv
@@ -363,7 +363,7 @@ lemma measure_univ (s : StarLayer) (hs : s.Valid) :
 
 lemma integrable_log (s : StarLayer) (w : ℂ) :
     Integrable (fun z : ℂ => Real.log ‖z-w‖) s.measure := by
-  simpa only [measure, zero_add] using
+  simpa only [measure, zero_add] using!
     integrable_log_line_measure 0 s.direction w s.left s.right (s.density : ℝ)
 
 end StarLayer

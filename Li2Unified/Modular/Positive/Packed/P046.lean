@@ -29,9 +29,7 @@ theorem posHalf_three_adic_good_fallback (n : ℕ) (hn : 1 ≤ n) :
     rw [lambda_eq_inverse]
     exact inverseParameter_moment_integral 2 (by norm_num) (by norm_num) (by norm_num)
   have h := Qtilde_GV_good_fallback 3 lambda lambda_ne_one hratio hlam hinv hn
-  convert h using 1
-  push_cast
-  ring
+  convert! h using 1 <;> push_cast <;> ring
 
 end
 end Li2Unified.Proofs.Arithmetic

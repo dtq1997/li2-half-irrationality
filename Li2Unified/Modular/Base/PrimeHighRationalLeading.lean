@@ -25,8 +25,8 @@ lemma primeHighBlock_above (hp4 : 3 < p) (ell : Fin 3) :
 lemma primeHighBlockMultiplicity (hp4 : 3 < p) (ell : Fin 3) :
     primeMultiplicity p (primeHighBlockJet hp4 ell).1 = 1 := by
   have hl := ell.isLt
-  simp only [primeHighBlockJet,primeMultiplicity,Fin.val_mk,
-    if_neg (by omega : ¬ p-(ell.val+1) < p-3)]
+  change (if p - (ell.val + 1) < p - 3 then 2 else 1) = 1
+  rw [if_neg (by omega)]
 
 def primeHighAugmentedIndex (hp4 : 3 < p) (ell : Fin 3) (i : Fin 2) :
     Fin (primeMultiplicity p (primeHighBlockJet hp4 ell).1+1) :=
@@ -42,7 +42,7 @@ def primeHighBlockPoly (hp4 : 3 < p) (ell : Fin 3) (i : Fin 2) : ℤ[X] :=
 lemma primeHighBlockPoly_jet (hp4 : 3 < p) (ell : Fin 3) :
     primeHighBlockPoly hp4 ell 0 = primeJetPoly p (primeHighBlockJet hp4 ell) := by
   simp only [primeHighBlockPoly,primeHighAugmentedIndex,primeAugmentedJet,Fin.val_mk]
-  rw [dif_pos (by rw [primeHighBlockMultiplicity]; decide)]
+  erw [dif_pos (by rw [primeHighBlockMultiplicity]; decide)]
   rfl
 
 lemma primeHighBlockPoly_top (hp4 : 3 < p) (ell : Fin 3) :
@@ -54,17 +54,17 @@ lemma primeHighRationalWeight_norm (hp4 : 3 < p) (ell : Fin 3) :
     ‖(primeHighDiscWeight (primeHighBlockJet hp4 ell).1:ℚ_[p])-
       ((primeHighRationalWeight ell:ℚ):ℚ_[p])‖ ≤ ‖(p:ℚ_[p])‖ := by
   fin_cases ell
-  · simpa [primeHighBlockJet,primeHighRationalWeight] using primeHighDiscWeight_one_norm hp4
-  · simpa [primeHighBlockJet,primeHighRationalWeight] using primeHighDiscWeight_two_norm hp4
-  · simpa [primeHighBlockJet,primeHighRationalWeight] using primeHighDiscWeight_three_norm hp4
+  · simpa [primeHighBlockJet,primeHighRationalWeight] using! primeHighDiscWeight_one_norm hp4
+  · simpa [primeHighBlockJet,primeHighRationalWeight] using! primeHighDiscWeight_two_norm hp4
+  · simpa [primeHighBlockJet,primeHighRationalWeight] using! primeHighDiscWeight_three_norm hp4
 
 lemma primeHighRationalLocalUnit_norm (hp4 : 3 < p) (ell : Fin 3) :
     ‖(primeLocalUnit p (primeHighBlockJet hp4 ell).1:ℚ_[p])-
       ((primeHighRationalLocalUnit ell:ℚ):ℚ_[p])‖ ≤ ‖(p:ℚ_[p])‖ := by
   fin_cases ell
-  · simpa [primeHighBlockJet,primeHighRationalLocalUnit] using primeLocalUnit_high_one_norm hp4
-  · simpa [primeHighBlockJet,primeHighRationalLocalUnit] using primeLocalUnit_high_two_norm hp4
-  · simpa [primeHighBlockJet,primeHighRationalLocalUnit] using primeLocalUnit_high_three_norm hp4
+  · simpa [primeHighBlockJet,primeHighRationalLocalUnit] using! primeLocalUnit_high_one_norm hp4
+  · simpa [primeHighBlockJet,primeHighRationalLocalUnit] using! primeLocalUnit_high_two_norm hp4
+  · simpa [primeHighBlockJet,primeHighRationalLocalUnit] using! primeLocalUnit_high_three_norm hp4
 
 lemma primeHighRationalWeight_VG (hp4 : 3 < p) (ell : Fin 3) :
     VG p (primeHighRationalWeight ell) 0 := by
@@ -86,7 +86,7 @@ lemma primeHighRationalWeight_VG (hp4 : 3 < p) (ell : Fin 3) :
 lemma primeHighMoment_VG (hp4 : 3 < p) (k : Fin 3) :
     VG p (![8,-46/3,266/9] k : ℚ) 0 := by
   have hv9 : padicValRat p (9:ℚ) = 0 := by
-    rw [show (9:ℚ) = 3^2 by norm_num,padicValRat.pow (by norm_num),
+    rw [show (9:ℚ) = 3^2 by norm_num,padicValRat.pow,
       three_valuation_zero (by omega)]
     norm_num
   have h9 : VG p (9:ℚ)⁻¹ 0 :=
@@ -111,7 +111,7 @@ theorem GV_of_linear_padic_leading_bound (F : ℚ[X]) (r : ℚ) (k : ℕ)
     apply VG_of_padic_norm_pow_le _ (k+1)
     have hn := h n
     rw [← hmap] at hn
-    simpa only [coeff_map,Rat.coe_castHom] using hn
+    simpa only [coeff_map,Rat.coe_castHom] using! hn
   have hpq : (p:ℚ) ≠ 0 := by exact_mod_cast hp.out.ne_zero
   have hp1 : (p:ℚ)^(-1:ℤ)*(p:ℚ) = 1 := by simp [zpow_neg,hpq]
   have hpk : (p:ℚ)^(-1:ℤ)*(p:ℚ)^k = (p:ℚ)^((k:ℤ)-1) := by
@@ -181,10 +181,10 @@ theorem primeHigh_rational_entry_leading (hp4 : 3 < p) (ell : Fin 3)
   apply fieldPolynomial_replace_leading_bound _ s t _ (by positivity) ?_ hst n
   intro l
   simpa only [primeHighBlockPoly,primeHighAugmentedIndex,Fin.val_mk,s,e,k,q,c,u,a]
-    using primeHigh_original_entry_leading hp4 (primeHighBlockJet hp4 ell).1
+    using! primeHigh_original_entry_leading hp4 (primeHighBlockJet hp4 ell).1
       (primeHighBlock_above hp4 ell)
       (primeHighAugmentedIndex hp4 ell i) (primeHighAugmentedIndex hp4 ell j)
-      (by simpa only [primeHighAugmentedIndex,Fin.val_mk] using hij) l
+      (by simpa only [primeHighAugmentedIndex,Fin.val_mk] using! hij) l
 
 theorem primeHigh_rational_entry_GV (hp4 : 3 < p) (ell : Fin 3)
     (i j : Fin 2) (hij : i.val+j.val < 2) :

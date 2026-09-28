@@ -23,12 +23,12 @@ private lemma shifted_log_two_decay (k : ℕ) :
   have hbase : Tendsto
       (fun x : ℝ => x ^ k * Real.exp (-(Real.log 2) * x))
       atTop (𝓝 0) := by
-    simpa only [Real.rpow_natCast] using
+    simpa only [Real.rpow_natCast] using!
       tendsto_rpow_mul_exp_neg_mul_atTop_nhds_zero (k : ℝ) (Real.log 2) hlog
   have hscale : Tendsto
       (fun x : ℝ => (2 : ℝ) ^ k * (x ^ k * Real.exp (-(Real.log 2) * x)))
       atTop (𝓝 0) := by
-    simpa only [mul_zero] using hbase.const_mul ((2 : ℝ) ^ k)
+    simpa only [mul_zero] using! hbase.const_mul ((2 : ℝ) ^ k)
   apply squeeze_zero_norm' _ hscale
   filter_upwards [eventually_ge_atTop (1 : ℝ)] with x hx
   have hx0 : 0 ≤ x := by linarith
@@ -61,7 +61,7 @@ private lemma ray_endpoint_norm_bound (d : ℕ) (F : ℚ[X])
     Li2.originalComplexEval_norm_le_of_norm_le F z (1 + x) hR hz
   have hD : 1 ≤ ‖(Li2.D d).eval₂ (Rat.castHom ℂ) z‖ := by
     apply Li2.D_eval₂_complex_norm_ge_one_of_re_nonneg d
-    simpa [z] using hx0
+    simpa [z] using! hx0
   have hq : ‖Li2.originalComplexQuotient d F z‖ ≤
       C * (1 + x) ^ F.natDegree := by
     rw [Li2.originalComplexQuotient, norm_div]
@@ -94,7 +94,7 @@ lemma ray_actual_G_endpoint (d : ℕ) (F : ℚ[X]) :
   have hlim : Tendsto (fun x : ℝ => Li2.originalCoefficientNormSum F *
       ((1 + x) ^ (F.natDegree + 1) * Real.exp (-Real.log 2 * x)))
       atTop (𝓝 0) := by
-    simpa only [mul_zero] using
+    simpa only [mul_zero] using!
       (shifted_log_two_decay (F.natDegree + 1)).const_mul
         (Li2.originalCoefficientNormSum F)
   apply squeeze_zero_norm' _ hlim

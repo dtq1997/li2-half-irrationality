@@ -30,13 +30,7 @@ private theorem residueCount_zero_bridge (p n : ℕ) (hp : 0 < p) :
   rw [residueCount]
   convert Nat.Ioc_filter_dvd_card_eq_div n p using 1
   congr 1
-  ext k
-  simp only [Finset.mem_filter, Finset.mem_Icc, Finset.mem_Ioc]
-  constructor
-  · rintro ⟨⟨h1, hn⟩, hmod⟩
-    exact ⟨⟨by omega, hn⟩, Nat.dvd_iff_mod_eq_zero.mpr hmod⟩
-  · rintro ⟨⟨h0, hn⟩, hdiv⟩
-    exact ⟨⟨by omega, hn⟩, Nat.dvd_iff_mod_eq_zero.mp hdiv⟩
+
 
 private theorem residueCount_nonzero_bridge (p n : ℕ) (c : Fin p)
     (hc : c.val ≠ 0) (hp : 0 < p) :

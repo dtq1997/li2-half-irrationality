@@ -30,7 +30,7 @@ theorem primeTopLeadingSum_four (hp4 : 3 < p) :
     apply Finset.sum_subset (Finset.subset_univ s)
     intro a _ ha
     have hn : ¬ (a.val=0 ∨ a.val=p-1 ∨ a.val=p-2 ∨ a.val=p-3) := by
-      simpa only [s,a0,a1,a2,a3,Finset.mem_insert,Finset.mem_singleton,Fin.ext_iff] using ha
+      simpa only [s,a0,a1,a2,a3,Finset.mem_insert,Finset.mem_singleton,Fin.ext_iff] using! ha
     have hz : a.val ≠ 0 := by omega
     have hl : a.val ≤ p-4 := by have := a.isLt; omega
     simp only [F,primeTopDiscLeading,if_neg hz,if_pos hl,mul_zero]

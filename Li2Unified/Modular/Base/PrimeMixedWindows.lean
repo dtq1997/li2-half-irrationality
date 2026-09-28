@@ -22,10 +22,10 @@ theorem sum_mixed_affine_nat_tendsto {ι : Type*} (s : Finset ι)
   intro i hi
   cases hstrict : strict i with
   | false =>
-      simpa only [hstrict, Bool.false_eq_true, ↓reduceIte] using
+      simpa only [hstrict, Bool.false_eq_true, ↓reduceIte] using!
         affineSum_nat_tendsto (α i) (β i) (ha i hi) (hab i hi).le
   | true =>
-      simpa only [hstrict, ↓reduceIte] using
+      simpa only [hstrict, ↓reduceIte] using!
         affineOpenSum_nat_tendsto (α i) (β i) (ha i hi) (hab i hi)
 
 end

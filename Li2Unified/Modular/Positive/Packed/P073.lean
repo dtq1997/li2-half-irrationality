@@ -301,7 +301,7 @@ lemma kappa_sum (z : ℂ)
           -(-1 + Complex.exp (2 * phase z)) := by ring
       _ = 0 := by rw [h]; ring
   have hEm' : Complex.exp (2 * phase z) - 1 ≠ 0 := by
-    simpa only [sub_eq_add_neg, add_comm] using hEm
+    simpa only [sub_eq_add_neg, add_comm] using! hEm
   field_simp [hp, hm, he0, hEm]
   field_simp [hEm']
   ring

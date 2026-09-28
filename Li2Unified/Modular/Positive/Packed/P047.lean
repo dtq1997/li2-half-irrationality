@@ -27,13 +27,13 @@ theorem posHalf_dtilde_three_lower (n : ℕ) (hn : 1 ≤ n)
   letI : Fact (Nat.Prime 3) := ⟨by decide⟩
   obtain ⟨k, hk0, hkval, _⟩ :=
     Qtilde_coeff_valuation_minimum lambda 3
-      (by simpa only [Instances.PosHalf.Qtilde] using hne)
+      (by simpa only [Instances.PosHalf.Qtilde] using! hne)
   have hcoeff := (posHalf_three_adic_good_fallback n hn) k
   change Li2.VG 3 ((ParameterFamily.Qtilde lambda n).coeff k) _ at hcoeff
   rcases hcoeff with hzero | hbound
   · exact (hk0 hzero).elim
   · rw [hkval] at hbound
-    simpa only using hbound
+    simpa only using! hbound
 
 /-- The exact Stage0 three-adic statement, expressed before its contentTerm wrapper. -/
 theorem posHalf_three_adic_content_raw :

@@ -23,7 +23,7 @@ theorem primeTop_fixed_entry_leading (hp4 : 3 < p) (n : ℕ) :
     intro k
     by_cases hk : k=0
     · subst k
-      simpa using primeTopLeadingSum_norm (p := p) hp4
+      simpa using! primeTopLeadingSum_norm (p := p) hp4
     · simp [coeff_C,hk]
   have hnew := fieldPolynomial_prime_power_bound
     (C (primeTopLeadingSum (p := p)-(-7609/72:ℚ_[p]))) 4 1 hc n

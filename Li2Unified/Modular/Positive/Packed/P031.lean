@@ -39,10 +39,10 @@ theorem profileWindowCells_partition (N n : ℕ) (hN : 1 ≤ N) (f : ℕ → ℝ
         linarith
       have h := one_div_le_one_div_of_le (by norm_num : (0:ℝ) < 1)
         hNge
-      simpa using h
+      simpa using! h
     have h12 : ⌊((1:ℝ)/((N:ℝ)+1))*(n:ℝ)⌋₊ ≤ n := by
       have h := Nat.floor_le_floor (mul_le_mul_of_nonneg_right hrec1 hnR)
-      simpa using h
+      simpa using! h
     have hconcat := Finset.sum_Ioc_consecutive f h01 h12
     rw [add_comm]
     convert hconcat using 1 <;> push_cast <;> ring
@@ -70,9 +70,9 @@ theorem profile_piece_zero (A : ℕ) (x : ℝ) (_hA : 1 ≤ A) (hx : 0 < x)
       apply Int.floor_eq_iff.mpr
       constructor
       · exact_mod_cast hlo'
-      · simpa only [Int.cast_add, Int.cast_natCast, Int.cast_one] using hhi'
+      · simpa only [Int.cast_add, Int.cast_natCast, Int.cast_one] using! hhi'
     exact_mod_cast h
-  have h1lo : (A:ℝ) ≤ (1:ℝ)/x := by simpa only [one_div] using hlo.le
+  have h1lo : (A:ℝ) ≤ (1:ℝ)/x := by simpa only [one_div] using! hlo.le
   have h1hi : (1:ℝ)/x < (A:ℝ)+1 := by
     rw [one_div]
     linarith only [hhi]
@@ -97,7 +97,7 @@ theorem profile_piece_zero (A : ℕ) (x : ℝ) (_hA : 1 ≤ A) (hx : 0 < x)
   have hf4 := hfloor (4*A) (4/x) h4lo h4hi
   have hAx : (A:ℝ)*x < 1 := by
     have h := mul_lt_mul_of_pos_right hlo hx
-    simpa only [inv_mul_cancel₀ hx.ne'] using h
+    simpa only [inv_mul_cancel₀ hx.ne'] using! h
   have hmin : min (1-(A:ℝ)*x) (4-((4*A:ℕ):ℝ)*x) = 1-(A:ℝ)*x := by
     apply min_eq_left
     push_cast
@@ -122,7 +122,7 @@ private theorem profile_floors_on_theta (A j b : ℕ) (x lo hi : ℝ)
       apply Int.floor_eq_iff.mpr
       constructor
       · exact_mod_cast hlo'
-      · simpa only [Int.cast_add, Int.cast_natCast, Int.cast_one] using hhi'
+      · simpa only [Int.cast_add, Int.cast_natCast, Int.cast_one] using! hhi'
     exact_mod_cast h
   have h1lo : (A:ℝ) ≤ (1:ℝ)/x := by
     rw [one_div]
@@ -155,7 +155,7 @@ private theorem profile_min_first (A j : ℕ) (x : ℝ) (hx : 0 < x)
     min (1-(A:ℝ)*x) (4-((4*A+j:ℕ):ℝ)*x) = 1-(A:ℝ)*x := by
   have hm := mul_lt_mul_of_pos_right hθ hx
   have hb : ((A:ℝ)+(j:ℝ)/3)*x < 1 := by
-    simpa only [inv_mul_cancel₀ hx.ne'] using hm
+    simpa only [inv_mul_cancel₀ hx.ne'] using! hm
   apply min_eq_left
   push_cast
   nlinarith only [hb]
@@ -166,7 +166,7 @@ private theorem profile_min_second (A j : ℕ) (x : ℝ) (hx : 0 < x)
       4-((4*A+j:ℕ):ℝ)*x := by
   have hm := mul_lt_mul_of_pos_right hθ hx
   have hb : 1 < ((A:ℝ)+(j:ℝ)/3)*x := by
-    simpa only [inv_mul_cancel₀ hx.ne'] using hm
+    simpa only [inv_mul_cancel₀ hx.ne'] using! hm
   apply min_eq_right
   push_cast
   nlinarith only [hb]
@@ -178,7 +178,7 @@ theorem profile_piece_one (A : ℕ) (x : ℝ) (hx : 0 < x)
     profile_floors_on_theta A 1 0 x (1/4) (1/3) hlo hhi
       (by norm_num) (by norm_num) (by norm_num) (by norm_num)
       (by norm_num) (by norm_num)
-  have hmin := profile_min_second A 1 x hx (by simpa only [Nat.cast_one] using hhi)
+  have hmin := profile_min_second A 1 x hx (by simpa only [Nat.cast_one] using! hhi)
   dsimp [profile]
   rw [hf1, hf2, hf4, hmin]
   push_cast
@@ -191,7 +191,7 @@ theorem profile_piece_two (A : ℕ) (x : ℝ) (hx : 0 < x)
     profile_floors_on_theta A 1 0 x (1/3) (1/2) hlo hhi
       (by norm_num) (by norm_num) (by norm_num) (by norm_num)
       (by norm_num) (by norm_num)
-  have hmin := profile_min_first A 1 x hx (by simpa only [Nat.cast_one] using hlo)
+  have hmin := profile_min_first A 1 x hx (by simpa only [Nat.cast_one] using! hlo)
   dsimp [profile]
   rw [hf1, hf2, hf4, hmin]
   push_cast

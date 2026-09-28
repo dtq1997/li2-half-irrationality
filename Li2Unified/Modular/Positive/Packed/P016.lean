@@ -1,4 +1,5 @@
 module
+public import Li2Unified.Modular.Base.RestrictedSeriesCompat
 public import Li2Unified.Modular.Positive.Packed.P015
 public import Li2Unified.Modular.Base.OriginalFunctionalAssembly
 public import Li2Unified.Modular.Base.FieldPoleSums
@@ -34,7 +35,7 @@ theorem generalOriginal_fieldPoleFunctional (μ : ℕ → ℤ_[p])
     (originalResidue m F j.val : ℚ_[p]) • pulledPoleRegular j.val a.val
   have hf : ∀ j, PowerSeries.IsRestricted 1 (f j) := by
     intro j
-    exact PowerSeries.IsRestricted.smul 1
+    exact Li2.restrictedSeries_smul 1
       (pulledPoleRegular_isRestricted (p := p) j.val a.val)
       (originalResidue m F j.val : ℚ_[p])
   have hq : PowerSeries.IsRestricted 1
@@ -382,7 +383,7 @@ theorem numeratorFunctional_fiberwise (lam : ℚ) (m p : ℕ)
     (hlam : |(lam : ℝ)| < 1) (hne : lam ≠ 0) (hp : 0 < p) (F : ℚ[X]) :
     Li2Unified.ParameterFamily.numeratorFunctional lam m F =
       ∑ a : Fin p, localActualFunctional lam m p a F := by
-  have hnorm : ‖(lam : ℝ)‖ < 1 := by simpa [Real.norm_eq_abs] using hlam
+  have hnorm : ‖(lam : ℝ)‖ < 1 := by simpa [Real.norm_eq_abs] using! hlam
   have hpoly : C (Li2.parameterU lam (F /ₘ Li2.D m)) =
       ∑ a : Fin p, polynomialFiber lam m p a F := by
     rw [Li2.parameterU_dissection lam hnorm hne p hp (F /ₘ Li2.D m)]

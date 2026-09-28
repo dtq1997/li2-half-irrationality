@@ -54,7 +54,6 @@ theorem partial_fractionsP (A : ℚ[X]) (Pl : Finset ℤ) :
           unfold piPl; rw [eval_prod]
           exact Finset.prod_eq_zero hr (by simp)
         conv_rhs => rw [← h1]
-        dsimp only
         rw [eval_add, eval_mul, h2, zero_mul, add_zero])]
     simp only [Lagrange.interpolate_apply]
     refine Finset.sum_congr rfl fun r _ => ?_

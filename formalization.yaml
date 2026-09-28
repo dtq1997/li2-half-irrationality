@@ -1,0 +1,73 @@
+# Submission metadata. Complete this port's verification before submission.
+version: "v0.4"
+project:
+  name: "Irrationality of Li₂(1/2)"
+  description: >-
+    This project formalizes the irrationality of the real number
+    Li₂(1/2) = sum over n >= 1 of 2^(-n)/n^2. The selected theorem states
+    irrationality directly for the real infinite series, without additional
+    mathematical hypotheses. The Challenge uses the standard Mathlib
+    definitions of real numbers, infinite summation, and irrationality.
+  authors:
+    - "Qian Tang"
+  responsible_maintainers:
+    - "Qian Tang"
+  license: "Apache-2.0"
+classification:
+  arxiv: ["math.NT"]
+  msc2020: ["11J72"]
+sources:
+  - title: "Irrationality of Li₂(1/2)"
+    authors: ["Qian Tang"]
+    contributors:
+      - name: "Siqi Liu"
+        role: "problem-proposer"
+    id: "https://github.com/dtq1997/li2-half-irrationality"
+    type: "original-proof"
+    relationship: "other"
+    note: >-
+      The author identifies this repository as the first presentation of the
+      result. This records the author's account of its origin; priority and
+      novelty have not been independently established.
+related_formalizations:
+  - id: "https://github.com/mo271/Zeta5/tree/f19a1960609f7d38e7b63fd2acb05e6f60a7b741"
+    relationship: "adapts"
+    note: "Selected auxiliary Lean developments were adapted; see NOTICE for the files and attribution."
+  - id: "https://github.com/AlexKontorovich/PrimeNumberTheoremAnd/tree/d7f9e2bfdcc7e34dfb9328b7494a6d424ff50c96"
+    relationship: "adapts"
+    note: "The prime-number-theorem developments listed in NOTICE were adapted."
+  - id: "https://github.com/leanprover-community/mathlib4/pull/39232"
+    relationship: "adapts"
+    note: "The rectangular-contour residue development was adapted from commit cad38f70f5a649a40dbb3b334055a8e9aff69af5; see NOTICE."
+status:
+  scope: >-
+    The submitted claim is irrationality of Li₂(1/2), expressed as the real
+    series with index k >= 0 and term (1/2)^(k+1)/(k+1)^2. No claim about
+    other parameters, transcendence, or algebraic independence is submitted.
+  sorry_count: 0
+  sorry_in_definitions: 0
+  axioms: ["propext", "Quot.sound", "Classical.choice"]
+automation:
+  methods:
+    - method: "agent"
+      models: ["opus5.5", "astra"]
+      framework: "OpenAI Codex; Anthropic Claude"
+      tool_setup: "Lean code written with substantial AI assistance, as disclosed in NOTICE."
+  notes: >-
+    The Lean code was written with substantial assistance from OpenAI Codex
+    and Anthropic Claude, under the author's direction. This disclosure
+    follows the repository's NOTICE. Model names are recorded as supplied
+    by the author. Costs are not reported.
+fidelity:
+  divergences: "The real-series theorem statement is unchanged from its first presentation in this repository."
+review:
+  status: "self-assessed"
+  notes: "The author checked that the formal statement in Challenge.lean is the intended theorem. The author has not fully reviewed the rest of the Lean code; its correctness rests on the Lean kernel and the independent checkers (Comparator, nanoda)."
+alignment:
+  statements:
+    - source: "The original result presented in this repository: irrationality of Li₂(1/2)"
+      lean: "li2_one_half_irrational"
+      module: "Solution"
+      status: "author-checked"
+      note: "The Challenge and Solution use the same literal real-series statement."
+acknowledgements: "I thank Siqi Liu for suggesting the problem and for helpful discussions. I also thank FatFish for support and discussions."

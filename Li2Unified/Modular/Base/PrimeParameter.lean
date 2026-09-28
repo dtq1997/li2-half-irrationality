@@ -46,7 +46,7 @@ theorem negativeHalf_prime_pow_congr (hp2 : p ≠ 2) :
     simpa only [Int.cast_sub, Int.cast_pow, Int.cast_neg, Int.cast_ofNat] using VG.intCast_of_dvd hdiv
   have hb : (-2:ℚ) ≠ 0 := by norm_num
   have hval : padicValRat p ((-2:ℚ)^p) = 0 := by
-    rw [padicValRat.pow hb, negative_two_valuation_zero hp2]
+    rw [padicValRat.pow, negative_two_valuation_zero hp2]
     simp
   have hi : VG p ((-2:ℚ)^p)⁻¹ 0 := by
     simpa using VG.inv (p := p) (pow_ne_zero _ hb) (show (padicValRat p ((-2:ℚ)^p):ℚ) ≤ 0 by rw [hval]; norm_num)
@@ -67,7 +67,7 @@ theorem primeParameter_unit (hp2 : p ≠ 2) :
   have hhalf : (-1/2:ℚ) ≠ 0 := by norm_num
   refine ⟨pow_ne_zero _ hhalf, ?_⟩
   unfold primeParameter
-  rw [padicValRat.pow hhalf]
+  rw [padicValRat.pow]
   have hval : padicValRat p (-1/2:ℚ) = 0 := by
     rw [show (-1/2:ℚ) = (-2:ℚ)⁻¹ by norm_num, padicValRat.inv, negative_two_valuation_zero hp2]
     rfl
@@ -105,7 +105,7 @@ theorem primeParameter_moment_initial_congr (hp2 : p ≠ 2) (hp3 : p ≠ 3) :
     simpa using VG.inv (p := p) (by norm_num : (3:ℚ) ≠ 0)
       (show (padicValRat p (3:ℚ):ℚ) ≤ 0 by rw [three_valuation_zero hp3]; norm_num)
   have h23 : VG p (2/3:ℚ) 0 := by
-    simpa only [div_eq_mul_inv, add_zero] using (VG.natCast (p := p) 2).mul h3
+    simpa only [div_eq_mul_inv, add_zero] using! (VG.natCast (p := p) 2).mul h3
   have he : primeParameter p/(1-primeParameter p)-(-1/3:ℚ) =
       (primeParameter p-(-1/2:ℚ))*(1-primeParameter p)⁻¹*(2/3) := by
     field_simp [hu.1]

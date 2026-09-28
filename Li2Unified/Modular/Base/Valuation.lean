@@ -115,8 +115,8 @@ lemma primePow [hp : Fact p.Prime] (k : ℤ) : VG p ((p : ℚ) ^ k) k := by
   have hpq : (p : ℚ) ≠ 0 := by exact_mod_cast hp.out.ne_zero
   have : padicValRat p ((p : ℚ) ^ k) = k := by
     cases k with
-    | ofNat n => simp [padicValRat.pow hpq, padicValRat.self hp.out.one_lt]
-    | negSucc n => simp [zpow_negSucc, padicValRat.inv, padicValRat.pow hpq,
+    | ofNat n => simp [padicValRat.pow, padicValRat.self hp.out.one_lt]
+    | negSucc n => simp [zpow_negSucc, padicValRat.inv, padicValRat.pow,
         padicValRat.self hp.out.one_lt] <;> omega
   rw [this]
 

@@ -67,7 +67,7 @@ theorem integrable_circleLayerPairKernel (c : ℂ) (ε : ℝ)
         Real.log ‖circleMap c ε θ - starLayerCurve t φ‖ =
           Real.log ‖starLayerCurve t φ - circleMap c ε θ‖ := by
       intro φ; rw [norm_sub_rev]
-    simpa only [hsymmetric] using h.const_mul
+    simpa only [hsymmetric] using! h.const_mul
       ((2 * Real.pi)⁻¹ * starLayerAngularDensity t)
   have hrow_norm (θ : ℝ) :
       (∫ φ in (0 : ℝ)..2 * Real.pi,
@@ -95,8 +95,9 @@ theorem integrable_circleLayerPairKernel (c : ℂ) (ε : ℝ)
           (fun z => |Real.log ‖circleMap c ε θ - z‖|)
       _ = _ := by
         congr 1
-        exact (t.integral_eq hvt _
-          ((measurable_const.sub measurable_id).norm.log.abs)).symm
+        exact (t.integral_eq hvt (fun z => |Real.log ‖circleMap c ε θ - z‖|)
+          (by simpa only [Real.norm_eq_abs] using!
+            ((measurable_const (a := circleMap c ε θ)).sub measurable_id).norm.log.norm)).symm
   have hmt : t.measure ≤ comparisonMeasure := selected_layer_le ht
   have hrow_le (θ : ℝ) :
       (∫ φ in (0 : ℝ)..2 * Real.pi,
@@ -107,12 +108,12 @@ theorem integrable_circleLayerPairKernel (c : ℂ) (ε : ℝ)
     have hw : ‖circleMap c ε θ‖ ≤ ‖c‖ + |ε| := by
       calc
         _ ≤ ‖c‖ + ‖circleMap 0 ε θ‖ := by
-          simpa only [circleMap, zero_add] using
+          simpa only [circleMap, zero_add] using!
             (norm_add_le c (circleMap 0 ε θ))
         _ = _ := by rw [norm_circleMap_zero]
     have hcomp : Integrable (fun z : ℂ =>
         |Real.log ‖circleMap c ε θ - z‖|) comparisonMeasure := by
-      simpa only [norm_sub_rev] using
+      simpa only [norm_sub_rev] using!
         (integrable_log_comparisonMeasure (circleMap c ε θ)).abs
     have hm :
         (∫ z : ℂ, |Real.log ‖circleMap c ε θ - z‖| ∂t.measure) ≤
@@ -123,7 +124,7 @@ theorem integrable_circleLayerPairKernel (c : ℂ) (ε : ℝ)
     have hc :
         (∫ z : ℂ, |Real.log ‖circleMap c ε θ - z‖| ∂comparisonMeasure) ≤
           11 / 10 + Real.log (56 / 5 + ‖circleMap c ε θ‖) := by
-      simpa only [norm_sub_rev] using
+      simpa only [norm_sub_rev] using!
         integral_abs_log_comparisonMeasure_le (circleMap c ε θ)
     have hlog : Real.log (56 / 5 + ‖circleMap c ε θ‖) ≤
         Real.log (56 / 5 + ‖c‖ + |ε|) :=

@@ -21,11 +21,11 @@ lemma primeDistinctJet_cube_order (hp4 : 3 < p) (a b : PrimeJet p)
     k ≤ primeJetLocalOrder p a c+primeJetLocalOrder p b c+primeDiscCubeGain c := by
   by_cases hca : c = a.1
   · subst c
-    simpa only [primeJetLocalOrder,ite_true,if_pos rfl,if_neg hab] using ha
+    simpa only [primeJetLocalOrder,ite_true,if_pos rfl,if_neg hab] using! ha
   · by_cases hcb : c = b.1
     · subst c
       simpa only [primeJetLocalOrder,ite_true,if_neg (Ne.symm hab),if_pos rfl,
-        Nat.add_comm,Nat.add_left_comm,Nat.add_assoc] using hb
+        Nat.add_comm,Nat.add_left_comm,Nat.add_assoc] using! hb
     · simp only [primeJetLocalOrder,ite_true,if_neg hca,if_neg hcb]
       apply hk.trans
       by_cases hz : c.val = 0

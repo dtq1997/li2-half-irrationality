@@ -34,7 +34,7 @@ theorem starProfilePair_symmetric (h : ℕ) (x : Fin h → ℂ)
   calc
     _ = ∫ φ in (0 : ℝ)..2 * Real.pi,
         ∫ θ in (0 : ℝ)..2 * Real.pi, F θ φ := by
-      simpa only [F, intervalIntegral.integral_of_le hT] using
+      simpa only [F, intervalIntegral.integral_of_le hT] using!
         (MeasureTheory.integral_integral_swap
           (f := F)
           (integrable_starProfilePairKernel h x hε k l))
@@ -84,7 +84,7 @@ theorem starProfileBlock_none_none (h : ℕ) (x : Fin h → ℂ) (ε : ℝ) :
       (List.get_mem layerData j) (List.get_mem layerData k)).integral_prod_left
     apply (intervalIntegrable_iff_integrableOn_Ioc_of_le hT).2
     simpa only [F, μcirc, angularLayerPairKernel,
-      intervalIntegral.integral_of_le hT] using hi
+      intervalIntegral.integral_of_le hT] using! hi
   have hrow (j : Fin layerData.length) (θ : ℝ) :
       (∑ k : Fin layerData.length, F j k θ) =
         starLayerAngularDensity (layerData.get j) *
@@ -93,7 +93,7 @@ theorem starProfileBlock_none_none (h : ℕ) (x : Fin h → ℂ) (ε : ℝ) :
     simp_rw [mul_assoc, intervalIntegral.integral_const_mul]
     rw [← Finset.mul_sum]
     congr 1
-    simpa only [intervalIntegral.integral_const_mul] using
+    simpa only [intervalIntegral.integral_const_mul] using!
       star_comparisonPotential_angular (starLayerCurve (layerData.get j) θ)
   dsimp only [starProfileBlock]
   simp_rw [hP]
@@ -143,7 +143,7 @@ theorem starProfileBlock_circle_lower (h : ℕ) (x : Fin h → ℂ) {ε : ℝ}
   have hscale : (2 * Real.pi)^2 * ((2 * Real.pi)⁻¹ ^ 2) = 1 := by
     field_simp [Real.pi_ne_zero]
   rw [starProfileBlock, hpair]
-  simpa only [← mul_assoc, hscale, one_mul, norm_sub_rev] using hcircle
+  simpa only [← mul_assoc, hscale, one_mul, norm_sub_rev] using! hcircle
 
 #print axioms starProfileBlock_none_none
 #print axioms starProfileBlock_circle_self

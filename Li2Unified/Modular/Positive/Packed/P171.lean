@@ -28,9 +28,9 @@ theorem contains_atanSmall {q : QPair} {k : ℕ}
     (smallAtanBounds q k).toBounds.Contains (Real.arctan (q.toRat : ℝ)) := by
   rw [smallAtanBounds_toBounds q hq k]
   have h0 : 0 ≤ q.toRat := by
-    simpa [qZero_toRat] using qLE_sound qValid_qZero hq hq0
+    simpa [qZero_toRat] using! qLE_sound qValid_qZero hq hq0
   have h1 : q.toRat < 1 := by
-    simpa [qOne_toRat] using qLT_sound hq qValid_qOne hq1
+    simpa [qOne_toRat] using! qLT_sound hq qValid_qOne hq1
   exact contains_small_arctan q.toRat h0 h1 k
 
 private theorem atanEnds (r : QPair) (hr : qValid r = true) (k : ℕ) :
@@ -70,7 +70,7 @@ theorem halfAtan_ratio_sound {q r : QPair}
     rw [toRat_qSub _ _ qValid_qOne (qValid_qMul (by decide) hr),
       toRat_qMul, qOne_toRat, qHalf_toRat]
   have hrle : r.toRat ≤ 1 / 2 := by
-    simpa [qHalf_toRat] using qLE_sound hr (by decide) hr1
+    simpa [qHalf_toRat] using! qLE_sound hr (by decide) hr1
   have hdpos : qLT qZero d = true := by
     apply qLT_complete qValid_qZero hdval
     rw [qZero_toRat, hden]
@@ -93,9 +93,9 @@ theorem contains_atanHalf {q r : QPair} {k : ℕ}
     (halfAtanBounds r k).toBounds.Contains (Real.arctan (q.toRat : ℝ)) := by
   rw [halfAtanBounds_toBounds r hr k]
   have h0 : 0 ≤ r.toRat := by
-    simpa [qZero_toRat] using qLE_sound qValid_qZero hr hr0
+    simpa [qZero_toRat] using! qLE_sound qValid_qZero hr hr0
   have h1 : r.toRat ≤ 1 / 2 := by
-    simpa [qHalf_toRat] using qLE_sound hr (by decide) hr1
+    simpa [qHalf_toRat] using! qLE_sound hr (by decide) hr1
   exact contains_arctan_half_add q.toRat r.toRat k h0 h1
     (halfAtan_ratio_sound hq hr hr0 hr1 heq)
 
@@ -125,7 +125,7 @@ theorem contains_atanInverse {q r : QPair} {a : I}
     (inverseAtanBounds a).toBounds.Contains (Real.arctan (q.toRat : ℝ)) := by
   rw [inverseAtanBounds_toBounds a ha]
   have hq0' : 0 < q.toRat := by
-    simpa [qZero_toRat] using qLT_sound qValid_qZero hq hq0
+    simpa [qZero_toRat] using! qLT_sound qValid_qZero hq hq0
   have hr' : r.toRat = q.toRat⁻¹ := by
     have h := qEq_sound hr (qValid_qInv_pos q hq0) heq
     rwa [toRat_qInv_pos q hq0] at h

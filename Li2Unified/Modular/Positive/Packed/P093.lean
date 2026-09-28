@@ -24,11 +24,11 @@ lemma three_arm_endpoint_diagonal_limit (d : ℕ) (F : ℚ[X]) :
     ray_actual_G_endpoint_nat d F
   have hU : Tendsto (fun N : ℕ => upEndpoint d F (N : ℝ)) atTop (𝓝 0) := by
     have h := (upper_actual_G_endpoint d F).comp tendsto_natCast_atTop_atTop
-    simpa only [upEndpoint, point_up, mul_assoc] using h
+    simpa only [upEndpoint, point_up, mul_assoc] using! h
   have hD : Tendsto (fun N : ℕ => downEndpoint d F (N : ℝ)) atTop (𝓝 0) := by
     have h := (lower_actual_G_endpoint d F).comp tendsto_natCast_atTop_atTop
-    simpa only [downEndpoint, point_down, mul_assoc] using h
-  simpa only [sub_zero] using (hR.sub hD).sub hU
+    simpa only [downEndpoint, point_down, mul_assoc] using! h
+  simpa only [sub_zero] using! (hR.sub hD).sub hU
 
 theorem three_arm_density_diagonal_limit (d : ℕ) (F : ℚ[X]) :
     Tendsto (fun N : ℕ => rayDensityFinite d F N +
@@ -45,7 +45,7 @@ theorem three_arm_density_diagonal_limit (d : ℕ) (F : ℚ[X]) :
       (rayEndpoint d F N - downEndpoint d F (N : ℝ) -
         upEndpoint d F (N : ℝ))) atTop
       (𝓝 ((numeratorFunctional lambda d F).eval₂ (Rat.castHom ℂ) (value : ℂ))) := by
-    simpa only [sub_zero] using hsub
+    simpa only [sub_zero] using! hsub
   apply (tendsto_congr' _).mpr hlimit
   filter_upwards [] with N
   have h := finite_three_arm_ibp d F N (N : ℝ)
@@ -71,7 +71,7 @@ private lemma ray_density_finite_tendsto (d : ℕ) (F : ℚ[X]) :
       (𝓝 (∫ t : ℝ, density ⟨0, by decide⟩ t *
         Li2.originalComplexQuotient d F (point ⟨0, by decide⟩ t)
           ∂(volume.restrict (Ioi (0 : ℝ))))) := by
-  simpa only [rayDensityFinite] using
+  simpa only [rayDensityFinite] using!
     (intervalIntegral_tendsto_integral_Ioi (f := fun t : ℝ =>
       density ⟨0, by decide⟩ t *
         Li2.originalComplexQuotient d F (point ⟨0, by decide⟩ t))
@@ -82,7 +82,7 @@ private lemma up_density_finite_tendsto (d : ℕ) (F : ℚ[X]) :
       (𝓝 (∫ t : ℝ, density ⟨1, by decide⟩ t *
         Li2.originalComplexQuotient d F (point ⟨1, by decide⟩ t)
           ∂(volume.restrict (Ioi (0 : ℝ))))) := by
-  simpa only [upDensityFinite] using
+  simpa only [upDensityFinite] using!
     (intervalIntegral_tendsto_integral_Ioi (f := fun t : ℝ =>
       density ⟨1, by decide⟩ t *
         Li2.originalComplexQuotient d F (point ⟨1, by decide⟩ t))
@@ -93,7 +93,7 @@ private lemma down_density_finite_tendsto (d : ℕ) (F : ℚ[X]) :
       (𝓝 (∫ t : ℝ, density ⟨2, by decide⟩ t *
         Li2.originalComplexQuotient d F (point ⟨2, by decide⟩ t)
           ∂(volume.restrict (Ioi (0 : ℝ))))) := by
-  simpa only [downDensityFinite] using
+  simpa only [downDensityFinite] using!
     (intervalIntegral_tendsto_integral_Ioi (f := fun t : ℝ =>
       density ⟨2, by decide⟩ t *
         Li2.originalComplexQuotient d F (point ⟨2, by decide⟩ t))

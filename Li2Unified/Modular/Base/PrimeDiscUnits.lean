@@ -54,10 +54,10 @@ lemma powerSeries_pow_constant_error_bound (f : PowerSeries ℤ_[p]) (a : ℤ_[p
 lemma restricted_pow (f : PowerSeries ℤ_[p]) (hf : PowerSeries.IsRestricted 1 f)
     (d : ℕ) : PowerSeries.IsRestricted 1 (f^d) := by
   induction d with
-  | zero => simpa using PowerSeries.IsRestricted.one (R := ℤ_[p]) 1
+  | zero => simpa using PowerSeries.isRestricted_one (R := ℤ_[p]) 1
   | succ d ih =>
     rw [pow_succ]
-    exact PowerSeries.IsRestricted.mul 1 ih hf
+    exact PowerSeries.isRestricted.mul 1 ih hf
 
 def primeDiscUnit (a : ℕ) (ha : a < p) : PowerSeries ℤ_[p] :=
   (integralNonmatchingDiscPolynomial (p := p) a (p-1) : PowerSeries ℤ_[p])^3 *
@@ -68,7 +68,7 @@ def primeDiscUnitConstant (a : ℕ) (ha : a < p) : ℤ_[p] :=
 
 theorem primeDiscUnit_isRestricted (a : ℕ) (ha : a < p) :
     PowerSeries.IsRestricted 1 (primeDiscUnit a ha) := by
-  exact PowerSeries.IsRestricted.mul 1
+  exact PowerSeries.isRestricted.mul 1
     (restricted_pow _ (polynomial_isRestricted _) 3)
     (nonmatchingDiscInverse_isRestricted a _ ha)
 

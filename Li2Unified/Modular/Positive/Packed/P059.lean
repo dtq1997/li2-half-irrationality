@@ -59,6 +59,7 @@ theorem parameterHigh_rational_entry_leading (lam : ℚ) (hlam : |(lam:ℝ)| < 1
   have he : s-t = (p:ℚ_[p])^k * ((d:ℚ_[p])*(q:ℚ_[p]) *
       ((parameterHighDiscWeight lam hu a:ℚ_[p])-((parameterHighRationalWeight lam ell:ℚ):ℚ_[p]))) := by
     dsimp only [s,t,d,e,u,parameterHighDiscWeight]
+    simp only [PadicInt.coe_mul, PadicInt.coe_neg, PadicInt.coe_natCast, PadicInt.coe_pow, PadicInt.coe_intCast]
     simp only [integralParameterInvPow,integralRational,Rat.cast_inv,PadicInt.coe_mul,PadicInt.coe_pow,PadicInt.coe_natCast,
       PadicInt.coe_intCast,PadicInt.coe_neg,Int.cast_mul,Rat.cast_mul,
       Rat.cast_pow,Rat.cast_intCast]
@@ -69,10 +70,10 @@ theorem parameterHigh_rational_entry_leading (lam : ℚ) (hlam : |(lam:ℝ)| < 1
   apply fieldPolynomial_replace_leading_bound _ s t _ (by positivity) ?_ hst n
   intro l
   simpa only [primeHighBlockPoly,primeHighAugmentedIndex,Fin.val_mk,s,e,k,q,c,u,a]
-    using parameterHigh_original_entry_leading lam hlam hu hone hferm hp4 (primeHighBlockJet hp4 ell).1
+    using! parameterHigh_original_entry_leading lam hlam hu hone hferm hp4 (primeHighBlockJet hp4 ell).1
       (primeHighBlock_above hp4 ell)
       (primeHighAugmentedIndex hp4 ell i) (primeHighAugmentedIndex hp4 ell j)
-      (by simpa only [primeHighAugmentedIndex,Fin.val_mk] using hij) l
+      (by simpa only [primeHighAugmentedIndex,Fin.val_mk] using! hij) l
 
 theorem parameterHigh_rational_entry_GV (lam : ℚ) (hlam : |(lam:ℝ)| < 1)
     (hu : lam ≠ 0 ∧ padicValRat p lam = 0)

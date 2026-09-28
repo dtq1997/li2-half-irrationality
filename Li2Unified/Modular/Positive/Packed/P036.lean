@@ -52,9 +52,8 @@ theorem primitiveQ_proportional (lam : ℚ) (n : ℕ) :
   have hfac := congrArg (fun f : ℤ[X] => (f.map (algebraMap ℤ ℚ)).coeff k)
     R.eq_C_content_mul_primPart
   have hco : (b : ℚ) * (Q lam n).coeff k = (R.content : ℚ) * (R.primPart.coeff k : ℚ) := by
-    dsimp only at hfac
     rw [show R.map (algebraMap ℤ ℚ) = b • Q lam n from hmap] at hfac
-    simpa using hfac
+    simpa using! hfac
   simp only [primitiveQ, if_neg hn, coeff_map, coeff_C_mul]
   change (R.primPart.coeff k : ℚ) = (b : ℚ)/(R.content : ℚ) * (Q lam n).coeff k
   apply (mul_left_cancel₀ hcontQ)
@@ -80,7 +79,7 @@ theorem d_pos (lam : ℚ) (n : ℕ) : 0 < d lam n := abs_pos.mpr (primitiveScale
 
 theorem P_eq_d_Q (lam : ℚ) (n : ℕ) : (P lam n).map (algebraMap ℤ ℚ) = C (d lam n) * Q lam n := by
   by_cases h : 0 < primitiveScale lam n
-  · simpa only [P, if_pos h, d, abs_of_pos h] using primitiveScale_spec lam n
+  · simpa only [P, if_pos h, d, abs_of_pos h] using! primitiveScale_spec lam n
   · have hneg : primitiveScale lam n < 0 :=
       lt_of_le_of_ne (le_of_not_gt h) (primitiveScale_ne_zero lam n)
     simp only [P, if_neg h, Polynomial.map_neg, primitiveScale_spec,
@@ -88,7 +87,7 @@ theorem P_eq_d_Q (lam : ℚ) (n : ℕ) : (P lam n).map (algebraMap ℤ ℚ) = C 
 
 theorem P_natDegree_le (lam : ℚ) (n : ℕ) : (P lam n).natDegree ≤ 2*n := by
   unfold P
-  split_ifs <;> simpa using primitiveQ_natDegree_le lam n
+  split_ifs <;> simpa using! primitiveQ_natDegree_le lam n
 
 theorem P_isPrimitive (lam : ℚ) (n : ℕ) (hn : Q lam n ≠ 0) : (P lam n).IsPrimitive := by
   unfold P
@@ -97,7 +96,7 @@ theorem P_isPrimitive (lam : ℚ) (n : ℕ) (hn : Q lam n ≠ 0) : (P lam n).IsP
   · apply Polynomial.isPrimitive_iff_isUnit_of_C_dvd.mpr
     intro r hr
     apply Polynomial.isPrimitive_iff_isUnit_of_C_dvd.mp (primitiveQ_isPrimitive lam n hn) r
-    simpa using hr
+    simpa using! hr
 
 
 def dtilde (lam : ℚ) (n : ℕ) : ℚ := d lam n / (Li2.Sn n ^ (2*n) / Li2.Fn n)
@@ -118,7 +117,7 @@ theorem P_eq_dtilde_Qtilde (lam : ℚ) (n : ℕ) :
 lemma P_coeff_eq_dtilde (lam : ℚ) (n k : ℕ) :
     ((P lam n).coeff k : ℚ) = dtilde lam n * (Qtilde lam n).coeff k := by
   have h := congrArg (fun F : ℚ[X] => F.coeff k) (P_eq_dtilde_Qtilde lam n)
-  simpa only [coeff_map, coeff_C_mul] using h
+  simpa only [coeff_map, coeff_C_mul] using! h
 
 lemma P_eq_zero_of_Q_eq_zero (lam : ℚ) (n : ℕ) (hn : Q lam n = 0) : P lam n = 0 := by
   simp [P, primitiveQ, hn]
@@ -156,9 +155,8 @@ theorem P_aeval_eq_dtilde_Qtilde (lam : ℚ) (n : ℕ) (x : ℝ) :
     aeval x (P lam n) = (dtilde lam n : ℝ) * aeval x (Qtilde lam n) := by
   have h := congrArg (fun F : ℚ[X] => F.eval₂ (algebraMap ℚ ℝ) x)
     (P_eq_dtilde_Qtilde lam n)
-  dsimp only at h
   rw [eval₂_map, eval₂_mul, eval₂_C] at h
-  simpa only [aeval_def, ← IsScalarTower.algebraMap_eq ℤ ℚ ℝ] using h
+  simpa only [aeval_def, ← IsScalarTower.algebraMap_eq ℤ ℚ ℝ] using! h
 
 lemma abs_P_aeval_eq_dtilde_Qtilde (lam : ℚ) (n : ℕ) (x : ℝ) :
     |aeval x (P lam n)| = (dtilde lam n : ℝ) * |aeval x (Qtilde lam n)| := by
