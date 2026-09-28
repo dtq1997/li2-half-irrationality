@@ -1,6 +1,8 @@
 module
 public import Li2Unified.Modular.Positive.Packed.P013
-public import Li2Unified.Modular.Base.PrimeFieldPoleExtension
+public import Li2Unified.Modular.Base.FieldPoleCompatibility
+public import Li2Unified.Modular.Base.FieldParameterFunctional
+public import Li2Unified.Modular.Base.PrimePoleExtension
 public import Li2Unified.Modular.Base.RationalBaseEvaluation
 public import Li2Unified.Modular.Positive.Packed.P010
 

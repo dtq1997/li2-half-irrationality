@@ -87,11 +87,6 @@ theorem arctan_series_bounds (x : ℝ) (hx : 0 ≤ x) (h1 : x < 1) (k : ℕ) :
   out.putStrLn "ElementaryBounds: series bounds complete"
   out.flush
 
-theorem arctan_one_twelfth_lower : (1/13:ℝ) < Real.arctan (1/12:ℝ) := by
-  have h := (arctan_series_bounds (1/12:ℝ) (by norm_num) (by norm_num) 1).1
-  norm_num [Finset.sum_range_succ] at h
-  linarith
-
 #eval show IO Unit from do
   let out ← IO.getStdout
   out.putStrLn "ElementaryBounds: final bound complete"
@@ -173,14 +168,6 @@ section
 namespace Li2Unified.Proofs.Potential
 noncomputable section
 open Li2Unified.ParameterFamily
-
-theorem contains_mulLogAbs_positive {a b : RationalBounds} {x : ℝ}
-    (hx : a.Contains x) (ha : 0 ≤ a.lower)
-    (hlog : b.Contains (Real.log x)) :
-    (RationalBounds.mul a b).Contains (mulLogAbs x) := by
-  have hx0 : 0 ≤ x := (by exact_mod_cast ha : (0:ℝ) ≤ a.lower).trans hx.1
-  rw [mulLogAbs_nonneg x hx0]
-  exact RationalBounds.contains_mul hx hlog
 
 theorem contains_mulLogAbs_quarter {a logLo logHi : RationalBounds} {x : ℝ}
     (hx : a.Contains x) (ha : 0 ≤ a.lower) (hquarter : a.upper ≤ 1/4)
@@ -287,23 +274,6 @@ theorem atan_sound {out a lo hi : I} {x : ℝ}
   apply contains_of_encloses ?_ hc
   exact RationalBounds.contains_arctan hx hlo.1 hhi.2
 
-theorem h_positive_sound {out a logNode witness : I} {x : ℝ}
-    (ha : validI a = true) (hb : validI logNode = true)
-    (hzero : qLE qZero a.lo = true)
-    (hx : a.toBounds.Contains x)
-    (hlog : logNode.toBounds.Contains (Real.log x))
-    (hw : encloses witness (mul a logNode) = true)
-    (hc : encloses out witness = true) :
-    out.toBounds.Contains (mulLogAbs x) := by
-  have ha0 : 0 ≤ a.toBounds.lower := by
-    have h := qLE_sound (by decide : qValid qZero = true) (validI_parts ha).1 hzero
-    simpa only [I.toBounds, qZero, QPair.toRat, Int.cast_zero, Nat.cast_one,
-      zero_div] using! h
-  apply contains_of_encloses ?_ hc
-  apply contains_of_encloses ?_ hw
-  rw [toBounds_mul a logNode ha hb]
-  exact contains_mulLogAbs_positive hx ha0 hlog
-
 theorem h_positive_from_product_bound {out a witness : I} {x : ℝ}
     (ha : validI a = true) (hzero : qLE qZero a.lo = true)
     (hx : a.toBounds.Contains x)
@@ -384,12 +354,10 @@ end Li2Unified.Proofs.Potential.KernelReflectionSelf
 #print axioms Li2Unified.Proofs.Potential.KernelReflectionSelf.mul_sound
 #print axioms Li2Unified.Proofs.Potential.KernelReflectionSelf.log_sound
 #print axioms Li2Unified.Proofs.Potential.KernelReflectionSelf.atan_sound
-#print axioms Li2Unified.Proofs.Potential.KernelReflectionSelf.h_positive_sound
 #print axioms Li2Unified.Proofs.Potential.KernelReflectionSelf.h_positive_from_product_bound
 #print axioms Li2Unified.Proofs.Potential.KernelReflectionSelf.h_quarter_sound
 #print axioms Li2Unified.Proofs.Potential.KernelReflectionSelf.h_cross_sound
 
 end
-
 
 end

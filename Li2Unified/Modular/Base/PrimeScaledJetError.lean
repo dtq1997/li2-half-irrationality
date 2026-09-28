@@ -28,24 +28,6 @@ theorem integralPolynomial_UV_difference_bound
   · rw [mul_comm]
     exact (integral_coeff_mul_norm_le _ _).trans (hV n)
 
-theorem primeJet_same_UV_substituted_error (hp4 : 3 < p) (a : Fin p)
-    (i j : Fin (primeMultiplicity p a)) (eta : ℤ_[p]) (n : ℕ) :
-    let T := primeJetPoly p ⟨a,i⟩ * primeJetPoly p ⟨a,j⟩
-    let q := (p:ℤ_[p])^(i.val+j.val)*((primeLocalUnit p a*primeLocalUnit p a:ℤ):ℤ_[p])
-    let S := C ((p:ℤ_[p])^2)*(X-C eta)
-    let U := (primePoleU hp4 (primeDiscTestRegular hp4 a T) (primeDiscTestResidue hp4 a T)).comp S
-    let V := (primePoleV hp4 (primeDiscTestRegular hp4 a T) (primeDiscTestResidue hp4 a T)).comp S
-    let H := (primePoleU hp4 (primeDiscMonomialRegular hp4 a (i.val+j.val))
-      (primeDiscMonomialResidue hp4 a (i.val+j.val))).comp S
-    let K := (primePoleV hp4 (primeDiscMonomialRegular hp4 a (i.val+j.val))
-      (primeDiscMonomialResidue hp4 a (i.val+j.val))).comp S
-    ‖((C (p:ℤ_[p])*U-C (a.val:ℤ_[p])*V)-C q*(C (p:ℤ_[p])*H-C (a.val:ℤ_[p])*K)).coeff n‖ ≤
-      ‖(p:ℤ_[p])^(i.val+j.val+1)‖ := by
-  dsimp only
-  exact integralPolynomial_UV_difference_bound _ _ _ _ _ _ _
-    (primeJet_same_U_substituted_error hp4 a i j eta)
-    (primeJet_same_V_substituted_error hp4 a i j eta) n
-
 end
 end Li2
 

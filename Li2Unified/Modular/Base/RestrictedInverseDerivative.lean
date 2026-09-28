@@ -32,25 +32,6 @@ lemma inverseOneSubSeries_square (b : ℤ_[p]) :
     (inverseOneSubSeries b 1)^2 = inverseOneSubSeries b 2 := by
   simpa only [pow_two] using (inverseOneSubSeries_add b 1 1).symm
 
-theorem inverseOneSubSeries_derivative_one (b : ℤ_[p]) :
-    PowerSeries.derivative (R := ℤ_[p]) (inverseOneSubSeries b 1) =
-      PowerSeries.C b*inverseOneSubSeries b 2 := by
-  have h := inverseOneSubSeries_identity b 1
-  rw [pow_one] at h
-  have hd := (PowerSeries.derivative (R := ℤ_[p])).leibniz_of_mul_eq_one h
-  simp only [map_sub, Derivation.map_one_eq_zero, Derivation.leibniz, PowerSeries.derivative_C,
-    PowerSeries.derivative_X, smul_eq_mul, mul_one, mul_zero, add_zero, zero_sub,
-    inverseOneSubSeries_square] at hd
-  simpa only [neg_mul_neg, mul_comm] using hd
-
-theorem restrictedV_inverse_one (μ : ℕ → ℤ_[p]) (b : ℤ_[p]) (hb : ‖b‖ < 1) :
-    restrictedV μ (inverseOneSubSeries b 1) =
-      b*restrictedMoment μ (inverseOneSubSeries b 2) := by
-  rw [restrictedV_derivative μ _ (inverseOneSubSeries_isRestricted b hb 1),
-    inverseOneSubSeries_derivative_one]
-  rw [← PowerSeries.smul_eq_C_mul]
-  exact restrictedMoment_smul μ _ (inverseOneSubSeries_isRestricted b hb 2) b
-
 end
 end Li2
 

@@ -31,11 +31,6 @@ theorem integral_norm_sub_rational_of_cleared_reduction (x : ℤ_[p]) (a d : ℤ
   simpa only [PadicInt.coe_sub,PadicInt.coe_mul,PadicInt.coe_intCast,
     PadicInt.coe_natCast] using hb
 
-lemma prime_four_valuation_zero (hp4 : 3 < p) : padicValRat p (4:ℚ) = 0 := by
-  rw [show (4:ℚ)=2*2 by norm_num,padicValRat.mul (by norm_num) (by norm_num),
-    two_valuation_zero (by omega)]
-  ring
-
 lemma prime_six_valuation_zero (hp4 : 3 < p) : padicValRat p (6:ℚ) = 0 := by
   rw [show (6:ℚ)=2*3 by norm_num,padicValRat.mul (by norm_num) (by norm_num),
     two_valuation_zero (by omega),three_valuation_zero (by omega)]

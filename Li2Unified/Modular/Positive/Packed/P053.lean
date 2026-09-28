@@ -69,7 +69,6 @@ theorem parameterReferenceMatrix_det (lam : ℚ) (corner : Matrix (Fin 6) (Fin 6
     _ = C ((p:ℚ)^(-2*((p-1:ℕ):ℤ))*(parameterReferenceCore lam p corner).det) := by
       rw [hA,hscale]
 
-
 theorem parameterReferenceCore_unit (lam : ℚ) (corner : Matrix (Fin 6) (Fin 6) ℚ)
     (hp4 : 3 < p) (h1 : lam ≠ 1)
     (hlam : lam ≠ 0 ∧ padicValRat p lam = 0)
@@ -137,35 +136,8 @@ theorem parameterDiscTest_V_coeff_bound (z : ℚ)
   · apply integralPoleMulResidue_bound_left _ _ _ B
     simpa only [Polynomial.coeff_coe] using! hT
 
-theorem parameterOriginalBasis_U_substituted_bound (z : ℚ)
-    (hu : z ≠ 0 ∧ padicValRat p z = 0) (hreg : VG p (z/(1-z)) 0) (hp4 : 3 < p)
-    (i j : Fin (2*(p-1))) (a : Fin p) (eta : ℤ_[p]) (n : ℕ) :
-    let T := primeOriginalBasis p (by omega) i * primeOriginalBasis p (by omega) j
-    ‖((parameterFourPoleU z hu hreg hp4 (primeDiscTestRegular hp4 a T) (primeDiscTestResidue hp4 a T)).comp
-      (C ((p:ℤ_[p])^2)*(X-C eta))).coeff n‖ ≤
-      ‖(p:ℤ_[p])^(primeOriginalBasisLocalOrder p (by omega) i a+
-        primeOriginalBasisLocalOrder p (by omega) j a)‖ := by
-  dsimp only
-  apply integralPolynomial_comp_coeff_bound _ _ _ (norm_nonneg _)
-  exact parameterDiscTest_U_coeff_bound z hu hreg hp4 _ a _ (norm_nonneg _)
-    (primeOriginalBasisProduct_integral_bound (by omega) i j a)
-
-theorem parameterOriginalBasis_V_substituted_bound (z : ℚ)
-    (hu : z ≠ 0 ∧ padicValRat p z = 0) (hreg : VG p (z/(1-z)) 0) (hp4 : 3 < p)
-    (i j : Fin (2*(p-1))) (a : Fin p) (eta : ℤ_[p]) (n : ℕ) :
-    let T := primeOriginalBasis p (by omega) i * primeOriginalBasis p (by omega) j
-    ‖((parameterFourPoleV z hu hreg hp4 (primeDiscTestRegular hp4 a T) (primeDiscTestResidue hp4 a T)).comp
-      (C ((p:ℤ_[p])^2)*(X-C eta))).coeff n‖ ≤
-      ‖(p:ℤ_[p])^(primeOriginalBasisLocalOrder p (by omega) i a+
-        primeOriginalBasisLocalOrder p (by omega) j a)‖ := by
-  dsimp only
-  apply integralPolynomial_comp_coeff_bound _ _ _ (norm_nonneg _)
-  exact parameterDiscTest_V_coeff_bound z hu hreg hp4 _ a _ (norm_nonneg _)
-    (primeOriginalBasisProduct_integral_bound (by omega) i j a)
-
 end
 end Li2Unified.Proofs.PrimeEdge
-#print axioms Li2Unified.Proofs.PrimeEdge.parameterOriginalBasis_U_substituted_bound
 
 end
 
@@ -445,6 +417,5 @@ end Li2Unified.Proofs.PrimeEdge
 #print axioms Li2Unified.Proofs.PrimeEdge.parameterFourPoleUV_rational_of_cleared
 
 end
-
 
 end

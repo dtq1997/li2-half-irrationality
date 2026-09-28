@@ -36,11 +36,6 @@ lemma parameterHighMoment_top_eq_edge (lam : ℚ) (ell : Fin 3) :
   · change (1/2:ℚ)*(-2*lam^2/3)*fixedHighMoment lam 1 = -lam^2/3*fixedHighMoment lam 1
     ring
 
-lemma parameterHigh_top_edge_symm (lam : ℚ) (ell : Fin 3) :
-    fixedCornerBlock lam 5 (primeHighEdgeSlot ell) =
-      fixedCornerBlock lam (primeHighEdgeSlot ell) 5 := by
-  fin_cases ell <;> rfl
-
 lemma parameterHighRationalWeight_VG (lam : ℚ)
     (hu : lam ≠ 0 ∧ padicValRat p lam = 0)
     (hferm : VG p (lam^p-lam) 1) (hp4 : 3 < p) (ell : Fin 3) :
@@ -187,7 +182,6 @@ theorem parameterHigh_top_block_scaled_GV (lam : ℚ) (hlam : |(lam:ℝ)| < 1)
   rw [← primeHighBlockPoly_top hp4 ell]
   exact parameterHigh_top_scaled_GV lam hlam hunit hone hferm hp4 ell
 
-
 end
 end Li2Unified.Proofs.PrimeEdge
 #print axioms Li2Unified.Proofs.PrimeEdge.parameterHigh_top_block_scaled_GV
@@ -276,7 +270,6 @@ theorem parameterZero_rational_entry_GV (lam : ℚ) (hlam : |(lam:ℝ)| < 1)
     (parameterZero_rational_entry_leading lam hlam hu hone hferm hp4 i j hij)
   convert h using 1 <;> push_cast <;> ring
 
-
 end
 end Li2Unified.Proofs.PrimeEdge
 #print axioms Li2Unified.Proofs.PrimeEdge.parameterZero_rational_entry_GV
@@ -296,11 +289,6 @@ lemma parameterZeroMoment_pair_eq_edge (lam : ℚ) (i j : Fin 2) (h : i.val+j.va
 
 lemma parameterZeroMoment_top_eq_edge (lam : ℚ) (i : Fin 2) (h : i.val+2 < 5) :
     -(zeroShapeUValue lam ⟨i.val+2,h⟩) =
-      fixedCornerBlock lam (primeZeroEdgeSlot i) 5 := by
-  fin_cases i <;> rfl
-
-lemma parameterZero_top_edge_symm (lam : ℚ) (i : Fin 2) :
-    fixedCornerBlock lam 5 (primeZeroEdgeSlot i) =
       fixedCornerBlock lam (primeZeroEdgeSlot i) 5 := by
   fin_cases i <;> rfl
 
@@ -443,7 +431,6 @@ theorem parameterZero_top_block_scaled_GV (lam : ℚ) (hlam : |(lam:ℝ)| < 1)
   unfold parameterOriginalNumeratorEntry
   rw [primeZeroSlot_basis,primeBlock_original_basis_top,← primeZeroBlockPoly_top hp4]
   exact parameterZero_top_scaled_GV lam hlam hunit hone hferm hp4 i
-
 
 end
 end Li2Unified.Proofs.PrimeEdge
@@ -613,7 +600,6 @@ theorem parameterNormalizedMatrix_low_edge_GV (lam : ℚ) (hlam : |(lam:ℝ)| < 
   · rw [parameterNormalizedMatrix_symm lam hp4 (Sum.inl (a,i)) (Sum.inr 5)]
     simpa only [add_comm] using! parameterNormalizedMatrix_top_low_GV lam hlam hu hone hferm hp4 a i
 
-
 end
 end Li2Unified.Proofs.PrimeEdge
 #print axioms Li2Unified.Proofs.PrimeEdge.parameterNormalizedMatrix_top_low_GV
@@ -683,6 +669,5 @@ end Li2Unified.Proofs.PrimeEdge
 #print axioms Li2Unified.Proofs.PrimeEdge.parameterLow_original_entry_leading
 
 end
-
 
 end

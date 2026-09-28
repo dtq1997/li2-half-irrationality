@@ -146,10 +146,6 @@ theorem localB_jets (K m : ℕ) (F : ℚ[X]) :
   simp only [bhat, div_eq_mul_inv, map_add, map_mul, map_sub, map_neg, map_one, map_pow, one_mul]
   ring
 
-lemma djet_mul (P Q : ℚ[X]) (m k : ℕ) :
-    djet (P * Q) m k = ((P.comp (X - C (m:ℚ))) * (Q.comp (X - C (m:ℚ)))).coeff k := by
-  rw [djet, mul_comp]
-
 /-- The matrix coefficient kappa(s,s') at node m (with the K!/e0 factor folded in). -/
 def kap (n m : ℕ) (s s' : ℕ) : ℚ[X] :=
   ∑ i ∈ Finset.range 3, if i + s + s' ≤ 2 then

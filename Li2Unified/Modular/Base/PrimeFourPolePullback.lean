@@ -1,6 +1,6 @@
 module
 public import Li2Unified.Modular.Base.PulledPoleValues
-public import Li2Unified.Modular.Base.PrimePoleFieldValues
+public import Li2Unified.Modular.Base.PrimePoleExtension
 
 set_option backward.privateInPublic true
 
@@ -26,22 +26,6 @@ lemma primeMatchingPoleIndex_lt (j a : ℕ) (hj : j ≤ 4*p-4) (ha : a < p)
 def primeMatchingPoleIndex (j a : ℕ) (hj : j ≤ 4*p-4) (ha : a < p)
     (hm : p ∣ j+(p-1-a)+1) : Fin 4 :=
   ⟨(j+(p-1-a)+1)/p-1, primeMatchingPoleIndex_lt j a hj ha hm⟩
-
-theorem pulledSimplePoleContribution_matching_actual (hp4 : 3 < p)
-    (Y : ℚ_[p]) (j a : ℕ) (hj : j ≤ 4*p-4) (ha : a < p)
-    (hm : p ∣ j+(p-1-a)+1) :
-    pulledSimplePoleContribution (by omega : p ≠ 2) (by omega : p ≠ 3) Y j a =
-      (p:ℚ_[p])⁻¹*(
-        (primePoleU hp4 0 (Pi.single (primeMatchingPoleIndex j a hj ha hm) 1)).eval₂
-          (algebraMap ℤ_[p] ℚ_[p]) Y-
-        (a:ℚ_[p])/(p:ℚ_[p])*
-          (primePoleV hp4 0 (Pi.single (primeMatchingPoleIndex j a hj ha hm) 1)).eval₂
-            (algebraMap ℤ_[p] ℚ_[p]) Y) := by
-  rw [primePoleU_single_eval₂, primePoleV_single_eval₂]
-  unfold pulledSimplePoleContribution
-  dsimp only
-  rw [dif_pos hm]
-  rfl
 
 end
 end Li2

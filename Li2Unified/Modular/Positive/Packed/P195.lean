@@ -79,18 +79,6 @@ lemma weightedPairInt_eq_prod (ρ : ι → ℝ → ℝ) (γ : ι → ℝ → ℂ
   rw [integral_prod _ hf, intervalIntegral.integral_of_le (by positivity)]
   simp_rw [intervalIntegral.integral_of_le (by positivity : (0:ℝ) ≤ 2*π)]
 
-lemma integrable_weighted_log_of_integrable {ρ : ι → ℝ → ℝ} (γ : ι → ℝ → ℂ)
-    {C : ℝ} (hρ : ∀ k, Continuous (ρ k)) (hρ0 : ∀ k θ, 0 ≤ ρ k θ)
-    (hC : 0 ≤ C) (hρC : ∀ k θ, ρ k θ ≤ C) (k l : ι)
-    (hint : Integrable (fun p : ℝ × ℝ => Real.log ‖γ k p.1-γ l p.2‖) (μcirc.prod μcirc)) :
-    Integrable (fun p : ℝ × ℝ => ρ k p.1 * ρ l p.2 * Real.log ‖γ k p.1-γ l p.2‖)
-      (μcirc.prod μcirc) := by
-  refine hint.bdd_mul (c := C^2)
-    (((hρ k).comp continuous_fst).mul ((hρ l).comp continuous_snd)).aestronglyMeasurable ?_
-  filter_upwards [] with p
-  rw [Real.norm_eq_abs, abs_of_nonneg (mul_nonneg (hρ0 k p.1) (hρ0 l p.2))]
-  simpa only [pow_two] using! mul_le_mul (hρC k p.1) (hρC l p.2) (hρ0 l p.2) hC
-
 lemma tendsto_weightedPairInt_Ltr {ρ : ι → ℝ → ℝ} {γ : ι → ℝ → ℂ}
     (hρ : ∀ k, Continuous (ρ k)) (hγ : ∀ k, Continuous (γ k)) (k l : ι)
     (hint : Integrable (fun p : ℝ × ℝ => ρ k p.1 * ρ l p.2 * Real.log ‖γ k p.1-γ l p.2‖)
@@ -223,6 +211,5 @@ end
 end Li2Unified.Proofs.Contour
 
 end
-
 
 end

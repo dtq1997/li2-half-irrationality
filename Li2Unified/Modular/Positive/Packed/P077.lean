@@ -176,22 +176,10 @@ private lemma exp_neg_period (N : ℕ) :
   rw [Complex.exp_neg, Complex.exp_nat_mul_two_pi_mul_I]
   norm_num
 
-private lemma exp_pos_period (N : ℕ) :
-    Complex.exp ((2 * (Real.pi : ℂ) * Complex.I) * (N : ℂ)) = 1 := by
-  rw [show (2 * (Real.pi : ℂ) * Complex.I) * (N : ℂ) =
-      (N : ℂ) * (2 * (Real.pi : ℂ) * Complex.I) by ring]
-  exact Complex.exp_nat_mul_two_pi_mul_I N
-
 lemma kappaPlus_nat_add (N : ℕ) (z : ℂ) :
     kappaPlus ((N : ℂ) + z) = kappaPlus z := by
   unfold kappaPlus
   rw [mul_add, Complex.exp_add, exp_neg_period]
-  ring
-
-lemma kappaMinus_nat_add (N : ℕ) (z : ℂ) :
-    kappaMinus ((N : ℂ) + z) = kappaMinus z := by
-  unfold kappaMinus
-  rw [mul_add, Complex.exp_add, exp_pos_period]
   ring
 
 lemma upper_kernel_nat_add (N : ℕ) (z : ℂ) :
@@ -201,17 +189,9 @@ lemma upper_kernel_nat_add (N : ℕ) (z : ℂ) :
     Li2.originalContourPower_nat_add, ← power_eq_original]
   ring
 
-lemma lower_kernel_nat_add (N : ℕ) (z : ℂ) :
-    power ((N : ℂ) + z) * kappaMinus ((N : ℂ) + z) =
-      (1 / 2 : ℂ) ^ N * (power z * kappaMinus z) := by
-  rw [kappaMinus_nat_add, power_eq_original,
-    Li2.originalContourPower_nat_add, ← power_eq_original]
-  ring
-
 end
 end Li2Unified.Proofs.Contour
 
 end
-
 
 end

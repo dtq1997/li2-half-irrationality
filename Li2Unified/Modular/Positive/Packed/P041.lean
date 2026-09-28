@@ -63,36 +63,10 @@ theorem outerWindowSum_eventually_lower (ε : ℝ) (hε : 0 < ε) :
   have hnpos : (0:ℝ) < n := by exact_mod_cast hn
   exact (le_div_iff₀ (sq_pos_of_pos hnpos)).mp hmassn
 
-theorem parameter_outer_eventually_conditional (lam : ℚ) (ε : ℝ) (hε : 0 < ε) :
-    ∀ᶠ n : ℕ in atTop, Qtilde lam n ≠ 0 →
-      (∀ p ∈ Finset.Ioc n (4*n), ∀ hp : p.Prime,
-        letI : Fact p.Prime := ⟨hp⟩
-        Li2.GV p (Qtilde lam n) (Li2.outerPrimeBound p n)) →
-      ((7/2:ℝ)-ε)*(n:ℝ)^2 ≤
-        ∑ p ∈ Finset.Ioc n (4*n),
-          if p.Prime then
-            ((-padicValRat p (dtilde lam n) : ℤ) : ℝ)*Real.log (p:ℝ)
-          else 0 := by
-  filter_upwards [outerWindowSum_eventually_lower ε hε] with n hlimit
-  intro hne houter
-  exact hlimit.trans (parameter_outerWindowSum_le_valuation lam n hne houter)
-
-/-- Exact strength check: the general normalized Gram floor is strictly
-weaker than the required sharp outer floor at an actual prime. -/
-theorem normalized_outer_gap_30_43 :
-    (43:ℕ).Prime ∧ 30 < 43 ∧ 43 ≤ 4*30 ∧
-      normalizedDetLower 30 43 = (-2:ℚ) ∧
-      Li2.outerPrimeBound 43 30 = (6:ℚ) := by
-  refine ⟨by decide, by omega, by omega, ?_, ?_⟩
-  · norm_num [normalizedDetLower]
-  · norm_num [Li2.outerPrimeBound]
-
 end
 end Li2Unified.Proofs.Arithmetic
 
 #print axioms Li2Unified.Proofs.Arithmetic.parameter_outerWindowSum_le_valuation
-#print axioms Li2Unified.Proofs.Arithmetic.parameter_outer_eventually_conditional
-#print axioms Li2Unified.Proofs.Arithmetic.normalized_outer_gap_30_43
 
 end
 
@@ -171,6 +145,5 @@ end Li2Unified.Proofs.Arithmetic
 #print axioms Li2Unified.Proofs.Arithmetic.parameterG_VG_of_integral_ratio
 
 end
-
 
 end

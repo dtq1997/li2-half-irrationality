@@ -128,27 +128,9 @@ theorem summable_originalRealQuotient_derivative
   intro k
   rw [(Li2.originalRealQuotient_hasDerivAt m F (x := (k:ℝ)+1) (by positivity)).deriv]
 
-theorem Q_real_derivative_series_det (lam : ℚ) (hlam : |(lam:ℝ)| < 1)
-    (h0 : lam ≠ 0) (n : ℕ) :
-    (Q lam n).eval₂ (Rat.castHom ℝ) (r lam) =
-      (Matrix.of fun i j : Fin (2*n) =>
-        ∑' k : ℕ, (lam:ℝ)^(k+1) *
-          deriv (fun x : ℝ => x*Li2.originalRealQuotient (4*n)
-            (Li2.numerator n (i.val+j.val)) x) ((k:ℝ)+1)).det := by
-  change (eval₂RingHom (Rat.castHom ℝ) (r lam)) (Q lam n) = _
-  rw [Q, ← hankelFor_original lam n, RingHom.map_det]
-  apply congrArg Matrix.det
-  ext i j
-  change (numeratorFunctional lam (4*n) ((Li2.D n)^3*X^(i.val+j.val))).eval₂
-    (Rat.castHom ℝ) (r lam) = _
-  rw [mul_comm ((Li2.D n)^3)]
-  exact numeratorFunctional_real_derivative_series lam hlam h0 (4*n)
-    (Li2.numerator n (i.val+j.val))
-
 end
 end Li2Unified.ParameterFamily
 
 end
-
 
 end

@@ -120,9 +120,6 @@ lemma primePow [hp : Fact p.Prime] (k : ℤ) : VG p ((p : ℚ) ^ k) k := by
         padicValRat.self hp.out.one_lt] <;> omega
   rw [this]
 
-lemma zpow_mul [Fact p.Prime] {q r : ℚ} (k : ℤ) (h : VG p q r) : VG p ((p : ℚ) ^ k * q) (k + r) :=
-  (primePow k).mul h
-
 lemma pow [Fact p.Prime] {q r : ℚ} (h : VG p q r) (n : ℕ) : VG p (q ^ n) (n * r) := by
   induction n with
   | zero => right; simp

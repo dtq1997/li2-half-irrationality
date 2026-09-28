@@ -140,12 +140,6 @@ lemma wv_step {n p j d : ℕ} (hp : 0 < p) (hnj : n < j) (hK : j + p*d ≤ 4*n) 
 
 /-! ## The literal pole scalars -/
 
-def γj (n j : ℕ) : ℚ[X] :=
-  C (rscale n (4*n) j * ((j:ℚ) * (-2:ℚ)^j)) * (X - C (tau j))
-
-lemma γj_eq_zero {n j : ℕ} (h1 : 1 ≤ j) (h2 : j ≤ n) : γj n j = 0 := by
-  simp [γj, rscale, D_eval_neg_of_le h1 h2]
-
 lemma nat_VG_dvd (p : ℕ) [hp : Fact p.Prime] (j : ℕ) (hj : 0 < j) :
     VG p (j:ℚ) (if p ∣ j then 1 else 0) := by
   split_ifs with h
@@ -154,107 +148,7 @@ lemma nat_VG_dvd (p : ℕ) [hp : Fact p.Prime] (j : ℕ) (hj : 0 < j) :
     exact_mod_cast one_le_padicValNat_of_dvd (by omega) h
   · exact VG.natCast j
 
-theorem γj_GV (p : ℕ) [Fact p.Prime] (hp2 : p ≠ 2) {n j : ℕ} (hj1 : 1 ≤ j) (hjK : j ≤ 4*n)
-    (hK : 4*n < p^2) : GV p (γj n j) (wv n p j) := by
-  by_cases hjn : j ≤ n
-  · rw [γj_eq_zero hj1 hjn]; exact GV.zero _
-  · push_neg at hjn
-    have hr : VG p (rscale n (4*n) j)
-        (2 * ((j-1)/p : ℕ) - 3 * ((j-1-n)/p : ℕ) - ((4*n-j)/p : ℕ) : ℚ) :=
-      VG.of_eq _ fun _ => by rw [rscale_val p hjn hjK hK]; push_cast; exact le_rfl
-    have hjv := nat_VG_dvd p j (by omega)
-    have h2 := negTwo_pow_unit p hp2 j
-    have ht : GV p (X - C (tau j)) (-(if p ≤ j then 2 else 0)) := by
-      split_ifs with hpj
-      · exact (GV.X.mono (by norm_num)).sub (GV.C (tau_VG_small p hp2 hjK hK))
-      · have h0 : VG p (tau j) 0 := by
-          have := tau_VG_of_ne_two p hp2 (N := j) le_rfl
-          rwa [Nat.log_of_lt (by omega), Nat.cast_zero, mul_zero] at this
-        simpa using GV.X.sub (GV.C h0)
-    have := (GV.C (hr.mul (hjv.mul h2))).mul ht
-    unfold wv
-    rw [if_neg (by omega)]
-    refine this.mono (le_of_eq ?_)
-    ring
-
 /-! ## The raw determinant as W + rank-one sum -/
-
-lemma hankel_entry (n a b : ℕ) :
-    numeratorFunctional (4*n) ((D n)^3 * X^(a+b)) =
-      C (polynomialMoment (polynomialPart n (a+b))) +
-      ∑ j ∈ Finset.Icc 1 (4*n), γj n j * C ((-(j:ℚ))^a * (-(j:ℚ))^b) := by
-  unfold numeratorFunctional
-  have hq : (D n)^3 * X^(a+b) /ₘ D (4*n) = polynomialPart n (a+b) := by
-    rw [polynomialPart, numerator, mul_comm]
-  rw [hq]
-  congr 1
-  apply Finset.sum_congr rfl
-  intro j _
-  rw [eval_mul, eval_pow, eval_pow, eval_X]
-  unfold γj rscale eraseProd
-  rw [show (D n).eval (-(j:ℚ)) ^ 3 * (-(j:ℚ))^(a+b) / ∏ l ∈ (Finset.Icc 1 (4*n)).erase j, ((l:ℚ)-(j:ℚ))
-      = (D n).eval (-(j:ℚ)) ^ 3 / (∏ l ∈ (Finset.Icc 1 (4*n)).erase j, ((l:ℚ)-(j:ℚ))) *
-        ((-(j:ℚ))^a * (-(j:ℚ))^b) by rw [pow_add]; ring]
-  simp only [map_mul, map_pow, map_inv₀, map_neg, map_div₀]
-  ring
-
-theorem raw_Q_GV (p : ℕ) [hp : Fact p.Prime] (hp2 : p ≠ 2) (hp3 : p ≠ 3) (n : ℕ)
-    (hK : 4*n < p^2) :
-    GV p (Q n) (∑ c : Fin p, ∑ k ∈ Finset.range (Ccl p (4*n) c),
-      min (wv n p (jn p (4*n) c k) + 2 * k) 0) := by
-  have hp0 : 0 < p := hp.out.pos
-  have hQ : Q n = (Matrix.of fun a b : Fin (2*n) =>
-      C (polynomialMoment (polynomialPart n (a+b))) +
-      ∑ c : Fin p, ∑ t ∈ Finset.range (Ccl p (4*n) c),
-        γj n (jn p (4*n) c t) *
-          C ((-(jn p (4*n) c t : ℚ))^(a:ℕ) * (-(jn p (4*n) c t : ℚ))^(b:ℕ))).det := by
-    rw [Q, ← hankelFor_original]
-    congr 1
-    ext a b
-    rw [hankelFor, hankel_entry,
-      regroup p (4*n) hp0, ← Fin.sum_univ_eq_sum_range
-        (fun c => ∑ t ∈ Finset.range (Ccl p (4*n) c), γj n (jn p (4*n) c t) *
-          C ((-(jn p (4*n) c t : ℚ))^(a:ℕ) * (-(jn p (4*n) c t : ℚ))^(b:ℕ))) p]
-    rfl
-  rw [hQ]
-  apply rank_one_GV (fun c : Fin p => Ccl p (4*n) c) (fun c t => -(jn p (4*n) c t : ℚ))
-    (fun c t => γj n (jn p (4*n) c t)) p (fun c t => wv n p (jn p (4*n) c t))
-  · intro a b
-    exact GV.C (polynomialPartMoment_VG p hp3 n _)
-  · intro c t
-    exact (VG.natCast _).neg
-  · intro c s t hs ht hst
-    have hpv : VG p (p:ℚ) 1 := by
-      right; rw [padicValRat.self hp.out.one_lt]; norm_num
-    have key : ∀ u v : ℕ, u ≤ v → v < Ccl p (4*n) c →
-        (jn p (4*n) c u : ℚ) = jn p (4*n) c v + (p:ℚ) * ((v - u : ℕ) : ℚ) := by
-      intro u v huv hv
-      have hN : jn p (4*n) c u = jn p (4*n) c v + p * (v - u) := by
-        unfold jn
-        rw [show Ccl p (4*n) c - 1 - u = (Ccl p (4*n) c - 1 - v) + (v - u) by omega, Nat.mul_add]
-        ring
-      rw [hN]; push_cast; ring
-    rcases lt_or_gt_of_ne hst with h | h
-    · rw [key s t h.le ht]
-      have := hpv.mul (VG.natCast (p := p) (t - s))
-      simpa [sub_eq_add_neg, add_comm, add_left_comm] using this
-    · rw [key t s h.le hs]
-      have := (hpv.mul (VG.natCast (p := p) (s - t))).neg
-      simpa [sub_eq_add_neg, add_comm, add_left_comm] using this
-  · intro c t ht
-    exact γj_GV p hp2 (by unfold jn; omega) (jn_le p (4*n) hp0 ht) hK
-  · intro c s t hst ht
-    by_cases hjt : jn p (4*n) c t ≤ n
-    · have := wv_le_big (n := n) (p := p) (jn_le p (4*n) hp0 (lt_of_le_of_lt hst ht))
-      simp only [wv, if_pos hjt]
-      exact this
-    · push_neg at hjt
-      have e : jn p (4*n) c s = jn p (4*n) c t + p * (t - s) := by
-        unfold jn
-        rw [show Ccl p (4*n) c - 1 - s = (Ccl p (4*n) c - 1 - t) + (t - s) by omega, Nat.mul_add]
-        ring
-      rw [e]
-      exact wv_step hp0 hjt (e ▸ jn_le p (4*n) hp0 (lt_of_le_of_lt hst ht))
 
 end
 end Li2

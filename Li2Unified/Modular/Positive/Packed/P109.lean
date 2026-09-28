@@ -94,24 +94,6 @@ lemma integral_log_norm_perpendicular {b x : ℝ} (hb : 0 < b) (hx : 0 ≤ x) :
   rw [Li2.integral_log_norm_real_add_imag hx hb.le]
   exact (perpendicularSlice_eq_original hb hx).symm
 
-lemma integral_integral_log_norm_perpendicular {b a c : ℝ}
-    (hb : 0 < b) (ha : 0 ≤ a) (hc : 0 ≤ c) :
-    (∫ x in a..c, ∫ y in (0:ℝ)..b, Real.log ‖(x:ℂ)+(y:ℂ)*Complex.I‖) =
-      perpendicularPrimitive b c-perpendicularPrimitive b a := by
-  calc
-    _ = ∫ x in a..c, perpendicularSlice b x := by
-      apply intervalIntegral.integral_congr
-      intro x hx
-      exact integral_log_norm_perpendicular hb ((le_min ha hc).trans hx.1)
-    _ = _ := integral_perpendicularSlice hb a c
-
-lemma integral_integral_log_norm_perpendicular_from_zero {a b : ℝ}
-    (ha : 0 ≤ a) (hb : 0 < b) :
-    (∫ x in (0:ℝ)..a, ∫ y in (0:ℝ)..b, Real.log ‖(x:ℂ)+(y:ℂ)*Complex.I‖) =
-      perpendicularPrimitive b a := by
-  simpa [perpendicularPrimitive] using!
-    integral_integral_log_norm_perpendicular hb (le_refl 0) ha
-
 end
 end Li2Unified.ParameterFamily.Energy
 
@@ -326,6 +308,5 @@ end
 end Li2Unified.Proofs.Potential
 
 end
-
 
 end

@@ -50,34 +50,6 @@ theorem integralPolynomial_leading_substitution (F H : (ℤ_[p])[X])
   exact max_le (integralPolynomial_comp_coeff_bound (F-H) _ B hB hFH n)
     ((integralPolynomial_scaled_substitution H s eta n).trans hs)
 
-theorem primeDiscPole_U_substituted_leading (hp4 : 3 < p) (a : ℕ) (ha : a < p)
-    (f : PowerSeries ℤ_[p]) (hf : PowerSeries.IsRestricted 1 f)
-    (r : Fin 4 → ℤ_[p]) (eta : ℤ_[p]) (n : ℕ) :
-    ‖((primePoleU hp4
-        (integralPoleMulRegular (primePoleCenters p) (primeDiscUnit a ha) f r)
-        (integralPoleMulResidue (primePoleCenters p) (primeDiscUnit a ha) r)).comp
-          (C ((p:ℤ_[p])^2)*(X-C eta)) -
-      C (primeDiscUnitConstant a ha*(primePoleU hp4 f r).eval 0)).coeff n‖ ≤ ‖(p:ℤ_[p])‖ := by
-  have hs : ‖(p:ℤ_[p])^2‖ ≤ ‖(p:ℤ_[p])‖ := by
-    simpa only [pow_two] using integral_coeff_mul_norm_le (p:ℤ_[p]) (p:ℤ_[p])
-  simpa only [eval_mul, eval_C] using integralPolynomial_leading_substitution
-    _ (C (primeDiscUnitConstant a ha)*primePoleU hp4 f r) ((p:ℤ_[p])^2) eta
-    ‖(p:ℤ_[p])‖ (norm_nonneg _) hs (primeDiscPole_U_error hp4 a ha f hf r) n
-
-theorem primeDiscPole_V_substituted_leading (hp4 : 3 < p) (a : ℕ) (ha : a < p)
-    (f : PowerSeries ℤ_[p]) (hf : PowerSeries.IsRestricted 1 f)
-    (r : Fin 4 → ℤ_[p]) (eta : ℤ_[p]) (n : ℕ) :
-    ‖((primePoleV hp4
-        (integralPoleMulRegular (primePoleCenters p) (primeDiscUnit a ha) f r)
-        (integralPoleMulResidue (primePoleCenters p) (primeDiscUnit a ha) r)).comp
-          (C ((p:ℤ_[p])^2)*(X-C eta)) -
-      C (primeDiscUnitConstant a ha*(primePoleV hp4 f r).eval 0)).coeff n‖ ≤ ‖(p:ℤ_[p])‖ := by
-  have hs : ‖(p:ℤ_[p])^2‖ ≤ ‖(p:ℤ_[p])‖ := by
-    simpa only [pow_two] using integral_coeff_mul_norm_le (p:ℤ_[p]) (p:ℤ_[p])
-  simpa only [eval_mul, eval_C] using integralPolynomial_leading_substitution
-    _ (C (primeDiscUnitConstant a ha)*primePoleV hp4 f r) ((p:ℤ_[p])^2) eta
-    ‖(p:ℤ_[p])‖ (norm_nonneg _) hs (primeDiscPole_V_error hp4 a ha f hf r) n
-
 end
 end Li2
 

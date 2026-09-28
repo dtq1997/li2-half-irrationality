@@ -16,23 +16,6 @@ namespace Li2Unified.Proofs.Hermite
 noncomputable section
 variable {p : ℕ} [Fact p.Prime]
 
-theorem generalVG_of_padic_norm_zpow_le (q : ℚ) (k : ℤ)
-    (h : ‖(q : ℚ_[p])‖ ≤ ‖(p : ℚ_[p])‖ ^ k) :
-    VG p q (k : ℚ) := by
-  apply (VG_iff_padic_norm_le q (k : ℚ)).mpr
-  simpa only [Rat.cast_intCast, Padic.norm_p, inv_zpow,
-    Real.rpow_intCast, Real.rpow_neg_eq_inv_rpow] using h
-
-theorem generalGV_of_padic_norm_zpow_le (F : ℚ[X]) (k : ℤ)
-    (h : ∀ j, ‖(F.map (Rat.castHom ℚ_[p])).coeff j‖ ≤
-      ‖(p : ℚ_[p])‖ ^ k) :
-    GV p F (k : ℚ) := by
-  intro j
-  apply generalVG_of_padic_norm_zpow_le (F.coeff j) k
-  simpa only [coeff_map, Rat.coe_castHom] using h j
-
-#print axioms generalVG_of_padic_norm_zpow_le
-#print axioms generalGV_of_padic_norm_zpow_le
 end
 end Li2Unified.Proofs.Hermite
 
@@ -60,15 +43,7 @@ theorem generalNormPrimePower_le_of_exponent_le (e : ℤ) (r : ℚ)
     _ = ((p : ℝ) ^ (r : ℝ))⁻¹ := Real.inv_rpow (by positivity) _
     _ = _ := by rw [Real.rpow_neg_eq_inv_rpow, Real.inv_rpow (by positivity)]
 
-theorem generalVG_of_padic_norm_zpow_le_rat (q : ℚ) (e : ℤ) (r : ℚ)
-    (he : r ≤ (e : ℚ))
-    (h : ‖(q : ℚ_[p])‖ ≤ ‖(p : ℚ_[p])‖ ^ e) :
-    Li2.VG p q r := by
-  apply (Li2.VG_iff_padic_norm_le q r).mpr
-  exact h.trans (generalNormPrimePower_le_of_exponent_le e r he)
-
 #print axioms generalNormPrimePower_le_of_exponent_le
-#print axioms generalVG_of_padic_norm_zpow_le_rat
 end
 end Li2Unified.Proofs.Hermite
 
@@ -222,6 +197,5 @@ end Li2Unified.Proofs.Hermite
 #print axioms Li2Unified.Proofs.Hermite.actual_binomGram_of_unit_basis
 
 end
-
 
 end

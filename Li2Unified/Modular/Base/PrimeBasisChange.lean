@@ -76,12 +76,6 @@ theorem primeFullBasis_independent (p : ℕ) [Fact p.Prime] (hp : 3 ≤ p)
     · rfl
     · intro i; rfl
 
-theorem primeFullBasis_det_unit (p : ℕ) [Fact p.Prime] (hp : 3 ≤ p) :
-    (coeffMat fun a => (primeFullBasis p hp a).map (Int.castRingHom ℚ)).det ≠ 0 ∧
-    padicValRat p (coeffMat fun a => (primeFullBasis p hp a).map (Int.castRingHom ℚ)).det = 0 :=
-  coeffMat_det_unit_of_independent _ (primeFullBasis_natDegree_lt p hp)
-    (primeFullBasis_independent p hp)
-
 end
 end Li2
 

@@ -34,15 +34,6 @@ theorem polynomial_family_independent_append (E : Fin h → F[X])
   · intro i
     exact congrFun hrest i
 
-lemma polynomial_family_append_degree (E : Fin h → F[X])
-    (hdeg : ∀ a, (E a).natDegree < h) (G : F[X]) (hGdeg : G.natDegree = h) :
-    ∀ a : Fin (h+1), (Fin.cases G E a : F[X]).natDegree < h+1 := by
-  intro a
-  refine Fin.cases ?_ ?_ a
-  · simpa only [Fin.cases_zero, hGdeg] using Nat.lt_succ_self h
-  · intro i
-    exact (hdeg i).trans (Nat.lt_succ_self h)
-
 end Li2
 
 end

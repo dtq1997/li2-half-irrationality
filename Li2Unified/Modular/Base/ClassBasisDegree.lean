@@ -26,10 +26,6 @@ lemma classProduct_monic (γ : ι → R) (L : ι → ℕ) (a : ι) :
     (classProduct γ L a).Monic :=
   monic_prod_of_monic _ _ (fun b _ => (monic_X_sub_C _).pow _)
 
-lemma classBasisPoly_monic (γ : ι → R) (L : ι → ℕ) (a : ι) (i : ℕ) :
-    (classBasisPoly γ L a i).Monic :=
-  (classProduct_monic γ L a).mul ((monic_X_sub_C _).pow _)
-
 lemma fullClassProduct_monic (γ : ι → R) (L : ι → ℕ) :
     (fullClassProduct γ L).Monic :=
   monic_prod_of_monic _ _ (fun a _ => (monic_X_sub_C _).pow _)

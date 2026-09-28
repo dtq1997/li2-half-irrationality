@@ -120,24 +120,6 @@ theorem concave_tangent_upper {f : ℝ → ℝ} {s : Set ℝ} {m x d : ℝ}
     have ht := (div_le_iff₀ (sub_pos.mpr h)).mp hs
     nlinarith
 
-theorem tangent_interval_upper {f : ℝ → ℝ} {s : Set ℝ}
-    {m x d lo hi u r : ℝ}
-    (hf : ConcaveOn ℝ s f) (hm : m ∈ s) (hx : x ∈ s)
-    (hd : HasDerivAt f d m) (hu : f m ≤ u)
-    (hlo : lo ≤ d) (hhi : d ≤ hi) (hr : |x-m| ≤ r) :
-    f x ≤ u+(hi-lo)*r/2+(lo+hi)/2*(x-m) := by
-  have hw : 0 ≤ (hi-lo)/2 := by linarith
-  have he : |d-(lo+hi)/2| ≤ (hi-lo)/2 := by
-    apply abs_le.mpr
-    constructor <;> linarith
-  have hb : (d-(lo+hi)/2)*(x-m) ≤ (hi-lo)/2*r := by
-    calc
-      _ ≤ |(d-(lo+hi)/2)*(x-m)| := le_abs_self _
-      _ = |d-(lo+hi)/2| *|x-m| := abs_mul _ _
-      _ ≤ (hi-lo)/2*r := mul_le_mul he hr (abs_nonneg _) hw
-  have ht := concave_tangent_upper hf hm hx hd
-  nlinarith
-
 theorem affine_box_upper {a b x alpha beta : ℝ} (hx : x ∈ Set.Icc a b) :
     alpha+beta*(x-(a+b)/2) ≤ alpha+|beta| *((b-a)/2) := by
   have hr : |x-(a+b)/2| ≤ (b-a)/2 := by
@@ -189,7 +171,6 @@ end Li2Unified.Proofs.Potential.CompactAffine
 
 #print axioms Li2Unified.Proofs.Potential.CompactAffine.convex_chord_upper
 #print axioms Li2Unified.Proofs.Potential.CompactAffine.concave_tangent_upper
-#print axioms Li2Unified.Proofs.Potential.CompactAffine.tangent_interval_upper
 #print axioms Li2Unified.Proofs.Potential.CompactAffine.affine_box_upper
 
 #print axioms Li2Unified.Proofs.Potential.CompactAffine.convex_affine_upper
@@ -459,6 +440,5 @@ end
 end Li2Unified.Proofs.Potential.CompactAffine
 
 end
-
 
 end

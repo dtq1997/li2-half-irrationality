@@ -60,13 +60,6 @@ lemma djet_add (F G : ℚ[X]) (m k : ℕ) : djet (F+G) m k = djet F m k + djet G
 lemma djet_C_mul (c : ℚ) (F : ℚ[X]) (m k : ℕ) : djet (C c * F) m k = c * djet F m k := by
   simp [djet, mul_comp, C_comp, coeff_C_mul]
 
-lemma djet_sum {ι : Type*} (s : Finset ι) (F : ι → ℚ[X]) (m k : ℕ) :
-    djet (∑ i ∈ s, F i) m k = ∑ i ∈ s, djet (F i) m k := by
-  classical
-  induction s using Finset.induction_on with
-  | empty => simp [djet]
-  | insert a s ha ih => rw [Finset.sum_insert ha, Finset.sum_insert ha, djet_add, ih]
-
 lemma djet_zero_eq (F : ℚ[X]) (m : ℕ) : djet F m 0 = F.eval (-(m:ℚ)) := by
   simp [djet, coeff_zero_eq_eval_zero, eval_comp]
 

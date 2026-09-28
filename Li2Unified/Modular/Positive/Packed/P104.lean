@@ -18,60 +18,6 @@ namespace Li2Unified.Proofs.Contour
 noncomputable section
 open Li2Unified.Stage0.HalfAnalytic
 
-theorem actual_weight_uniform :
-    ∃ (C : ℝ) (K : ℕ), 0 < C ∧ ∀ n : ℕ, 1 ≤ n →
-      ∀ b : Fin 3, ∀ t : ℝ, 0 ≤ t →
-        (Li2.Sn n : ℝ) * ‖density b t *
-          Li2.originalComplexQuotient (4 * n) ((Li2.D n) ^ 3) (point b t)‖ ≤
-        C * (n + 1 : ℝ) ^ K * (1 + t / (n : ℝ)) ^ K *
-          Real.exp ((n : ℝ) *
-            (if b.val = 0 then Vray ((1 / 2 + t) / (n : ℝ))
-             else Vvertical (t / (n : ℝ)))) := by
-  refine ⟨rayWeightConstant + verticalWeightConstant, 6, ?_, ?_⟩
-  · unfold rayWeightConstant verticalWeightConstant
-    have hlog : 0 < Real.log 2 := Real.log_pos (by norm_num)
-    positivity
-  intro n hn b t ht
-  fin_cases b
-  · have h := ray_density_uniform_bound n hn t ht
-    have hc : rayWeightConstant ≤ rayWeightConstant + verticalWeightConstant := by
-      have hv : 0 ≤ verticalWeightConstant := by
-        unfold verticalWeightConstant
-        positivity
-      linarith
-    have hp : 0 ≤ ((n : ℝ) + 1) ^ 6 *
-        (1 + t / (n : ℝ)) ^ 6 *
-        Real.exp ((n : ℝ) * Vray ((1 / 2 + t) / (n : ℝ))) := by positivity
-    have h' := mul_le_mul_of_nonneg_right hc hp
-    simpa only [Fin.val_zero, ↓reduceIte, mul_assoc] using! h.trans (by
-      simpa only [mul_assoc] using! h')
-  · have h := up_density_uniform_bound n hn t ht
-    have hc : verticalWeightConstant ≤ rayWeightConstant + verticalWeightConstant := by
-      have hr : 0 ≤ rayWeightConstant := by
-        unfold rayWeightConstant
-        have hlog : 0 ≤ Real.log 2 := Real.log_nonneg (by norm_num)
-        positivity
-      linarith
-    have hp : 0 ≤ ((n : ℝ) + 1) ^ 6 *
-        (1 + t / (n : ℝ)) ^ 6 *
-        Real.exp ((n : ℝ) * Vvertical (t / (n : ℝ))) := by positivity
-    have h' := mul_le_mul_of_nonneg_right hc hp
-    simpa only [Fin.val_one, one_ne_zero, ↓reduceIte, mul_assoc] using! h.trans (by
-      simpa only [mul_assoc] using! h')
-  · have h := down_density_uniform_bound n hn t ht
-    have hc : verticalWeightConstant ≤ rayWeightConstant + verticalWeightConstant := by
-      have hr : 0 ≤ rayWeightConstant := by
-        unfold rayWeightConstant
-        have hlog : 0 ≤ Real.log 2 := Real.log_nonneg (by norm_num)
-        positivity
-      linarith
-    have hp : 0 ≤ ((n : ℝ) + 1) ^ 6 *
-        (1 + t / (n : ℝ)) ^ 6 *
-        Real.exp ((n : ℝ) * Vvertical (t / (n : ℝ))) := by positivity
-    have h' := mul_le_mul_of_nonneg_right hc hp
-    simpa only [Fin.val_two, Nat.reduceEqDiff, ↓reduceIte, mul_assoc] using! h.trans (by
-      simpa only [mul_assoc] using! h')
-
 end
 end Li2Unified.Proofs.Contour
 
@@ -104,10 +50,6 @@ lemma starPartitionPrefactor_pos (n : ℕ) (hn : 1 ≤ n) :
   have hF : 0 < (Fn n : ℝ) := by exact_mod_cast Fn_pos n
   have hC := starPartitionWeightConstant_pos
   unfold starPartitionPrefactor
-  positivity
-
-lemma starPartitionErrorConstant_pos : 0 < starPartitionErrorConstant := by
-  unfold starPartitionErrorConstant
   positivity
 
 lemma starPartitionPrefactor_log (n : ℕ) (hn : 1 ≤ n) :
@@ -179,15 +121,6 @@ theorem star_n_log_eventually_le_square (K : ℝ) {δ : ℝ} (hδ : 0 < δ) :
     K * (n : ℝ) * Real.log ((n : ℝ) + 1) = (K * Real.log ((n : ℝ) + 1)) * (n : ℝ) := by ring
     _ ≤ (δ * (n : ℝ)) * (n : ℝ) := mul_le_mul_of_nonneg_right hlinear hnpos.le
     _ = δ * (n : ℝ) ^ 2 := by ring
-
-theorem starPartitionPrefactor_eventually_le_exp (δ : ℝ) (hδ : 0 < δ) :
-    ∀ᶠ n : ℕ in atTop, starPartitionPrefactor n ≤
-      Real.exp ((6-4*Real.log 2+δ)*(n:ℝ)^2) := by
-  filter_upwards [star_n_log_eventually_le_square starPartitionErrorConstant hδ,
-    eventually_ge_atTop (1 : ℕ)] with n hn hn1
-  apply (starPartitionPrefactor_le_exp n hn1).trans
-  apply Real.exp_le_exp.mpr
-  nlinarith only [hn]
 
 end
 end Li2Unified.Proofs.Arithmetic
@@ -331,6 +264,5 @@ end
 end Li2Unified.ParameterFamily.Energy
 
 end
-
 
 end

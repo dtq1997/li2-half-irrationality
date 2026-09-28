@@ -133,19 +133,6 @@ lemma newtonCoeff_VG (p : ℕ) [Fact p.Prime] {f : ℚ[X]} (c r : ℚ) (k : ℕ)
     rw [this]; exact VG.intCast _
   simpa using hcoef.mul (hv i (by simp at hi; omega))
 
-/-- A p-adic bound on d+1 consecutive values at c,...,c+d extends to c+m for every integer m. -/
-theorem eval_VG_of_window (p : ℕ) [Fact p.Prime] {f : ℚ[X]} {d : ℕ} (hf : f.natDegree ≤ d)
-    (c r : ℚ) (hv : ∀ i ≤ d, VG p (f.eval (c + i)) r) (m : ℤ) :
-    VG p (f.eval (c + m)) r := by
-  have hN := congrArg (eval (c + (m:ℚ))) (newton_expansion hf c)
-  rw [hN, eval_finset_sum]
-  apply VG.sum
-  intro k hk
-  have hk' : k ≤ d := by simp at hk; omega
-  simp only [eval_mul, eval_C, eval_comp, eval_sub, eval_X, add_sub_cancel_left]
-  simpa using (newtonCoeff_VG p c r k fun i hi => hv i (hi.trans hk')).mul
-    (binomPoly_eval_int_VG p k m)
-
 lemma descPochhammer_eval_neg_one (k : ℕ) :
     (descPochhammer ℚ k).eval (-1) = (-1 : ℚ)^k * (k.factorial : ℚ) := by
   induction k with

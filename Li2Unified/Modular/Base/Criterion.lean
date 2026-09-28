@@ -35,7 +35,6 @@ lemma pow_mul_aeval_div_eq_intCast (p : ℤ[X]) {d : ℕ} (hd : p.natDegree ≤ 
   simp only [algebraMap_int_eq, eq_intCast]
   field_simp
 
-
 /-- An integer polynomial at a rational argument cannot be nonzero and too small. -/
 theorem one_le_den_pow_mul_abs (Q : ℤ[X]) (q : ℚ) (d : ℕ)
     (hdeg : Q.natDegree ≤ d) (hne : aeval (q : ℝ) Q ≠ 0) :
@@ -92,19 +91,6 @@ theorem tendsto_pow_mul_exp_neg_sq_of_pos {c : ℝ} (hc : 0 < c) (D b : ℕ) (hb
     rw [div_le_iff₀ hc] at hn'; linarith
   have hn0 : (0 : ℝ) ≤ n := Nat.cast_nonneg n
   nlinarith [mul_le_mul_of_nonneg_left hn'' hn0]
-
-
-/-- A quadratic exponential bound pays every fixed rational denominator cost. -/
-theorem tendsto_den_mul_of_gaussian (ξ : ℝ) (P : ℕ → ℤ[X]) (D : ℕ)
-    {c : ℝ} (hc : 0 < c)
-    (hbound : ∀ᶠ n in atTop, |aeval ξ (P n)| ≤ Real.exp (-c*(n:ℝ)^2))
-    (b : ℕ) (hb : 0 < b) :
-    Tendsto (fun n => (b : ℝ)^(D*n) * |aeval ξ (P n)|) atTop (𝓝 0) := by
-  refine squeeze_zero' (Eventually.of_forall fun n =>
-    mul_nonneg (pow_nonneg (Nat.cast_nonneg b) _) (abs_nonneg _)) ?_
-    (tendsto_pow_mul_exp_neg_sq_of_pos hc D b hb)
-  filter_upwards [hbound] with n hn
-  exact mul_le_mul_of_nonneg_left hn (pow_nonneg (Nat.cast_nonneg b) _)
 
 end Li2
 

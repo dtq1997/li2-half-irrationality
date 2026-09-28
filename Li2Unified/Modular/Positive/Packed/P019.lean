@@ -172,13 +172,6 @@ lemma inverseParameter_moment_integral (q : ℕ) (hq : 1 < q)
   obtain ⟨h1,hv1⟩ := inverseParameter_one_sub_unit (p := p) q hq hpq hpm
   exact moment_ratio_integral_of_units _ h0 hv h1 hv1
 
-lemma inverseParameter_power_moment_integral (q : ℕ) (hq : 1 < q)
-    (hpq : ¬p ∣ q) (hpm : ¬p ∣ q-1) :
-    Li2.VG p ((inverseParameter q)^p/(1-(inverseParameter q)^p)) 0 := by
-  obtain ⟨h0,hv⟩ := inverseParameter_power_unit (p := p) q (by omega) hpq
-  obtain ⟨h1,hv1⟩ := inverseParameter_power_one_sub_unit (p := p) q hq hpq hpm
-  exact moment_ratio_integral_of_units _ h0 hv h1 hv1
-
 /-- Rational formulas from the manuscript, not yet determinants of Lean blocks. -/
 def lowBlockConstant (lam : ℚ) : ℚ := -(lam+12)*(13*lam-12)/(8*lam^3*(lam-1))
 def cornerBlockConstant (lam : ℚ) : ℚ :=
@@ -237,6 +230,5 @@ end
 end Li2Unified.LambdaLift
 
 end
-
 
 end

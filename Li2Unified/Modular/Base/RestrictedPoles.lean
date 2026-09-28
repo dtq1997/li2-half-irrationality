@@ -55,12 +55,6 @@ def integralPoleNumerator (c : ι → ℤ_[p]) (f : PowerSeries ℤ_[p]) (r : ι
   (integralPoleDenominator c : PowerSeries ℤ_[p])*f +
     ((∑ i, C (r i)*integralPoleCofactor c i : (ℤ_[p])[X]) : PowerSeries ℤ_[p])
 
-theorem integralPoleNumerator_isRestricted (c : ι → ℤ_[p]) (f : PowerSeries ℤ_[p])
-    (hf : PowerSeries.IsRestricted 1 f) (r : ι → ℤ_[p]) :
-    PowerSeries.IsRestricted 1 (integralPoleNumerator c f r) :=
-  PowerSeries.isRestricted.add 1
-    (PowerSeries.isRestricted.mul 1 (polynomial_isRestricted _) hf) (polynomial_isRestricted _)
-
 theorem integralPoleNumerator_eval (c : ι → ℤ_[p]) (f : PowerSeries ℤ_[p])
     (hf : PowerSeries.IsRestricted 1 f) (r : ι → ℤ_[p]) (i : ι) :
     restrictedEval (c i) (integralPoleNumerator c f r) =

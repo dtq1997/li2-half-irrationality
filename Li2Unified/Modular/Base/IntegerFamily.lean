@@ -36,10 +36,6 @@ theorem polynomialPart_GV (p : ℕ) (n k : ℕ) : GV p (polynomialPart n k) 0 :=
   rw [coeff_map]
   exact VG.intCast _
 
-theorem polynomialPartMoment_VG (p : ℕ) [Fact p.Prime] (hp3 : p ≠ 3) (n k : ℕ) :
-    VG p (polynomialMoment (polynomialPart n k)) 0 :=
-  polynomialMoment_VG_of_ne_three p hp3 _ (polynomialPart_GV p n k)
-
 end
 end Li2
 

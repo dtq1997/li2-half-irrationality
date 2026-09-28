@@ -56,33 +56,6 @@ theorem restrictedEval_mul (x : ℤ_[p]) (f g : PowerSeries ℤ_[p])
   rw [pow_add]
   exact mul_mul_mul_comm _ _ _ _
 
-theorem restrictedTranslate_eval (a x : ℤ_[p]) (f : PowerSeries ℤ_[p])
-    (hf : PowerSeries.IsRestricted 1 f) :
-    restrictedEval x (restrictedTranslate a f) = restrictedEval (x+a) f := by
-  have hl := translatedMoment_trunc_tendsto (fun n => x^n) a f hf
-  have hr := restrictedMoment_trunc_tendsto (fun n => (x+a)^n) f hf
-  have he (N : ℕ) : restrictedEval x
-      (restrictedTranslate a (PowerSeries.trunc N f : PowerSeries ℤ_[p])) =
-      restrictedEval (x+a) (PowerSeries.trunc N f : PowerSeries ℤ_[p]) := by
-    rw [restrictedTranslate_polynomial, restrictedEval_polynomial, restrictedEval_polynomial,
-      eval_comp, eval_add, eval_X, eval_C]
-  exact tendsto_nhds_unique hl (hr.congr' (Filter.Eventually.of_forall fun N => (he N).symm))
-
-theorem inverseOneSubSeries_eval (b : ℤ_[p]) (hb : ‖b‖ < 1) (x : ℤ_[p]) (d : ℕ) :
-    restrictedEval x (inverseOneSubSeries b d)*(1-b*x)^d = 1 := by
-  have hc : (((1-C b*X)^d : (ℤ_[p])[X]) : PowerSeries ℤ_[p]) =
-      (1-PowerSeries.C b*PowerSeries.X)^d := by simp
-  have hpoly : PowerSeries.IsRestricted 1 ((1-PowerSeries.C b*PowerSeries.X)^d) := by
-    rw [← hc]
-    exact polynomial_isRestricted _
-  have heval : restrictedEval x ((1-PowerSeries.C b*PowerSeries.X)^d) = (1-b*x)^d := by
-    rw [← hc, restrictedEval_polynomial]
-    simp
-  have he := congrArg (restrictedEval x) (inverseOneSubSeries_identity b d)
-  rw [restrictedEval_mul x _ _ (inverseOneSubSeries_isRestricted b hb d) hpoly,
-    heval, restrictedEval_one] at he
-  exact he
-
 end
 end Li2
 

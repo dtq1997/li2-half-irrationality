@@ -126,7 +126,6 @@ open MeasureTheory Set Real
 
 namespace Li2Unified.ParameterFamily.Energy
 
-
 #eval show IO Unit from do
   let out ← IO.getStdout
   out.putStrLn "Gaussian: imports loaded"
@@ -142,10 +141,6 @@ lemma integrable_gaussian_sub {b : ℝ} (hb : 0 < b) (c : ℝ) :
   have := (integrable_exp_neg_mul_sq hb).comp_sub_right c
   simpa using! this
 
-/-- Completing the square in one variable. -/
-lemma sq_add_sq_eq (a b x : ℝ) :
-    (a - x) ^ 2 + (b - x) ^ 2 = 2 * (x - (a + b) / 2) ^ 2 + (a - b) ^ 2 / 2 := by ring
-
 lemma gaussian_conv_one (s a b : ℝ) :
     ∫ x : ℝ, Real.exp (-(2 * s) * (a - x) ^ 2) * Real.exp (-(2 * s) * (b - x) ^ 2) =
       Real.sqrt (π / (4 * s)) * Real.exp (-s * (a - b) ^ 2) := by
@@ -157,7 +152,6 @@ lemma gaussian_conv_one (s a b : ℝ) :
     ring
   simp_rw [this]
   rw [integral_mul_const, integral_gaussian_sub]
-
 
 #eval show IO Unit from do
   let out ← IO.getStdout
@@ -196,7 +190,6 @@ lemma gaussian_conv {s : ℝ} (hs : 0 < s) (z w : ℂ) :
   congr 2
   ring
 
-
 #eval show IO Unit from do
   let out ← IO.getStdout
   out.putStrLn "Gaussian: complex convolution complete"
@@ -213,7 +206,6 @@ lemma intervalIntegral_swap_of_continuous {f : ℝ → ℝ → ℝ} (hf : Contin
   refine IntegrableOn.mono_set ?_ (Set.prod_mono Ioc_subset_Icc_self Ioc_subset_Icc_self)
   exact ContinuousOn.integrableOn_compact (isCompact_Icc.prod isCompact_Icc) hf.continuousOn
 
-
 #eval show IO Unit from do
   let out ← IO.getStdout
   out.putStrLn "Gaussian: Fubini complete"
@@ -222,6 +214,5 @@ lemma intervalIntegral_swap_of_continuous {f : ℝ → ℝ → ℝ} (hf : Contin
 end Li2Unified.ParameterFamily.Energy
 
 end
-
 
 end

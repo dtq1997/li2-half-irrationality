@@ -1,7 +1,9 @@
 module
 public import Li2Unified.Modular.Base.PrimeBaseShapes
 public import Li2Unified.Modular.Base.ParameterDifferentialDissection
-public import Li2Unified.Modular.Base.FiniteCertificates
+public import Mathlib.LinearAlgebra.Matrix.Block
+public import Mathlib.Tactic.NormNum
+public import Mathlib.Tactic.FinCases
 
 set_option backward.privateInPublic true
 
@@ -98,11 +100,6 @@ lemma parameterV_C_mul_X (z a : ℚ) : parameterV z (C a*X) = a*parameterMoment 
 lemma parameterV_X_sq (z : ℚ) : parameterV z (X^2) = 2*parameterMoment z 1 := by
   simp [parameterV, derivative_pow, parameterG_C_mul, parameterG_X]
 
-lemma parameterMoment_negHalf_zero : parameterMoment (-1/2) 0 = -1/3 := by
-  norm_num [parameterMoment]
-lemma parameterMoment_negHalf_one : parameterMoment (-1/2) 1 = -2/9 := by
-  norm_num [parameterMoment, Fin.sum_univ_succ]
-
 lemma parameterU_natCast (z : ℚ) (n : ℕ) : parameterU z (n:ℚ[X]) = n*parameterMoment z 0 := by
   simpa using parameterU_C z (n:ℚ)
 lemma parameterV_natCast (z : ℚ) (n : ℕ) : parameterV z (n:ℚ[X]) = 0 := by
@@ -110,63 +107,6 @@ lemma parameterV_natCast (z : ℚ) (n : ℕ) : parameterV z (n:ℚ[X]) = 0 := by
 lemma parameterV_natCast_mul_X (z : ℚ) (n : ℕ) :
     parameterV z ((n:ℚ[X])*X) = n*parameterMoment z 0 := by
   simpa using parameterV_C_mul_X z (n:ℚ)
-
-lemma parameterTau_negHalf_small (j : Fin 4) :
-    parameterTau (-1/2) j.val = ![0,-1/2,-7/16,-65/144] j := by
-  fin_cases j <;> norm_num [parameterTau, Finset.sum_Icc_succ_top]
-
-lemma parameterU_six : parameterU (-(1/2)) (6:ℚ[X]) = -2 := by
-  change parameterU (-(1/2)) (C 6) = -2
-  rw [parameterU_C]
-  norm_num [parameterMoment]
-lemma parameterV_three : parameterV (-(1/2)) (3:ℚ[X]) = 0 := parameterV_C _ _
-lemma parameterV_six : parameterV (-(1/2)) (6:ℚ[X]) = 0 := parameterV_C _ _
-lemma parameterV_seven : parameterV (-(1/2)) (7:ℚ[X]) = 0 := parameterV_C _ _
-lemma parameterV_three_X : parameterV (-(1/2)) (3*X:ℚ[X]) = -1 := by
-  change parameterV (-(1/2)) (C 3*X) = -1
-  rw [parameterV_C_mul_X]
-  norm_num [parameterMoment]
-
-theorem zeroShape_U_values (k : Fin 5) :
-    (rationalPoleU (-1/2) (zeroShapeRegular k) (zeroShapeResidue k)).eval 0 =
-      ![-113/12,95/4,-253/4,2093/12,-17773/36] k := by
-  fin_cases k <;>
-    norm_num [rationalPoleU, zeroShapeRegular, zeroShapeResidue, Fin.sum_univ_succ,
-      parameterU_six, parameterTau, Finset.sum_Icc_succ_top, parameterU_zero, parameterU_one, parameterU_sub, parameterU_X,
-      show (6:ℚ[X]) = C 6 from rfl, parameterU_C, parameterU_natCast,
-      parameterMoment_negHalf_zero, parameterMoment_negHalf_one, parameterMoment, Fin.sum_univ_succ]
-
-  all_goals norm_num only [parameterU_six]
-
-theorem lowShape_V_values (k : Fin 3) :
-    (rationalPoleV (-1/2) (zeroShapeRegular ⟨k.val+2,by omega⟩)
-      (zeroShapeResidue ⟨k.val+2,by omega⟩)).eval 0 =
-      ![95/4,-253/4,2093/12] k := by
-  fin_cases k <;>
-    norm_num [rationalPoleV, zeroShapeRegular, zeroShapeResidue, Fin.sum_univ_succ,
-      parameterV_six, parameterTau, Finset.sum_Icc_succ_top, parameterV_zero, parameterV_one, parameterV_sub, parameterV_X,
-      show (6:ℚ[X]) = C 6 from rfl, parameterV_C, parameterV_natCast, parameterMoment_negHalf_zero, parameterMoment, Fin.sum_univ_succ]
-
-  all_goals norm_num only [parameterV_six]
-
-theorem highShape_V_values (k : Fin 3) :
-    (rationalPoleV (-1/2) (highShapeRegular k) (highShapeResidue k)).eval 0 =
-      ![8,-46/3,266/9] k := by
-  fin_cases k <;>
-    norm_num [rationalPoleV, highShapeRegular, highShapeResidue, Fin.sum_univ_succ,
-      parameterV_three, parameterV_seven, parameterV_three_X, parameterTau, Finset.sum_Icc_succ_top, parameterV_one, parameterV_add, parameterV_sub, parameterV_X,
-      show (3:ℚ[X]) = C 3 from rfl, show (7:ℚ[X]) = C 7 from rfl,
-      parameterV_C_mul_X, parameterV_X_sq, parameterV_C, parameterV_natCast, parameterV_natCast_mul_X,
-      parameterMoment_negHalf_zero, parameterMoment_negHalf_one, parameterMoment, Fin.sum_univ_succ]
-
-  all_goals norm_num only [parameterV_three, parameterV_seven, parameterV_three_X]
-
-theorem lowBlock_from_functional (i j : Fin 2) :
-    lowBlock i j = (rationalPoleV (-1/2)
-      (zeroShapeRegular ⟨i.val+j.val+2,by omega⟩)
-      (zeroShapeResidue ⟨i.val+j.val+2,by omega⟩)).eval 0 := by
-  have h := lowShape_V_values (⟨i.val+j.val,by omega⟩ : Fin 3)
-  fin_cases i <;> fin_cases j <;> simpa [lowBlock] using h.symm
 
 end
 end Li2

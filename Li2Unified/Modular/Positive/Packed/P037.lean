@@ -44,27 +44,11 @@ theorem parameter_dtilde_medium_weighted (lam : ℚ) (n p : ℕ) [Fact p.Prime]
     Real.log_nonneg (by exact_mod_cast hp.one_lt.le)
   exact mul_le_mul_of_nonneg_right hv hl
 
-/-- Finite summation keeps the Hermite estimate as a visible per-prime premise. -/
-theorem parameter_dtilde_medium_sum_lower (lam : ℚ) (n : ℕ) (s : Finset ℕ)
-    (hne : Qtilde lam n ≠ 0)
-    (hprime : ∀ p ∈ s, p.Prime)
-    (hgram : ∀ p ∈ s, ∀ hp : p.Prime,
-      letI : Fact p.Prime := ⟨hp⟩
-      Li2.GV p (binomGram lam n).det (normalizedDetLower n p)) :
-    (∑ p ∈ s, (normalizedDetLower n p : ℝ) * Real.log (p:ℝ)) ≤
-      ∑ p ∈ s,
-        ((-padicValRat p (dtilde lam n) : ℤ) : ℝ) * Real.log (p:ℝ) := by
-  apply Finset.sum_le_sum
-  intro p hp
-  letI : Fact p.Prime := ⟨hprime p hp⟩
-  exact parameter_dtilde_medium_weighted lam n p hne (hgram p hp (hprime p hp))
-
 end
 end Li2Unified.Proofs.Arithmetic
 
 #print axioms Li2Unified.Proofs.Arithmetic.parameter_dtilde_medium_lower
 #print axioms Li2Unified.Proofs.Arithmetic.parameter_dtilde_medium_weighted
-#print axioms Li2Unified.Proofs.Arithmetic.parameter_dtilde_medium_sum_lower
 
 end
 
@@ -124,6 +108,5 @@ end Li2Unified.Proofs.Arithmetic
 #print axioms Li2Unified.Proofs.Arithmetic.normalizedDetLower_eq_profile
 
 end
-
 
 end

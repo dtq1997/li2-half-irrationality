@@ -48,25 +48,6 @@ theorem parameterU_dissection (z : ℚ) (hz : ‖(z:ℝ)‖ < 1) (hzne : z ≠ 0
   rw [affine_differential_identity _ _ (by exact_mod_cast (Nat.ne_of_gt hq)),
     parameterG_sub, parameterG_C_mul]
 
-theorem parameterU_negHalf (P : ℚ[X]) : parameterU (-1/2) P = polynomialMoment P := by
-  induction P using Polynomial.induction_on' with
-  | add P Q hP hQ =>
-    simp only [parameterU, mul_add, derivative_add, parameterG_add,
-      polynomialMoment_add] at *
-    rw [hP, hQ]
-  | monomial n a =>
-    simp [parameterU, X_mul_monomial, derivative_monomial_succ, parameterG_monomial,
-      parameterMoment_negHalf, polynomialMoment, Polynomial.sum_monomial_index]
-
-theorem original_polynomial_dissection (q : ℕ) (hq : 0 < q) (P : ℚ[X]) :
-    polynomialMoment P = ∑ a : Fin q, (-2:ℚ)^a.val*
-      (parameterU ((-1/2:ℚ)^q) (P.comp (C (q:ℚ)*X-C (a.val:ℚ))) -
-        (a.val:ℚ)/(q:ℚ)*parameterV ((-1/2:ℚ)^q)
-          (P.comp (C (q:ℚ)*X-C (a.val:ℚ)))) := by
-  rw [← parameterU_negHalf]
-  simpa only [show (-1/2:ℚ)⁻¹ = -2 by norm_num] using
-    parameterU_dissection (-1/2) (by norm_num) (by norm_num) q hq P
-
 end
 end Li2
 

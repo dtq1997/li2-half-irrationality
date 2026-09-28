@@ -14,45 +14,6 @@ namespace Li2Unified.Proofs.Hermite
 noncomputable section
 variable {p : ℕ} [Fact p.Prime]
 
-theorem generalPoleTest_U_shift_coeff_bound (z : ℚ)
-    (hu : z ≠ 0 ∧ padicValRat p z = 0)
-    (hz : VG p (z / (1 - z)) 0)
-    (f : PowerSeries ℤ_[p]) (r : Fin p → ℤ_[p])
-    (T : ℤ[X]) (a : Fin p) (eta : ℤ_[p])
-    (B : ℝ) (hB : 0 ≤ B)
-    (hT : ∀ k, ‖(integralDiscTestPolynomial T a).coeff k‖ ≤ B)
-    (k : ℕ) :
-    ‖((generalPoleU z hu hz
-      (integralPoleMulRegular (generalPoleCenters (p := p))
-        (integralDiscTestPolynomial T a : PowerSeries ℤ_[p]) f r)
-      (integralPoleMulResidue (generalPoleCenters (p := p))
-        (integralDiscTestPolynomial T a : PowerSeries ℤ_[p]) r)).comp
-          (C ((p : ℤ_[p]) ^ 2) * (X - C eta))).coeff k‖ ≤ B := by
-  classical
-  exact integralPolynomial_comp_coeff_bound _ _ B hB
-    (fun j => generalPoleTest_U_coeff_bound z hu hz f r T a B hB hT j) k
-
-theorem generalPoleTest_V_shift_coeff_bound (z : ℚ)
-    (hu : z ≠ 0 ∧ padicValRat p z = 0)
-    (hz : VG p (z / (1 - z)) 0)
-    (f : PowerSeries ℤ_[p]) (r : Fin p → ℤ_[p])
-    (T : ℤ[X]) (a : Fin p) (eta : ℤ_[p])
-    (B : ℝ) (hB : 0 ≤ B)
-    (hT : ∀ k, ‖(integralDiscTestPolynomial T a).coeff k‖ ≤ B)
-    (k : ℕ) :
-    ‖((generalPoleV z hu hz
-      (integralPoleMulRegular (generalPoleCenters (p := p))
-        (integralDiscTestPolynomial T a : PowerSeries ℤ_[p]) f r)
-      (integralPoleMulResidue (generalPoleCenters (p := p))
-        (integralDiscTestPolynomial T a : PowerSeries ℤ_[p]) r)).comp
-          (C ((p : ℤ_[p]) ^ 2) * (X - C eta))).coeff k‖ ≤ B := by
-  classical
-  exact integralPolynomial_comp_coeff_bound _ _ B hB
-    (fun j => generalPoleTest_V_coeff_bound z hu hz f r T a B hB hT j) k
-
-#print axioms generalPoleTest_U_shift_coeff_bound
-#print axioms generalPoleTest_V_shift_coeff_bound
-
 end
 end Li2Unified.Proofs.Hermite
 
@@ -263,6 +224,5 @@ end
 end Li2Unified.Proofs.Hermite
 
 end
-
 
 end

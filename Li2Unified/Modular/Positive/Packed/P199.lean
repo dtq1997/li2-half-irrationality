@@ -79,28 +79,13 @@ def pairExprQ (s t : LayerQ) : Expr :=
     else .add (.add (logSecondExpr s.radius) (logSecondExpr t.radius))
       (.neg (logSecondExpr (qSub s.radius t.radius)))
 
-def rowExpr (s : LayerQ) : Expr :=
-  (layersQ.map (fun t => .mul (.rat (qMul s.density t.density)) (pairExprQ s t))).foldr
-    Expr.add (.rat qZero)
-
 structure RowData where
   steps : List Step
   node : Nat
   bound : I
 
-def checkRow (s : LayerQ) (data : RowData) : Bool :=
-  match prepareTrace data.steps with
-  | none => false
-  | some p => checkExprPoint p (rowExpr s) data.node data.bound
-
-def checkRows : List LayerQ → List RowData → Bool
-  | [], [] => true
-  | s :: ss, d :: ds => checkRow s d && checkRows ss ds
-  | _, _ => false
-
 end Li2Unified.Proofs.Energy.CompactEnergy
 
 end
-
 
 end

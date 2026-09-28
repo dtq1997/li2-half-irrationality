@@ -76,14 +76,6 @@ theorem fieldPoleFunctional_smul (μ : ℕ → ℤ_[p]) (w : ι → (ℚ_[p])[X]
   simp only [fieldPoleFunctional, fieldRestrictedMoment_smul μ f hf a, map_mul,
     mul_add, Finset.mul_sum, mul_assoc]
 
-theorem fieldPoleFunctional_well_defined (c : ι → ℤ_[p]) (hc : Function.Injective c)
-    (μ : ℕ → ℤ_[p]) (w : ι → (ℚ_[p])[X]) (f g : PowerSeries ℚ_[p])
-    (hf : PowerSeries.IsRestricted 1 f) (hg : PowerSeries.IsRestricted 1 g)
-    (r s : ι → ℚ_[p]) (he : fieldPoleNumerator c f r = fieldPoleNumerator c g s) :
-    fieldPoleFunctional μ w f r = fieldPoleFunctional μ w g s := by
-  obtain ⟨rfl,rfl⟩ := fieldPoleNumerator_injective c hc f g hf hg r s he
-  rfl
-
 end
 end Li2
 

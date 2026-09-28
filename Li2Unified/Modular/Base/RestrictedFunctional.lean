@@ -74,15 +74,6 @@ theorem restrictedMoment_polynomial (μ : ℕ → ℤ_[p]) (P : (ℤ_[p])[X]) :
   intro n hn
   rw [Polynomial.notMem_support_iff.mp hn, zero_mul]
 
-theorem derivative_isRestricted (f : PowerSeries ℤ_[p])
-    (hf : PowerSeries.IsRestricted 1 f) :
-    PowerSeries.IsRestricted 1 (PowerSeries.derivative (R := ℤ_[p]) f) := by
-  rw [PowerSeries.isRestricted_iff']
-  simp only [one_pow, mul_one, PowerSeries.coeff_derivative]
-  have ht : Tendsto (fun n : ℕ => ‖PowerSeries.coeff (n+1) f‖) atTop (𝓝 0) :=
-    (restricted_coeff_tendsto hf).comp (tendsto_add_atTop_nat 1)
-  exact squeeze_zero (fun _ => norm_nonneg _) (fun n => integral_coeff_mul_norm_le _ _) ht
-
 end
 end Li2
 

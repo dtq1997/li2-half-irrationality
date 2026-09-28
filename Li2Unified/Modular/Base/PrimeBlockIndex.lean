@@ -188,15 +188,6 @@ theorem primeBlockWeight_sum (hp4 : 3 < p) :
   rw [h4,h1]
   ring
 
-def primeOriginalRowWeight (hp4 : 3 < p) (I : Fin (2*(p-1))) : ℚ :=
-  primeBlockWeight (primeOriginalBlockEquiv hp4 I)
-
-theorem primeOriginalRowWeight_sum (hp4 : 3 < p) :
-    (∑ I, primeOriginalRowWeight hp4 I) = -((p-1 : ℕ) : ℚ) := by
-  unfold primeOriginalRowWeight
-  rw [Equiv.sum_comp (primeOriginalBlockEquiv hp4) primeBlockWeight]
-  exact primeBlockWeight_sum hp4
-
 /-- Only jet vectors are divided by actual product-basis local units; G is unchanged. -/
 def primeBlockUnitScale (hp4 : 3 < p) (x : PrimeBlockIndex p) : ℚ :=
   match primeBlockToJet hp4 x with

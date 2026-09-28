@@ -1,5 +1,8 @@
 module
-public import Li2Unified.Modular.Base.CompactLogPotential
+public import Mathlib.Analysis.Convolution
+public import Mathlib.Analysis.SpecialFunctions.Integrability.Basic
+public import Mathlib.MeasureTheory.Measure.Haar.Unique
+public import Mathlib.Tactic.Linarith
 public import Mathlib.Analysis.SpecialFunctions.Integrals.Basic
 public import Mathlib.Tactic
 
@@ -68,41 +71,6 @@ theorem realLogTruncationError_integrable_and_integral {ε : ℝ} (hε : 0 < ε)
     simp only [smul_eq_mul]
     ring
 
-theorem integrable_compactLogPotential_truncated_integrand {ρ : ℝ → ℝ}
-    (hρ : Continuous ρ) (hρsupport : HasCompactSupport ρ) {ε : ℝ} (hε : 0 < ε) (x : ℝ) :
-    Integrable (fun t : ℝ => ρ t * Real.log (max ε |x - t|)) volume := by
-  have hpos (t : ℝ) : 0 < max ε |x - t| := lt_of_lt_of_le hε (le_max_left _ _)
-  have hlog : Continuous (fun t : ℝ => Real.log (max ε |x - t|)) :=
-    (continuous_const.max (continuous_const.sub continuous_id).abs).log (fun t => (hpos t).ne')
-  exact (hρ.mul hlog).integrable_of_hasCompactSupport hρsupport.mul_right
-
-/-- Scalar density truncation; no circle geometry or zero-mass energy is assumed. -/
-theorem compactLogPotential_truncated_integrable_and_le {ρ : ℝ → ℝ} {M ε : ℝ}
-    (hρ : Continuous ρ) (hρsupport : HasCompactSupport ρ)
-    (hρbounds : ∀ t : ℝ, 0 ≤ ρ t ∧ ρ t ≤ M) (hε : 0 < ε) (x : ℝ) :
-    Integrable (fun t : ℝ => ρ t * Real.log (max ε |x - t|)) volume ∧
-    (∫ t : ℝ, ρ t * Real.log (max ε |x - t|)) ≤
-      (∫ t : ℝ, ρ t * Real.log |x - t|) + 2 * M * ε := by
-  have hcut := integrable_compactLogPotential_truncated_integrand hρ hρsupport hε x
-  have hraw := integrable_compactLogPotential_integrand hρ hρsupport x
-  have herr := realLogTruncationError_integrable_and_integral hε x
-  refine ⟨hcut, ?_⟩
-  have hmono : (∫ t : ℝ, ρ t * Real.log (max ε |x - t|)) ≤
-      ∫ t : ℝ, (ρ t * Real.log |x - t| + M * realLogTruncationError ε x t) := by
-    apply MeasureTheory.integral_mono_ae hcut (hraw.add (herr.1.const_mul M))
-    filter_upwards [(volume : Measure ℝ).ae_ne x] with t ht
-    have hnonneg := realLogTruncationError_nonneg_of_ne (ε := ε) ht
-    have hmul := mul_le_mul_of_nonneg_right (hρbounds t).2 hnonneg
-    calc
-      ρ t * Real.log (max ε |x - t|) =
-          ρ t * Real.log |x - t| + ρ t * realLogTruncationError ε x t := by
-        rw [realLogTruncationError_eq_sub]; ring
-      _ ≤ ρ t * Real.log |x - t| + M * realLogTruncationError ε x t := by linarith only [hmul]
-  rw [MeasureTheory.integral_add hraw (herr.1.const_mul M), MeasureTheory.integral_const_mul, herr.2] at hmono
-  calc
-    (∫ t : ℝ, ρ t * Real.log (max ε |x - t|)) ≤
-        (∫ t : ℝ, ρ t * Real.log |x - t|) + M * (2 * ε) := hmono
-    _ = (∫ t : ℝ, ρ t * Real.log |x - t|) + 2 * M * ε := by ring
 end
 end Li2
 

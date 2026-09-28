@@ -99,74 +99,15 @@ lemma A2_ratio_tendsto :
     rw [div_le_iff₀ (sq_pos_of_pos hnpos)]
     linarith only [hA]
 
-lemma S3_ratio_tendsto :
-    Tendsto (fun n : ℕ => (S3 n : ℝ)/(n : ℝ)^2)
-      atTop (𝓝 (9/4 : ℝ)) := by
-  have hunit : Tendsto (fun n : ℕ => (1 : ℝ)/(n : ℝ)^2)
-      atTop (𝓝 (0 : ℝ)) := by
-    simpa [div_pow] using! (tendsto_const_div_atTop_nhds_zero_nat (1 : ℝ)).pow 2
-  have hrem : Tendsto (fun n : ℕ => ((n%2 : ℕ) : ℝ)/(n : ℝ)^2)
-      atTop (𝓝 (0 : ℝ)) := by
-    refine tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds hunit ?_ ?_
-    · intro n
-      positivity
-    · intro n
-      have hm : ((n%2 : ℕ) : ℝ) ≤ 1 := by
-        exact_mod_cast (show n%2 ≤ 1 by omega)
-      exact div_le_div_of_nonneg_right hm (sq_nonneg (n : ℝ))
-  have h : Tendsto (fun n : ℕ => (9/4 : ℝ)-(((n%2 : ℕ) : ℝ)/(n : ℝ)^2)/4)
-      atTop (𝓝 (9/4 : ℝ)) := by
-    simpa only [zero_div, sub_zero] using!
-      (tendsto_const_nhds (x := (9/4 : ℝ))).sub (hrem.div_const (4 : ℝ))
-  apply (tendsto_congr' ?_).mp h
-  filter_upwards [eventually_ge_atTop (1 : ℕ)] with n hn
-  have hn0 : (n : ℝ) ≠ 0 := by exact_mod_cast (show n ≠ 0 by omega)
-  have hclosed : 4*(S3 n : ℝ)+((n%2 : ℕ) : ℝ) = 9*(n : ℝ)^2 := by
-    exact_mod_cast (Li2.S3_closed n)
-  field_simp [hn0] <;> nlinarith only [hclosed]
-
 /-- The literal rational lower bound in Qtilde_GV_two. -/
 def twoAdicLowerBound (n : ℕ) : ℚ :=
   (A2 n : ℚ)-4*(n : ℚ)*(Nat.log 2 (7*n-2) : ℚ)
-
-/-- The literal rational lower bound in Qtilde_GV_three. -/
-def threeAdicLowerBound (n : ℕ) : ℚ :=
-  -(S3 n : ℚ)-4*(n : ℚ)*(Nat.log 3 (7*n-2) : ℚ)
-
-lemma Qtilde_GV_twoAdicLowerBound {n : ℕ} (hn : 1 ≤ n) :
-    GV 2 (Qtilde n) (twoAdicLowerBound n) := Qtilde_GV_two hn
-
-lemma Qtilde_GV_threeAdicLowerBound {n : ℕ} (hn : 1 ≤ n) :
-    GV 3 (Qtilde n) (threeAdicLowerBound n) := Qtilde_GV_three hn
 
 lemma twoAdicLowerBound_tendsto :
     Tendsto (fun n : ℕ => (twoAdicLowerBound n : ℝ)/(n : ℝ)^2)
       atTop (𝓝 (8/3 : ℝ)) := by
   simpa [twoAdicLowerBound, sub_div] using!
     A2_ratio_tendsto.sub (natLog_error_square_tendsto_zero 2)
-
-lemma threeAdicLowerBound_tendsto :
-    Tendsto (fun n : ℕ => (threeAdicLowerBound n : ℝ)/(n : ℝ)^2)
-      atTop (𝓝 (-(9/4 : ℝ))) := by
-  simpa [threeAdicLowerBound, sub_div, neg_div] using!
-    S3_ratio_tendsto.neg.sub (natLog_error_square_tendsto_zero 3)
-
-def twoThreeWeightedBound (n : ℕ) : ℝ :=
-  (twoAdicLowerBound n : ℝ)*Real.log 2 +
-    (threeAdicLowerBound n : ℝ)*Real.log 3
-
-theorem twoThreeWeightedBound_tendsto :
-    Tendsto (fun n : ℕ => twoThreeWeightedBound n/(n : ℝ)^2) atTop
-      (𝓝 ((8/3 : ℝ)*Real.log 2-(9/4 : ℝ)*Real.log 3)) := by
-  have h := (twoAdicLowerBound_tendsto.mul_const (Real.log 2)).add
-    (threeAdicLowerBound_tendsto.mul_const (Real.log 3))
-  have hmass : (8/3 : ℝ)*Real.log 2+(-(9/4 : ℝ))*Real.log 3 =
-      (8/3 : ℝ)*Real.log 2-(9/4 : ℝ)*Real.log 3 := by ring
-  rw [hmass] at h
-  apply (tendsto_congr' ?_).mp h
-  exact Filter.Eventually.of_forall (fun n => by
-    dsimp [twoThreeWeightedBound]
-    ring)
 
 end
 end Li2.PrimeSums

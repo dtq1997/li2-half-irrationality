@@ -1,10 +1,8 @@
 module
 public import Li2Unified.Modular.Positive.Packed.P055
 public import Li2Unified.Modular.Base.PrimeAugmentedOther
-public import Li2Unified.Modular.Base.PrimeFactorLeading
+public import Li2Unified.Modular.Base.PrimeActualLowLeading
 public import Li2Unified.Modular.Base.PrimeAugmentedJets
-public import Li2Unified.Modular.Base.PrimeZeroEntry
-public import Li2Unified.Modular.Base.PrimeHighEntry
 
 set_option backward.privateInPublic true
 

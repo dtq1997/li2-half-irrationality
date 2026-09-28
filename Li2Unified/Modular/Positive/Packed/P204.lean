@@ -190,36 +190,9 @@ theorem row_fold_denote (s : LayerQ) (hs : validLayer s = true)
       simp only [List.map_cons, List.foldr_cons, Expr.denote, real_qMul,
         pairExprQ_denote s t hs ht, hi, List.sum_cons, LayerQ.toLayer]
 
-theorem rowExpr_denote (s : LayerQ) (hs : validLayer s = true) :
-    (rowExpr s).denote 0 =
-      (layersQ.map (fun t => (s.toLayer.density : ℝ) * (t.toLayer.density : ℝ) *
-        pairFormula s.toLayer t.toLayer)).sum := by
-  exact row_fold_denote s hs layersQ layersQ_valid
-
-theorem comparisonEnergy_eq_rows :
-    comparisonEnergy = (layersQ.map (fun s => (rowExpr s).denote 0)).sum := by
-  rw [comparisonEnergy_eq_pairFormula_sum]
-  simp only [← layersQ_toLayer, List.map_map, Function.comp_def]
-  congr 1
-  apply List.map_congr_left
-  intro s hs
-  exact (rowExpr_denote s (layersQ_valid s hs)).symm
-
-theorem energy_lower_of_certs (ds : List RowData)
-    (hc : checkRows layersQ ds = true)
-    (ht : qLE ⟨589,1000⟩ (ds.foldl (fun acc d => qAdd acc d.bound.lo) qZero) = true) :
-    (589/1000 : ℝ) ≤ comparisonEnergy := by
-  rw [comparisonEnergy_eq_rows]
-  have h := checked_total_lower hc (show qValid ⟨589,1000⟩ = true by decide) ht
-  norm_num [QPair.toRat] at h
-  exact h
-
 end
 end Li2Unified.Proofs.Energy.CompactEnergy
 
-#print axioms Li2Unified.Proofs.Energy.CompactEnergy.energy_lower_of_certs
-
 end
-
 
 end

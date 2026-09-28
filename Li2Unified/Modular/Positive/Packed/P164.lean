@@ -209,9 +209,6 @@ open Li2Unified.ParameterFamily
 
 def mulLogAbs (x : ℝ) : ℝ := x*Real.log |x|
 
-lemma mulLogAbs_odd (x : ℝ) : mulLogAbs (-x) = -mulLogAbs x := by
-  simp only [mulLogAbs, abs_neg, neg_mul]
-
 lemma mulLogAbs_nonneg (x : ℝ) (hx : 0 ≤ x) :
     mulLogAbs x = x*Real.log x := by
   simp only [mulLogAbs, abs_of_nonneg hx]
@@ -559,6 +556,5 @@ end Li2Unified.Proofs.Potential.CompactAffine
 #print axioms Li2Unified.Proofs.Potential.CompactAffine.F_concaveOn
 
 end
-
 
 end

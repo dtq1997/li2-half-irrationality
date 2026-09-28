@@ -20,17 +20,6 @@ def fixedLowMoment (lam : ℚ) (k : Fin 3) : ℚ :=
 def fixedLowBlock (lam : ℚ) : Matrix (Fin 2) (Fin 2) ℚ :=
   fun i j => fixedLowMoment lam ⟨i.val+j.val, by omega⟩
 
-/-- The underlying rational numerator is u^(k+2)/((u+1)(u+2)(u+3)),
-represented with the existing common four-pole denominator. -/
-theorem fixedLowMoment_cleared (k : Fin 3) :
-    Li2.rationalPoleNumerator (Li2.zeroShapeRegular ⟨k.val+2, by omega⟩)
-      (Li2.zeroShapeResidue ⟨k.val+2, by omega⟩) = X^(k.val+3) := by
-  simpa using Li2.zeroShape_cleared (⟨k.val+2, by omega⟩ : Fin 5)
-
-theorem fixedLowBlock_negHalf : fixedLowBlock (-1/2) = Li2.lowBlock := by
-  ext i j
-  exact (Li2.lowBlock_from_functional i j).symm
-
 theorem fixedLowBlock_det (lam : ℚ) (h0 : lam ≠ 0) (h1 : lam ≠ 1) :
     (fixedLowBlock lam).det = lowBlockConstant lam := by
   have hs : 1-lam ≠ 0 := sub_ne_zero.mpr h1.symm
@@ -49,6 +38,5 @@ end
 end Li2Unified.ParameterFamily
 
 end
-
 
 end

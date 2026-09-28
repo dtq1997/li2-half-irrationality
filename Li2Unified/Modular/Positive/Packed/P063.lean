@@ -8,7 +8,7 @@ public import Li2Unified.Modular.Positive.Packed.P056
 public import Li2Unified.Modular.Base.PrimeTopLocal
 public import Li2Unified.Modular.Base.PrimeTopEntry
 public import Li2Unified.Modular.Positive.Packed.P058
-public import Li2Unified.Modular.Base.PrimeTopSupport
+public import Li2Unified.Modular.Base.PrimeEdgeNormValues
 
 set_option backward.privateInPublic true
 

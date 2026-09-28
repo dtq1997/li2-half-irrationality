@@ -61,11 +61,6 @@ lemma originalKernelRegularized_nat (m : ℕ) :
     _ = ((1 / 2 : ℂ) / (-1 : ℂ)) ^ m := (div_pow _ _ _).symm
     _ = (-1 / 2 : ℂ) ^ m := by norm_num
 
-lemma originalKernelRegularized_nat_ne_zero (m : ℕ) :
-    originalKernelRegularized m (m : ℂ) ≠ 0 := by
-  rw [originalKernelRegularized_nat]
-  exact pow_ne_zero _ (by norm_num)
-
 lemma analyticAt_originalKernelRegularized (m : ℕ) :
     AnalyticAt ℂ (originalKernelRegularized m) (m : ℂ) := by
   have hn : Differentiable ℂ (fun z : ℂ => (Real.pi : ℂ) * originalContourPower z) := by
@@ -85,20 +80,6 @@ lemma analyticAt_originalKernelRegularized (m : ℕ) :
     exact mul_ne_zero (pow_ne_zero _ (by norm_num))
       (by exact_mod_cast Real.pi_ne_zero)
   exact (hn.analyticAt _).div hds hd0
-
-theorem originalContourKernel_residue_limit (m : ℕ) :
-    Tendsto (fun z : ℂ => (z - (m : ℂ)) * originalContourKernel z)
-      (𝓝[≠] (m : ℂ)) (𝓝 ((-1 / 2 : ℂ) ^ m)) := by
-  have h : Tendsto (originalKernelRegularized m) (𝓝[≠] (m : ℂ))
-      (𝓝 ((-1 / 2 : ℂ) ^ m)) := by
-    simpa only [originalKernelRegularized_nat] using
-      (analyticAt_originalKernelRegularized m).continuousAt.tendsto.mono_left
-        nhdsWithin_le_nhds
-  have he : originalKernelRegularized m =ᶠ[𝓝[≠] (m : ℂ)]
-      (fun z : ℂ => (z - (m : ℂ)) * originalContourKernel z) := by
-    filter_upwards [self_mem_nhdsWithin] with z hz
-    exact originalKernelRegularized_eq m z hz
-  exact (tendsto_congr' he).mp h
 
 end
 end Li2

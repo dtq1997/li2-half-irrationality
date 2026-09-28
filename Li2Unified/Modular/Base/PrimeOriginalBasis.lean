@@ -46,14 +46,6 @@ theorem primeOriginalBasis_det_unit (p : ℕ) [Fact p.Prime] (hp : 3 ≤ p) :
   coeffMat_det_unit_of_independent _ (primeOriginalBasis_natDegree_lt p hp)
     (primeOriginalBasis_independent p hp)
 
-theorem primeOriginalBasis_gram (p : ℕ) (hp : 3 ≤ p) :
-    (Matrix.of fun a b => numeratorFunctional (4*(p-1))
-      ((D (p-1))^3 * (primeOriginalBasis p hp a).map (Int.castRingHom ℚ) *
-        (primeOriginalBasis p hp b).map (Int.castRingHom ℚ))).det =
-    C ((coeffMat fun a => (primeOriginalBasis p hp a).map (Int.castRingHom ℚ)).det^2) * Q (p-1) :=
-  original_gram_basis_change (p-1) _
-    (fun a => natDegree_map_le.trans_lt (primeOriginalBasis_natDegree_lt p hp a))
-
 end
 end Li2
 

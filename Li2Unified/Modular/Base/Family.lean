@@ -82,8 +82,6 @@ theorem primitiveQ_natDegree_le (n : ℕ) : (primitiveQ n).natDegree ≤ 2*n := 
   exact (Polynomial.notMem_support_iff.mpr (Polynomial.coeff_eq_zero_of_natDegree_lt hk)) (hs h)
 
 theorem moment_zero : moment 0 = -1/3 := by rw [moment]
-theorem moment_one : moment 1 = -2/9 := by norm_num [moment, Fin.sum_univ_succ]
-theorem moment_two : moment 2 = -2/27 := by norm_num [moment, Fin.sum_univ_succ]
 
 end
 end Li2

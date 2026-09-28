@@ -1,5 +1,9 @@
 module
-public import Li2Unified.Modular.Base.PrimeMediumTableSum
+public import Li2Unified.Modular.Base.PrimeEndpointTerms
+public import Mathlib.Data.Fin.VecNotation
+public import Mathlib.Algebra.BigOperators.Fin
+public import Mathlib.Tactic.FinCases
+public import Mathlib.Tactic.NormNum
 
 set_option backward.privateInPublic true
 
@@ -84,16 +88,6 @@ theorem outerWindowSum_nat_tendsto :
       atTop (𝓝 (7/2 : ℝ)) := by
   simpa only [outerWindowSum, add_div, add_zero] using!
     outerWindowLeadingSum_nat_tendsto.add outerWindowCorrection_square_tendsto_zero
-
-def mediumOuterWindowSum (x : ℝ) : ℝ := mediumWindowSum x + outerWindowSum x
-
-theorem mediumOuterWindowSum_nat_tendsto :
-    Tendsto (fun n : ℕ => mediumOuterWindowSum (n : ℝ)/(n : ℝ)^2)
-      atTop (𝓝 (635659/356400 : ℝ)) := by
-  have h := mediumWindowSum_nat_tendsto.add outerWindowSum_nat_tendsto
-  have hmass : (-611741/356400 : ℝ)+7/2 = 635659/356400 := by norm_num
-  rw [hmass] at h
-  simpa only [mediumOuterWindowSum, add_div] using! h
 
 end
 end Li2.PrimeSums

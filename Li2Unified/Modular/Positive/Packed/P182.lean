@@ -182,7 +182,6 @@ noncomputable section
   out.putStrLn "SegmentCurve: imports loaded"
   out.flush
 
-
 def clampUnit (x : ℝ) : ℝ := max 0 (min 1 x)
 
 lemma clampUnit_mem (x : ℝ) : clampUnit x ∈ Icc (0:ℝ) 1 := by
@@ -227,13 +226,6 @@ lemma segmentCurve_norm_le (a b : ℂ) (θ : ℝ) :
         (mul_le_mul_of_nonneg_left (le_max_right _ _) ht.1)
     _ = max ‖a‖ ‖b‖ := by ring
 
-/-- The source energy uses unnormalized angular measure. -/
-lemma angular_coefficient_mass (mass : ℝ) :
-    (∫ _θ in (0:ℝ)..2*Real.pi, mass/(2*Real.pi)) = mass := by
-  rw [intervalIntegral.integral_const, sub_zero, smul_eq_mul]
-  field_simp [Real.pi_ne_zero]
-
-
 #eval show IO Unit from do
   let out ← IO.getStdout
   out.putStrLn "SegmentCurve: declarations processed"
@@ -271,6 +263,5 @@ end
 end Li2Unified.ParameterFamily.Energy
 
 end
-
 
 end

@@ -47,45 +47,6 @@ lemma continuous_originalContourPoint : Continuous originalContourPoint := by
   unfold originalContourPoint
   fun_prop
 
-lemma continuous_originalContourWeight : Continuous originalContourWeight := by
-  have hp : Continuous (fun y : ℝ => originalContourPower (originalContourPoint y)) := by
-    unfold originalContourPower originalContourPoint
-    fun_prop
-  have hc : Continuous (fun y : ℝ => (Real.cosh (Real.pi * y) : ℂ)) := by fun_prop
-  have hs : Continuous (fun y : ℝ => (Real.sinh (Real.pi * y) : ℂ)) := by fun_prop
-  have ht : Continuous (fun y : ℝ => (Real.tanh (Real.pi * y) : ℂ)) := by
-    simp_rw [Real.tanh_eq_sinh_div_cosh, Complex.ofReal_div]
-    exact hs.div hc originalContour_cosh_ne_zero
-  unfold originalContourWeight
-  exact ((continuous_originalContourPoint.mul hp).mul
-    (continuous_const.add (continuous_const.mul ht))).div
-    (continuous_const.mul hc)
-    (fun y => mul_ne_zero (by norm_num) (originalContour_cosh_ne_zero y))
-
-lemma integrable_originalContourWeight_mul_pow (k : ℕ) :
-    Integrable (fun y : ℝ => originalContourWeight y * originalContourPoint y ^ k) := by
-  have hlog : 0 ≤ Real.log 2 := Real.log_nonneg (by norm_num)
-  have hm := (original_integrable_one_add_abs_pow_exp (k + 1) Real.pi_pos).const_mul
-    (Real.log 2 + Real.pi)
-  apply hm.mono' (continuous_originalContourWeight.mul
-    (continuous_originalContourPoint.pow k)).aestronglyMeasurable
-  exact Filter.Eventually.of_forall (fun y => by
-    rw [Pi.mul_apply, Pi.pow_apply, norm_mul, norm_pow]
-    have hp : ‖originalContourPoint y‖ ≤ 1 + |y| := by
-      have h := originalContourPoint_norm_le y
-      linarith
-    calc
-      ‖originalContourWeight y‖ * ‖originalContourPoint y‖ ^ k ≤
-          ((Real.log 2 + Real.pi) * (1 + |y|) * Real.exp (-Real.pi * |y|)) *
-          (1 + |y|) ^ k :=
-        mul_le_mul (originalContourWeight_norm_le_exp y)
-          (pow_le_pow_left₀ (norm_nonneg _) hp k) (by positivity) (by positivity)
-      _ = (Real.log 2 + Real.pi) * ((1 + |y|) ^ (k + 1) *
-          Real.exp (-Real.pi * |y|)) := by rw [pow_succ]; ring)
-
-lemma integrable_originalContourWeight : Integrable originalContourWeight := by
-  simpa using integrable_originalContourWeight_mul_pow 0
-
 end
 end Li2
 

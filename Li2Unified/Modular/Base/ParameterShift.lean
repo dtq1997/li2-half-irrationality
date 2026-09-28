@@ -84,31 +84,6 @@ theorem parameterG_shift_one (z : ℚ) (hz : z ≠ 1) (P : ℚ[X]) :
       one_pow, mul_one, parameterG_X_add_one_pow, parameterMoment_full_recurrence z hz k]
     ring
 
-theorem parameterG_shift_scaled (z : ℚ) (hz : z ≠ 1) (P : ℚ[X]) (k : ℕ) :
-    z^k*parameterG z (P.comp (X+C (k:ℚ))) = parameterG z P-
-      ∑ j ∈ Finset.range k, z^(j+1)*P.eval ((j:ℚ)+1) := by
-  induction k with
-  | zero => simp
-  | succ k ih =>
-    have hc : (P.comp (X+C (k:ℚ))).comp (X+1) = P.comp (X+C ((k+1:ℕ):ℚ)) := by
-      rw [comp_assoc, add_comp, X_comp, C_comp]
-      congr 1
-      push_cast
-      simp only [map_add, map_one]
-      ring
-    have he : (P.comp (X+C (k:ℚ))).eval 1 = P.eval ((k:ℚ)+1) := by
-      simp only [eval_comp, eval_add, eval_X, eval_C, add_comm]
-    rw [pow_succ, mul_assoc, ← hc, parameterG_shift_one z hz, mul_sub, ih,
-      Finset.sum_range_succ, he]
-    rw [pow_succ]
-    ring
-
-theorem parameterG_shift (z : ℚ) (hz0 : z ≠ 0) (hz1 : z ≠ 1) (P : ℚ[X]) (k : ℕ) :
-    parameterG z (P.comp (X+C (k:ℚ))) = (parameterG z P-
-      ∑ j ∈ Finset.range k, z^(j+1)*P.eval ((j:ℚ)+1))/z^k := by
-  apply (eq_div_iff (pow_ne_zero k hz0)).mpr
-  simpa only [mul_comm] using parameterG_shift_scaled z hz1 P k
-
 end
 end Li2
 

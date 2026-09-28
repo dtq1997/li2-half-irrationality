@@ -88,51 +88,6 @@ theorem original_zero_integral_cleared (hp4 : 3 < p) :
       PowerSeries.map (algebraMap ℤ_[p] ℚ_[p]) (primeDiscUnit 0 hp.out.pos)) := by ring
     _ = _ := by rw [← he]; ring
 
-theorem numeratorPulledValue_low (hp4 : 3 < p) (Y : ℚ_[p]) (a : Fin p)
-    (ha0 : 0 < a.val) (ha : a.val ≤ p-4) :
-    let g := integralPoleMulRegular (primePoleCenters p) (primeDiscUnit a.val a.isLt) 0
-      (primeLowShapeResidue hp4)
-    let r := integralPoleMulResidue (primePoleCenters p) (primeDiscUnit a.val a.isLt)
-      (primeLowShapeResidue hp4)
-    (p:ℚ_[p]) * numeratorPulledValue (by omega : p ≠ 2) (by omega : p ≠ 3)
-      Y (4*(p-1)) ((D (p-1))^3) a =
-      (primePoleU hp4 g r).eval₂ (algebraMap ℤ_[p] ℚ_[p]) Y - (a.val:ℚ_[p])/(p:ℚ_[p]) *
-        (primePoleV hp4 g r).eval₂ (algebraMap ℤ_[p] ℚ_[p]) Y := by
-  apply numeratorPulledValue_integral_of_cleared hp4 Y (4*(p-1)) (by omega)
-  · exact integralPoleMulRegular_isRestricted _ _ _ (primeDiscUnit_isRestricted _ _)
-      (PowerSeries.isRestricted_zero 1) _
-  · exact original_low_integral_cleared hp4 a ha0 ha
-
-theorem numeratorPulledValue_high (hp4 : 3 < p) (Y : ℚ_[p]) (a : Fin p)
-    (ha : p-3 ≤ a.val) :
-    let g := integralPoleMulRegular (primePoleCenters p) (primeDiscUnit a.val a.isLt) 1
-      primeHighShapeResidue
-    let r := integralPoleMulResidue (primePoleCenters p) (primeDiscUnit a.val a.isLt)
-      primeHighShapeResidue
-    numeratorPulledValue (by omega : p ≠ 2) (by omega : p ≠ 3)
-      Y (4*(p-1)) ((D (p-1))^3) a =
-      (primePoleU hp4 g r).eval₂ (algebraMap ℤ_[p] ℚ_[p]) Y - (a.val:ℚ_[p])/(p:ℚ_[p]) *
-        (primePoleV hp4 g r).eval₂ (algebraMap ℤ_[p] ℚ_[p]) Y := by
-  have h := numeratorPulledValue_integral_of_cleared hp4 Y (4*(p-1)) (by omega)
-    ((D (p-1))^3) a 1 _
-    (integralPoleMulRegular_isRestricted _ _ _ (primeDiscUnit_isRestricted _ _)
-      (PowerSeries.isRestricted_one 1) _) _ (original_high_integral_cleared hp4 a ha)
-  simpa only [one_mul] using h
-
-theorem numeratorPulledValue_zero (hp4 : 3 < p) (Y : ℚ_[p]) :
-    let g := integralPoleMulRegular (primePoleCenters p) (primeDiscUnit 0 hp.out.pos) 0
-      (primeZeroShapeResidue hp4)
-    let r := integralPoleMulResidue (primePoleCenters p) (primeDiscUnit 0 hp.out.pos)
-      (primeZeroShapeResidue hp4)
-    (p:ℚ_[p])^3 * numeratorPulledValue (by omega : p ≠ 2) (by omega : p ≠ 3)
-      Y (4*(p-1)) ((D (p-1))^3) ⟨0,hp.out.pos⟩ =
-      (primePoleU hp4 g r).eval₂ (algebraMap ℤ_[p] ℚ_[p]) Y := by
-  have h := numeratorPulledValue_integral_of_cleared hp4 Y (4*(p-1)) (by omega)
-    ((D (p-1))^3) ⟨0,hp.out.pos⟩ ((p:ℚ_[p])^3) _
-    (integralPoleMulRegular_isRestricted _ _ _ (primeDiscUnit_isRestricted _ _)
-      (PowerSeries.isRestricted_zero 1) _) _ (original_zero_integral_cleared hp4)
-  simpa only [Nat.cast_zero, zero_div, zero_mul, sub_zero] using h
-
 end
 end Li2
 

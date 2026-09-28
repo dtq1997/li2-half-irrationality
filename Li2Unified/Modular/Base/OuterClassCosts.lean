@@ -1,5 +1,5 @@
 module
-public import Li2Unified.Modular.Base.DecayLargePrimes
+public import Li2Unified.Modular.Base.DecayMediumRefined
 
 set_option backward.privateInPublic true
 

@@ -59,25 +59,9 @@ theorem generalPoleV_coeff_bound (z : ℚ)
     ‖(generalPoleV z hzUnit hz f r).coeff n‖ ≤ B := by
   exact Li2.restrictedPoleFunctional_coeff_bound _ _ f r B hB hf hr n
 
-theorem generalPoleUV_well_defined (z : ℚ)
-    (hzUnit : z ≠ 0 ∧ padicValRat p z = 0)
-    (hz : Li2.VG p (z / (1 - z)) 0)
-    (f g : PowerSeries ℤ_[p])
-    (hf : PowerSeries.IsRestricted 1 f)
-    (hg : PowerSeries.IsRestricted 1 g)
-    (r s : Fin p → ℤ_[p])
-    (he : Li2.integralPoleNumerator (generalPoleCenters (p := p)) f r =
-      Li2.integralPoleNumerator (generalPoleCenters (p := p)) g s) :
-    generalPoleU z hzUnit hz f r = generalPoleU z hzUnit hz g s ∧
-      generalPoleV z hzUnit hz f r = generalPoleV z hzUnit hz g s := by
-  obtain ⟨rfl, rfl⟩ := Li2.integralPoleNumerator_injective
-    _ generalPoleCenters_injective f g hf hg r s he
-  exact ⟨rfl, rfl⟩
-
 #print axioms generalPoleCenters_injective
 #print axioms generalPoleU_coeff_bound
 #print axioms generalPoleV_coeff_bound
-#print axioms generalPoleUV_well_defined
 
 end
 end Li2Unified.Proofs.Hermite
@@ -105,14 +89,7 @@ theorem generalMatchingPole_denominator (p m j : ℕ) (a : Fin p)
   dsimp [generalMatchingPoleIndex]
   linear_combination hc
 
-theorem generalMatchingPole_center (p m j : ℕ) [Fact p.Prime] (a : Fin p)
-    (hp : 0 < p) (hm : m < p * p) (hj : j ≤ m)
-    (hmod : j % p = a.val) :
-    generalPoleCenters (generalMatchingPoleIndex p m j a hp hm hj hmod) =
-      -((j / p : ℕ) : ℤ_[p]) := rfl
-
 #print axioms generalMatchingPole_denominator
-#print axioms generalMatchingPole_center
 
 end
 end Li2Unified.Proofs.Hermite
@@ -161,6 +138,5 @@ end
 end Li2Unified.Proofs.Hermite
 
 end
-
 
 end

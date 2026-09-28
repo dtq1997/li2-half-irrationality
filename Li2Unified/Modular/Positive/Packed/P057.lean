@@ -60,21 +60,6 @@ theorem parameterDiscContribution_cube_factor_bound (lam : ℚ)
         primeDiscCubeGain,if_neg hz,if_neg hl]
       simpa only [Nat.add_comm] using! fieldPolynomial_prime_power_bound _ 2 m h n
 
-
-theorem parameterOriginalBasisProduct_cube_disc_bound (lam : ℚ)
-    (hu : lam ≠ 0 ∧ padicValRat p lam = 0)
-    (hreg : VG p (lam^p/(1-lam^p)) 0) (hp4 : 3 < p)
-    (i j : Fin (2*(p-1))) (a : Fin p) (n : ℕ) :
-    ‖(C ((p:ℚ_[p])^3)*parameterDiscContribution lam hu hreg hp4 a
-      (primeOriginalBasis p (by omega) i*primeOriginalBasis p (by omega) j)).coeff n‖ ≤
-      ‖(p:ℚ_[p])‖^(primeOriginalBasisLocalOrder p (by omega) i a+
-        primeOriginalBasisLocalOrder p (by omega) j a+primeDiscCubeGain a) := by
-  obtain ⟨A,hA⟩ := primeOriginalBasisProduct_disc_factor p (by omega) i j a
-  apply parameterDiscContribution_cube_factor_bound lam hu hreg hp4
-  exact ⟨X^(primeOriginalBasisLocalOrder p (by omega) i a+
-    primeOriginalBasisLocalOrder p (by omega) j a)*A,by rw [hA,mul_assoc]⟩
-
-
 theorem parameterNumerator_cube_bound_of_disc_bounds (lam : ℚ) (hlam : |(lam:ℝ)| < 1)
     (hu : lam ≠ 0 ∧ padicValRat p lam = 0)
     (hreg : VG p (lam^p/(1-lam^p)) 0)
@@ -102,7 +87,6 @@ theorem parameterNumerator_cube_bound_of_disc_bounds (lam : ℚ) (hlam : |(lam:�
     (integralParameterInvPow lam hu.1 hu.2 a.val) _ (hdisc a) n
   simpa only [integralParameterInvPow,integralRational,Rat.cast_pow,Rat.cast_inv,PadicInt.coe_pow,PadicInt.coe_neg,PadicInt.coe_natCast] using! h
 
-
 theorem parameterLow_cross_original_entry_bound (lam : ℚ) (hlam : |(lam:ℝ)| < 1)
     (hu : lam ≠ 0 ∧ padicValRat p lam = 0)
     (hreg : VG p (lam^p/(1-lam^p)) 0)
@@ -123,7 +107,6 @@ theorem parameterLow_cross_original_entry_bound (lam : ℚ) (hlam : |(lam:ℝ)| 
     (PadicInt.norm_le_one (p:ℤ_[p]))
     (primeLow_cross_cube_order hp4 a b ha0 ha hb0 hb hab i j c))
 
-
 theorem parameterTop_low_original_entry_bound (lam : ℚ) (hlam : |(lam:ℝ)| < 1)
     (hu : lam ≠ 0 ∧ padicValRat p lam = 0)
     (hreg : VG p (lam^p/(1-lam^p)) 0)
@@ -142,7 +125,6 @@ theorem parameterTop_low_original_entry_bound (lam : ℚ) (hlam : |(lam:ℝ)| < 
   exact h.trans (pow_le_pow_of_le_one (norm_nonneg _)
     (PadicInt.norm_le_one (p:ℤ_[p]))
     (primeTop_low_cube_order hp4 a ha0 ha i c))
-
 
 theorem parameterOriginalBasis_low_cross_entry_bound (lam : ℚ) (hlam : |(lam:ℝ)| < 1)
     (hu : lam ≠ 0 ∧ padicValRat p lam = 0)
@@ -164,7 +146,6 @@ theorem parameterOriginalBasis_low_cross_entry_bound (lam : ℚ) (hlam : |(lam:�
   rw [primeOriginalBasis_eq_jet_of_index (by omega) I ⟨a,i⟩ hI,
     primeOriginalBasis_eq_jet_of_index (by omega) J ⟨b,j⟩ hJ]
   exact parameterLow_cross_original_entry_bound lam hlam hu hreg hz1 hp4 a b ha0 ha hb0 hb hab i j n
-
 
 theorem parameterOriginalBasis_top_low_entry_bound (lam : ℚ) (hlam : |(lam:ℝ)| < 1)
     (hu : lam ≠ 0 ∧ padicValRat p lam = 0)
@@ -396,12 +377,6 @@ def parameterOriginalNumeratorEntry (lam : ℚ) (p : ℕ) (hp3 : 3 ≤ p)
     (primeOriginalBasis p hp3 I * primeOriginalBasis p hp3 J).map
       (Int.castRingHom ℚ))
 
-lemma parameterOriginalNumeratorEntry_symm (lam : ℚ) (hp3 : 3 ≤ p)
-    (I J : Fin (2*(p-1))) :
-    parameterOriginalNumeratorEntry lam p hp3 I J = parameterOriginalNumeratorEntry lam p hp3 J I := by
-  unfold parameterOriginalNumeratorEntry
-  rw [mul_comm (primeOriginalBasis p hp3 I) (primeOriginalBasis p hp3 J)]
-
 theorem parameterOriginalBasis_low_cross_GV_strict (lam : ℚ) (hlam : |(lam:ℝ)| < 1)
     (hu : lam ≠ 0 ∧ padicValRat p lam = 0)
     (hreg : VG p (lam^p/(1-lam^p)) 0)
@@ -569,7 +544,6 @@ lemma parameterNormalizedMatrix_GV_of_original [Fact p.Prime] (lam : ℚ) (hp4 :
     norm_num
   simpa only [parameterNormalizedMatrix, zero_add] using! GV.C_mul (hx.mul hy) h
 
-
 end
 end Li2Unified.Proofs.PrimeEdge
 #print axioms Li2Unified.Proofs.PrimeEdge.parameterNormalizedMatrix_GV_of_original
@@ -623,6 +597,5 @@ end Li2Unified.Proofs.PrimeEdge
 #print axioms Li2Unified.Proofs.PrimeEdge.lowShapeVValue_norm_le_one
 
 end
-
 
 end

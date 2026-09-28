@@ -1,5 +1,7 @@
 module
-public import Li2Unified.Modular.Base.PrimeSmallTableSum
+public import Li2Unified.Modular.Base.PrimePowerTail
+public import Mathlib.Analysis.SpecificLimits.Basic
+public import Mathlib.Tactic.Ring
 
 set_option backward.privateInPublic true
 

@@ -21,7 +21,6 @@ noncomputable section
   out.putStrLn "NegativeLog: imports loaded"
   out.flush
 
-
 def negativeLog (x : ℝ) : ℝ := max (-Real.log x) 0
 
 lemma negativeLog_nonneg (x : ℝ) : 0 ≤ negativeLog x := le_max_right _ _
@@ -58,15 +57,6 @@ lemma integral_negativeLog : (∫ x : ℝ, negativeLog x) = 2 := by
 lemma integral_negativeLog_sub (a : ℝ) :
     (∫ x : ℝ, negativeLog (x-a)) = 2 := by
   rw [integral_sub_right_eq_self negativeLog a, integral_negativeLog]
-
-lemma setIntegral_negativeLog_sub_le (a : ℝ) (s : Set ℝ) :
-    (∫ x in s, negativeLog (x-a)) ≤ 2 := by
-  calc
-    _ ≤ ∫ x : ℝ, negativeLog (x-a) :=
-      setIntegral_le_integral (integrable_negativeLog.comp_sub_right a)
-        (Filter.Eventually.of_forall (fun x => negativeLog_nonneg (x-a)))
-    _ = 2 := integral_negativeLog_sub a
-
 
 #eval show IO Unit from do
   let out ← IO.getStdout
@@ -364,17 +354,9 @@ lemma comparisonEnergy_eq_integral_potential :
     comparisonEnergy = ∫ w : ℂ, comparisonPotential w ∂comparisonMeasure :=
   integral_prod_symm _ integrable_log_comparison_prod
 
-lemma comparisonEnergy_eq :
-    comparisonEnergy =
-      (layerData.map (fun s => (s.density : ℝ) *
-        ∫ x in s.left..s.right, comparisonPotential ((x:ℂ)*s.direction))).sum := by
-  rw [comparisonEnergy_eq_integral_potential]
-  exact integral_comparisonMeasure _ measurable_comparisonPotential integrable_comparisonPotential
-
 end
 end Li2Unified.Instances.PosHalf.LayerComparison
 
 end
-
 
 end

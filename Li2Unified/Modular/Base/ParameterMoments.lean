@@ -68,13 +68,6 @@ theorem parameterMoment_congr (p : ℕ) [Fact p.Prime] (z w r : ℚ)
 def parameterG (z : ℚ) (P : ℚ[X]) : ℚ :=
   P.sum fun k a => a * parameterMoment z k
 
-theorem parameterG_VG (p : ℕ) [Fact p.Prime] (z r : ℚ)
-    (hz : VG p (z/(1-z)) 0) (P : ℚ[X]) (hP : GV p P r) : VG p (parameterG z P) r := by
-  unfold parameterG Polynomial.sum
-  apply VG.sum
-  intro k _
-  simpa only [add_zero] using (hP k).mul (parameterMoment_VG p z hz k)
-
 end
 end Li2
 

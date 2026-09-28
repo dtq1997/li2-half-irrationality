@@ -60,7 +60,6 @@ theorem primitiveQ_proportional (lam : ℚ) (n : ℕ) :
   field_simp
   nlinarith [hco]
 
-
 def primitiveScale (lam : ℚ) (n : ℕ) : ℚ := (primitiveQ_proportional lam n).choose
 
 lemma primitiveScale_ne_zero (lam : ℚ) (n : ℕ) : primitiveScale lam n ≠ 0 :=
@@ -98,7 +97,6 @@ theorem P_isPrimitive (lam : ℚ) (n : ℕ) (hn : Q lam n ≠ 0) : (P lam n).IsP
     apply Polynomial.isPrimitive_iff_isUnit_of_C_dvd.mp (primitiveQ_isPrimitive lam n hn) r
     simpa using! hr
 
-
 def dtilde (lam : ℚ) (n : ℕ) : ℚ := d lam n / (Li2.Sn n ^ (2*n) / Li2.Fn n)
 
 lemma dtilde_pos (lam : ℚ) (n : ℕ) : 0 < dtilde lam n :=
@@ -114,42 +112,9 @@ theorem P_eq_dtilde_Qtilde (lam : ℚ) (n : ℕ) :
       rw [Qtilde, ← mul_assoc, ← C_mul, dtilde,
         div_mul_cancel₀ _ (Li2.Qtilde_scale_pos n).ne']
 
-lemma P_coeff_eq_dtilde (lam : ℚ) (n k : ℕ) :
-    ((P lam n).coeff k : ℚ) = dtilde lam n * (Qtilde lam n).coeff k := by
-  have h := congrArg (fun F : ℚ[X] => F.coeff k) (P_eq_dtilde_Qtilde lam n)
-  simpa only [coeff_map, coeff_C_mul] using! h
-
-lemma P_eq_zero_of_Q_eq_zero (lam : ℚ) (n : ℕ) (hn : Q lam n = 0) : P lam n = 0 := by
-  simp [P, primitiveQ, hn]
-
-lemma P_eq_zero_iff_Q_eq_zero (lam : ℚ) (n : ℕ) : P lam n = 0 ↔ Q lam n = 0 := by
-  constructor
-  · intro hP
-    have h := P_eq_d_Q lam n
-    rw [hP, Polynomial.map_zero] at h
-    have hd : (C (d lam n) : ℚ[X]) ≠ 0 := by
-      exact Polynomial.C_ne_zero.mpr (d_pos lam n).ne'
-    exact (mul_eq_zero.mp h.symm).resolve_left hd
-  · exact P_eq_zero_of_Q_eq_zero lam n
-
-lemma Qtilde_eq_zero_iff_Q_eq_zero (lam : ℚ) (n : ℕ) : Qtilde lam n = 0 ↔ Q lam n = 0 := by
-  rw [Qtilde, mul_eq_zero, C_eq_zero]
-  simp [(Li2.Qtilde_scale_pos n).ne']
-
-lemma P_eq_zero_iff_Qtilde_eq_zero (lam : ℚ) (n : ℕ) : P lam n = 0 ↔ Qtilde lam n = 0 :=
-  (P_eq_zero_iff_Q_eq_zero lam n).trans (Qtilde_eq_zero_iff_Q_eq_zero lam n).symm
-
 lemma P_isPrimitive_of_Qtilde_ne_zero (lam : ℚ) (n : ℕ) (hn : Qtilde lam n ≠ 0) :
     (P lam n).IsPrimitive :=
   P_isPrimitive lam n ((Qtilde_ne_zero_iff lam n).mp hn)
-
-theorem primitiveBinomial_zero_branch (lam : ℚ) (n : ℕ) (hn : Q lam n = 0) :
-    Qtilde lam n = 0 ∧ P lam n = 0 :=
-  ⟨(Qtilde_eq_zero_iff_Q_eq_zero lam n).mpr hn, P_eq_zero_of_Q_eq_zero lam n hn⟩
-
-lemma P_aeval_zero_of_Q_eq_zero (lam : ℚ) (n : ℕ) (hn : Q lam n = 0) (x : ℝ) :
-    aeval x (P lam n) = 0 := by
-  rw [P_eq_zero_of_Q_eq_zero lam n hn, map_zero]
 
 theorem P_aeval_eq_dtilde_Qtilde (lam : ℚ) (n : ℕ) (x : ℝ) :
     aeval x (P lam n) = (dtilde lam n : ℝ) * aeval x (Qtilde lam n) := by
@@ -162,24 +127,6 @@ lemma abs_P_aeval_eq_dtilde_Qtilde (lam : ℚ) (n : ℕ) (x : ℝ) :
     |aeval x (P lam n)| = (dtilde lam n : ℝ) * |aeval x (Qtilde lam n)| := by
   rw [P_aeval_eq_dtilde_Qtilde, abs_mul,
     abs_of_pos (show (0:ℝ) < (dtilde lam n : ℝ) by exact_mod_cast dtilde_pos lam n)]
-
-
- theorem primitiveQ_negHalf (n : ℕ) : primitiveQ (-1/2) n = Li2.primitiveQ n := by
-  unfold primitiveQ Li2.primitiveQ
-  rw [Q_negHalf]
-
- theorem primitiveScale_negHalf (n : ℕ) : primitiveScale (-1/2) n = Li2.primitiveScale n := by
-  unfold primitiveScale Li2.primitiveScale
-  congr 1 <;> simp only [primitiveQ_negHalf, Q_negHalf]
-
- theorem P_negHalf (n : ℕ) : P (-1/2) n = Li2.P n := by
-  simp only [P, Li2.P, primitiveScale_negHalf, primitiveQ_negHalf]
-
- theorem d_negHalf (n : ℕ) : d (-1/2) n = Li2.d n := by
-  simp only [d, Li2.d, primitiveScale_negHalf]
-
- theorem dtilde_negHalf (n : ℕ) : dtilde (-1/2) n = Li2.dtilde n := by
-  simp only [dtilde, Li2.dtilde, d_negHalf]
 
  theorem Qtilde_coeff_valuation_minimum (lam : ℚ) (p : ℕ) [Fact p.Prime] {n : ℕ}
     (hn : Qtilde lam n ≠ 0) :
@@ -195,6 +142,5 @@ end
 end Li2Unified.ParameterFamily
 
 end
-
 
 end

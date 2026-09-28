@@ -89,18 +89,6 @@ lemma continuous_lowerLeftIntegrand (d : ℕ) (F : ℚ[X]) :
   rw [heq]
   exact hc
 
-lemma continuous_plainLeftIntegrand (d : ℕ) (F : ℚ[X]) :
-    Continuous (fun y : ℝ => plainIntegrand d F (point ⟨1, by decide⟩ y)) := by
-  rw [show (fun y : ℝ => plainIntegrand d F (point ⟨1, by decide⟩ y)) =
-      (fun y : ℝ => power (Li2.originalContourPoint y) *
-        deriv (Li2.originalContourG d F) (Li2.originalContourPoint y)) by
-      funext y; rw [point_up]; rfl]
-  have hp : Continuous (fun y : ℝ => power (Li2.originalContourPoint y)) := by
-    unfold power
-    exact Complex.continuous_exp.comp
-      (continuous_const.mul Li2.continuous_originalContourPoint)
-  exact hp.mul (continuous_vertical_G_deriv d F)
-
 def upperLeftLowerIntegral (d : ℕ) (F : ℚ[X]) (T : ℝ) : ℂ :=
   ∫ y : ℝ in (-T)..0,
     (power (point ⟨1, by decide⟩ y) * kappaPlus (point ⟨1, by decide⟩ y)) *
@@ -162,6 +150,5 @@ end
 end Li2Unified.Proofs.Contour
 
 end
-
 
 end

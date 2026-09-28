@@ -133,48 +133,6 @@ lemma originalContour_sineZero_in_Icc (N : ℕ) {z : ℂ}
   have hmN : m < N + 1 := by exact_mod_cast hmNR
   exact ⟨m, Finset.mem_Icc.mpr ⟨by omega, by omega⟩, hzm⟩
 
-def originalContourPatchedRemainder (d : ℕ) (F : ℚ[X]) (N : ℕ) : ℂ → ℂ :=
-  originalKernelFinitePatchedRemainder (Finset.Icc 1 N) (deriv (originalContourG d F))
-
-lemma analyticAt_originalContourPatchedRemainder (d : ℕ) (F : ℚ[X]) (N : ℕ)
-    {z : ℂ} (hz : 0 < z.re) (hzN : z.re < (N : ℝ) + 1) :
-    AnalyticAt ℂ (originalContourPatchedRemainder d F N) z := by
-  by_cases hs : Complex.sin ((Real.pi : ℂ) * z) = 0
-  · obtain ⟨m, hm, rfl⟩ := originalContour_sineZero_in_Icc N hz hzN hs
-    exact analyticAt_originalKernelFinitePatchedRemainder_nat _ _ m hm
-      (analyticAt_originalContourG_deriv d F hz)
-  · exact analyticAt_originalKernelFinitePatchedRemainder_off_poles _ _
-      (analyticAt_originalContourG_deriv d F hz) hs
-
-lemma continuousOn_originalContourPatchedRemainder_rectangle
-    (d : ℕ) (F : ℚ[X]) (N : ℕ) (a b : ℂ)
-    (ha : 0 < min a.re b.re) (hb : max a.re b.re < (N : ℝ) + 1) :
-    ContinuousOn (originalContourPatchedRemainder d F N)
-      ([[a.re, b.re]] ×ℂ [[a.im, b.im]]) := by
-  intro z hz
-  have hzr : min a.re b.re ≤ z.re ∧ z.re ≤ max a.re b.re := hz.1
-  exact (analyticAt_originalContourPatchedRemainder d F N
-    (lt_of_lt_of_le ha hzr.1) (lt_of_le_of_lt hzr.2 hb)).continuousAt.continuousWithinAt
-
-lemma differentiableAt_originalContourPatchedRemainder_rectangle
-    (d : ℕ) (F : ℚ[X]) (N : ℕ) (a b : ℂ)
-    (ha : 0 < min a.re b.re) (hb : max a.re b.re < (N : ℝ) + 1)
-    {z : ℂ}
-    (hz : z ∈ Set.Ioo (min a.re b.re) (max a.re b.re) ×ℂ
-      Set.Ioo (min a.im b.im) (max a.im b.im)) :
-    DifferentiableAt ℂ (originalContourPatchedRemainder d F N) z := by
-  exact (analyticAt_originalContourPatchedRemainder d F N
-    (lt_trans ha hz.1.1) (lt_trans hz.1.2 hb)).differentiableAt
-
-lemma boundaryIntegral_originalContourPatchedRemainder_eq_zero
-    (d : ℕ) (F : ℚ[X]) (N : ℕ) (a b : ℂ)
-    (ha : 0 < min a.re b.re) (hb : max a.re b.re < (N : ℝ) + 1) :
-    Complex.boundaryIntegral (originalContourPatchedRemainder d F N) a b = 0 := by
-  apply Complex.boundaryIntegral_eq_zero_of_diffOn (s := ∅) Set.countable_empty
-  · exact continuousOn_originalContourPatchedRemainder_rectangle d F N a b ha hb
-  · intro z hz
-    exact differentiableAt_originalContourPatchedRemainder_rectangle d F N a b ha hb hz.1
-
 lemma rectangle_continuousOn_horizontal_intervalIntegrable
     {h : ℂ → ℂ} {a b : ℂ}
     (hh : ContinuousOn h ([[a.re, b.re]] ×ℂ [[a.im, b.im]]))
@@ -198,57 +156,6 @@ lemma rectangle_continuousOn_vertical_intervalIntegrable
   apply hh.comp hp.continuousOn
   intro y hy
   simpa [Complex.mem_reProdIm] using And.intro hc hy
-
-lemma intervalIntegrable_originalContourPatchedRemainder_rectangle_edges
-    (d : ℕ) (F : ℚ[X]) (N : ℕ) (a b : ℂ)
-    (ha : 0 < min a.re b.re) (hb : max a.re b.re < (N : ℝ) + 1) :
-    IntervalIntegrable
-      (fun x : ℝ => originalContourPatchedRemainder d F N (x + a.im * Complex.I))
-      volume a.re b.re ∧
-    IntervalIntegrable
-      (fun x : ℝ => originalContourPatchedRemainder d F N (x + b.im * Complex.I))
-      volume a.re b.re ∧
-    IntervalIntegrable
-      (fun y : ℝ => originalContourPatchedRemainder d F N (b.re + y * Complex.I))
-      volume a.im b.im ∧
-    IntervalIntegrable
-      (fun y : ℝ => originalContourPatchedRemainder d F N (a.re + y * Complex.I))
-      volume a.im b.im := by
-  have hc := continuousOn_originalContourPatchedRemainder_rectangle d F N a b ha hb
-  exact ⟨rectangle_continuousOn_horizontal_intervalIntegrable hc left_mem_uIcc,
-    rectangle_continuousOn_horizontal_intervalIntegrable hc right_mem_uIcc,
-    rectangle_continuousOn_vertical_intervalIntegrable hc right_mem_uIcc,
-    rectangle_continuousOn_vertical_intervalIntegrable hc left_mem_uIcc⟩
-
-def originalContourPatchedIntegrand (d : ℕ) (F : ℚ[X]) (N : ℕ) (z : ℂ) : ℂ :=
-  (∑ m ∈ Finset.Icc 1 N,
-    ((-1 / 2 : ℂ) ^ m * deriv (originalContourG d F) (m : ℂ)) * (z - (m : ℂ))⁻¹) +
-    originalContourPatchedRemainder d F N z
-
-lemma originalContourPatchedIntegrand_eq_off_poles
-    (d : ℕ) (F : ℚ[X]) (N : ℕ) {z : ℂ}
-    (hz : ∀ m ∈ Finset.Icc 1 N, z ≠ (m : ℂ)) :
-    originalContourPatchedIntegrand d F N z =
-      originalContourKernel z * deriv (originalContourG d F) z := by
-  unfold originalContourPatchedIntegrand originalContourPatchedRemainder
-  rw [originalKernelFinitePatchedRemainder_eq_raw _ _ hz]
-  unfold originalKernelFiniteRawRemainder
-  simp only [div_eq_mul_inv]
-  ring
-
-lemma originalContourPatchedIntegrand_eq_on_rectangle_boundary
-    (d : ℕ) (F : ℚ[X]) (N : ℕ) (a b : ℂ)
-    (hre : ∀ m ∈ Finset.Icc 1 N, (m : ℝ) ∈ Set.Ioo a.re b.re)
-    (hbot : a.im < 0) (htop : 0 < b.im) {z : ℂ}
-    (hz : z.re = a.re ∨ z.re = b.re ∨ z.im = a.im ∨ z.im = b.im) :
-    originalContourPatchedIntegrand d F N z =
-      originalContourKernel z * deriv (originalContourG d F) z := by
-  apply originalContourPatchedIntegrand_eq_off_poles
-  intro m hm he
-  have hmR := hre m hm
-  rw [he] at hz
-  simp only [Complex.natCast_re, Complex.natCast_im] at hz
-  rcases hz with h | h | h | h <;> linarith [hmR.1, hmR.2]
 
 end
 end Li2

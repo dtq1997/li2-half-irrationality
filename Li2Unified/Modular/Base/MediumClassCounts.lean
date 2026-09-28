@@ -39,22 +39,6 @@ lemma Ccl_eq_quot_rem {p K c q r : ℕ} (hp : 0 < p) (hc : c < p)
             omega
         rw [hd]
 
-lemma Ncl_eq_quot_rem {p n c q r : ℕ} (hp : 0 < p) (hc : c < p)
-    (hr : r < p) (hn : n = q * p + r) :
-    Ncl p n c = q + if c < r then 1 else 0 := by
-  change Ccl p n c = _
-  exact Ccl_eq_quot_rem hp hc hr hn
-
-lemma Ccl_eq_div_mod {p K c : ℕ} (hp : 0 < p) (hc : c < p) :
-    Ccl p K c = K / p + if c < K % p then 1 else 0 := by
-  apply Ccl_eq_quot_rem hp hc (Nat.mod_lt K hp)
-  simpa [mul_comm] using (Nat.div_add_mod K p).symm
-
-lemma Ncl_eq_div_mod {p n c : ℕ} (hp : 0 < p) (hc : c < p) :
-    Ncl p n c = n / p + if c < n % p then 1 else 0 := by
-  change Ccl p n c = _
-  exact Ccl_eq_div_mod hp hc
-
 lemma sum_range_ite_lt_rat {p r : ℕ} (hr : r ≤ p) (A B : ℚ) :
     (∑ c ∈ Finset.range p, if c < r then A else B) =
       (r : ℚ) * A + ((p - r : ℕ) : ℚ) * B := by

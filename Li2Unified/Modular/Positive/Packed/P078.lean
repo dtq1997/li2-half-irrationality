@@ -195,40 +195,9 @@ lemma upperRightIntegral_norm_le (d : ℕ) (F : ℚ[X]) (N : ℕ) (T : ℝ)
   rw [hlen] at h
   convert h using 1; ring
 
-theorem upperRightIntegral_tendsto_zero (d : ℕ) (F : ℚ[X]) (T : ℝ)
-    (hT : 0 ≤ T) : Tendsto (fun N : ℕ => upperRightIntegral d F N T) atTop (𝓝 0) := by
-  let C : ℝ := Li2.originalCoefficientNormSum (Li2.originalContourGDerivativeNumerator d F)
-  let k : ℕ := (Li2.originalContourGDerivativeNumerator d F).natDegree
-  have hdecay := Li2.originalRightDecay_tendsto_zero k
-  have hlim : Tendsto
-      (fun N : ℕ => (2 * T * C * (1 + T) ^ k) *
-        ((1 + (N : ℝ)) ^ k * (1 / 2 : ℝ) ^ N)) atTop (𝓝 0) := by
-    simpa only [mul_zero] using! hdecay.const_mul (2 * T * C * (1 + T) ^ k)
-  apply squeeze_zero_norm' _ hlim
-  filter_upwards [] with N
-  have hC : 0 ≤ C := Li2.originalRightCoefficientNormSum_nonneg _
-  have hshift : 1 + (N : ℝ) + T ≤ (1 + T) * (1 + (N : ℝ)) := by
-    have hN : 0 ≤ (N : ℝ) := Nat.cast_nonneg N
-    nlinarith
-  have hpow : (1 + (N : ℝ) + T) ^ k ≤
-      (1 + T) ^ k * (1 + (N : ℝ)) ^ k := by
-    calc
-      _ ≤ ((1 + T) * (1 + (N : ℝ))) ^ k :=
-        pow_le_pow_left₀ (by positivity) hshift k
-      _ = _ := mul_pow _ _ _
-  calc
-    ‖upperRightIntegral d F N T‖ ≤
-        (2 * T) * ((1 / 2 : ℝ) ^ N * C * (1 + (N : ℝ) + T) ^ k) :=
-      upperRightIntegral_norm_le d F N T hT
-    _ ≤ (2 * T) * ((1 / 2 : ℝ) ^ N * C *
-        ((1 + T) ^ k * (1 + (N : ℝ)) ^ k)) := by gcongr
-    _ = (2 * T * C * (1 + T) ^ k) *
-        ((1 + (N : ℝ)) ^ k * (1 / 2 : ℝ) ^ N) := by ring
-
 end
 end Li2Unified.Proofs.Contour
 
 end
-
 
 end

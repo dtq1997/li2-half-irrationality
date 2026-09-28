@@ -45,14 +45,6 @@ theorem Qtilde_coeff_valuation_minimum (p : ℕ) [Fact p.Prime] {n : ℕ}
   primitive_scale_coeff_valuation_minimum p (P n) (P_isPrimitive_of_Qtilde_ne_zero n hn)
     (Qtilde n) (dtilde n) (dtilde_ne_zero n) (P_eq_dtilde_Qtilde n)
 
-theorem dtilde_padicVal_le_neg_GV (p : ℕ) [Fact p.Prime] {n : ℕ}
-    (hn : Qtilde n ≠ 0) {r : ℚ} (hbound : GV p (Qtilde n) r) :
-    (padicValRat p (dtilde n) : ℚ) ≤ -r := by
-  obtain ⟨k, hk, hval, _⟩ := Qtilde_coeff_valuation_minimum p hn
-  have h := (hbound k).resolve_left hk
-  rw [hval, Int.cast_neg] at h
-  linarith
-
 end
 end Li2
 

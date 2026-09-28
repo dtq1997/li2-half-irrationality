@@ -64,37 +64,6 @@ def primeDiscTestResidue (hp4 : 3 < p) (a : Fin p) (T : ℤ[X]) : Fin 4 → ℤ_
   integralPoleMulResidue (primePoleCenters p) (integralDiscTestPolynomial T a : PowerSeries ℤ_[p])
     (primeDiscResidue hp4 a)
 
-lemma primeDiscTestRegular_isRestricted (hp4 : 3 < p) (a : Fin p) (T : ℤ[X]) :
-    PowerSeries.IsRestricted 1 (primeDiscTestRegular hp4 a T) :=
-  integralPoleMulRegular_isRestricted _ _ _ (polynomial_isRestricted _)
-    (primeDiscRegular_isRestricted hp4 a) _
-
-theorem numeratorPulledValue_all_integer_tests (hp4 : 3 < p) (Y : ℚ_[p])
-    (a : Fin p) (T : ℤ[X]) :
-    primeDiscScale a * numeratorPulledValue (by omega : p ≠ 2) (by omega : p ≠ 3)
-      Y (4*(p-1)) ((D (p-1))^3*T.map (Int.castRingHom ℚ)) a =
-      (primePoleU hp4 (primeDiscTestRegular hp4 a T) (primeDiscTestResidue hp4 a T)).eval₂
-        (algebraMap ℤ_[p] ℚ_[p]) Y - (a.val:ℚ_[p])/(p:ℚ_[p]) *
-      (primePoleV hp4 (primeDiscTestRegular hp4 a T) (primeDiscTestResidue hp4 a T)).eval₂
-        (algebraMap ℤ_[p] ℚ_[p]) Y :=
-  numeratorPulledValue_integer_test hp4 Y (4*(p-1)) (by omega) ((D (p-1))^3) a
-    (primeDiscScale a) (primeDiscRegular hp4 a) (primeDiscRegular_isRestricted hp4 a)
-    (primeDiscResidue hp4 a) (original_disc_integral_cleared hp4 a) T
-
-theorem numeratorPulledValue_original_basis (hp4 : 3 < p) (Y : ℚ_[p])
-    (a : Fin p) (i j : Fin (2*(p-1))) :
-    let T := primeOriginalBasis p (by omega) i * primeOriginalBasis p (by omega) j
-    primeDiscScale a * numeratorPulledValue (by omega : p ≠ 2) (by omega : p ≠ 3)
-      Y (4*(p-1)) ((D (p-1))^3 *
-        (primeOriginalBasis p (by omega) i).map (Int.castRingHom ℚ) *
-        (primeOriginalBasis p (by omega) j).map (Int.castRingHom ℚ)) a =
-      (primePoleU hp4 (primeDiscTestRegular hp4 a T) (primeDiscTestResidue hp4 a T)).eval₂
-        (algebraMap ℤ_[p] ℚ_[p]) Y - (a.val:ℚ_[p])/(p:ℚ_[p]) *
-      (primePoleV hp4 (primeDiscTestRegular hp4 a T) (primeDiscTestResidue hp4 a T)).eval₂
-        (algebraMap ℤ_[p] ℚ_[p]) Y := by
-  simpa only [Polynomial.map_mul, mul_assoc] using numeratorPulledValue_all_integer_tests hp4 Y a
-    (primeOriginalBasis p (by omega) i * primeOriginalBasis p (by omega) j)
-
 end
 end Li2
 

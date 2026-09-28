@@ -55,29 +55,6 @@ lemma highShapeResidue_integral (k : Fin 3) (j : Fin 4) :
   · simpa [highShapeResidue] using (VG.intCast (p := p) (-4)).mul (hint (-2))
   · simpa [highShapeResidue] using VG.zero (p := p) 0
 
-theorem zeroShape_U_prime_values (hp4 : 3 < p) (k : Fin 5) :
-    VG p ((rationalPoleU (primeParameter p) (zeroShapeRegular k) (zeroShapeResidue k)).eval 0 -
-      ![-113/12,95/4,-253/4,2093/12,-17773/36] k) 1 := by
-  have h := rationalPoleU_prime_congr hp4 _ _ (zeroShapeRegular_integral k)
-    (zeroShapeResidue_integral hp4 k)
-  simpa only [coeff_sub, coeff_zero_eq_eval_zero, eval_sub, zeroShape_U_values] using h 0
-
-theorem lowShape_V_prime_values (hp4 : 3 < p) (k : Fin 3) :
-    VG p ((rationalPoleV (primeParameter p)
-      (zeroShapeRegular ⟨k.val+2,by omega⟩) (zeroShapeResidue ⟨k.val+2,by omega⟩)).eval 0 -
-      ![95/4,-253/4,2093/12] k) 1 := by
-  have h := rationalPoleV_prime_congr hp4 _ _
-    (zeroShapeRegular_integral (⟨k.val+2,by omega⟩ : Fin 5))
-    (zeroShapeResidue_integral hp4 ⟨k.val+2,by omega⟩)
-  simpa only [coeff_sub, coeff_zero_eq_eval_zero, eval_sub, lowShape_V_values] using h 0
-
-theorem highShape_V_prime_values (hp4 : 3 < p) (k : Fin 3) :
-    VG p ((rationalPoleV (primeParameter p) (highShapeRegular k) (highShapeResidue k)).eval 0 -
-      ![8,-46/3,266/9] k) 1 := by
-  have h := rationalPoleV_prime_congr hp4 _ _ (highShapeRegular_integral k)
-    (highShapeResidue_integral (p := p) k)
-  simpa only [coeff_sub, coeff_zero_eq_eval_zero, eval_sub, highShape_V_values] using h 0
-
 end
 end Li2
 

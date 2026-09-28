@@ -153,96 +153,9 @@ open Li2Unified.Stage0.HermitePreparation
 open Filter Finset
 open scoped BigOperators
 
-/-- The full `ε` medium-prime rate follows by choosing one finite reciprocal
-cutoff after `ε`. Only the actual Gram estimate remains a premise. -/
-theorem posHalf_medium_eventually_of_gram (ε : ℝ) (hε : 0 < ε) :
-    ∀ᶠ n : ℕ in atTop,
-      (∀ p ∈ (Finset.range (n+1)).filter (fun p => p.Prime ∧ 5 ≤ p),
-        ∀ hp : p.Prime,
-          letI : Fact p.Prime := ⟨hp⟩
-          Li2.GV p (binomGram lambda n).det (normalizedDetLower n p)) →
-      Instances.PosHalf.Qtilde n ≠ 0 →
-        ((-523/840:ℝ)-ε)*(n:ℝ)^2 ≤
-          ∑ p ∈ (Finset.range (n+1)).filter (fun p => p.Prime ∧ 5 ≤ p),
-            ((-padicValRat p (dtilde lambda n) : ℤ) : ℝ)*Real.log (p:ℝ) := by
-  obtain ⟨N, hN, hδ0raw, hδ1raw, hδbudgetRaw⟩ :=
-    exists_finite_cutoff ε hε
-  let δ : ℝ := 1/((N:ℝ)+1)
-  have hδ0 : 0 < δ := by
-    simpa only [δ, Nat.cast_add, Nat.cast_one] using! hδ0raw
-  have hδ1 : δ ≤ 1 := by
-    simpa only [δ, Nat.cast_add, Nat.cast_one] using! hδ1raw
-  have hδbudget : 4*δ < ε/2 := by
-    simpa only [δ, Nat.cast_add, Nat.cast_one, mul_one_div] using! hδbudgetRaw
-  have hε4 : 0 < ε/4 := by linarith
-  have hsmall := posHalf_smallTail_eventually_delta δ (ε/4)
-    hδ0 hδ1 hε4
-  have hmedium := parameter_mediumN_eventually lambda N hN (ε/4) hε4
-  filter_upwards [hsmall, hmedium,
-    eventually_ge_atTop (4*(N+1))] with n hs hm hn
-  intro hgram hne
-  let c := ⌊δ*(n:ℝ)⌋₊
-  have hc4 : 4 ≤ c := by
-    apply (Nat.le_floor_iff (mul_nonneg hδ0.le (Nat.cast_nonneg n))).mpr
-    have hnR : (4:ℝ)*((N:ℝ)+1) ≤ (n:ℝ) := by
-      have := (Nat.cast_le (α := ℝ)).mpr hn
-      push_cast at this
-      nlinarith
-    dsimp [δ]
-    have hden : (0:ℝ) < (N:ℝ)+1 := by positivity
-    calc
-      (4:ℝ) = 4*((N:ℝ)+1)/((N:ℝ)+1) := by field_simp
-      _ ≤ ((n:ℝ))/((N:ℝ)+1) :=
-        div_le_div_of_nonneg_right hnR hden.le
-      _ = (1/((N:ℝ)+1))*(n:ℝ) := by ring
-  have hcn : c ≤ n := by
-    have hle : δ*(n:ℝ) ≤ (n:ℝ) := by
-      have hnR : (0:ℝ) ≤ (n:ℝ) := Nat.cast_nonneg _
-      nlinarith [hδ1]
-    have := Nat.floor_le_floor hle
-    simpa only [Nat.floor_natCast] using! this
-  let f : ℕ → ℝ := fun p =>
-    ((-padicValRat p (dtilde lambda n) : ℤ) : ℝ)*Real.log (p:ℝ)
-  have hpart := medium_prime_two_interval_partition f n c hc4 hcn
-  have hsmallEq :
-      (∑ p ∈ Finset.Ioc 4 c, if p.Prime then f p else 0) =
-      ∑ p ∈ smallTailPrimes δ n,
-        if p.Prime then f p else 0 := by
-    change (∑ p ∈ Finset.Ioc 4 c, if p.Prime then f p else 0) =
-      ∑ p ∈ (Finset.Ioc 4 c).filter Nat.Prime,
-        if p.Prime then f p else 0
-    rw [Finset.sum_filter]
-    apply Finset.sum_congr rfl
-    intro p _
-    by_cases hp : p.Prime <;> simp [hp]
-  have hgramN : ∀ p ∈ Finset.Ioc c n, ∀ hp : p.Prime,
-      letI : Fact p.Prime := ⟨hp⟩
-      Li2.GV p (binomGram lambda n).det (normalizedDetLower n p) := by
-    intro p hpI hp
-    apply hgram p
-    · simp only [Finset.mem_filter, Finset.mem_range]
-      obtain ⟨hpc, hpn⟩ := Finset.mem_Ioc.mp hpI
-      exact ⟨by omega, ⟨hp, by omega⟩⟩
-    · exact hp
-  have hs' := hs hne
-  have hm' := hm (by omega : 0 < n)
-    (by simpa only [Instances.PosHalf.Qtilde] using! hne) hgramN
-  have hbudget : (-523/840:ℝ)-ε ≤
-      ((-523/840:ℝ)+(2/3:ℝ)/((N+1:ℕ):ℝ)^2-ε/4) +
-      (-4*δ-ε/4) := by
-    have hcorr : (0:ℝ) ≤ (2/3:ℝ)/((N+1:ℕ):ℝ)^2 := by positivity
-    linarith
-  have hbudgetN := mul_le_mul_of_nonneg_right hbudget (sq_nonneg (n:ℝ))
-  rw [hpart, hsmallEq]
-  dsimp only [f] at hs' hm' ⊢
-  linarith
-
 end
 end Li2Unified.Proofs.Arithmetic
 
-#print axioms Li2Unified.Proofs.Arithmetic.posHalf_medium_eventually_of_gram
-
 end
-
 
 end

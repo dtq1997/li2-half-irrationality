@@ -1,6 +1,6 @@
 module
 public import Li2Unified.Modular.Positive.Packed.P054
-public import Li2Unified.Modular.Base.PrimeMonomialScaledLeading
+public import Li2Unified.Modular.Base.PrimeMonomialLeading
 public import Li2Unified.Modular.Positive.Packed.P053
 public import Li2Unified.Modular.Base.PrimeActualLowLeading
 public import Li2Unified.Modular.Base.PrimeOtherDiscBounds
@@ -8,7 +8,6 @@ public import Li2Unified.Modular.Positive.Packed.P017
 public import Li2Unified.Modular.Base.PrimeOriginalLocalBasis
 public import Li2Unified.Modular.Positive.Packed.P022
 public import Li2Unified.Modular.Base.PrimeGlobalDissection
-public import Li2Unified.Modular.Base.PrimeOtherContribution
 
 set_option backward.privateInPublic true
 

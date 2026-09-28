@@ -108,47 +108,9 @@ namespace Li2Unified.Proofs.Contour
 noncomputable section
 open Li2Unified.Stage0.HalfAnalytic
 
-private lemma polynomial_exponential_decay (k : ℕ) :
-    Tendsto (fun T : ℝ => T ^ k * Real.exp (-(2 * Real.pi) * T))
-      atTop (𝓝 0) := by
-  simpa only [Real.rpow_natCast] using!
-    tendsto_rpow_mul_exp_neg_mul_atTop_nhds_zero
-      (k : ℝ) (2 * Real.pi) (by positivity)
-
-lemma upper_kernel_polynomial_decay (k : ℕ) :
-    Tendsto (fun T : ℝ => (T : ℂ) ^ k *
-      kappaPlus (point ⟨1, by decide⟩ T)) atTop (𝓝 0) := by
-  apply squeeze_zero_norm' _ (polynomial_exponential_decay k)
-  filter_upwards [eventually_ge_atTop (0 : ℝ)] with T hT
-  have hp : 0 ≤ T ^ k := pow_nonneg hT _
-  calc
-    ‖(T : ℂ) ^ k * kappaPlus (point ⟨1, by decide⟩ T)‖ =
-        T ^ k * ‖kappaPlus (point ⟨1, by decide⟩ T)‖ := by
-      rw [norm_mul, norm_pow, Complex.norm_real, Real.norm_eq_abs,
-        abs_of_nonneg hT]
-    _ ≤ T ^ k * Real.exp (-2 * Real.pi * T) :=
-      mul_le_mul_of_nonneg_left (kappaPlus_upper_norm_le T) hp
-    _ = T ^ k * Real.exp (-(2 * Real.pi) * T) := by ring
-
-lemma lower_kernel_polynomial_decay (k : ℕ) :
-    Tendsto (fun T : ℝ => (T : ℂ) ^ k *
-      kappaMinus (point ⟨2, by decide⟩ T)) atTop (𝓝 0) := by
-  apply squeeze_zero_norm' _ (polynomial_exponential_decay k)
-  filter_upwards [eventually_ge_atTop (0 : ℝ)] with T hT
-  have hp : 0 ≤ T ^ k := pow_nonneg hT _
-  calc
-    ‖(T : ℂ) ^ k * kappaMinus (point ⟨2, by decide⟩ T)‖ =
-        T ^ k * ‖kappaMinus (point ⟨2, by decide⟩ T)‖ := by
-      rw [norm_mul, norm_pow, Complex.norm_real, Real.norm_eq_abs,
-        abs_of_nonneg hT]
-    _ ≤ T ^ k * Real.exp (-2 * Real.pi * T) :=
-      mul_le_mul_of_nonneg_left (kappaMinus_lower_norm_le T) hp
-    _ = T ^ k * Real.exp (-(2 * Real.pi) * T) := by ring
-
 end
 end Li2Unified.Proofs.Contour
 
 end
-
 
 end

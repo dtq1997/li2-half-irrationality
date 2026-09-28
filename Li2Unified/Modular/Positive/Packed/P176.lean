@@ -86,19 +86,6 @@ theorem checkPart_sound {steps : List Step} {p : Prepared}
   | tangent mn mi dn di => exact checkTangent_sound hp hc hx
   | cross outer u rho k => exact checkCross_sound hc hx
 
-theorem checkParts_length {p : Prepared} {a b : QPair}
-    {terms : List Term} {parts : List PartCert}
-    (hc : checkParts p a b terms parts = true) :
-    terms.length = parts.length := by
-  induction terms generalizing parts with
-  | nil => cases parts <;> simp_all [checkParts]
-  | cons t ts ih =>
-      cases parts with
-      | nil => simp [checkParts] at hc
-      | cons c cs =>
-          simp only [checkParts, Bool.and_eq_true] at hc
-          simpa only [List.length_cons] using! congrArg Nat.succ (ih hc.2)
-
 theorem checkParts_coeff_valid {p : Prepared} {a b : QPair}
     {terms : List Term} {parts : List PartCert}
     (hc : checkParts p a b terms parts = true) :
@@ -279,6 +266,5 @@ end Li2Unified.Proofs.Potential.CompactAffine
 #print axioms Li2Unified.Proofs.Potential.CompactAffine.checkAll_cover_sound
 
 end
-
 
 end

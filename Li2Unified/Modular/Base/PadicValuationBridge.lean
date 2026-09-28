@@ -28,11 +28,6 @@ theorem VG_iff_padic_norm_le (q r : ℚ) :
       Real.rpow_le_rpow_left_iff (by exact_mod_cast hp.out.one_lt), neg_le_neg_iff]
     norm_cast
 
-theorem VG_of_integral_padic_value (q : ℚ) (x : ℤ_[p]) (he : (q:ℚ_[p]) = (x:ℚ_[p])) :
-    VG p q 0 := by
-  rw [VG_iff_padic_norm_le, he]
-  simpa using PadicInt.norm_le_one x
-
 end Li2
 
 end

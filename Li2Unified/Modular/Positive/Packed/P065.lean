@@ -45,7 +45,6 @@ theorem parameterTop_fixed_entry_leading (lam : ℚ) (hlam : |(lam:ℝ)| < 1)
   exact (IsUltrametricDist.norm_add_le_max _ _).trans
     (max_le (parameterTop_original_entry_leading lam hlam hu hone hferm hp4 n) hnew)
 
-
 end
 end Li2Unified.Proofs.PrimeEdge
 #print axioms Li2Unified.Proofs.PrimeEdge.parameterTop_fixed_entry_leading
@@ -82,7 +81,6 @@ theorem parameterTop_block_scaled_GV (lam : ℚ) (hlam : |(lam:ℝ)| < 1)
   norm_num only [show (1/2:ℚ)+(1/2:ℚ)+1 = 2 by norm_num]
   simpa only [neg_div, show ((4:ℕ):ℤ)-3 = 1 by norm_num, zpow_one,
     show ((4:ℕ):ℚ)-2 = 2 by norm_num] using! h
-
 
 end
 end Li2Unified.Proofs.PrimeEdge
@@ -294,17 +292,6 @@ theorem parameterEntryReference_entry_GV (lam : ℚ) (hlam : |(lam:ℝ)| < 1)
   · exact parameterEntryReference_GV_swap lam hlam hu hone hferm hp4 (parameterEntryReference_low_edge_GV lam hlam hu hone hferm hp4 b j k)
   · exact (parameterEntryReference_edge_GV lam hlam hu hone hferm hp4 k l).mono (by linarith)
 
-theorem parameterEntryReference_entry_strict (lam : ℚ) (hlam : |(lam:ℝ)| < 1)
-    (hu : lam ≠ 0 ∧ padicValRat p lam = 0)
-    (hone : 1-lam ≠ 0 ∧ padicValRat p (1-lam) = 0)
-    (hferm : VG p (lam^p-lam) 1) (hp4 : 3 < p)
-    (x y : PrimeBlockIndex p) (n : ℕ) :
-    (parameterNormalizedMatrix lam hp4 x y-parameterEntryReferenceMatrix lam p x y).coeff n = 0 ∨
-      primeBlockWeight x+primeBlockWeight y <
-        (padicValRat p ((parameterNormalizedMatrix lam hp4 x y-parameterEntryReferenceMatrix lam p x y).coeff n):ℚ) :=
-  (parameterEntryReference_entry_GV lam hlam hu hone hferm hp4 x y).strict_coeff_of_margin (by norm_num) n
-
-
 theorem parameterEntryReference_literal (lam : ℚ) (p : ℕ)
     (x y : PrimeBlockIndex p) :
     parameterEntryReferenceMatrix lam p x y = C ((p:ℚ)^
@@ -428,6 +415,5 @@ end Li2Unified.Proofs.PrimeEdge
 #print axioms Li2Unified.Proofs.PrimeEdge.parameterReferenceMatrix_GV_of_block_bounds
 
 end
-
 
 end

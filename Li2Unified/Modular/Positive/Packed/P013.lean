@@ -256,28 +256,6 @@ def parameterFourPoleV (z : ℚ) (hu : z ≠ 0 ∧ padicValRat p z = 0)
     (derivativeMoments (integralParameterMoment z hreg))
     (fun j : Fin 4 => integralVPole z hu.1 hu.2 j.val (by omega)) f r
 
-theorem parameterFourPoleU_regular (z : ℚ) (hu : z ≠ 0 ∧ padicValRat p z = 0)
-    (hreg : VG p (z/(1-z)) 0) (hp4 : 3 < p) (f : PowerSeries ℤ_[p]) :
-    parameterFourPoleU z hu hreg hp4 f 0 = C (restrictedU
-      (integralParameterMoment z hreg) f) :=
-  restrictedPoleFunctional_regular _ _ _
-
-theorem parameterFourPoleV_regular (z : ℚ) (hu : z ≠ 0 ∧ padicValRat p z = 0)
-    (hreg : VG p (z/(1-z)) 0) (hp4 : 3 < p) (f : PowerSeries ℤ_[p]) :
-    parameterFourPoleV z hu hreg hp4 f 0 = C (restrictedV
-      (integralParameterMoment z hreg) f) :=
-  restrictedPoleFunctional_regular _ _ _
-
-theorem parameterFourPoleU_single (z : ℚ) (hu : z ≠ 0 ∧ padicValRat p z = 0)
-    (hreg : VG p (z/(1-z)) 0) (hp4 : 3 < p) (j : Fin 4) :
-    parameterFourPoleU z hu hreg hp4 0 (Pi.single j 1) = integralUPole z hu.1 hu.2 j.val (by omega) :=
-  restrictedPoleFunctional_single _ _ j
-
-theorem parameterFourPoleV_single (z : ℚ) (hu : z ≠ 0 ∧ padicValRat p z = 0)
-    (hreg : VG p (z/(1-z)) 0) (hp4 : 3 < p) (j : Fin 4) :
-    parameterFourPoleV z hu hreg hp4 0 (Pi.single j 1) = integralVPole z hu.1 hu.2 j.val (by omega) :=
-  restrictedPoleFunctional_single _ _ j
-
 theorem parameterFourPoleU_coeff_bound (z : ℚ) (hu : z ≠ 0 ∧ padicValRat p z = 0)
     (hreg : VG p (z/(1-z)) 0) (hp4 : 3 < p)
     (f : PowerSeries ℤ_[p]) (r : Fin 4 → ℤ_[p]) (B : ℝ) (hB : 0 ≤ B)
@@ -292,24 +270,10 @@ theorem parameterFourPoleV_coeff_bound (z : ℚ) (hu : z ≠ 0 ∧ padicValRat p
     ‖(parameterFourPoleV z hu hreg hp4 f r).coeff n‖ ≤ B :=
   restrictedPoleFunctional_coeff_bound _ _ f r B hB hf hr n
 
-theorem parameterFourPoleUV_well_defined (z : ℚ) (hu : z ≠ 0 ∧ padicValRat p z = 0)
-    (hreg : VG p (z/(1-z)) 0) (hp4 : 3 < p)
-    (f g : PowerSeries ℤ_[p]) (hf : PowerSeries.IsRestricted 1 f)
-    (hg : PowerSeries.IsRestricted 1 g) (r s : Fin 4 → ℤ_[p])
-    (he : integralPoleNumerator (primePoleCenters p) f r =
-      integralPoleNumerator (primePoleCenters p) g s) :
-    parameterFourPoleU z hu hreg hp4 f r = parameterFourPoleU z hu hreg hp4 g s ∧
-      parameterFourPoleV z hu hreg hp4 f r = parameterFourPoleV z hu hreg hp4 g s := by
-  obtain ⟨rfl, rfl⟩ := integralPoleNumerator_injective _ primePoleCenters_injective f g hf hg r s he
-  exact ⟨rfl, rfl⟩
-
-
 end
 end Li2Unified.Proofs.PrimeEdge
-#print axioms Li2Unified.Proofs.PrimeEdge.parameterFourPoleUV_well_defined
 #print axioms Li2Unified.Proofs.PrimeEdge.parameterFourPoleU_coeff_bound
 
 end
-
 
 end

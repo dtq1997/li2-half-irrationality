@@ -59,25 +59,6 @@ theorem original_test_integral_cleared
         (integralPoleNumerator (primePoleCenters p) g r)) := by ring
     _ = _ := by rw [he]; ring
 
-theorem numeratorPulledValue_integer_test (hp4 : 3 < p) (Y : ℚ_[p])
-    (m : ℕ) (hm : m ≤ 4*p-4) (F : ℚ[X]) (a : Fin p) (c : ℚ_[p])
-    (g : PowerSeries ℤ_[p]) (hg : PowerSeries.IsRestricted 1 g) (r : Fin 4 → ℤ_[p])
-    (he : primeDiscPolynomialSeries a.val m *
-      PowerSeries.map (algebraMap ℤ_[p] ℚ_[p]) (integralPoleNumerator (primePoleCenters p) g r) =
-      PowerSeries.C c * (fieldPoleDenominator (primePoleCenters p) : PowerSeries ℚ_[p]) *
-        rationalPolynomialSeries (F.comp (C (p:ℚ)*X-C (a.val:ℚ)))) (T : ℤ[X]) :
-    let gT := integralPoleMulRegular (primePoleCenters p)
-      (integralDiscTestPolynomial T a : PowerSeries ℤ_[p]) g r
-    let rT := integralPoleMulResidue (primePoleCenters p)
-      (integralDiscTestPolynomial T a : PowerSeries ℤ_[p]) r
-    c * numeratorPulledValue (by omega : p ≠ 2) (by omega : p ≠ 3)
-      Y m (F*T.map (Int.castRingHom ℚ)) a =
-      (primePoleU hp4 gT rT).eval₂ (algebraMap ℤ_[p] ℚ_[p]) Y - (a.val:ℚ_[p])/(p:ℚ_[p]) *
-        (primePoleV hp4 gT rT).eval₂ (algebraMap ℤ_[p] ℚ_[p]) Y := by
-  apply numeratorPulledValue_integral_of_cleared hp4 Y m hm
-  · exact integralPoleMulRegular_isRestricted _ _ _ (polynomial_isRestricted _) hg _
-  · exact original_test_integral_cleared m F a c g r he T
-
 end
 end Li2
 

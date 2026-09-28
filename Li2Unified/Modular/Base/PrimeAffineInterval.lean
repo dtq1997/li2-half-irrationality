@@ -44,11 +44,6 @@ lemma wsum_scaled_tendsto {a b : ℝ} (ha : 0 < a) (hab : a ≤ b) :
       have hh : 0 < ε*x^2 := by positivity
       linarith
 
-lemma wsum_scaled_nat_tendsto {a b : ℝ} (ha : 0 < a) (hab : a ≤ b) :
-    Tendsto (fun n : ℕ => wsum (a*(n : ℝ)) (b*(n : ℝ))/(n : ℝ)^2)
-      atTop (𝓝 ((b^2-a^2)/2)) :=
-  (wsum_scaled_tendsto ha hab).comp tendsto_natCast_atTop_atTop
-
 def affineSum (α β a b x : ℝ) : ℝ :=
   ∑ k ∈ Finset.Ioc ⌊a*x⌋₊ ⌊b*x⌋₊, (α*(k : ℝ)+β*x)*cPrime k
 

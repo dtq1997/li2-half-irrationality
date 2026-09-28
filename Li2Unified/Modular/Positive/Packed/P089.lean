@@ -26,14 +26,6 @@ private lemma vertical_G_deriv_continuous (d : ℕ) (F : ℚ[X]) :
   exact (Li2.analyticAt_originalContourG_deriv d F hz).continuousAt.comp
     (f := Li2.originalContourPoint) Li2.continuous_originalContourPoint.continuousAt
 
-private lemma vertical_analytic_continuous (H : ℂ → ℂ)
-    (hH : ∀ y : ℝ, AnalyticAt ℂ H (Li2.originalContourPoint y)) :
-    Continuous (fun y : ℝ => H (Li2.originalContourPoint y)) := by
-  apply continuous_iff_continuousAt.mpr
-  intro y
-  exact (hH y).continuousAt.comp
-    (f := Li2.originalContourPoint) Li2.continuous_originalContourPoint.continuousAt
-
 private lemma vertical_analytic_deriv_continuous (H : ℂ → ℂ)
     (hH : ∀ y : ℝ, AnalyticAt ℂ H (Li2.originalContourPoint y)) :
     Continuous (fun y : ℝ => deriv H (Li2.originalContourPoint y)) := by
@@ -134,6 +126,5 @@ end
 end Li2Unified.Proofs.Contour
 
 end
-
 
 end

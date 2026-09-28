@@ -79,37 +79,6 @@ section
 namespace Li2Unified.Proofs.Hermite
 noncomputable section
 
-def matchingTailProduct (n p : ℕ) (a : Fin p) (u : ℚ) : ℚ :=
-  ∏ j ∈ (Finset.Icc (n + 1) (4 * n)).filter (fun j => j % p = a.val),
-    (u + ((j / p : ℕ) : ℚ))
-
-theorem matchingProduct_split (n p : ℕ) (a : Fin p) (u : ℚ) :
-    matchingProduct (4 * n) p a u =
-      matchingProduct n p a u * matchingTailProduct n p a u := by
-  let s := (Finset.Icc 1 n).filter (fun j => j % p = a.val)
-  let t := (Finset.Icc (n + 1) (4 * n)).filter (fun j => j % p = a.val)
-  have hs : (Finset.Icc 1 (4 * n)).filter (fun j => j % p = a.val) = s ∪ t := by
-    ext j
-    simp only [Finset.mem_filter, Finset.mem_Icc, Finset.mem_union, s, t]
-    constructor <;> intro h <;> omega
-  have hd : Disjoint s t := by
-    apply Finset.disjoint_left.mpr
-    intro j hj hj'
-    simp only [Finset.mem_filter, Finset.mem_Icc, s, t] at hj hj'
-    omega
-  unfold matchingProduct matchingTailProduct
-  rw [hs, Finset.prod_union hd]
-
-theorem matchingRatio_tail (n p : ℕ) (a : Fin p) (u : ℚ) :
-    matchingRatio n p a u =
-      matchingProduct n p a u ^ 2 / matchingTailProduct n p a u := by
-  rw [matchingRatio, matchingProduct_split]
-  by_cases hN : matchingProduct n p a u = 0
-  · simp [hN]
-  by_cases hT : matchingTailProduct n p a u = 0
-  · simp [hT]
-  field_simp [hN, hT]
-
 theorem matching_pole_index_injective (p j k : ℕ) (a : Fin p)
     (hj : j % p = a.val) (hk : k % p = a.val)
     (hdiv : j / p = k / p) : j = k := by
@@ -119,14 +88,11 @@ theorem matching_pole_index_injective (p j k : ℕ) (a : Fin p)
   rw [hk] at h2
   omega
 
-#print axioms matchingProduct_split
-#print axioms matchingRatio_tail
 #print axioms matching_pole_index_injective
 
 end
 end Li2Unified.Proofs.Hermite
 
 end
-
 
 end

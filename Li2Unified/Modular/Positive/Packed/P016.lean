@@ -240,7 +240,6 @@ theorem parameter_matching_pole_contribution (z : ℚ) (hreg : VG p (z/(1-z)) 0)
   field_simp
   <;> ring
 
-
 end
 end Li2Unified.Proofs.PrimeEdge
 #print axioms Li2Unified.Proofs.PrimeEdge.parameter_nonmatching_pole_contribution
@@ -363,53 +362,9 @@ open scoped BigOperators
 namespace Li2Unified.Proofs.Hermite
 noncomputable section
 
-def rawPoleFiber (lam : ℚ) (m p : ℕ) (a : Fin p) (F : ℚ[X]) : ℚ[X] :=
-  ∑ j ∈ (Finset.Icc 1 m).filter (fun j => j % p = a.val),
-    C (F.eval (-(j : ℚ)) /
-      ∏ l ∈ (Finset.Icc 1 m).erase j, ((l : ℚ) - (j : ℚ))) *
-      (C ((j : ℚ) * lam⁻¹ ^ j) * (X - C (Li2.parameterTau lam j)))
-
-def polynomialFiber (lam : ℚ) (m p : ℕ) (a : Fin p) (F : ℚ[X]) : ℚ[X] :=
-  let P := F /ₘ Li2.D m
-  let Pₐ := P.comp (C (p : ℚ) * X - C (a.val : ℚ))
-  C (lam⁻¹ ^ a.val *
-    (Li2.parameterU (lam ^ p) Pₐ -
-      (a.val : ℚ) / (p : ℚ) * Li2.parameterV (lam ^ p) Pₐ))
-
-def localActualFunctional (lam : ℚ) (m p : ℕ) (a : Fin p) (F : ℚ[X]) : ℚ[X] :=
-  polynomialFiber lam m p a F + rawPoleFiber lam m p a F
-
-theorem numeratorFunctional_fiberwise (lam : ℚ) (m p : ℕ)
-    (hlam : |(lam : ℝ)| < 1) (hne : lam ≠ 0) (hp : 0 < p) (F : ℚ[X]) :
-    Li2Unified.ParameterFamily.numeratorFunctional lam m F =
-      ∑ a : Fin p, localActualFunctional lam m p a F := by
-  have hnorm : ‖(lam : ℝ)‖ < 1 := by simpa [Real.norm_eq_abs] using! hlam
-  have hpoly : C (Li2.parameterU lam (F /ₘ Li2.D m)) =
-      ∑ a : Fin p, polynomialFiber lam m p a F := by
-    rw [Li2.parameterU_dissection lam hnorm hne p hp (F /ₘ Li2.D m)]
-    simp [polynomialFiber, map_sum]
-  have hpoles :
-      (∑ j ∈ Finset.Icc 1 m,
-        C (F.eval (-(j : ℚ)) /
-          ∏ l ∈ (Finset.Icc 1 m).erase j, ((l : ℚ) - (j : ℚ))) *
-          (C ((j : ℚ) * lam⁻¹ ^ j) * (X - C (Li2.parameterTau lam j)))) =
-      ∑ a : Fin p, rawPoleFiber lam m p a F := by
-    let g : ℕ → Fin p := fun j => ⟨j % p, Nat.mod_lt j hp⟩
-    have hs := Finset.sum_fiberwise_eq_sum_filter (Finset.Icc 1 m)
-      (Finset.univ : Finset (Fin p)) g
-      (fun j =>
-        C (F.eval (-(j : ℚ)) /
-          ∏ l ∈ (Finset.Icc 1 m).erase j, ((l : ℚ) - (j : ℚ))) *
-          (C ((j : ℚ) * lam⁻¹ ^ j) * (X - C (Li2.parameterTau lam j))))
-    simpa [rawPoleFiber, g, Fin.ext_iff] using hs.symm
-  unfold Li2Unified.ParameterFamily.numeratorFunctional
-  rw [hpoly, hpoles]
-  simp only [localActualFunctional, Finset.sum_add_distrib]
-
 end
 end Li2Unified.Proofs.Hermite
 
 end
-
 
 end

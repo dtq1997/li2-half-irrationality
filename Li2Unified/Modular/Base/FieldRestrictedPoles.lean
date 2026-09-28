@@ -54,12 +54,6 @@ def fieldPoleNumerator (c : ι → ℤ_[p]) (f : PowerSeries ℚ_[p]) (r : ι �
   (fieldPoleDenominator c : PowerSeries ℚ_[p])*f +
     ((∑ i, C (r i)*fieldPoleCofactor c i : (ℚ_[p])[X]) : PowerSeries ℚ_[p])
 
-theorem fieldPoleNumerator_isRestricted (c : ι → ℤ_[p]) (f : PowerSeries ℚ_[p])
-    (hf : PowerSeries.IsRestricted 1 f) (r : ι → ℚ_[p]) :
-    PowerSeries.IsRestricted 1 (fieldPoleNumerator c f r) :=
-  PowerSeries.isRestricted.add 1
-    (PowerSeries.isRestricted.mul 1 (field_polynomial_isRestricted _) hf) (field_polynomial_isRestricted _)
-
 theorem fieldPoleNumerator_eval (c : ι → ℤ_[p]) (f : PowerSeries ℚ_[p])
     (hf : PowerSeries.IsRestricted 1 f) (r : ι → ℚ_[p]) (i : ι) :
     fieldRestrictedEval (c i) (fieldPoleNumerator c f r) =

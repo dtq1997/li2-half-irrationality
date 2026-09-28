@@ -24,26 +24,6 @@ theorem restricted_mul_coeff_bound (g f : PowerSeries ℤ_[p]) (B : ℝ) (hB : 0
   rw [mul_comm]
   exact (integral_coeff_mul_norm_le _ _).trans (hf ij.2)
 
-theorem integralPoleMulRegular_coeff_bound (c : ι → ℤ_[p])
-    (g f : PowerSeries ℤ_[p]) (r : ι → ℤ_[p]) (B : ℝ) (hB : 0 ≤ B)
-    (hf : ∀ n, ‖PowerSeries.coeff n f‖ ≤ B) (hr : ∀ i, ‖r i‖ ≤ B) (n : ℕ) :
-    ‖PowerSeries.coeff n (integralPoleMulRegular c g f r)‖ ≤ B := by
-  unfold integralPoleMulRegular
-  rw [map_add, map_sum]
-  apply (IsUltrametricDist.norm_add_le_max _ _).trans
-  apply max_le
-  · exact restricted_mul_coeff_bound g f B hB hf n
-  · apply IsUltrametricDist.norm_sum_le_of_forall_le_of_nonneg hB
-    intro i _
-    rw [PowerSeries.coeff_C_mul]
-    exact (integral_coeff_mul_norm_le _ _).trans (hr i)
-
-theorem integralPoleMulResidue_bound (c : ι → ℤ_[p])
-    (g : PowerSeries ℤ_[p]) (r : ι → ℤ_[p]) (B : ℝ)
-    (hr : ∀ i, ‖r i‖ ≤ B) (i : ι) :
-    ‖integralPoleMulResidue c g r i‖ ≤ B :=
-  (integral_coeff_mul_norm_le _ _).trans (hr i)
-
 def restrictedPoleFunctional (μ : ℕ → ℤ_[p]) (w : ι → (ℤ_[p])[X])
     (f : PowerSeries ℤ_[p]) (r : ι → ℤ_[p]) : (ℤ_[p])[X] :=
   C (restrictedMoment μ f) + ∑ i, C (r i)*w i

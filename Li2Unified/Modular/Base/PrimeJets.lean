@@ -54,58 +54,6 @@ theorem primeProduct_expansion (p : ℕ) (a : Fin p) :
         (C (primeLocalUnit p a)+C (p:ℤ)*A) :=
   fullClassProduct_expansion _ _ _ _
 
-lemma GV.integer_polynomial (p : ℕ) (P : ℤ[X]) :
-    GV p (P.map (Int.castRingHom ℚ)) 0 := by
-  intro k
-  rw [coeff_map]
-  exact VG.intCast _
-
-lemma integer_polynomial_pmultiple_VG (p m : ℕ) [Fact p.Prime] (P : ℤ[X])
-    (h : ∃ A : ℤ[X], P = C ((p:ℤ)^m)*A) :
-    GV p (P.map (Int.castRingHom ℚ)) (m:ℚ) := by
-  obtain ⟨A, rfl⟩ := h
-  simp only [Polynomial.map_mul, Polynomial.map_C, Int.coe_castRingHom, Int.cast_pow,
-    Int.cast_natCast]
-  have hp : VG p ((p:ℚ)^m) (m:ℚ) := by
-    simpa only [zpow_natCast, Int.cast_natCast] using VG.primePow (p := p) (m:ℤ)
-  simpa only [add_zero] using GV.C_mul hp (GV.integer_polynomial p A)
-
-theorem primeJetPoly_other_VG (p : ℕ) [Fact p.Prime] (a : PrimeJet p) (b : Fin p)
-    (hb : b ≠ a.1) :
-    GV p (((primeJetPoly p a).comp (primeDiscSubstitution p b)).map (Int.castRingHom ℚ))
-      (primeMultiplicity p b : ℚ) := by
-  obtain ⟨A, hA⟩ := primeJetPoly_other_expansion p a b hb
-  apply integer_polynomial_pmultiple_VG
-  exact ⟨X^(primeMultiplicity p b)*A, by rw [hA, mul_assoc]⟩
-
-theorem primeJetPoly_own_error_VG (p : ℕ) [Fact p.Prime] (a : PrimeJet p) :
-    GV p (((primeJetPoly p a).comp (primeDiscSubstitution p a.1) -
-      C ((p:ℤ)^a.2.val)*X^a.2.val*C (primeLocalUnit p a.1)).map (Int.castRingHom ℚ))
-      ((a.2.val:ℚ)+1) := by
-  obtain ⟨A, hA⟩ := primeJetPoly_own_expansion p a
-  have h : ∃ B : ℤ[X],
-      (primeJetPoly p a).comp (primeDiscSubstitution p a.1) -
-        C ((p:ℤ)^a.2.val)*X^a.2.val*C (primeLocalUnit p a.1) =
-        C ((p:ℤ)^(a.2.val+1))*B := by
-    refine ⟨X^a.2.val*A, ?_⟩
-    rw [hA, pow_succ, C_mul]
-    ring
-  simpa only [Nat.cast_add, Nat.cast_one] using integer_polynomial_pmultiple_VG p _ _ h
-
-theorem primeProduct_error_VG (p : ℕ) [Fact p.Prime] (a : Fin p) :
-    GV p (((primeProduct p).comp (primeDiscSubstitution p a) -
-      C ((p:ℤ)^(primeMultiplicity p a))*X^(primeMultiplicity p a)*C (primeLocalUnit p a)).map
-        (Int.castRingHom ℚ)) ((primeMultiplicity p a : ℚ)+1) := by
-  obtain ⟨A, hA⟩ := primeProduct_expansion p a
-  have h : ∃ B : ℤ[X],
-      (primeProduct p).comp (primeDiscSubstitution p a) -
-        C ((p:ℤ)^(primeMultiplicity p a))*X^(primeMultiplicity p a)*C (primeLocalUnit p a) =
-        C ((p:ℤ)^(primeMultiplicity p a+1))*B := by
-    refine ⟨X^(primeMultiplicity p a)*A, ?_⟩
-    rw [hA, pow_succ, C_mul]
-    ring
-  simpa only [Nat.cast_add, Nat.cast_one] using integer_polynomial_pmultiple_VG p _ _ h
-
 end
 end Li2
 

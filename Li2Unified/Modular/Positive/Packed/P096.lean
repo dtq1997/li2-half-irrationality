@@ -1,5 +1,19 @@
 module
-public import Li2Unified.Modular.Base.OriginalContourIntegralScale
+public import Mathlib.MeasureTheory.Measure.Haar.NormedSpace
+public import Mathlib.MeasureTheory.Constructions.Pi
+public import Mathlib.LinearAlgebra.Dimension.Constructions
+public import Mathlib.LinearAlgebra.Vandermonde
+public import Mathlib.Algebra.BigOperators.Intervals
+public import Li2Unified.Modular.Base.AndreiefIntegrable
+public import Li2Unified.Modular.Base.Andreief
+public import Li2Unified.Modular.Base.OriginalContourFiniteRectangle
+public import Li2Unified.Modular.Base.OriginalContourHorizontalTails
+public import Li2Unified.Modular.Base.OriginalContourRightActual
+public import Li2Unified.Modular.Base.OriginalContourResidueSeries
+public import Li2Unified.Modular.Base.OriginalRealDerivative
+public import Li2Unified.Modular.Base.Gram
+public import Li2Unified.Modular.Base.DecayNormalization
+public import Mathlib.Data.Complex.BigOperators
 public import Li2Unified.Modular.Positive.Packed.P073
 public import Li2Unified.Modular.Positive.Packed.P095
 

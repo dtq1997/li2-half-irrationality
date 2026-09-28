@@ -38,20 +38,6 @@ lemma starProfileBlock_symmetric {h l : ℕ} (T : ℝ)
     | none => simp only [starProfileBlock, hP]
     | some j => simp only [starProfileBlock, hP]
 
-lemma starProfile_signed_sum {h l : ℕ}
-    (P : (Fin h ⊕ Fin l) → (Fin h ⊕ Fin l) → ℝ) :
-    let s : (Fin h ⊕ Fin l) → ℝ := Sum.elim (fun _ => 1) (fun _ => -(h:ℝ))
-    (∑ i : Fin h ⊕ Fin l, ∑ j : Fin h ⊕ Fin l, s i*s j*P i j) =
-      (∑ i : Fin h, ∑ j : Fin h, P (.inl i) (.inl j)) -
-      (h:ℝ)*(∑ i : Fin h, ∑ j : Fin l, P (.inl i) (.inr j)) -
-      (h:ℝ)*(∑ i : Fin l, ∑ j : Fin h, P (.inr i) (.inl j)) +
-      (h:ℝ)^2*(∑ i : Fin l, ∑ j : Fin l, P (.inr i) (.inr j)) := by
-  classical
-  dsimp only
-  simp only [Fintype.sum_sum_type, Sum.elim_inl, Sum.elim_inr,
-    Finset.sum_add_distrib, ← Finset.mul_sum]
-  ring
-
 theorem starProfileBlock_energy {h l : ℕ} (hh : 0 < h) (T : ℝ) (hT : T ≠ 0)
     (P : (Fin h ⊕ Fin l) → (Fin h ⊕ Fin l) → ℝ) :
     let w : Option (Fin h) → ℝ := fun k => match k with
@@ -201,6 +187,5 @@ end
 end Li2Unified.Proofs.Contour
 
 end
-
 
 end

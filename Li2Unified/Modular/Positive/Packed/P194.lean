@@ -25,19 +25,9 @@ noncomputable section
   out.putStrLn "Noncollision: imports loaded"
   out.flush
 
-
 lemma circle_fiber_null (c w : ℂ) (r a b : ℝ) (hr : r ≠ 0) :
     (volume.restrict (Ioc a b)) {t : ℝ | circleMap c r t = w} = 0 := by
   have h := (Set.countable_singleton w).preimage_circleMap c hr
-  simpa using! h.measure_zero (volume.restrict (Ioc a b))
-
-lemma line_fiber_null (c v w : ℂ) (a b : ℝ) (hv : v ≠ 0) :
-    (volume.restrict (Ioc a b)) {t : ℝ | c+(t:ℂ)*v = w} = 0 := by
-  have hi : Function.Injective (fun t : ℝ => c+(t:ℂ)*v) := by
-    intro x y h
-    apply Complex.ofReal_injective
-    exact (mul_left_injective₀ hv) (add_left_cancel h)
-  have h := (Set.countable_singleton w).preimage hi
   simpa using! h.measure_zero (volume.restrict (Ioc a b))
 
 lemma pair_collision_null (f g : ℝ → ℂ) (μ ν : Measure ℝ) [SFinite ν]
@@ -48,7 +38,6 @@ lemma pair_collision_null (f g : ℝ → ℂ) (μ ν : Measure ℝ) [SFinite ν]
     (isClosed_eq (hf.comp continuous_fst) (hg.comp continuous_snd)).measurableSet
   apply Measure.measure_prod_null_of_ae_null hm
   exact Filter.Eventually.of_forall (fun x => by simpa [eq_comm] using! hnull (f x))
-
 
 #eval show IO Unit from do
   let out ← IO.getStdout
@@ -284,6 +273,5 @@ end
 end Li2Unified.Proofs.Contour
 
 end
-
 
 end

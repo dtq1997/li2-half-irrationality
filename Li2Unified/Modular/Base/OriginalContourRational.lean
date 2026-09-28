@@ -60,12 +60,6 @@ lemma D_eval₂_complex_vertical_ne_zero (m : ℕ) (y : ℝ) :
     (D m).eval₂ (Rat.castHom ℂ) (originalContourPoint y) ≠ 0 := by
   exact norm_pos_iff.mp (lt_of_lt_of_le zero_lt_one (D_eval₂_complex_norm_ge_one m y))
 
-lemma D_eval₂_complex_vertical_inv_norm_le_one (m : ℕ) (y : ℝ) :
-    ‖((D m).eval₂ (Rat.castHom ℂ) (originalContourPoint y))⁻¹‖ ≤ 1 := by
-  rw [norm_inv]
-  simpa only [one_div] using
-    (div_le_self (by norm_num : (0 : ℝ) ≤ 1) (D_eval₂_complex_norm_ge_one m y))
-
 lemma originalComplexQuotient_vertical_norm_le (m : ℕ) (F : ℚ[X]) (y : ℝ) :
     ‖originalComplexQuotient m F (originalContourPoint y)‖ ≤
       ‖F.eval₂ (Rat.castHom ℂ) (originalContourPoint y)‖ := by
@@ -118,57 +112,6 @@ lemma continuous_originalComplexQuotient_vertical (m : ℕ) (F : ℚ[X]) :
   exact ((F.continuous_eval₂ (Rat.castHom ℂ)).comp continuous_originalContourPoint).div
     (((D m).continuous_eval₂ (Rat.castHom ℂ)).comp continuous_originalContourPoint)
     (D_eval₂_complex_vertical_ne_zero m)
-
-lemma integrable_originalContourWeight_mul_eval₂ (F : ℚ[X]) :
-    Integrable (fun y : ℝ => originalContourWeight y *
-      F.eval₂ (Rat.castHom ℂ) (originalContourPoint y)) := by
-  have he : (fun y : ℝ => originalContourWeight y *
-      F.eval₂ (Rat.castHom ℂ) (originalContourPoint y)) =
-      (fun y : ℝ => ∑ k ∈ Finset.range (F.natDegree + 1),
-        (F.coeff k : ℂ) * (originalContourWeight y * originalContourPoint y ^ k)) := by
-    funext y
-    rw [eval₂_eq_sum_range, Finset.mul_sum]
-    apply Finset.sum_congr rfl
-    intro k _
-    simp only [Rat.coe_castHom]
-    ring
-  rw [he]
-  apply integrable_finset_sum
-  intro k _
-  exact (integrable_originalContourWeight_mul_pow k).const_mul (F.coeff k : ℂ)
-
-lemma integrable_originalContourWeight_mul_quotient (m : ℕ) (F : ℚ[X]) :
-    Integrable (fun y : ℝ => originalContourWeight y *
-      originalComplexQuotient m F (originalContourPoint y)) := by
-  apply (integrable_originalContourWeight_mul_eval₂ F).mono
-    (show AEStronglyMeasurable (fun y : ℝ => originalContourWeight y *
-      originalComplexQuotient m F (originalContourPoint y)) volume from
-      (continuous_originalContourWeight.mul
-        (continuous_originalComplexQuotient_vertical m F)).aestronglyMeasurable)
-  exact Filter.Eventually.of_forall (fun y => by
-    simp only [norm_mul]
-    exact mul_le_mul_of_nonneg_left
-      (originalComplexQuotient_vertical_norm_le m F y) (norm_nonneg _))
-
-lemma originalComplexQuotient_numerator (n k : ℕ) (z : ℂ) :
-    originalComplexQuotient (4 * n) (numerator n k) z =
-      z ^ k * ((D n).eval₂ (Rat.castHom ℂ) z) ^ 3 /
-        (D (4 * n)).eval₂ (Rat.castHom ℂ) z := by
-  simp only [originalComplexQuotient, numerator, eval₂_mul, eval₂_pow, eval₂_X]
-
-theorem integrable_originalContourEntry (n : ℕ) (i j : Fin (2 * n)) :
-    Integrable (fun y : ℝ => originalContourWeight y *
-      originalComplexQuotient (4 * n) (numerator n (i.val + j.val))
-        (originalContourPoint y)) :=
-  integrable_originalContourWeight_mul_quotient (4 * n)
-    (numerator n (i.val + j.val))
-
-theorem integrable_originalContourEntry_explicit (n : ℕ) (i j : Fin (2 * n)) :
-    Integrable (fun y : ℝ => originalContourWeight y *
-      (originalContourPoint y ^ (i.val + j.val) *
-        ((D n).eval₂ (Rat.castHom ℂ) (originalContourPoint y)) ^ 3 /
-        (D (4 * n)).eval₂ (Rat.castHom ℂ) (originalContourPoint y))) := by
-  simpa only [originalComplexQuotient_numerator] using integrable_originalContourEntry n i j
 
 end
 end Li2

@@ -1,6 +1,7 @@
 module
 public import Li2Unified.Modular.Positive.Packed.P041
-public import Li2Unified.Modular.Base.DecayFallback
+public import Li2Unified.Modular.Base.DecayReflect
+public import Li2Unified.Modular.Base.DecayThreeAdic
 public import Li2Unified.Modular.Positive.Packed.P019
 public import Li2Unified.Modular.Positive.Packed.P036
 public import Mathlib.Tactic.IntervalCases
@@ -190,26 +191,15 @@ lemma lambda_pos : 0 < lambda := by norm_num [lambda]
 lemma lambda_abs_lt_one : |(lambda : ℝ)| < 1 := by norm_num [lambda]
 lemma lambda_nonzero : lambda ≠ 0 := lambda_pos.ne'
 lemma lambda_ne_one : lambda ≠ 1 := by norm_num [lambda]
-lemma numerator_denominator_coprime : Nat.Coprime 1 2 := by norm_num
-lemma badPrimes_prime (p : ℕ) (hp : p ∈ badPrimes) : p.Prime := by
-  simp only [badPrimes, Finset.mem_insert, Finset.mem_singleton] at hp
-  rcases hp with rfl | rfl | rfl | rfl | rfl <;> norm_num
 
 lemma value_eq_series : value =
     ∑' k : ℕ, (1/2:ℝ)^(k+1)/((k:ℝ)+1)^2 := by norm_num [value, r, lambda]
-lemma summable_series : Summable (fun k : ℕ => (1/2:ℝ)^(k+1)/((k:ℝ)+1)^2) := by
-  simpa only [lambda, Rat.cast_div, Rat.cast_one, Rat.cast_ofNat] using! summable_r lambda lambda_abs_lt_one
 lemma Q_natDegree_le (n : ℕ) : (Q n).natDegree ≤ 2*n := ParameterFamily.Q_natDegree_le lambda n
 lemma P_natDegree_le (n : ℕ) : (P n).natDegree ≤ 2*n := ParameterFamily.P_natDegree_le lambda n
 lemma P_isPrimitive (n : ℕ) (hn : Q n ≠ 0) : (P n).IsPrimitive :=
   ParameterFamily.P_isPrimitive lambda n hn
-lemma P_same_Q (n : ℕ) : (P n).map (algebraMap ℤ ℚ) = C (d lambda n) * Q n :=
-  P_eq_d_Q lambda n
-lemma P_scale_pos (n : ℕ) : 0 < d lambda n := d_pos lambda n
 lemma lowBlockConstant_value : lowBlockConstant lambda = -275/2 := by norm_num [lowBlockConstant, lambda]
 lemma cornerBlockConstant_value : cornerBlockConstant lambda = -28788 := by norm_num [cornerBlockConstant, lambda]
-lemma lowBlockConstant_ne_zero : lowBlockConstant lambda ≠ 0 := by rw [lowBlockConstant_value]; norm_num
-lemma cornerBlockConstant_ne_zero : cornerBlockConstant lambda ≠ 0 := by rw [cornerBlockConstant_value]; norm_num
 
 lemma good_prime_inputs (p : ℕ) (hp : p.Prime) (hbad : p ∉ badPrimes) :
     ¬p ∣ 2 ∧ ¬p ∣ 1 := by
@@ -237,19 +227,6 @@ lemma parameter_fermat (p : ℕ) [hp : Fact p.Prime] (hbad : p ∉ badPrimes) :
     Li2.VG p (lambda^p-lambda) 1 := by
   rw [lambda_eq_inverse]
   exact inverseParameter_prime_pow_congr 2 (by norm_num) (good_prime_inputs p hp.out hbad).1
-
-lemma moment_integral (p : ℕ) [hp : Fact p.Prime] (hbad : p ∉ badPrimes) :
-    Li2.VG p (lambda/(1-lambda)) 0 ∧ Li2.VG p (lambda^p/(1-lambda^p)) 0 := by
-  obtain ⟨hq,hm⟩ := good_prime_inputs p hp.out hbad
-  rw [lambda_eq_inverse]
-  exact ⟨inverseParameter_moment_integral 2 (by norm_num) hq hm,
-    inverseParameter_power_moment_integral 2 (by norm_num) hq hm⟩
-
-lemma all_moments_integral (p : ℕ) [Fact p.Prime] (hbad : p ∉ badPrimes) (k : ℕ) :
-    Li2.VG p (Li2.parameterMoment lambda k) 0 ∧
-      Li2.VG p (Li2.parameterMoment (lambda^p) k) 0 :=
-  ⟨Li2.parameterMoment_VG p lambda (moment_integral p hbad).1 k,
-    Li2.parameterMoment_VG p (lambda^p) (moment_integral p hbad).2 k⟩
 
 lemma good_prime_not_dvd_275 (p : ℕ) (hp : p.Prime) (hbad : p ∉ badPrimes) : ¬p ∣ 275 := by
   have h := prime_not_dvd_product_outside p hp badPrimes hbad [5,5,11]
@@ -371,34 +348,11 @@ theorem posHalf_smallTail_sum_lower (δ : ℝ) (n : ℕ)
     Real.log_nonneg (by exact_mod_cast hpr.one_lt.le)
   simpa [hpr] using! mul_le_mul_of_nonneg_right hv hlog
 
-/-- At cutoff `1/200`, the small primes cost at most `4/200 + ε` in the
-quadratic exponent. -/
-theorem posHalf_smallTail_eventually (ε : ℝ) (hε : 0 < ε) :
-    ∀ᶠ n : ℕ in atTop, Instances.PosHalf.Qtilde n ≠ 0 →
-      ((-4/200:ℝ)-ε)*(n:ℝ)^2 ≤
-        ∑ p ∈ smallTailPrimes (1/200:ℝ) n,
-          if p.Prime then
-            ((-padicValRat p (dtilde lambda n) : ℤ) : ℝ)*Real.log (p:ℝ)
-          else 0 := by
-  have hmass : ∀ᶠ n : ℕ in atTop,
-      (-4/200:ℝ)-ε ≤
-        smallTailFallbackBound (1/200:ℝ) n/(n:ℝ)^2 :=
-    Filter.Tendsto.eventually_const_le (by linarith)
-      (smallTailFallbackBound_tendsto (1/200:ℝ) (by norm_num) (by norm_num))
-  filter_upwards [hmass, eventually_ge_atTop (1:ℕ)] with n hm hn
-  intro hne
-  have hnpos : (0:ℝ) < n := by exact_mod_cast hn
-  have hcost : ((-4/200:ℝ)-ε)*(n:ℝ)^2 ≤
-      smallTailFallbackBound (1/200:ℝ) n :=
-    (le_div_iff₀ (sq_pos_of_pos hnpos)).mp hm
-  exact hcost.trans (posHalf_smallTail_sum_lower (1/200:ℝ) n hn hne)
-
 end
 end Li2Unified.Proofs.Arithmetic
 
 #print axioms Li2Unified.Proofs.Arithmetic.posHalf_goodPrime_fallback
 #print axioms Li2Unified.Proofs.Arithmetic.posHalf_smallTail_sum_lower
-#print axioms Li2Unified.Proofs.Arithmetic.posHalf_smallTail_eventually
 
 end
 
@@ -434,6 +388,5 @@ end Li2Unified.Proofs.Arithmetic
 #print axioms Li2Unified.Proofs.Arithmetic.posHalf_smallTail_eventually_delta
 
 end
-
 
 end

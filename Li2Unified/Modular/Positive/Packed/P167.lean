@@ -155,21 +155,9 @@ theorem hasDerivAt_affineH (r slope c m : ℝ) (hm : r + slope*m ≠ 0) :
     ring
   convert! ((hasDerivAt_H (r + slope*m) hm).comp m harg).const_mul c using 1
 
-theorem hasDerivAt_affineH_midpoint (a b r slope c : ℝ)
-    (hm : r + slope*((a+b)/2) ≠ 0) :
-    HasDerivAt (fun t : ℝ => c * H (r + slope*t))
-      (c * ((Real.log |r + slope*((a+b)/2)| + 1) * slope)) ((a+b)/2) :=
-  hasDerivAt_affineH r slope c ((a+b)/2) hm
-
 theorem H_cross_zero {u R : ℝ} (hu : |u| ≤ R) (hR : R ≤ 1/4) :
     |H u| ≤ -R * Real.log R := by
   simpa only [H, mulLogAbs] using! mulLogAbs_cross_zero hu hR
-
-theorem affineH_cross_zero {r slope c t R : ℝ}
-    (hu : |r + slope*t| ≤ R) (hR : R ≤ 1/4) :
-    |c * H (r + slope*t)| ≤ |c| * (-R * Real.log R) := by
-  rw [abs_mul]
-  exact mul_le_mul_of_nonneg_left (H_cross_zero hu hR) (abs_nonneg c)
 
 end
 end Li2Unified.Proofs.Potential.CompactAffine
@@ -181,10 +169,7 @@ end Li2Unified.Proofs.Potential.CompactAffine
 #print axioms Li2Unified.Proofs.Potential.CompactAffine.affineH_concave_nonneg
 #print axioms Li2Unified.Proofs.Potential.CompactAffine.affineH_convex_nonpos
 #print axioms Li2Unified.Proofs.Potential.CompactAffine.hasDerivAt_affineH
-#print axioms Li2Unified.Proofs.Potential.CompactAffine.hasDerivAt_affineH_midpoint
-#print axioms Li2Unified.Proofs.Potential.CompactAffine.affineH_cross_zero
 
 end
-
 
 end

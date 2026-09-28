@@ -43,46 +43,8 @@ noncomputable section
 open Li2Unified.ParameterFamily Li2Unified.Instances.PosHalf
 open Li2Unified.Instances.PosHalf.LayerComparison
 
-theorem star_moment_integrable (m : ℕ) (F : ℚ[X]) :
-    Integrable (fun v : Fin 3 × ℝ => density v.1 v.2 *
-      Li2.originalComplexQuotient m F (point v.1 v.2)) contourMeasure := by
-  exact Li2Unified.Proofs.Contour.actual_star_moment_integrable m F
-
-/-- Must include the original quotient, both orientations, endpoint cancellation
-and the infinite boundary terms of UNIFIED (16)-(17). -/
-theorem original_functional_star (m : ℕ) (F : ℚ[X]) :
-    (numeratorFunctional lambda m F).eval₂ (Rat.castHom ℂ) (value:ℂ) = starMoment m F := by
-  exact Li2Unified.Proofs.Contour.actual_original_functional_star m F
-
-theorem original_Qtilde_star_bound (n : ℕ) :
-    |aeval value (Instances.PosHalf.Qtilde n)| ≤
-      (((Li2.Sn n ^ (2*n) / Li2.Fn n:ℚ):ℝ) / ((2*n).factorial:ℝ)) * starPartition n := by
-  exact Li2Unified.Proofs.Contour.actual_Qtilde_star_bound n
-
-theorem original_weight_uniform :
-    ∃ (C : ℝ) (K : ℕ), 0 < C ∧ ∀ n : ℕ, 1 ≤ n →
-      ∀ b : Fin 3, ∀ t : ℝ, 0 ≤ t →
-        (Li2.Sn n:ℝ) * ‖density b t *
-          Li2.originalComplexQuotient (4*n) ((Li2.D n)^3) (point b t)‖ ≤
-        C*(n+1:ℝ)^K*(1+t/(n:ℝ))^K * Real.exp ((n:ℝ) *
-          (if b.val = 0 then Vray ((1/2+t)/(n:ℝ)) else Vvertical (t/(n:ℝ)))) := by
-  exact Li2Unified.Proofs.Contour.actual_weight_uniform
-
 theorem energy_lower : (589/1000:ℝ) ≤ comparisonEnergy := by
   exact Li2Unified.Proofs.Energy.CompactEnergy.energy_lower_triangle
-
-theorem potential_ray_compact : ∀ x : ℝ, 0 ≤ x → x ≤ 18 → psiRay x ≤ 19/10 := by
-  intro x hx hx18
-  exact GeneratedPotential.ray_compact x ⟨hx, by simpa using! hx18⟩
-theorem potential_up_compact : ∀ y : ℝ, 0 ≤ y → y ≤ 2 → psiUp y ≤ 19/10 := by
-  intro y hy hy2
-  exact GeneratedPotential.vertical_compact y ⟨hy, by simpa using! hy2⟩
-theorem potential_reflection (y : ℝ) : psiDown y = psiUp y := by
-  exact Li2Unified.Proofs.Potential.psi_reflection y
-theorem potential_ray_tail : ∀ x : ℝ, 18 ≤ x → psiRay x ≤ 19/10 := by
-  exact Li2Unified.Proofs.Potential.actual_ray_tail
-theorem potential_up_tail : ∀ y : ℝ, 2 ≤ y → psiUp y ≤ 19/10 := by
-  exact Li2Unified.Proofs.Potential.actual_up_tail
 
 /-- Actual measure smoothing, diagonal terms, shift and all infinite tails.
 This is an all-n bridge, separate from every finite certificate. -/
@@ -163,6 +125,5 @@ end
 end Li2Unified.Instances.PosHalf
 
 end
-
 
 end

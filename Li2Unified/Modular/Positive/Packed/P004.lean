@@ -73,23 +73,12 @@ theorem generalIndexedJetPoly_independent (n p : ℕ) [Fact p.Prime]
       Li2.classBasisPoly_map] at hv
     simpa only [Li2.classBasisPoly, Li2.classProduct, Int.coe_castRingHom] using hv
 
-theorem generalIndexedJetPoly_det_unit (n p : ℕ) [Fact p.Prime] :
-    (Li2.coeffMat fun i =>
-      (generalIndexedJetPoly n p i).map (Int.castRingHom ℚ)).det ≠ 0 ∧
-    padicValRat p (Li2.coeffMat fun i =>
-      (generalIndexedJetPoly n p i).map (Int.castRingHom ℚ)).det = 0 :=
-  Li2.coeffMat_det_unit_of_independent _
-    (generalIndexedJetPoly_natDegree_lt n p)
-    (generalIndexedJetPoly_independent n p)
-
 #print axioms generalIndexedJetPoly_natDegree_lt
 #print axioms generalIndexedJetPoly_independent
-#print axioms generalIndexedJetPoly_det_unit
 
 end
 end Li2Unified.Proofs.Hermite
 
 end
-
 
 end

@@ -42,23 +42,6 @@ lemma exists_allowed_prime (bad : Finset ℕ) (N M : ℕ) :
     omega
   exact ⟨p, by omega, hp, by omega, hbad⟩
 
-theorem frequently_rational_nonzero_of_finite_prime_reduction
-    (polys : ℕ → ℤ[X]) (bad : Finset ℕ) (N : ℕ)
-    (hred : ∀ p : ℕ, p.Prime → N < p → p ∉ bad →
-      ∃ c : ZMod p, c ≠ 0 ∧ (polys (p-1)).map (Int.castRingHom (ZMod p)) = C c)
-    (q : ℚ) : ∃ᶠ n in atTop, aeval (q : ℝ) (polys n) ≠ 0 := by
-  rw [Filter.frequently_atTop]
-  intro M
-  obtain ⟨p, hpbig, hp, hN, hbad⟩ := exists_allowed_prime bad N (max M q.den)
-  letI : Fact p.Prime := ⟨hp⟩
-  obtain ⟨c, hc, hcp⟩ := hred p hp hN hbad
-  refine ⟨p-1, by omega,
-    Li2.rational_nonzero_of_constant_reduction (polys (p-1)) p c hc hcp q ?_⟩
-  intro hz
-  have hdvd : p ∣ q.den := (ZMod.natCast_eq_zero_iff _ _).mp hz
-  have hden : q.den < p := by omega
-  exact (not_le.mpr hden) (Nat.le_of_dvd q.den_pos hdvd)
-
 lemma frequently_allowed_indices (bad : Finset ℕ) (N : ℕ) :
     ∃ᶠ n : ℕ in atTop, (n+1).Prime ∧ N < n+1 ∧ n+1 ∉ bad := by
   rw [Filter.frequently_atTop]
@@ -116,14 +99,6 @@ theorem irrational_r_of_prime_decay (lam : ℚ) (bad : Finset ℕ) (N : ℕ)
   irrational_of_prime_subsequence_gaussian (r lam) (P lam) 2 bad N (P_natDegree_le lam)
     hc hedge hbound
 
-theorem irrational_r_of_gaussian (lam : ℚ) (bad : Finset ℕ) (N : ℕ)
-    {c : ℝ} (hc : 0 < c) (hedge : PrimeEdgeReduction lam bad N)
-    (hbound : ∀ᶠ n : ℕ in atTop, |aeval (r lam) (P lam n)| ≤ Real.exp (-c*(n:ℝ)^2)) :
-    Irrational (r lam) := by
-  apply irrational_r_of_prime_decay lam bad N hc hedge
-  filter_upwards [hbound] with n hn
-  exact fun _ _ _ => hn
-
 end
 end Li2Unified.ParameterFamily
 
@@ -136,10 +111,6 @@ namespace Li2Unified.Stage0.HalfPrimeEdge
 noncomputable section
 open Li2Unified.ParameterFamily Li2Unified.Instances.PosHalf
 open Li2Unified.Proofs.PrimeEdge
-
-/-- UNIFIED §4 parameter weight; the legacy weight contains (-2)^a. -/
-def lowWeight (a : ℕ) : ℚ :=
-  lambda⁻¹^a * (-(a:ℚ)) * Li2.primeLowRationalUnit a
 
 def actualMatrix (p : ℕ) (hp4 : 3 < p) :
     Matrix (Li2.PrimeBlockIndex p) (Li2.PrimeBlockIndex p) ℚ[X] :=
@@ -181,40 +152,6 @@ theorem actualMatrix_det_original_Q (p : ℕ) (hp4 : 3 < p) :
   rw [hb, hm, ← map_prod]
   simp only [Li2.primeNormalizedDetScale, Instances.PosHalf.Q, E, mul_pow, C_mul, C_pow]
   ring
-
-/-- The corner is constrained by actual entrywise comparison, not defined
-backwards from its desired determinant. Both identification tasks stay open. -/
-theorem actual_matrix_block_comparison
-    (p : ℕ) [Fact p.Prime] (hp4 : 3 < p) (hbad : p ∉ badPrimes) :
-    ∃ corner : Matrix (Fin 6) (Fin 6) ℚ,
-      corner.det = cornerBlockConstant lambda ∧
-      ∀ x y : Li2.PrimeBlockIndex p,
-        Li2.GV p
-          (actualMatrix p hp4 x y - C ((p:ℚ)^
-            (Li2.primeReferenceRowExponent x + Li2.primeReferenceColExponent y) *
-            (match x, y with
-             | Sum.inl ai, Sum.inl bi =>
-                 if ai.1 = bi.1 then
-                   lowWeight (ai.1.val+1) * fixedLowBlock lambda ai.2 bi.2
-                 else 0
-             | Sum.inr i, Sum.inr j => corner i j
-             | _, _ => 0)))
-          (Li2.primeBlockWeight x + Li2.primeBlockWeight y + 1/2) := by
-  let corner := Li2Unified.Proofs.PrimeEdge.fixedCornerBlock lambda
-  refine ⟨corner, Li2Unified.Proofs.PrimeEdge.fixedCornerBlock_det lambda
-    lambda_nonzero lambda_ne_one, ?_⟩
-  intro x y
-  have hM : actualMatrix p hp4 x y =
-      Li2Unified.Proofs.PrimeEdge.parameterNormalizedMatrix lambda hp4 x y := by
-    simp only [actualMatrix, Li2Unified.Proofs.PrimeEdge.parameterNormalizedMatrix,
-      Li2Unified.Proofs.PrimeEdge.parameterOriginalNumeratorEntry, Polynomial.map_mul,
-      mul_assoc]
-  have h := Li2Unified.Proofs.PrimeEdge.parameterEntryReference_entry_GV lambda
-    lambda_abs_lt_one (parameter_units p hbad).1 (parameter_units p hbad).2.1
-    (parameter_fermat p hbad) hp4 x y
-  rw [Li2Unified.Proofs.PrimeEdge.parameterEntryReference_literal] at h
-  simpa only [hM, lowWeight, Li2Unified.Proofs.PrimeEdge.parameterLowRationalWeight]
-    using! h
 
 theorem scaled_original_Q_congruence
     (p : ℕ) [Fact p.Prime] (hp4 : 3 < p) (hbad : p ∉ badPrimes) :
@@ -277,7 +214,6 @@ open MeasureTheory Set
 namespace Li2Unified.ParameterFamily.Energy
 noncomputable section
 
-
 #eval show IO Unit from do
   let out ← IO.getStdout
   out.putStrLn "LineLog: imports loaded"
@@ -293,7 +229,6 @@ lemma intervalIntegrable_log_line (c v w : ℂ) (a b : ℝ) :
   have hw : AnalyticAt ℝ (fun _ : ℝ => w) t := analyticAt_const
   exact (hc.add ((Complex.ofRealCLM.analyticAt t).mul hv)).sub hw
 
-
 #eval show IO Unit from do
   let out ← IO.getStdout
   out.putStrLn "LineLog: interval integrability complete"
@@ -308,7 +243,6 @@ lemma integrable_log_line_measure (c v w : ℂ) (a b density : ℝ) :
   apply Integrable.smul_measure _ ENNReal.ofReal_ne_top
   apply (integrable_map_measure hg.aestronglyMeasurable hf.aemeasurable).2
   exact (intervalIntegrable_log_line c v w a b).1
-
 
 #eval show IO Unit from do
   let out ← IO.getStdout
@@ -463,7 +397,6 @@ def layerData : List StarLayer := [
   ⟨2/25, 3178600/100000027, true⟩
 ]
 
-lemma layerData_length : layerData.length = 36 := by norm_num [layerData]
 lemma layerData_valid : ∀ s ∈ layerData, s.Valid := by
   norm_num [layerData, StarLayer.Valid]
 lemma layerData_radii : ∀ s ∈ layerData, 0 < s.radius ∧ s.radius ≤ 56/5 := by
@@ -492,6 +425,5 @@ end
 end Li2Unified.Instances.PosHalf.LayerComparison
 
 end
-
 
 end

@@ -54,8 +54,6 @@ noncomputable def Gk (γ : ι → ℝ → ℂ) (t : ℝ) (k l : ι) : ℝ :=
 noncomputable def gk (γ : ι → ℝ → ℂ) (t : ℝ) (k : ι) (u : ℂ) : ℝ :=
   ∫ θ in (0 : ℝ)..2 * π, Real.exp (-(2 * t) * ‖γ k θ - u‖ ^ 2)
 
-lemma sq_sub_comm' (a b : ℝ) : (a - b) ^ 2 = (b - a) ^ 2 := by ring
-
 /-- Integrability of a Gaussian on `ℂ`. -/
 lemma integrable_gaussC {c : ℝ} (hc : 0 < c) (z : ℂ) :
     Integrable (fun u : ℂ => Real.exp (-c * ‖z - u‖ ^ 2)) := by
@@ -215,7 +213,6 @@ lemma gaussian_energy_nonneg [Fintype ι] {s : ι → ℝ} {γ : ι → ℝ → 
   rw [e]
   exact mul_nonneg (by positivity) (integral_nonneg fun u => sq_nonneg _)
 
-
 /-! ### The truncated kernel -/
 
 lemma continuous_inv_max {a : ℝ} (ha : 0 < a) : Continuous fun s : ℝ => (max s a)⁻¹ :=
@@ -346,6 +343,5 @@ theorem energy_Ltr_nonpos [Fintype ι] {s : ι → ℝ} {γ : ι → ℝ → ℂ
 end Li2Unified.ParameterFamily.Energy
 
 end
-
 
 end

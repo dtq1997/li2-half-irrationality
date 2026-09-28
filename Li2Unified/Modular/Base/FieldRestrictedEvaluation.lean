@@ -35,12 +35,6 @@ lemma fieldRestrictedEval_polynomial (x : ℤ_[p]) (P : (ℚ_[p])[X]) :
   rw [fieldRestrictedEval, fieldRestrictedMoment_polynomial, eval_eq_sum]
   simp only [PadicInt.coe_pow]
 
-lemma fieldRestrictedEval_integral (x : ℤ_[p]) (f : PowerSeries ℤ_[p])
-    (hf : PowerSeries.IsRestricted 1 f) :
-    fieldRestrictedEval x (PowerSeries.map (algebraMap ℤ_[p] ℚ_[p]) f) =
-      (restrictedEval x f : ℚ_[p]) :=
-  fieldRestrictedMoment_integral _ _ hf
-
 lemma fieldRestrictedEval_summable (x : ℤ_[p]) (f : PowerSeries ℚ_[p])
     (hf : PowerSeries.IsRestricted 1 f) :
     Summable (fun n => PowerSeries.coeff n f*(x:ℚ_[p])^n) := by

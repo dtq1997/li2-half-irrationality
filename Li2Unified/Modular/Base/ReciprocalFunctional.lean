@@ -20,25 +20,6 @@ theorem padicReciprocalSeries_eval_inv (d : ℚ) (hd : d ≠ 0)
       (((d:ℚ_[p])+(p:ℚ_[p])*(x:ℚ_[p]))^e)⁻¹ :=
   eq_inv_of_mul_eq_one_left (padicReciprocalSeries_eval d hd hv e x)
 
-theorem primeReciprocalG_shift (hp2 : p ≠ 2) (hp3 : p ≠ 3)
-    (d : ℚ) (hd : d ≠ 0) (hv : padicValRat p d = 0) (e k : ℕ) :
-    (padicParameterG (primeParameter p) (primeParameter_moment_integral hp2 hp3)
-      (padicReciprocalSeries (d+(p:ℚ)*(k:ℚ))
-        (rational_unit_add_prime_mul d hd hv k).1
-        (rational_unit_add_prime_mul d hd hv k).2 e) : ℚ_[p]) =
-      ((padicParameterG (primeParameter p) (primeParameter_moment_integral hp2 hp3)
-        (padicReciprocalSeries d hd hv e) : ℚ_[p])-
-        ∑ j ∈ Finset.range k, (primeParameter p:ℚ_[p])^(j+1)*
-          (((d:ℚ_[p])+(p:ℚ_[p])*((j:ℚ_[p])+1))^e)⁻¹)/
-        (primeParameter p:ℚ_[p])^k := by
-  rw [← padicReciprocalSeries_shift d hd hv e k,
-    primeRestrictedShift hp2 hp3 _ (padicReciprocalSeries_isRestricted d hd hv e) k]
-  congr 2
-  apply Finset.sum_congr rfl
-  intro j _
-  rw [padicReciprocalSeries_eval_inv]
-  simp only [PadicInt.coe_add, PadicInt.coe_natCast, PadicInt.coe_one]
-
 theorem reciprocal_differential_correction (μ : ℕ → ℤ_[p])
     (d : ℚ) (hd : d ≠ 0) (hv : padicValRat p d = 0) (a : ℚ_[p]) :
     (restrictedU μ (padicReciprocalSeries d hd hv 1) : ℚ_[p])-

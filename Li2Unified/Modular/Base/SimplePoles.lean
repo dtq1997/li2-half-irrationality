@@ -61,11 +61,6 @@ theorem partial_fractionsP (A : ℚ[X]) (Pl : Finset ℤ) :
   conv_lhs => rw [← modByMonic_add_div A (piPl Pl)]
   rw [hmod, polyPart, add_comm, mul_comm]
 
-lemma natDegree_polyPart_le (A : ℚ[X]) (Pl : Finset ℤ) :
-    (polyPart A Pl).natDegree ≤ A.natDegree - Pl.card := by
-  unfold polyPart
-  rw [natDegree_divByMonic A (piPl_monic Pl), natDegree_piPl]
-
 end Li2.SimplePoles
 
 end

@@ -89,7 +89,6 @@ private theorem validI_point (q : QPair) (hq : qValid q = true) :
   simp [validI, point, hq, qLE]
 
 private theorem validI_logTwo : validI logTwoBounds = true := by decide
-private theorem validI_pi : validI piBounds = true := by decide
 
 private theorem intPair_valid (k : ℤ) : qValid (⟨k, 1⟩ : QPair) = true := by
   simp [qValid]
@@ -168,6 +167,5 @@ theorem contains_logAtom {q u rho : QPair} {k : ℤ}
 end Li2Unified.Proofs.Potential.KernelReflectionSelf
 
 end
-
 
 end

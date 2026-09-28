@@ -3,7 +3,12 @@ public import Li2Unified.Modular.Base.FieldPoleCompatibility
 public import Li2Unified.Modular.Base.FieldParameterFunctional
 public import Li2Unified.Modular.Base.PrimeFourPolePullback
 public import Li2Unified.Modular.Base.PrimeDiscShapes
-public import Li2Unified.Modular.Base.NumeratorDissection
+public import Li2Unified.Modular.Base.DissectedSquareRecurrence
+public import Li2Unified.Modular.Base.DissectedSquare
+public import Li2Unified.Modular.Base.PoleWindowReversal
+public import Mathlib.Data.Fin.Rev
+public import Li2Unified.Modular.Base.PulledPoleValues
+public import Li2Unified.Modular.Base.ParameterDifferentialDissection
 
 set_option backward.privateInPublic true
 

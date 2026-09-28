@@ -18,8 +18,6 @@ variable {p : ℕ} [Fact p.Prime]
 def parameterTau (z : ℚ) (j : ℕ) : ℚ :=
   ∑ b ∈ Finset.Icc 1 j, z^b/(b:ℚ)^2
 
-lemma parameterTau_negHalf (j : ℕ) : parameterTau (-1/2) j = tau j := rfl
-
 lemma rational_unit_inverse_VG (z : ℚ) (hz : z ≠ 0) (hv : padicValRat p z = 0) :
     VG p z⁻¹ 0 := by
   simpa using VG.inv (p := p) hz (show (padicValRat p z:ℚ) ≤ 0 by rw [hv]; norm_num)
@@ -55,44 +53,6 @@ def integralVPole (z : ℚ) (hz : z ≠ 0) (hv : padicValRat p z = 0)
     (j : ℕ) (hj : j < p) : (ℤ_[p])[X] :=
   C (-integralParameterInvPow z hz hv j)*
     (X-C (integralParameterTau z (Or.inr (by rw [hv]; norm_num)) j hj))
-
-theorem integralUPole_eval (z : ℚ) (hz : z ≠ 0) (hv : padicValRat p z = 0)
-    (j : ℕ) (hj : j < p) (y : ℤ_[p]) :
-    (((integralUPole z hz hv j hj).eval y : ℤ_[p]) : ℚ_[p]) =
-      (j:ℚ_[p])*(z:ℚ_[p])⁻¹^j*((y:ℚ_[p])-(parameterTau z j:ℚ_[p])) := by
-  unfold integralUPole
-  rw [eval_mul, eval_C, eval_sub, eval_X, eval_C,
-    PadicInt.coe_mul, PadicInt.coe_mul, PadicInt.coe_natCast, PadicInt.coe_sub]
-  simp [integralParameterInvPow, integralParameterTau, integralRational]
-
-theorem integralVPole_eval (z : ℚ) (hz : z ≠ 0) (hv : padicValRat p z = 0)
-    (j : ℕ) (hj : j < p) (y : ℤ_[p]) :
-    (((integralVPole z hz hv j hj).eval y : ℤ_[p]) : ℚ_[p]) =
-      -(z:ℚ_[p])⁻¹^j*((y:ℚ_[p])-(parameterTau z j:ℚ_[p])) := by
-  unfold integralVPole
-  rw [eval_mul, eval_C, eval_sub, eval_X, eval_C,
-    PadicInt.coe_mul, PadicInt.coe_neg, PadicInt.coe_sub]
-  simp [integralParameterInvPow, integralParameterTau, integralRational]
-
-theorem integralUPole_zero (z : ℚ) (hz : z ≠ 0) (hv : padicValRat p z = 0)
-    (h0 : 0 < p) : integralUPole z hz hv 0 h0 = 0 := by
-  simp [integralUPole]
-
-theorem integralVPole_zero (z : ℚ) (hz : z ≠ 0) (hv : padicValRat p z = 0)
-    (h0 : 0 < p) : integralVPole z hz hv 0 h0 = -X := by
-  have ht : integralParameterTau z (Or.inr (by rw [hv]; norm_num)) 0 h0 = 0 := by
-    apply PadicInt.ext
-    simp [integralParameterTau, integralRational, parameterTau]
-  have hi : integralParameterInvPow z hz hv 0 = 1 := by
-    apply PadicInt.ext
-    simp [integralParameterInvPow, integralRational]
-  simp [integralVPole, ht, hi]
-
-def primeUPole (hp2 : p ≠ 2) (j : ℕ) (hj : j < p) : (ℤ_[p])[X] :=
-  integralUPole (primeParameter p) (primeParameter_unit hp2).1 (primeParameter_unit hp2).2 j hj
-
-def primeVPole (hp2 : p ≠ 2) (j : ℕ) (hj : j < p) : (ℤ_[p])[X] :=
-  integralVPole (primeParameter p) (primeParameter_unit hp2).1 (primeParameter_unit hp2).2 j hj
 
 end
 end Li2

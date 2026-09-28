@@ -32,15 +32,6 @@ theorem primeJet_same_product_expansion (p : ℕ) (a : Fin p)
   exact integerProductJet_expansion p i.val j.val _ _ _ _
     (primeJetPoly_own_expansion p ⟨a,i⟩) (primeJetPoly_own_expansion p ⟨a,j⟩)
 
-theorem primeProduct_jet_expansion (p : ℕ) (a : PrimeJet p) :
-    ∃ E : ℤ[X], (primeProduct p * primeJetPoly p a).comp
-      (primeDiscSubstitution p a.1) =
-      C ((p:ℤ)^(primeMultiplicity p a.1+a.2.val))*X^(primeMultiplicity p a.1+a.2.val)*
-        (C (primeLocalUnit p a.1 * primeLocalUnit p a.1)+C (p:ℤ)*E) := by
-  rw [mul_comp]
-  exact integerProductJet_expansion p _ _ _ _ _ _
-    (primeProduct_expansion p a.1) (primeJetPoly_own_expansion p a)
-
 theorem primeProduct_square_expansion (p : ℕ) (a : Fin p) :
     ∃ E : ℤ[X], (primeProduct p * primeProduct p).comp (primeDiscSubstitution p a) =
       C ((p:ℤ)^(primeMultiplicity p a+primeMultiplicity p a))*
@@ -61,41 +52,6 @@ theorem primeJet_disc_factor (p : ℕ) (a : PrimeJet p) (b : Fin p) :
     obtain ⟨A,hA⟩ := primeJetPoly_own_expansion p a
     exact ⟨C (primeLocalUnit p a.1)+C (p:ℤ)*A, by simpa [primeJetLocalOrder] using hA⟩
   · simpa [primeJetLocalOrder, he] using primeJetPoly_other_expansion p a b he
-
-def primeFullBasisLocalOrder (p : ℕ) (hp : 3 ≤ p) (b : Fin p) : Fin ((2*p-3)+1) → ℕ :=
-  Fin.cases (primeMultiplicity p b) (fun i => primeJetLocalOrder p (primeJetEquiv p hp i) b)
-
-def primeOriginalBasisLocalOrder (p : ℕ) (hp : 3 ≤ p) (i : Fin (2*(p-1))) (b : Fin p) : ℕ :=
-  primeFullBasisLocalOrder p hp b (finCongr (primeBasisSize p hp) i)
-
-theorem primeFullBasis_disc_factor (p : ℕ) (hp : 3 ≤ p) (i : Fin ((2*p-3)+1)) (b : Fin p) :
-    ∃ A : ℤ[X], (primeFullBasis p hp i).comp (primeDiscSubstitution p b) =
-      C ((p:ℤ)^(primeFullBasisLocalOrder p hp b i))*X^(primeFullBasisLocalOrder p hp b i)*A := by
-  refine Fin.cases ?_ ?_ i
-  · obtain ⟨A,hA⟩ := primeProduct_expansion p b
-    exact ⟨C (primeLocalUnit p b)+C (p:ℤ)*A,hA⟩
-  · intro j
-    exact primeJet_disc_factor p (primeJetEquiv p hp j) b
-
-theorem primeOriginalBasis_disc_factor (p : ℕ) (hp : 3 ≤ p)
-    (i : Fin (2*(p-1))) (b : Fin p) :
-    ∃ A : ℤ[X], (primeOriginalBasis p hp i).comp (primeDiscSubstitution p b) =
-      C ((p:ℤ)^(primeOriginalBasisLocalOrder p hp i b))*
-      X^(primeOriginalBasisLocalOrder p hp i b)*A :=
-  primeFullBasis_disc_factor p hp _ b
-
-theorem primeOriginalBasisProduct_disc_factor (p : ℕ) (hp : 3 ≤ p)
-    (i j : Fin (2*(p-1))) (b : Fin p) :
-    ∃ A : ℤ[X], (primeOriginalBasis p hp i * primeOriginalBasis p hp j).comp
-      (primeDiscSubstitution p b) =
-      C ((p:ℤ)^(primeOriginalBasisLocalOrder p hp i b+primeOriginalBasisLocalOrder p hp j b))*
-      X^(primeOriginalBasisLocalOrder p hp i b+primeOriginalBasisLocalOrder p hp j b)*A := by
-  obtain ⟨A,hA⟩ := primeOriginalBasis_disc_factor p hp i b
-  obtain ⟨B,hB⟩ := primeOriginalBasis_disc_factor p hp j b
-  refine ⟨A*B,?_⟩
-  rw [mul_comp,hA,hB]
-  simp only [pow_add,C_mul]
-  ring
 
 end
 end Li2

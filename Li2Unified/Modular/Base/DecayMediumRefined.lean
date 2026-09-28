@@ -146,22 +146,6 @@ theorem class_sum_ge' {p n c : ℕ} (hp : 0 < p) (hc : c < p) :
     · exact le_rfl
   linarith
 
-/-- **Refined per-prime bound.** -/
-theorem Qtilde_GV_prime' (p : ℕ) [hp : Fact p.Prime] (hp2 : p ≠ 2) (hp3 : p ≠ 3) (n : ℕ)
-    (hK : 4*n < p^2) :
-    GV p (Qtilde n) (∑ c : Fin p, ∑ k ∈ Finset.range (Ccl p (4*n) c - Ncl p n c),
-      min (Wslot p n c k + 2 * k) 0 + normVal p n) := by
-  have hp0 := hp.out.pos
-  have hraw := raw_Q_GV p hp2 hp3 n hK
-  have hsc : VG p (Sn n ^ (2*n) / Fn n) (normVal p n) :=
-    VG.of_eq _ fun _ => by rw [normScale_val p hK]
-  have h := (GV.C hsc).mul hraw
-  rw [Qtilde]
-  refine h.mono ?_
-  have hsum := Finset.sum_le_sum (s := Finset.univ) fun (c : Fin p) _ =>
-    class_sum_ge' (p := p) (n := n) (c := c) hp0 c.isLt
-  linarith
-
 end
 end Li2
 

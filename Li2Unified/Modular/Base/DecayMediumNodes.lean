@@ -78,22 +78,6 @@ theorem rscale_val (p : ℕ) [hp : Fact p.Prime] {n K j : ℕ} (hnj : n < j) (hj
     padicValRat_factorial_small p (by omega : K - j < p^2)]
   ring
 
-/-- tau_j has v_p >= -2 when j <= K < p^2 and p != 2. -/
-lemma tau_VG_small (p : ℕ) [Fact p.Prime] (hp2 : p ≠ 2) {j K : ℕ} (hjK : j ≤ K) (hK : K < p^2) :
-    VG p (tau j) (-2) := by
-  have h := tau_VG_of_ne_two p hp2 hjK
-  refine h.mono ?_
-  have : Nat.log p K ≤ 1 := by
-    rcases Nat.eq_zero_or_pos K with h0 | h0
-    · simp [h0]
-    · exact Nat.lt_succ_iff.mp (Nat.log_lt_of_lt_pow (by omega) hK)
-  have : ((Nat.log p K : ℕ) : ℚ) ≤ 1 := by exact_mod_cast this
-  linarith
-
-lemma negTwo_pow_unit (p : ℕ) [Fact p.Prime] (hp2 : p ≠ 2) (j : ℕ) : VG p ((-2:ℚ)^j) 0 := by
-  have : ((-2:ℚ)^j) = (((-2:ℤ)^j : ℤ) : ℚ) := by push_cast; ring
-  rw [this]; exact VG.intCast _
-
 end
 end Li2
 

@@ -22,11 +22,6 @@ def restrictedU (μ : ℕ → ℤ_[p]) (f : PowerSeries ℤ_[p]) : ℤ_[p] :=
 def restrictedV (μ : ℕ → ℤ_[p]) (f : PowerSeries ℤ_[p]) : ℤ_[p] :=
   restrictedMoment (derivativeMoments μ) f
 
-theorem restrictedU_summable (μ : ℕ → ℤ_[p]) (f : PowerSeries ℤ_[p])
-    (hf : PowerSeries.IsRestricted 1 f) :
-    Summable (fun n => PowerSeries.coeff n f*((n+1:ℕ)*μ n)) :=
-  restrictedMoment_summable _ _ hf
-
 theorem restrictedV_summable (μ : ℕ → ℤ_[p]) (f : PowerSeries ℤ_[p])
     (hf : PowerSeries.IsRestricted 1 f) :
     Summable (fun n => PowerSeries.coeff n f*derivativeMoments μ n) :=
@@ -54,14 +49,6 @@ theorem restrictedV_derivative (μ : ℕ → ℤ_[p]) (f : PowerSeries ℤ_[p])
   rw [PowerSeries.coeff_derivative]
   push_cast
   ring
-
-theorem restrictedU_norm_le (μ : ℕ → ℤ_[p]) (f : PowerSeries ℤ_[p]) (B : ℝ)
-    (hB : ∀ n, ‖PowerSeries.coeff n f‖ ≤ B) : ‖restrictedU μ f‖ ≤ B :=
-  restrictedMoment_norm_le _ _ _ hB
-
-theorem restrictedV_norm_le (μ : ℕ → ℤ_[p]) (f : PowerSeries ℤ_[p]) (B : ℝ)
-    (hB : ∀ n, ‖PowerSeries.coeff n f‖ ≤ B) : ‖restrictedV μ f‖ ≤ B :=
-  restrictedMoment_norm_le _ _ _ hB
 
 end
 end Li2

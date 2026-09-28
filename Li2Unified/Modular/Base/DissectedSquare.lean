@@ -28,32 +28,6 @@ lemma rational_nonmultiple_sub_prime (n : ℕ) (hn : ¬p ∣ n) :
       rfl
     simpa only [Int.cast_sub, Int.cast_natCast] using hh
 
-def dissectedSquare (hp2 : p ≠ 2) (hp3 : p ≠ 3) (Y : ℚ_[p]) (m : ℕ) : ℚ_[p] :=
-  if hm : p ∣ m+1 then
-    (p:ℚ_[p])⁻¹^2*(primeParameter p:ℚ_[p])⁻¹^((m+1)/p-1)*
-      (Y-(parameterTau (primeParameter p) ((m+1)/p-1):ℚ_[p]))
-  else
-    (padicParameterG (primeParameter p) (primeParameter_moment_integral hp2 hp3)
-      (padicReciprocalSeries (((m+1:ℕ):ℚ)-(p:ℚ))
-        (rational_nonmultiple_sub_prime (m+1) hm).1
-        (rational_nonmultiple_sub_prime (m+1) hm).2 2) : ℚ_[p])
-
-lemma dissectedSquare_nonmatching (hp2 : p ≠ 2) (hp3 : p ≠ 3) (Y : ℚ_[p])
-    (m : ℕ) (hm : ¬p ∣ m+1) :
-    dissectedSquare hp2 hp3 Y m =
-      (padicParameterG (primeParameter p) (primeParameter_moment_integral hp2 hp3)
-        (padicReciprocalSeries (((m+1:ℕ):ℚ)-(p:ℚ))
-          (rational_nonmultiple_sub_prime (m+1) hm).1
-          (rational_nonmultiple_sub_prime (m+1) hm).2 2) : ℚ_[p]) := by
-  simp only [dissectedSquare, dif_neg hm]
-
-lemma dissectedSquare_matching (hp2 : p ≠ 2) (hp3 : p ≠ 3) (Y : ℚ_[p])
-    (m : ℕ) (hm : p ∣ m+1) :
-    dissectedSquare hp2 hp3 Y m =
-      (p:ℚ_[p])⁻¹^2*(primeParameter p:ℚ_[p])⁻¹^((m+1)/p-1)*
-        (Y-(parameterTau (primeParameter p) ((m+1)/p-1):ℚ_[p])) := by
-  simp only [dissectedSquare, dif_pos hm]
-
 lemma padicReciprocalSeries_congr (d d' : ℚ) (he : d = d')
     (hd : d ≠ 0) (hv : padicValRat p d = 0)
     (hd' : d' ≠ 0) (hv' : padicValRat p d' = 0) (e : ℕ) :

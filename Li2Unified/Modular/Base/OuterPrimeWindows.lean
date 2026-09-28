@@ -141,73 +141,12 @@ lemma outer_prime_square {p n : ℕ} (hp5 : 5 ≤ p) (hnp : n < p) :
     4*n < p^2 := by
   nlinarith [Nat.mul_le_mul_right p hp5]
 
-lemma Qtilde_GV_outer_raw (p : ℕ) [Fact p.Prime] (hp5 : 5 ≤ p) {n : ℕ}
-    (hnp : n < p) : GV p (Qtilde n) (outerRawBound p n + normVal p n) := by
-  exact Qtilde_GV_prime' p (by omega) (by omega) n (outer_prime_square hp5 hnp)
-
-lemma Qtilde_GV_outer_w1 (p : ℕ) [Fact p.Prime] (hp5 : 5 ≤ p) {n : ℕ}
-    (hnp : n < p) (hlo : 3*p ≤ 4*n) : GV p (Qtilde n) (3*(n:ℚ) - p + 2) := by
-  have h := Qtilde_GV_outer_raw p hp5 hnp
-  have hL : (4*n)/p = 3 := div_eq_of_bounds (by omega) (by omega)
-  rw [outerRawBound_w1 hnp hlo, normVal_outer_low hnp (by omega) hL] at h
-  convert h using 1 <;> ring
-
-lemma Qtilde_GV_outer_w2 (p : ℕ) [Fact p.Prime] (hp5 : 5 ≤ p) {n : ℕ}
-    (hnp : n < p) (hlo : 4*n < 3*p) (hhi : 2*p ≤ 3*n) : GV p (Qtilde n) (5*(p:ℚ) - 7*n + 1) := by
-  have h := Qtilde_GV_outer_raw p hp5 hnp
-  have hL : (4*n)/p = 2 := div_eq_of_bounds (by omega) (by omega)
-  rw [outerRawBound_w2 hnp hlo hhi, normVal_outer_low hnp (by omega) hL] at h
-  convert h using 1 <;> ring
-
-lemma Qtilde_GV_outer_w3 (p : ℕ) [Fact p.Prime] (hp5 : 5 ≤ p) {n : ℕ}
-    (hnp : n < p) (hlo : 3*n < 2*p) (hhi : p ≤ 2*n) : GV p (Qtilde n) ((p:ℚ) - n + 1) := by
-  have h := Qtilde_GV_outer_raw p hp5 hnp
-  have hL : (4*n)/p = 2 := div_eq_of_bounds (by omega) (by omega)
-  rw [outerRawBound_w3 hnp hlo hhi, normVal_outer_low hnp (by omega) hL] at h
-  convert h using 1 <;> ring
-
-lemma Qtilde_GV_outer_w4 (p : ℕ) [Fact p.Prime] (hp5 : 5 ≤ p) {n : ℕ}
-    (hnp : n < p) (hlo : 2*n < p) (hhi : p ≤ 3*n) : GV p (Qtilde n) (3*(p:ℚ) - 7*n - 1) := by
-  have h := Qtilde_GV_outer_raw p hp5 hnp
-  have hL : (4*n)/p = 1 := div_eq_of_bounds (by omega) (by omega)
-  rw [outerRawBound_w4 hnp hlo hhi, normVal_outer_high hnp (by omega) hL] at h
-  convert h using 1 <;> ring
-
-lemma Qtilde_GV_outer_w5 (p : ℕ) [Fact p.Prime] (hp5 : 5 ≤ p) {n : ℕ}
-    (hnp : n < p) (hlo : 3*n < p) (hhi : p ≤ 4*n) : GV p (Qtilde n) (2*(n:ℚ) - 1) := by
-  have h := Qtilde_GV_outer_raw p hp5 hnp
-  have hL : (4*n)/p = 1 := div_eq_of_bounds (by omega) (by omega)
-  rw [outerRawBound_w5 hnp hlo hhi, normVal_outer_high hnp (by omega) hL] at h
-  convert h using 1 <;> ring
-
 def outerPrimeBound (p n : ℕ) : ℚ :=
   if 3*p ≤ 4*n then 3*(n:ℚ)-p+2
   else if 2*p ≤ 3*n then 5*(p:ℚ)-7*n+1
   else if p ≤ 2*n then (p:ℚ)-n+1
   else if p ≤ 3*n then 3*(p:ℚ)-7*n-1
   else 2*(n:ℚ)-1
-
-theorem Qtilde_GV_outer (p : ℕ) [Fact p.Prime] (hp5 : 5 ≤ p) {n : ℕ}
-    (hnp : n < p) (hpn : p ≤ 4*n) :
-    GV p (Qtilde n) (outerPrimeBound p n) := by
-  unfold outerPrimeBound
-  split_ifs with h1 h2 h3 h4
-  · exact Qtilde_GV_outer_w1 p hp5 hnp h1
-  · exact Qtilde_GV_outer_w2 p hp5 hnp (by omega) h2
-  · exact Qtilde_GV_outer_w3 p hp5 hnp (by omega) h3
-  · exact Qtilde_GV_outer_w4 p hp5 hnp (by omega) h4
-  · exact Qtilde_GV_outer_w5 p hp5 hnp (by omega) hpn
-
-theorem Qtilde_GV_outer_or_large (p : ℕ) [Fact p.Prime] (hp5 : 5 ≤ p) {n : ℕ}
-    (hnp : n < p) :
-    GV p (Qtilde n) (if p ≤ 4*n then outerPrimeBound p n else 0) := by
-  split_ifs with hpn
-  · exact Qtilde_GV_outer p hp5 hnp hpn
-  · exact Qtilde_GV_large p (by omega) (by omega) (by omega)
-
-theorem Qtilde_GV_outer_zero (p : ℕ) [Fact p.Prime] (hp5 : 5 ≤ p) :
-    GV p (Qtilde 0) 0 := by
-  exact Qtilde_GV_large p (by omega) (by omega) (by omega)
 
 end
 end Li2

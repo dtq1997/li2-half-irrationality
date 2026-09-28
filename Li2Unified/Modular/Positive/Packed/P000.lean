@@ -31,13 +31,9 @@ noncomputable section
     Summable (fun k : ℕ => (lam : ℝ)^(k+1) / ((k : ℝ)+1)^2) :=
   summable_abs_iff.mp (summable_abs_r lam hlam)
 
- theorem r_negHalf : r (-1/2) = Li2.li2NegHalf := by
-  norm_num [r, Li2.li2NegHalf]
-
 end
 end Li2Unified.ParameterFamily
 
 end
-
 
 end

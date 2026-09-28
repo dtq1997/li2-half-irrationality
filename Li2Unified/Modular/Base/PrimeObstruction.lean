@@ -57,24 +57,6 @@ theorem rational_nonzero_of_constant_reduction (P : ℤ[X]) (p : ℕ) [Fact p.Pr
     exact hmZ
   exact mul_ne_zero (pow_ne_zero _ hb) hc hprod
 
-/-- A prime p greater than the denominator and all exceptional primes is enough. -/
-theorem frequently_rational_nonzero_of_prime_reduction (P : ℕ → ℤ[X])
-    (hred : ∀ p : ℕ, p.Prime → 73 < p →
-      ∃ c : ZMod p, c ≠ 0 ∧ (P (p-1)).map (Int.castRingHom (ZMod p)) = C c)
-    (q : ℚ) : ∃ᶠ n in atTop, aeval (q : ℝ) (P n) ≠ 0 := by
-  rw [Filter.frequently_atTop]
-  intro N
-  obtain ⟨p, hpbig, hp⟩ := Nat.exists_infinite_primes (max (N+2) (max 74 (q.den+1)))
-  have h73 : 73 < p := by omega
-  have hden : q.den < p := by omega
-  have hN : N ≤ p-1 := by omega
-  letI : Fact p.Prime := ⟨hp⟩
-  obtain ⟨c, hc, hcp⟩ := hred p hp h73
-  refine ⟨p-1, hN, rational_nonzero_of_constant_reduction (P (p-1)) p c hc hcp q ?_⟩
-  intro hz
-  have hdvd : p ∣ q.den := (ZMod.natCast_eq_zero_iff _ _).mp hz
-  exact (not_le.mpr hden) (Nat.le_of_dvd q.den_pos hdvd)
-
 end Li2
 
 end

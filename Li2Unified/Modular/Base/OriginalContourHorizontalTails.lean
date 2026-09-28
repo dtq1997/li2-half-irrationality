@@ -62,39 +62,6 @@ lemma originalContour_sin_ne_zero_of_im_ne_zero {z : ℂ} (hz : z.im ≠ 0) :
       congrArg Complex.im hk
   exact hz ((mul_eq_zero.mp him).resolve_left Real.pi_ne_zero)
 
-lemma continuous_originalContourKernel_horizontal {t : ℝ} (ht : t ≠ 0) :
-    Continuous (fun x : ℝ => originalContourKernel ((x : ℂ) + (t : ℂ) * Complex.I)) := by
-  have hp : Continuous (fun x : ℝ => originalContourPower ((x : ℂ) + (t : ℂ) * Complex.I)) := by
-    unfold originalContourPower
-    fun_prop
-  have hs : Continuous (fun x : ℝ =>
-      Complex.sin ((Real.pi : ℂ) * ((x : ℂ) + (t : ℂ) * Complex.I))) := by fun_prop
-  change Continuous (fun x : ℝ =>
-    (Real.pi : ℂ) * originalContourPower ((x : ℂ) + (t : ℂ) * Complex.I) /
-      Complex.sin ((Real.pi : ℂ) * ((x : ℂ) + (t : ℂ) * Complex.I)))
-  exact (continuous_const.mul hp).div hs (fun x =>
-    originalContour_sin_ne_zero_of_im_ne_zero (by simpa using ht))
-
-lemma intervalIntegrable_originalContour_horizontal (d : ℕ) (F : ℚ[X])
-    (N : ℕ) (hN : 1 ≤ N) {t : ℝ} (ht : t ≠ 0) :
-    IntervalIntegrable (fun x : ℝ =>
-      originalContourKernel ((x : ℂ) + (t : ℂ) * Complex.I) *
-        deriv (originalContourG d F) ((x : ℂ) + (t : ℂ) * Complex.I))
-      volume (1 / 2) ((N : ℝ) + 1 / 2) := by
-  have hg : ContinuousOn
-      (fun x : ℝ => deriv (originalContourG d F) ((x : ℂ) + (t : ℂ) * Complex.I))
-      (Set.Icc (1 / 2) ((N : ℝ) + 1 / 2)) := by
-    intro x hx
-    have hz : 0 < ((x : ℂ) + (t : ℂ) * Complex.I).re := by
-      have hx0 : 0 < x := lt_of_lt_of_le (by norm_num) hx.1
-      simpa using hx0
-    have hp : ContinuousAt (fun s : ℝ => (s : ℂ) + (t : ℂ) * Complex.I) x := by fun_prop
-    exact ((analyticAt_originalContourG_deriv d F hz).continuousAt.comp
-      (f := fun s : ℝ => (s : ℂ) + (t : ℂ) * Complex.I) hp).continuousWithinAt
-  have hNR : (1 : ℝ) ≤ (N : ℝ) := by exact_mod_cast hN
-  exact ContinuousOn.intervalIntegrable_of_Icc (by linarith)
-    ((continuous_originalContourKernel_horizontal ht).continuousOn.mul hg)
-
 lemma originalContourKernel_norm_le_exp_of_re_nonneg (z : ℂ)
     (hz : 0 ≤ z.re) (ht : 1 ≤ |z.im|) :
     ‖originalContourKernel z‖ ≤ (4 * Real.pi) * Real.exp (-Real.pi * |z.im|) := by
@@ -170,67 +137,6 @@ lemma originalContour_horizontal_integrand_norm_le (d : ℕ) (F : ℚ[X])
       mul_le_mul hK (originalContourG_deriv_horizontal_norm_le d F N hN hx ht)
         (norm_nonneg _) (by positivity)
     _ = _ := by unfold originalContourHorizontalConstant; ring
-
-def originalContourHorizontalIntegral (d : ℕ) (F : ℚ[X]) (N : ℕ) (t : ℝ) : ℂ :=
-  ∫ x : ℝ in (1 / 2)..((N : ℝ) + 1 / 2),
-    originalContourKernel ((x : ℂ) + (t : ℂ) * Complex.I) *
-      deriv (originalContourG d F) ((x : ℂ) + (t : ℂ) * Complex.I)
-
-lemma originalContourHorizontalIntegral_norm_le (d : ℕ) (F : ℚ[X])
-    (N : ℕ) (hN : 1 ≤ N) {t : ℝ} (ht : 1 ≤ |t|) :
-    ‖originalContourHorizontalIntegral d F N t‖ ≤
-      (N : ℝ) * originalContourHorizontalConstant d F N *
-        |t| ^ (originalContourGDerivativeNumerator d F).natDegree * Real.exp (-Real.pi * |t|) := by
-  have hNR : (1 : ℝ) ≤ (N : ℝ) := by exact_mod_cast hN
-  have hab : (1 / 2 : ℝ) ≤ (N : ℝ) + 1 / 2 := by linarith
-  have hbound := intervalIntegral.norm_integral_le_of_norm_le_const
-    (a := (1 / 2 : ℝ)) (b := (N : ℝ) + 1 / 2)
-    (f := fun x : ℝ => originalContourKernel ((x : ℂ) + (t : ℂ) * Complex.I) *
-      deriv (originalContourG d F) ((x : ℂ) + (t : ℂ) * Complex.I))
-    (C := originalContourHorizontalConstant d F N *
-      |t| ^ (originalContourGDerivativeNumerator d F).natDegree * Real.exp (-Real.pi * |t|))
-    (fun x hx => originalContour_horizontal_integrand_norm_le d F N hN
-      (by rw [Set.uIoc_of_le hab] at hx; exact ⟨hx.1.le, hx.2⟩) ht)
-  have hlen : |((N : ℝ) + 1 / 2) - 1 / 2| = (N : ℝ) := by
-    rw [add_sub_cancel_right, abs_of_nonneg (Nat.cast_nonneg N)]
-  calc
-    ‖originalContourHorizontalIntegral d F N t‖ ≤
-        (originalContourHorizontalConstant d F N *
-          |t| ^ (originalContourGDerivativeNumerator d F).natDegree *
-          Real.exp (-Real.pi * |t|)) * |((N : ℝ) + 1 / 2) - 1 / 2| := hbound
-    _ = _ := by rw [hlen]; ring
-
-lemma tendsto_originalContour_horizontal_bound (d : ℕ) (F : ℚ[X]) (N : ℕ) :
-    Tendsto (fun T : ℝ => ((N : ℝ) * originalContourHorizontalConstant d F N) *
-        (T ^ (originalContourGDerivativeNumerator d F).natDegree * Real.exp (-Real.pi * T)))
-      atTop (𝓝 0) := by
-  have h : Tendsto (fun T : ℝ =>
-      T ^ (originalContourGDerivativeNumerator d F).natDegree * Real.exp (-Real.pi * T))
-      atTop (𝓝 0) := by
-    simpa only [Real.rpow_natCast] using
-      tendsto_rpow_mul_exp_neg_mul_atTop_nhds_zero
-        ((originalContourGDerivativeNumerator d F).natDegree : ℝ) Real.pi Real.pi_pos
-  simpa only [mul_zero] using h.const_mul ((N : ℝ) * originalContourHorizontalConstant d F N)
-
-theorem tendsto_originalContourHorizontalIntegral_atTop
-    (d : ℕ) (F : ℚ[X]) (N : ℕ) (hN : 1 ≤ N) :
-    Tendsto (originalContourHorizontalIntegral d F N) atTop (𝓝 0) := by
-  apply squeeze_zero_norm' _ (tendsto_originalContour_horizontal_bound d F N)
-  filter_upwards [eventually_ge_atTop (1 : ℝ)] with T hT
-  have hT0 : 0 ≤ T := by linarith
-  have h := originalContourHorizontalIntegral_norm_le d F N hN
-    (t := T) (by simpa only [abs_of_nonneg hT0] using hT)
-  simpa only [abs_of_nonneg hT0, mul_assoc] using h
-
-theorem tendsto_originalContourHorizontalIntegral_neg_atTop
-    (d : ℕ) (F : ℚ[X]) (N : ℕ) (hN : 1 ≤ N) :
-    Tendsto (fun T : ℝ => originalContourHorizontalIntegral d F N (-T)) atTop (𝓝 0) := by
-  apply squeeze_zero_norm' _ (tendsto_originalContour_horizontal_bound d F N)
-  filter_upwards [eventually_ge_atTop (1 : ℝ)] with T hT
-  have hT0 : 0 ≤ T := by linarith
-  have h := originalContourHorizontalIntegral_norm_le d F N hN
-    (t := -T) (by simpa only [abs_neg, abs_of_nonneg hT0] using hT)
-  simpa only [abs_neg, abs_of_nonneg hT0, mul_assoc] using h
 
 end
 end Li2

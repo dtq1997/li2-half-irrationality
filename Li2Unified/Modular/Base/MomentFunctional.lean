@@ -61,11 +61,6 @@ theorem polynomialMoment_series (f : ℚ[X]) : (polynomialMoment f:ℝ) =
   · intro k _
     exact (summable_realMoment k).mul_left _
 
-theorem polynomialMoment_derivative_series (f : ℚ[X]) : (polynomialMoment f:ℝ) =
-    ∑' m : ℕ, (-1/2:ℝ)^(m+1) *
-      ((f.map (Rat.castHom ℝ))*X).derivative.eval ((m:ℝ)+1) := by
-  simpa only [polynomialIntegrand_derivative] using polynomialMoment_series f
-
 end
 end Li2
 

@@ -47,21 +47,6 @@ theorem padicParameterG_shift (z : ℚ) (hz0 : VG p z 0)
   simpa only [PadicInt.coe_mul, PadicInt.coe_sub, PadicInt.coe_pow, PadicInt.coe_sum,
     integralRational, mul_comm] using! h
 
-theorem primeRestrictedShift (hp2 : p ≠ 2) (hp3 : p ≠ 3)
-    (f : PowerSeries ℤ_[p]) (hf : PowerSeries.IsRestricted 1 f) (k : ℕ) :
-    (padicParameterG (primeParameter p) (primeParameter_moment_integral hp2 hp3)
-      (restrictedTranslate (k:ℤ_[p]) f) : ℚ_[p]) =
-      ((padicParameterG (primeParameter p) (primeParameter_moment_integral hp2 hp3) f : ℚ_[p])-
-        ∑ j ∈ Finset.range k, (primeParameter p:ℚ_[p])^(j+1)*
-          (restrictedEval ((j:ℤ_[p])+1) f : ℚ_[p]))/(primeParameter p:ℚ_[p])^k := by
-  have hu := primeParameter_unit hp2
-  have hz0 : VG p (primeParameter p) 0 := Or.inr (by rw [hu.2]; norm_num)
-  have hz1 : primeParameter p ≠ 1 := by
-    intro h
-    apply (primeParameter_one_sub_unit hp2 hp3).1
-    rw [h, sub_self]
-  exact padicParameterG_shift _ hz0 _ hz1 hu.1 f hf k
-
 end
 end Li2
 

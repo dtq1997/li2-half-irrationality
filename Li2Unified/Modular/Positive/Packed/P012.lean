@@ -98,10 +98,6 @@ def generalNonmatchingQuotient (n : ℕ) (a : Fin p) : PowerSeries ℤ_[p] :=
   (Li2.integralNonmatchingDiscPolynomial (p := p) a.val n : PowerSeries ℤ_[p]) ^ 3 *
     Li2.nonmatchingDiscInverse (p := p) a.val (4 * n) a.isLt
 
-def generalNonmatchingConstant (n : ℕ) (a : Fin p) : ℤ_[p] :=
-  Li2.nonmatchingDiscConstant (p := p) a.val n ^ 3 *
-    Li2.nonmatchingInverseConstant (p := p) a.val (4 * n) a.isLt
-
 theorem generalNonmatchingQuotient_restricted (n : ℕ) (a : Fin p) :
     PowerSeries.IsRestricted 1 (generalNonmatchingQuotient n a) := by
   exact PowerSeries.isRestricted.mul 1
@@ -115,17 +111,7 @@ theorem generalNonmatchingQuotient_cleared (n : ℕ) (a : Fin p) :
   unfold generalNonmatchingQuotient
   rw [mul_assoc, Li2.nonmatchingDiscInverse_identity, mul_one]
 
-theorem generalNonmatchingQuotient_constant_error (n : ℕ) (a : Fin p) (k : ℕ) :
-    ‖PowerSeries.coeff k
-      (generalNonmatchingQuotient n a -
-        PowerSeries.C (generalNonmatchingConstant n a))‖ ≤ ‖(p : ℤ_[p])‖ := by
-  apply Li2.powerSeries_mul_constant_error_bound _ _ _ _ _ (norm_nonneg _)
-  · exact Li2.powerSeries_pow_constant_error_bound _ _ _ (norm_nonneg _)
-      (Li2.nonmatchingDiscPolynomial_constant_error a.val n) 3
-  · exact Li2.nonmatchingDiscInverse_constant_error a.val (4 * n) a.isLt
-
 #print axioms generalNonmatchingQuotient_cleared
-#print axioms generalNonmatchingQuotient_constant_error
 
 end
 end Li2Unified.Proofs.Hermite
@@ -213,6 +199,5 @@ end
 end Li2Unified.Proofs.Hermite
 
 end
-
 
 end

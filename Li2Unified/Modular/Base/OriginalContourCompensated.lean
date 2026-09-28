@@ -74,36 +74,6 @@ lemma originalKernelCompensated_eq (m : ℕ) (f : ℂ → ℂ)
   rw [originalKernelRegularized_eq m z hz, originalKernelRegularized_nat]
   field_simp [sub_ne_zero.mpr hz] <;> ring
 
-lemma originalKernelCompensated_nat (m : ℕ) (f : ℂ → ℂ) :
-    originalKernelCompensated m f (m : ℂ) =
-      deriv (fun w : ℂ => originalKernelRegularized m w * f w) (m : ℂ) := by
-  exact dslope_same _ _
-
-lemma originalKernelCompensated_eventuallyEq (m : ℕ) (f : ℂ → ℂ) :
-    originalKernelCompensated m f =ᶠ[𝓝[≠] (m : ℂ)]
-      (fun z : ℂ => originalContourKernel z * f z -
-        ((-1 / 2 : ℂ) ^ m * f (m : ℂ)) / (z - (m : ℂ))) := by
-  filter_upwards [self_mem_nhdsWithin] with z hz
-  exact originalKernelCompensated_eq m f hz
-
-def originalContourDerivativeCompensated (d : ℕ) (F : ℚ[X]) (m : ℕ) : ℂ → ℂ :=
-  originalKernelCompensated m (deriv (originalContourG d F))
-
-lemma analyticAt_originalContourDerivativeCompensated (d : ℕ) (F : ℚ[X])
-    (m : ℕ) (hm : 0 < m) :
-    AnalyticAt ℂ (originalContourDerivativeCompensated d F m) (m : ℂ) := by
-  apply analyticAt_originalKernelCompensated
-  apply analyticAt_originalContourG_deriv
-  simpa only [Complex.natCast_re] using (show (0 : ℝ) < (m : ℝ) by exact_mod_cast hm)
-
-lemma originalContourDerivativeCompensated_eq (d : ℕ) (F : ℚ[X]) (m : ℕ)
-    {z : ℂ} (hz : z ≠ (m : ℂ)) :
-    originalContourDerivativeCompensated d F m z =
-      originalContourKernel z * deriv (originalContourG d F) z -
-        ((-1 / 2 : ℂ) ^ m * deriv (originalContourG d F) (m : ℂ)) /
-          (z - (m : ℂ)) :=
-  originalKernelCompensated_eq m (deriv (originalContourG d F)) hz
-
 /-- Local extension near m after subtracting all finite principal parts. -/
 def originalKernelFiniteLocalRemainder (S : Finset ℕ) (m : ℕ)
     (f : ℂ → ℂ) (z : ℂ) : ℂ :=
@@ -131,14 +101,6 @@ lemma originalKernelFiniteLocalRemainder_eq (S : Finset ℕ) (m : ℕ)
     ← Finset.add_sum_erase S
       (fun j => ((-1 / 2 : ℂ) ^ j * f (j : ℂ)) / (z - (j : ℂ))) hm]
   ring
-
-lemma analyticAt_originalContourFiniteLocalRemainder (d : ℕ) (F : ℚ[X])
-    (S : Finset ℕ) (m : ℕ) (hm : 0 < m) :
-    AnalyticAt ℂ
-      (originalKernelFiniteLocalRemainder S m (deriv (originalContourG d F))) (m : ℂ) := by
-  apply analyticAt_originalKernelFiniteLocalRemainder
-  apply analyticAt_originalContourG_deriv
-  simpa only [Complex.natCast_re] using (show (0 : ℝ) < (m : ℝ) by exact_mod_cast hm)
 
 end
 end Li2

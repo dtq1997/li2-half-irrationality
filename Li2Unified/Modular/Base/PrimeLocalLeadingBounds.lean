@@ -30,44 +30,6 @@ theorem integralPolynomial_rational_constant_bound
     · simpa [hn] using hv
     · simp [coeff_C, hn]
 
-theorem primeDiscPole_U_substituted_rational (hp4 : 3 < p) (a : ℕ) (ha : a < p)
-    (f : PowerSeries ℤ_[p]) (hf : PowerSeries.IsRestricted 1 f)
-    (r : Fin 4 → ℤ_[p]) (eta : ℤ_[p]) (q : ℚ_[p])
-    (hq : ‖(((primePoleU hp4 f r).eval 0:ℤ_[p]):ℚ_[p])-q‖ ≤ ‖(p:ℚ_[p])‖) (n : ℕ) :
-    ‖(((primePoleU hp4
-        (integralPoleMulRegular (primePoleCenters p) (primeDiscUnit a ha) f r)
-        (integralPoleMulResidue (primePoleCenters p) (primeDiscUnit a ha) r)).comp
-          (C ((p:ℤ_[p])^2)*(X-C eta))).map (algebraMap ℤ_[p] ℚ_[p]) -
-      C ((primeDiscUnitConstant a ha:ℚ_[p])*q)).coeff n‖ ≤ ‖(p:ℚ_[p])‖ := by
-  apply integralPolynomial_rational_constant_bound
-    _ (primeDiscUnitConstant a ha*(primePoleU hp4 f r).eval 0) _
-    (primeDiscPole_U_substituted_leading hp4 a ha f hf r eta)
-  have hmul : ‖(primeDiscUnitConstant a ha:ℚ_[p]) *
-      ((((primePoleU hp4 f r).eval 0:ℤ_[p]):ℚ_[p])-q)‖ ≤ ‖(p:ℚ_[p])‖ := by
-    rw [norm_mul]
-    exact (mul_le_mul (PadicInt.norm_le_one _) hq (norm_nonneg _) (by norm_num)).trans_eq
-      (one_mul _)
-  simpa only [PadicInt.coe_mul, mul_sub] using hmul
-
-theorem primeDiscPole_V_substituted_rational (hp4 : 3 < p) (a : ℕ) (ha : a < p)
-    (f : PowerSeries ℤ_[p]) (hf : PowerSeries.IsRestricted 1 f)
-    (r : Fin 4 → ℤ_[p]) (eta : ℤ_[p]) (q : ℚ_[p])
-    (hq : ‖(((primePoleV hp4 f r).eval 0:ℤ_[p]):ℚ_[p])-q‖ ≤ ‖(p:ℚ_[p])‖) (n : ℕ) :
-    ‖(((primePoleV hp4
-        (integralPoleMulRegular (primePoleCenters p) (primeDiscUnit a ha) f r)
-        (integralPoleMulResidue (primePoleCenters p) (primeDiscUnit a ha) r)).comp
-          (C ((p:ℤ_[p])^2)*(X-C eta))).map (algebraMap ℤ_[p] ℚ_[p]) -
-      C ((primeDiscUnitConstant a ha:ℚ_[p])*q)).coeff n‖ ≤ ‖(p:ℚ_[p])‖ := by
-  apply integralPolynomial_rational_constant_bound
-    _ (primeDiscUnitConstant a ha*(primePoleV hp4 f r).eval 0) _
-    (primeDiscPole_V_substituted_leading hp4 a ha f hf r eta)
-  have hmul : ‖(primeDiscUnitConstant a ha:ℚ_[p]) *
-      ((((primePoleV hp4 f r).eval 0:ℤ_[p]):ℚ_[p])-q)‖ ≤ ‖(p:ℚ_[p])‖ := by
-    rw [norm_mul]
-    exact (mul_le_mul (PadicInt.norm_le_one _) hq (norm_nonneg _) (by norm_num)).trans_eq
-      (one_mul _)
-  simpa only [PadicInt.coe_mul, mul_sub] using hmul
-
 end
 end Li2
 

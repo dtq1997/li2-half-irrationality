@@ -15,26 +15,6 @@ namespace Li2
 noncomputable section
 variable {p : ℕ} [hp : Fact p.Prime]
 
-theorem primeDiscPole_U_error (hp4 : 3 < p) (a : ℕ) (ha : a < p)
-    (f : PowerSeries ℤ_[p]) (hf : PowerSeries.IsRestricted 1 f)
-    (r : Fin 4 → ℤ_[p]) (n : ℕ) :
-    ‖(primePoleU hp4
-        (integralPoleMulRegular (primePoleCenters p) (primeDiscUnit a ha) f r)
-        (integralPoleMulResidue (primePoleCenters p) (primeDiscUnit a ha) r) -
-      C (primeDiscUnitConstant a ha)*primePoleU hp4 f r).coeff n‖ ≤ ‖(p:ℤ_[p])‖ :=
-  restrictedPoleFunctional_multiplier_error _ primePoleCenters_injective _ _ _ _
-    (primeDiscUnit_isRestricted a ha) hf r _ _ (norm_nonneg _) (primeDiscUnit_constant_error a ha) n
-
-theorem primeDiscPole_V_error (hp4 : 3 < p) (a : ℕ) (ha : a < p)
-    (f : PowerSeries ℤ_[p]) (hf : PowerSeries.IsRestricted 1 f)
-    (r : Fin 4 → ℤ_[p]) (n : ℕ) :
-    ‖(primePoleV hp4
-        (integralPoleMulRegular (primePoleCenters p) (primeDiscUnit a ha) f r)
-        (integralPoleMulResidue (primePoleCenters p) (primeDiscUnit a ha) r) -
-      C (primeDiscUnitConstant a ha)*primePoleV hp4 f r).coeff n‖ ≤ ‖(p:ℤ_[p])‖ :=
-  restrictedPoleFunctional_multiplier_error _ primePoleCenters_injective _ _ _ _
-    (primeDiscUnit_isRestricted a ha) hf r _ _ (norm_nonneg _) (primeDiscUnit_constant_error a ha) n
-
 theorem primeDiscLowPole_cleared (hp4 : 3 < p) (a : ℕ) (ha : a < p) :
     integralPoleNumerator (primePoleCenters p)
       (integralPoleMulRegular (primePoleCenters p) (primeDiscUnit a ha) 0

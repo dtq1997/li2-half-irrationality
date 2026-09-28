@@ -46,13 +46,6 @@ theorem hasSum_positive_residues (d : ℕ) (F : ℚ[X]) :
   simpa only [Nat.cast_add, Nat.cast_one] using!
     positive_residueTerm_ofReal d F (k + 1) (by omega)
 
-theorem numeratorFunctional_positive_complex_derivative_series (d : ℕ) (F : ℚ[X]) :
-    (numeratorFunctional lambda d F).eval₂ (Rat.castHom ℂ) (value : ℂ) =
-      ∑' k : ℕ, (1 / 2 : ℂ) ^ (k + 1) *
-        deriv (Li2.originalContourG d F) ((k + 1 : ℕ) : ℂ) := by
-  rw [Li2.originalComplexEval_ofReal]
-  exact (hasSum_positive_residues d F).tsum_eq.symm
-
 theorem tendsto_positive_residueSum (d : ℕ) (F : ℚ[X]) :
     Tendsto
       (fun N : ℕ => ∑ m ∈ Finset.Icc 1 N,
@@ -73,6 +66,5 @@ end
 end Li2Unified.Proofs.Contour
 
 end
-
 
 end

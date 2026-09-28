@@ -30,26 +30,6 @@ def integralParameterMoment (z : ℚ) (hz : VG p (z/(1-z)) 0) (k : ℕ) : ℤ_[p
 def padicParameterG (z : ℚ) (hz : VG p (z/(1-z)) 0) (f : PowerSeries ℤ_[p]) : ℤ_[p] :=
   restrictedMoment (integralParameterMoment z hz) f
 
-theorem padicParameterG_summable (z : ℚ) (hz : VG p (z/(1-z)) 0)
-    (f : PowerSeries ℤ_[p]) (hf : PowerSeries.IsRestricted 1 f) :
-    Summable (fun n => PowerSeries.coeff n f * integralParameterMoment z hz n) :=
-  restrictedMoment_summable _ _ hf
-
-theorem padicParameterG_polynomial (z : ℚ) (hz : VG p (z/(1-z)) 0) (P : ℤ[X]) :
-    (padicParameterG z hz ((P.map (Int.castRingHom ℤ_[p])) : PowerSeries ℤ_[p]) : ℚ_[p]) =
-      (parameterG z (P.map (Int.castRingHom ℚ)) : ℚ_[p]) := by
-  unfold padicParameterG
-  rw [restrictedMoment_polynomial]
-  unfold parameterG Polynomial.sum
-  rw [support_map_of_injective P (show Function.Injective (Int.castRingHom ℤ_[p]) from Int.cast_injective),
-    support_map_of_injective P (show Function.Injective (Int.castRingHom ℚ) from Int.cast_injective)]
-  rw [PadicInt.coe_sum, Rat.cast_sum]
-  apply Finset.sum_congr rfl
-  intro k _
-  simp only [coeff_map, Int.coe_castRingHom, PadicInt.coe_mul, PadicInt.coe_intCast,
-    integralParameterMoment, integralRational, Rat.cast_mul, Rat.cast_intCast]
-  rfl
-
 end
 end Li2
 

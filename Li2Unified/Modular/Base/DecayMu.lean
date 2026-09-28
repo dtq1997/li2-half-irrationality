@@ -58,32 +58,6 @@ lemma binomMoment_succ (k : ℕ) :
   simp only [binomMoment, Gm] at h ⊢
   linarith
 
-theorem binomMoment_VG_three (k : ℕ) : VG 3 (binomMoment k) (-((k:ℚ)+1)) := by
-  letI : Fact (Nat.Prime 3) := ⟨by decide⟩
-  have h3 : VG 3 (3 : ℚ)⁻¹ (-1) := by
-    right
-    have hv : padicValRat 3 (3 : ℚ) = 1 := padicValRat.self (p := 3) (by decide)
-    rw [padicValRat.inv, hv]
-    norm_num
-  induction k with
-  | zero =>
-    rw [binomMoment_zero]
-    simpa [div_eq_mul_inv] using h3.neg
-  | succ k ih =>
-    have he : binomMoment (k+1) = (-binomMoment k - (binomPoly (k+1)).eval 1) * (3:ℚ)⁻¹ := by
-      have := binomMoment_succ k
-      field_simp
-      linarith
-    have hv : VG 3 ((binomPoly (k+1)).eval 1) (-((k:ℚ)+1)) := by
-      have := binomPoly_eval_int_VG 3 (k+1) 1
-      exact (by simpa using this : VG 3 ((binomPoly (k+1)).eval 1) 0).mono
-        (by have := (Nat.cast_nonneg k : (0:ℚ) ≤ k); linarith)
-    have ht := (ih.neg.sub hv).mul h3
-    rw [he]
-    refine ht.mono ?_
-    push_cast
-    linarith
-
 /-- G(g) through the Newton coefficients of g at 0. -/
 theorem Gm_newton {g : ℚ[X]} {d : ℕ} (hg : g.natDegree ≤ d) :
     Gm g = ∑ k ∈ Finset.range (d+1), newtonCoeff g 0 k * binomMoment k := by
@@ -94,19 +68,6 @@ theorem Gm_newton {g : ℚ[X]} {d : ℕ} (hg : g.natDegree ≤ d) :
   intro k _
   rw [parameterG_C_mul]
   rfl
-
-/-- If g(0),...,g(d) have v_3 >= r then v_3(G g) >= r-(d+1). -/
-theorem Gm_VG_three {g : ℚ[X]} {d : ℕ} (hg : g.natDegree ≤ d) (r : ℚ)
-    (hv : ∀ i ≤ d, VG 3 (g.eval (i:ℚ)) r) : VG 3 (Gm g) (r - ((d:ℚ)+1)) := by
-  letI : Fact (Nat.Prime 3) := ⟨by decide⟩
-  rw [Gm_newton hg]
-  apply VG.sum
-  intro k hk
-  have hk' : k ≤ d := by simp at hk; omega
-  have hc := newtonCoeff_VG 3 0 r k (fun i hi => by simpa using hv i (hi.trans hk'))
-  refine (hc.mul (binomMoment_VG_three k)).mono ?_
-  have : (k:ℚ) ≤ d := by exact_mod_cast hk'
-  linarith
 
 /-- Derivative values at integers from values at all integers. -/
 theorem derivative_eval_VG (p : ℕ) [Fact p.Prime] {f : ℚ[X]} {e : ℕ} (hf : f.natDegree ≤ e)
@@ -130,29 +91,6 @@ theorem derivative_eval_VG (p : ℕ) [Fact p.Prime] {f : ℚ[X]} {e : ℕ} (hf :
     push_cast at h2
     simpa using h1.mul h2
   simpa [sub_eq_add_neg] using hc.mul hinv
-
-/-- **U bound at 3.** If every integer value of q has v_3 >= r and deg q <= e, then
-v_3(polynomialMoment q) >= r - log_3 e - (e+1). -/
-theorem polynomialMoment_VG_three {q : ℚ[X]} {e : ℕ} (hq : q.natDegree ≤ e) (r : ℚ)
-    (hv : ∀ m : ℤ, VG 3 (q.eval (m:ℚ)) r) :
-    VG 3 (polynomialMoment q) (r - (Nat.log 3 e : ℚ) - ((e:ℚ)+1)) := by
-  letI : Fact (Nat.Prime 3) := ⟨by decide⟩
-  rw [polynomialMoment_eq_Gm]
-  have hdeg : (derivative (X * q)).natDegree ≤ e := by
-    refine (natDegree_derivative_le _).trans ?_
-    have := natDegree_mul_le (p := (X:ℚ[X])) (q := q)
-    rw [natDegree_X] at this
-    omega
-  apply Gm_VG_three hdeg
-  intro i _
-  have hd := derivative_eval_VG 3 hq r hv (i : ℤ)
-  rw [derivative_mul, derivative_X, one_mul, eval_add, eval_mul, eval_X]
-  have hq' : VG 3 (q.eval (i:ℚ)) (r - (Nat.log 3 e : ℚ)) := by
-    have := hv (i : ℤ)
-    push_cast at this
-    exact this.mono (by have := (Nat.cast_nonneg (Nat.log 3 e) : (0:ℚ) ≤ _); linarith)
-  push_cast at hd
-  simpa using hq'.add ((VG.natCast (p := 3) i).mul hd |>.mono (by simp))
 
 end
 end Li2

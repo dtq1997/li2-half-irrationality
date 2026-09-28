@@ -81,49 +81,6 @@ lemma originalContourG_deriv_right_norm_le (d : ℕ) (F : ℚ[X]) (N : ℕ) (y :
   exact (div_le_self (norm_nonneg _) (one_le_pow₀ hD)).trans
     (originalComplexEval_right_norm_le (originalContourGDerivativeNumerator d F) N y)
 
-lemma continuous_originalContourG_deriv_right (d : ℕ) (F : ℚ[X]) (N : ℕ) :
-    Continuous (fun y : ℝ => deriv (originalContourG d F)
-      ((N : ℂ) + originalContourPoint y)) := by
-  apply continuous_iff_continuousAt.mpr
-  intro y
-  have hz : 0 < ((N : ℂ) + originalContourPoint y).re := by
-    rw [originalRightContourPoint_re]
-    positivity
-  exact (analyticAt_originalContourG_deriv d F hz).continuousAt.comp
-    (f := fun t : ℝ => (N : ℂ) + originalContourPoint t)
-    (continuous_const.add continuous_originalContourPoint).continuousAt
-
-lemma integrable_originalRightKernel_mul_G_deriv (d : ℕ) (F : ℚ[X]) (N : ℕ) :
-    Integrable (fun y : ℝ => originalContourKernel ((N : ℂ) + originalContourPoint y) *
-      deriv (originalContourG d F) ((N : ℂ) + originalContourPoint y)) := by
-  exact integrable_originalRightKernel_mul
-    (originalRightCoefficientNormSum_nonneg (originalContourGDerivativeNumerator d F))
-    (originalContourGDerivativeNumerator d F).natDegree N
-    (fun y : ℝ => deriv (originalContourG d F) ((N : ℂ) + originalContourPoint y))
-    (continuous_originalContourG_deriv_right d F N).aestronglyMeasurable
-    (originalContourG_deriv_right_norm_le d F N)
-
-lemma originalRightKernel_G_deriv_absoluteIntegral_tendsto_zero (d : ℕ) (F : ℚ[X]) :
-    Tendsto (fun N : ℕ => ∫ y : ℝ,
-        ‖originalContourKernel ((N : ℂ) + originalContourPoint y) *
-          deriv (originalContourG d F) ((N : ℂ) + originalContourPoint y)‖)
-      atTop (𝓝 0) := by
-  exact originalRightKernel_absoluteIntegral_tendsto_zero
-    (originalRightCoefficientNormSum_nonneg (originalContourGDerivativeNumerator d F))
-    (originalContourGDerivativeNumerator d F).natDegree
-    (fun N y => deriv (originalContourG d F) ((N : ℂ) + originalContourPoint y))
-    (fun N => (continuous_originalContourG_deriv_right d F N).aestronglyMeasurable)
-    (originalContourG_deriv_right_norm_le d F)
-
-lemma originalRightKernel_G_deriv_integral_tendsto_zero (d : ℕ) (F : ℚ[X]) :
-    Tendsto (fun N : ℕ => ∫ y : ℝ,
-        originalContourKernel ((N : ℂ) + originalContourPoint y) *
-          deriv (originalContourG d F) ((N : ℂ) + originalContourPoint y))
-      atTop (𝓝 0) := by
-  apply tendsto_zero_iff_norm_tendsto_zero.mpr
-  exact squeeze_zero (fun N => norm_nonneg _) (fun N => norm_integral_le_integral_norm _)
-    (originalRightKernel_G_deriv_absoluteIntegral_tendsto_zero d F)
-
 end
 end Li2
 

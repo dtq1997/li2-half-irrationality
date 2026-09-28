@@ -41,14 +41,12 @@ def starMoment (m : ℕ) (F : ℚ[X]) : ℂ :=
   ∫ v : Fin 3 × ℝ, density v.1 v.2 *
     Li2.originalComplexQuotient m F (point v.1 v.2) ∂contourMeasure
 
-
 def starPartition (n : ℕ) : ℝ :=
   ∫ v : Fin (2*n) → (Fin 3 × ℝ),
     ‖(Matrix.of fun i j : Fin (2*n) => (point (v j).1 (v j).2)^i.val).det‖^2 *
       (∏ i : Fin (2*n), ‖density (v i).1 (v i).2 *
         Li2.originalComplexQuotient (4*n) ((Li2.D n)^3) (point (v i).1 (v i).2)‖)
     ∂(Measure.pi fun _ : Fin (2*n) => contourMeasure)
-
 
 def baseRay (x : ℝ) : ℝ :=
   4*Real.log 4-1 + 3*(∫ t in (0:ℝ)..1, Real.log (t+x)) -
@@ -95,7 +93,6 @@ theorem starScale_map (c : ℝ) (hc : 0 < c) :
   rw [hm, contourMeasure, ← Measure.map_prod_map _ _ measurable_id (measurable_const_mul c),
     Measure.map_id, positiveRay_map_mul c hc, Measure.prod_smul_right]
 
-
 theorem starScale_pi_map (h : ℕ) (c : ℝ) (hc : 0 < c) :
     Measure.map (fun v : Fin h → Fin 3 × ℝ => fun i => starScale c (v i))
       (Measure.pi fun _ : Fin h => contourMeasure) =
@@ -118,27 +115,10 @@ theorem starScale_pi_map (h : ℕ) (c : ℝ) (hc : 0 < c) :
   simp only [Measure.smul_apply, smul_eq_mul, Finset.prod_mul_distrib,
     Finset.prod_const, Finset.card_univ, Fintype.card_fin]
 
-theorem integral_starScale_pi (h : ℕ) (c : ℝ) (hc : 0 < c)
-    (f : (Fin h → Fin 3 × ℝ) → ℝ) (hf : Measurable f) :
-    (∫ v, f v ∂(Measure.pi fun _ : Fin h => contourMeasure)) =
-      c^h * (∫ v, f (fun i => starScale c (v i))
-        ∂(Measure.pi fun _ : Fin h => contourMeasure)) := by
-  have hm : Measurable (fun v : Fin h → Fin 3 × ℝ => fun i => starScale c (v i)) := by
-    unfold starScale
-    fun_prop
-  have hi := integral_map hm.aemeasurable hf.aestronglyMeasurable
-    (μ := Measure.pi fun _ : Fin h => contourMeasure)
-  rw [starScale_pi_map h c hc, integral_smul_measure] at hi
-  simp only [ENNReal.toReal_pow, ENNReal.toReal_ofReal (inv_nonneg.mpr hc.le),
-    smul_eq_mul] at hi
-  rw [← hi, ← mul_assoc, ← mul_pow, mul_inv_cancel₀ hc.ne', one_pow, one_mul]
-
 end
 end Li2Unified.Proofs.Measure
 #print axioms Li2Unified.Proofs.Measure.positiveRay_map_mul
 #print axioms Li2Unified.Proofs.Measure.starScale_map
-
-#print axioms Li2Unified.Proofs.Measure.integral_starScale_pi
 
 end
 
@@ -331,6 +311,5 @@ end
 end Li2Unified.Proofs.Contour
 
 end
-
 
 end

@@ -111,12 +111,6 @@ theorem outerWindowSum_eq_table (n : ℕ) :
   simp_rw [outerWindowRowSum_eq_table]
   exact outerWindow_intervals_partition n (fun p => (Li2.outerPrimeBound p n : ℝ)*cPrime p)
 
-theorem outerPrimeBound_sum_nat_tendsto :
-    Tendsto (fun n : ℕ =>
-      (∑ p ∈ Finset.Ioc n (4*n), ((Li2.outerPrimeBound p n : ℝ)*cPrime p))/(n : ℝ)^2)
-      atTop (𝓝 (7/2 : ℝ)) := by
-  simpa only [← outerWindowSum_eq_table] using! outerWindowSum_nat_tendsto
-
 end
 end Li2.PrimeSums
 

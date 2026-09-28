@@ -16,42 +16,6 @@ namespace Li2Unified.Proofs.Hermite
 noncomputable section
 variable {p : ℕ} [Fact p.Prime]
 
-/-- The actual rational pole factor, evaluated at the independently constructed
-local window origin and its common affine coordinate. -/
-theorem parameterPoleFactor_eval₂ (lam : ℚ)
-    (hzne : lam ≠ 0) (hz0 : Li2.VG p (lam ^ p) 0)
-    (hz : Li2.VG p (lam ^ p / (1 - lam ^ p)) 0)
-    (hz1 : lam ^ p ≠ 1) (Y : ℚ_[p]) (j : ℕ) :
-    (C ((j : ℚ) * lam⁻¹ ^ j) *
-        (X - C (Li2.parameterTau lam j)) : ℚ[X]).eval₂
-          (Rat.castHom ℚ_[p])
-          (parameterPoleEta lam hz + (p : ℚ_[p])⁻¹ ^ 2 * Y) =
-      (j : ℚ_[p]) * parameterPoleWindow lam hz Y j := by
-  rw [parameterPoleWindow_affine lam hzne hz0 hz hz1 Y j]
-  simp only [eval₂_mul, eval₂_C, eval₂_sub, eval₂_X,
-    Rat.coe_castHom, Rat.cast_mul, Rat.cast_pow, Rat.cast_inv]
-  push_cast
-  ring
-
-/-- The pole contribution in the literal parameter numerator, with its original
-residues and original finite pole range, equals a sum of local windows. -/
-theorem rawPoleFiber_eval₂ (lam : ℚ) (m : ℕ) (a : Fin p) (F : ℚ[X])
-    (hzne : lam ≠ 0) (hz0 : Li2.VG p (lam ^ p) 0)
-    (hz : Li2.VG p (lam ^ p / (1 - lam ^ p)) 0)
-    (hz1 : lam ^ p ≠ 1) (Y : ℚ_[p]) :
-    (rawPoleFiber lam m p a F).eval₂ (Rat.castHom ℚ_[p])
-        (parameterPoleEta lam hz + (p : ℚ_[p])⁻¹ ^ 2 * Y) =
-      ∑ j ∈ (Finset.Icc 1 m).filter (fun j => j % p = a.val),
-        ((F.eval (-(j : ℚ)) /
-          ∏ l ∈ (Finset.Icc 1 m).erase j, ((l : ℚ) - (j : ℚ)) : ℚ) : ℚ_[p]) *
-          ((j : ℚ_[p]) * parameterPoleWindow lam hz Y j) := by
-  unfold rawPoleFiber
-  rw [eval₂_finset_sum]
-  apply Finset.sum_congr rfl
-  intro j hj
-  rw [eval₂_mul, eval₂_C, Rat.coe_castHom]
-  rw [parameterPoleFactor_eval₂ lam hzne hz0 hz hz1 Y j]
-
 /-- A single affine coordinate shared by every pole disc. -/
 def parameterPoleShiftY (lam : ℚ)
     (hz : Li2.VG p (lam ^ p / (1 - lam ^ p)) 0)
@@ -68,63 +32,6 @@ theorem parameterPoleShiftY_recover (lam : ℚ)
     exact_mod_cast (Fact.out : p.Prime).ne_zero
   field_simp [hp]
   ring
-
-theorem parameterPoleFactor_eval₂_at (lam : ℚ)
-    (hzne : lam ≠ 0) (hz0 : Li2.VG p (lam ^ p) 0)
-    (hz : Li2.VG p (lam ^ p / (1 - lam ^ p)) 0)
-    (hz1 : lam ^ p ≠ 1) (x : ℚ_[p]) (j : ℕ) :
-    (C ((j : ℚ) * lam⁻¹ ^ j) *
-        (X - C (Li2.parameterTau lam j)) : ℚ[X]).eval₂
-          (Rat.castHom ℚ_[p]) x =
-      (j : ℚ_[p]) * parameterPoleWindow lam hz
-        (parameterPoleShiftY lam hz x) j := by
-  simpa only [parameterPoleShiftY_recover] using
-    (parameterPoleFactor_eval₂ lam hzne hz0 hz hz1
-      (parameterPoleShiftY lam hz x) j)
-
-theorem rawPoleFiber_eval₂_at (lam : ℚ) (m : ℕ) (a : Fin p) (F : ℚ[X])
-    (hzne : lam ≠ 0) (hz0 : Li2.VG p (lam ^ p) 0)
-    (hz : Li2.VG p (lam ^ p / (1 - lam ^ p)) 0)
-    (hz1 : lam ^ p ≠ 1) (x : ℚ_[p]) :
-    (rawPoleFiber lam m p a F).eval₂ (Rat.castHom ℚ_[p]) x =
-      ∑ j ∈ (Finset.Icc 1 m).filter (fun j => j % p = a.val),
-        ((F.eval (-(j : ℚ)) /
-          ∏ l ∈ (Finset.Icc 1 m).erase j, ((l : ℚ) - (j : ℚ)) : ℚ) : ℚ_[p]) *
-          ((j : ℚ_[p]) * parameterPoleWindow lam hz
-            (parameterPoleShiftY lam hz x) j) := by
-  simpa only [parameterPoleShiftY_recover] using
-    (rawPoleFiber_eval₂ lam m a F hzne hz0 hz hz1
-      (parameterPoleShiftY lam hz x))
-
-/-- The literal parameter numerator, including its polynomial quotient and all
-original residues, decomposed on the same affine coordinate. -/
-theorem numeratorFunctional_eval₂_local (lam : ℚ) (m : ℕ) (F : ℚ[X])
-    (hlam : |(lam : ℝ)| < 1) (hzne : lam ≠ 0)
-    (hz0 : Li2.VG p (lam ^ p) 0)
-    (hz : Li2.VG p (lam ^ p / (1 - lam ^ p)) 0)
-    (hz1 : lam ^ p ≠ 1) (x : ℚ_[p]) :
-    (Li2Unified.ParameterFamily.numeratorFunctional lam m F).eval₂
-        (Rat.castHom ℚ_[p]) x =
-      ∑ a : Fin p,
-        (
-        (polynomialFiber lam m p a F).eval₂ (Rat.castHom ℚ_[p]) x +
-          ∑ j ∈ (Finset.Icc 1 m).filter (fun j => j % p = a.val),
-            ((F.eval (-(j : ℚ)) /
-              ∏ l ∈ (Finset.Icc 1 m).erase j,
-                ((l : ℚ) - (j : ℚ)) : ℚ) : ℚ_[p]) *
-              ((j : ℚ_[p]) * parameterPoleWindow lam hz
-                (parameterPoleShiftY lam hz x) j)) := by
-  rw [numeratorFunctional_fiberwise lam m p hlam hzne
-    (Fact.out : p.Prime).pos F]
-  rw [eval₂_finset_sum]
-  apply Finset.sum_congr rfl
-  intro a ha
-  rw [localActualFunctional, eval₂_add,
-    rawPoleFiber_eval₂_at lam m a F hzne hz0 hz hz1 x]
-
-#print axioms parameterPoleFactor_eval₂_at
-#print axioms rawPoleFiber_eval₂_at
-#print axioms numeratorFunctional_eval₂_local
 
 end
 end Li2Unified.Proofs.Hermite
@@ -271,7 +178,6 @@ theorem parameter_original_pulled_polynomial_UV (z : ℚ) (hu : z ≠ 0 ∧ padi
         (((F /ₘ D m).comp (C (p:ℚ)*X-C (a.val:ℚ))).map (Rat.castHom ℚ_[p]) :
           PowerSeries ℚ_[p]) 0).eval Y = _
   rw [fieldParameterFourPoleU_polynomial, fieldParameterFourPoleV_polynomial]
-
 
 theorem parameter_original_pulled_simplePole_UV (z : ℚ)
     (hu : z ≠ 0 ∧ padicValRat p z = 0)
@@ -433,6 +339,5 @@ end
 end Li2Unified.Proofs.Hermite
 
 end
-
 
 end
