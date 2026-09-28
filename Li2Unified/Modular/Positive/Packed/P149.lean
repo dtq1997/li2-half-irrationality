@@ -407,7 +407,7 @@ def rayCover038Checked : Bool :=
   checkOne halfRayTerms ⟨19, 10⟩ rayCover038Data
 
 theorem rayCover038Checked_true : rayCover038Checked = true := by
-  exact checkOneFast_sound (by decide +kernel)
+  exact checkOne_of_fast (by decide +kernel) (by decide +kernel)
 
 end Li2Unified.Proofs.Potential.CompactAffine
 

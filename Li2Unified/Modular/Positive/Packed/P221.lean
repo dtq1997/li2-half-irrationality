@@ -400,7 +400,7 @@ noncomputable def triangleRow012 : RowData :=
 theorem triangleRow012_checked :
     checkTriangleRow ⟨⟨91, 100⟩, ⟨771500, 100000027⟩, false⟩
       (layersQ.drop 13) triangleRow012 = true := by
-  exact checkTriangleRowFast_sound (by decide +kernel)
+  exact checkTriangleRow_of_fast (by decide +kernel) (by decide +kernel)
 
 end Li2Unified.Proofs.Energy.CompactEnergy
 

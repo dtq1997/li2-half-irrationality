@@ -267,7 +267,7 @@ noncomputable def triangleRow020 : RowData :=
 theorem triangleRow020_checked :
     checkTriangleRow ⟨⟨21, 10⟩, ⟨2947820, 100000027⟩, false⟩
       (layersQ.drop 21) triangleRow020 = true := by
-  exact checkTriangleRowFast_sound (by decide +kernel)
+  exact checkTriangleRow_of_fast (by decide +kernel) (by decide +kernel)
 
 end Li2Unified.Proofs.Energy.CompactEnergy
 
@@ -513,7 +513,7 @@ noncomputable def triangleRow021 : RowData :=
 theorem triangleRow021_checked :
     checkTriangleRow ⟨⟨14, 5⟩, ⟨2013740, 100000027⟩, false⟩
       (layersQ.drop 22) triangleRow021 = true := by
-  exact checkTriangleRowFast_sound (by decide +kernel)
+  exact checkTriangleRow_of_fast (by decide +kernel) (by decide +kernel)
 
 end Li2Unified.Proofs.Energy.CompactEnergy
 
@@ -733,7 +733,7 @@ noncomputable def triangleRow022 : RowData :=
 theorem triangleRow022_checked :
     checkTriangleRow ⟨⟨7, 2⟩, ⟨1498080, 100000027⟩, false⟩
       (layersQ.drop 23) triangleRow022 = true := by
-  exact checkTriangleRowFast_sound (by decide +kernel)
+  exact checkTriangleRow_of_fast (by decide +kernel) (by decide +kernel)
 
 end Li2Unified.Proofs.Energy.CompactEnergy
 

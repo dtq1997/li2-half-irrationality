@@ -509,7 +509,7 @@ def upCover001Checked : Bool :=
   checkOne halfUpTerms ⟨19, 10⟩ upCover001Data
 
 theorem upCover001Checked_true : upCover001Checked = true := by
-  exact checkOneFast_sound (by decide +kernel)
+  exact checkOne_of_fast (by decide +kernel) (by decide +kernel)
 
 end Li2Unified.Proofs.Potential.CompactAffine
 

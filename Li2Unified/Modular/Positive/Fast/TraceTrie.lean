@@ -116,35 +116,37 @@ def checkStepWith (look : Nat → Option Step) (fresh : Bool) (domain : I) (s : 
       | _, _ => false
 
 /-- Binary trie keyed by the low `d` bits; values live at depth `d`. -/
-inductive Trie where
+inductive Trie (α : Type) where
   | nil
-  | node (v : Option Step) (l r : Trie)
+  | node (v : Option α) (l r : Trie α)
 
-def Trie.val : Trie → Option Step
+variable {α : Type}
+
+def Trie.val : Trie α → Option α
   | .nil => none
   | .node v _ _ => v
-def Trie.left : Trie → Trie
+def Trie.left : Trie α → Trie α
   | .nil => .nil
   | .node _ l _ => l
-def Trie.right : Trie → Trie
+def Trie.right : Trie α → Trie α
   | .nil => .nil
   | .node _ _ r => r
 
 /-- Structural in `d`, so the kernel reduces it on literals (no well-founded recursion). -/
-def Trie.find : Nat → Trie → Nat → Option Step
+def Trie.find : Nat → Trie α → Nat → Option α
   | 0, t, _ => t.val
   | d + 1, t, k => if k % 2 = 0 then find d t.left (k / 2) else find d t.right (k / 2)
 
-def Trie.insert : Nat → Trie → Nat → Step → Trie
+def Trie.insert : Nat → Trie α → Nat → α → Trie α
   | 0, t, _, s => .node (some s) t.left t.right
   | d + 1, t, k, s =>
       if k % 2 = 0 then .node t.val (insert d t.left (k / 2) s) t.right
       else .node t.val t.left (insert d t.right (k / 2) s)
 
-def trieLook (d : Nat) (t : Trie) (k : Nat) : Option Step :=
+def trieLook (d : Nat) (t : Trie α) (k : Nat) : Option α :=
   if k < 2 ^ d then t.find d k else none
 
-def fastGo (d : Nat) (domain : I) (t : Trie) : List Step → Bool
+def fastGo (d : Nat) (domain : I) (t : Trie Step) : List Step → Bool
   | [] => true
   | s :: ss =>
       decide (s.id < 2 ^ d) &&
@@ -164,13 +166,13 @@ theorem checkStep_eq_with (domain : I) (env : List Step) (s : Step) :
       checkStepWith (lookupStep env) (!(env.any (fun entry => entry.id == s.id))) domain s := by
   rfl
 
-theorem Trie.find_nil : ∀ d k, Trie.find d .nil k = none
+theorem Trie.find_nil : ∀ d k, Trie.find d (.nil : Trie α) k = none
   | 0, _ => rfl
   | d + 1, k => by
       unfold Trie.find
       split <;> exact Trie.find_nil d _
 
-theorem Trie.find_insert : ∀ (d : Nat) (t : Trie) (k k' : Nat) (s : Step),
+theorem Trie.find_insert : ∀ (d : Nat) (t : Trie α) (k k' : Nat) (s : α),
     k < 2 ^ d → k' < 2 ^ d →
       (t.insert d k s).find d k' = if k' = k then some s else t.find d k'
   | 0, t, k, k', s, hk, hk' => by
@@ -197,13 +199,13 @@ theorem Trie.find_insert : ∀ (d : Nat) (t : Trie) (k k' : Nat) (s : Step),
         by_cases h : k' / 2 = k / 2 <;> simp [h, e]
 
 /-- The trie represents `env` exactly, and every id in `env` is below `2^d`. -/
-def Rep (d : Nat) (t : Trie) (env : List Step) : Prop :=
+def Rep (d : Nat) (t : Trie Step) (env : List Step) : Prop :=
   (∀ k, k < 2 ^ d → t.find d k = lookupStep env k) ∧ ∀ e ∈ env, e.id < 2 ^ d
 
 theorem rep_nil (d : Nat) : Rep d .nil [] :=
   ⟨fun k _ => by simp [Trie.find_nil, lookupStep], fun _ h => by simp at h⟩
 
-theorem trieLook_eq {d : Nat} {t : Trie} {env : List Step} (h : Rep d t env) :
+theorem trieLook_eq {d : Nat} {t : Trie Step} {env : List Step} (h : Rep d t env) :
     trieLook d t = lookupStep env := by
   funext k
   unfold trieLook
@@ -225,7 +227,7 @@ theorem any_eq_isSome_find (env : List Step) (k : Nat) :
       simp only [List.any_cons, lookupStep, List.find?_cons] at ih ⊢
       cases h : (e.id == k) <;> simp [h, ih]
 
-theorem rep_insert {d : Nat} {t : Trie} {env : List Step} {s : Step}
+theorem rep_insert {d : Nat} {t : Trie Step} {env : List Step} {s : Step}
     (h : Rep d t env) (hs : s.id < 2 ^ d) :
     Rep d (t.insert d s.id s) (s :: env) := by
   refine ⟨fun k hk => ?_, fun e he => ?_⟩
@@ -240,7 +242,7 @@ theorem rep_insert {d : Nat} {t : Trie} {env : List Step} {s : Step}
     · exact h.2 e he'
 
 theorem fastGo_sound (d : Nat) (domain : I) :
-    ∀ (ss : List Step) (t : Trie) (env : List Step), Rep d t env →
+    ∀ (ss : List Step) (t : Trie Step) (env : List Step), Rep d t env →
       fastGo d domain t ss = true → checkGo domain env ss = true
   | [], _, _, _, _ => rfl
   | s :: ss, t, env, hrep, hgo => by
