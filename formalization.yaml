@@ -1,34 +1,164 @@
-# Submission metadata. Complete this port's verification before submission.
+# yaml-language-server: $schema=https://raw.githubusercontent.com/mathlib-initiative/formalization.yaml/main/schema/formalization.schema.json
 version: "v0.4"
+
 project:
   name: "Irrationality of Li₂(1/2)"
   description: >-
-    This project formalizes the irrationality of the real number
-    Li₂(1/2) = sum over n >= 1 of 2^(-n)/n^2. The selected theorem states
-    irrationality directly for the real infinite series, without additional
-    mathematical hypotheses. The Challenge uses the standard Mathlib
-    definitions of real numbers, infinite summation, and irrationality.
+    A Lean formalization of the irrationality of
+    Li₂(1/2) = Σ_{n≥1} 2^(-n)/n².
+    The proof is inspired by A. Fauzan's work on the irrationality of
+    ζ(5) and builds on Moritz Firsching's Lean formalization in mo271/Zeta5.
+    The central idea is to establish the irrationality of a real number r
+    by constructing a sequence of integer polynomials P_n whose values
+    P_n(r) decay rapidly as n tends to infinity, while for every rational
+    q, P_n(q) ≠ 0 for infinitely many n. Analytic umbral calculus was used
+    to find suitable polynomials Q_n with rational coefficients.
+    Random matrix theory provides rapid decay of Q_n(r) as n tends to
+    infinity. Estimates of p-adic valuations, together with the prime
+    number theorem, ensure that the values P_n(r) of the corresponding
+    primitive integer polynomials also decay rapidly as n tends to
+    infinity, completing the proof.
+    Similar methods may apply to other values Li₂(1/n), but those cases
+    are not included here.
+    The compared theorem depends on propext, Classical.choice and
+    Quot.sound and on nothing else, and there is no sorry outside the
+    one deliberate hole in Challenge.lean.
   authors:
     - "Qian Tang"
   responsible_maintainers:
     - "Qian Tang"
   license: "Apache-2.0"
+
 classification:
   arxiv: ["math.NT"]
-  msc2020: ["11J72"]
+  msc2020: ["11J72", "33B30"]
+
+status:
+  scope: >-
+    Complete, with no unproved step. Formalized: Li₂(1/2) ∉ ℚ, stated in
+    Challenge.lean as
+    Irrational (∑' k : ℕ, (1/2 : ℝ) ^ (k + 1) / ((k : ℝ) + 1) ^ 2), which is
+    the series Σ_{n≥1} 2^(−n)/n² written with index k = n − 1. Nothing is
+    assumed from the literature.
+  sorry_count: 0
+  sorry_in_definitions: 0
+  axioms: ["propext", "Quot.sound", "Classical.choice"]
+  main_results:
+    - declaration: "li2_one_half_irrational"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Quot.sound", "Classical.choice"]
+      comparator_config: "comparator.json"
+      literature_dependencies: []
+
+fidelity:
+  divergences: >-
+    The formal statement expresses Li₂(1/2) by its defining real series,
+    with the summation index shifted from n ≥ 1 to k ≥ 0.
+    This is an original proof using methods adapted from the cited
+    work on ζ(5) and analytic umbral calculus.
+
 sources:
   - title: "Irrationality of Li₂(1/2)"
     authors: ["Qian Tang"]
-    contributors:
-      - name: "Siqi Liu"
-        role: "problem-proposer"
     id: "https://github.com/dtq1997/li2-half-irrationality"
     type: "original-proof"
     relationship: "other"
     note: >-
-      The author identifies this repository as the first presentation of the
-      result. This records the author's account of its origin; priority and
-      novelty have not been independently established.
+      The proof is first presented in this repository. A literature search
+      (2026-09-28: arXiv, zbMATH Open, Crossref, OpenAlex, the matlas
+      theorem search, GitHub, Formal Conjectures and the Palomar registry;
+      Google Scholar and MathSciNet were not searched) found no earlier
+      proof of the irrationality of Li₂(1/2). Novelty beyond that search is
+      not established.
+
+  - title: "ζ(5) is irrational"
+    authors: ["Aabir Fauzan"]
+    id: "https://doi.org/10.5281/zenodo.22826419"
+    type: "preprint"
+    relationship: "other"
+    note: >-
+      The proof adapts the polynomial approach of this
+      paper to Li₂(1/2).
+
+  - title: "The linear independence of 1, ζ(2), and L(2,χ₋₃)"
+    authors: ["Frank Calegari", "Vesselin Dimitrov", "Yunqing Tang"]
+    id: "https://arxiv.org/abs/2408.15403v2"
+    type: "preprint"
+    location: "Remark 2.8.2 and §15.2"
+    relationship: "background"
+    note: >-
+      Lists the irrationality of Li₂(1/2) among the unresolved cases
+      for Li₂(1/n).
+
+  - title: "Three Irrationality Results for the Dilogarithm: Rhin–Viola and Viola–Zudilin Constructions at −1/4, 1/5, and −1/3"
+    authors: ["Thomas Prellberg"]
+    id: "https://arxiv.org/abs/2609.06895v1"
+    type: "preprint"
+    location: "Theorem 1.1"
+    relationship: "background"
+    note: >-
+      Presents proofs of irrationality for Li₂(−1/4), Li₂(1/5)
+      and Li₂(−1/3).
+
+  - title: "Rational approximations to the dilogarithm"
+    authors: ["Masayoshi Hata"]
+    id: "https://doi.org/10.1090/S0002-9947-1993-1147401-5"
+    type: "paper"
+    location: "Trans. Amer. Math. Soc. 336 (1993), 363–387"
+    relationship: "background"
+
+  - title: "The permutation group method for the dilogarithm"
+    authors: ["Georges Rhin", "Carlo Viola"]
+    id: "https://doi.org/10.2422/2036-2145.2005.3.02"
+    type: "paper"
+    location: "Ann. Sc. Norm. Super. Pisa Cl. Sci. (5) 4 (2005), 389–437"
+    relationship: "background"
+    note: >-
+      Establishes the irrationality of Li₂(1/6).
+
+  - title: "Linear independence of 1, Li1 and Li2"
+    authors: ["Georges Rhin", "Carlo Viola"]
+    id: "https://doi.org/10.2140/moscow.2019.8.81"
+    type: "paper"
+    location: "Mosc. J. Comb. Number Theory 8 (2019), 81–96"
+    relationship: "background"
+
+  - title: "Linear independence of dilogarithmic values"
+    authors: ["Carlo Viola", "Wadim Zudilin"]
+    id: "https://doi.org/10.1515/crelle-2015-0030"
+    type: "paper"
+    location: "J. Reine Angew. Math. 736 (2018), 193–223"
+    relationship: "background"
+
+  - title: "Linear independence of polylogarithms at algebraic points"
+    authors: ["Raffaele Marcovecchio"]
+    type: "paper"
+    location: "Mosc. J. Comb. Number Theory 6 (2016), 208–232"
+    relationship: "background"
+
+  - title: "Irrationality of certain numbers that contain values of the di- and trilogarithm"
+    authors:
+      - "Khodabakhsh Hessami Pilehrood"
+      - "Tatiana Hessami Pilehrood"
+      - "Wadim Zudilin"
+    id: "https://doi.org/10.1007/s00209-006-0948-4"
+    type: "paper"
+    location: "Math. Z. 254 (2006), 299–313"
+    relationship: "background"
+    note: >-
+      Studies irrationality of combinations of dilogarithmic and
+      trilogarithmic values, including combinations evaluated at 1/2.
+
+  - title: "A Characterization of Umbral Calculus Inspired by Fractional Sums"
+    authors: ["Qian Tang"]
+    id: "https://arxiv.org/abs/2103.09117v1"
+    type: "preprint"
+    relationship: "other"
+    note: >-
+      The analytic umbral calculus developed in this paper was used to
+      find the polynomials Q_n in the proof.
+
 related_formalizations:
   - id: "https://github.com/mo271/Zeta5/tree/f19a1960609f7d38e7b63fd2acb05e6f60a7b741"
     relationship: "adapts"
@@ -39,35 +169,68 @@ related_formalizations:
   - id: "https://github.com/leanprover-community/mathlib4/pull/39232"
     relationship: "adapts"
     note: "The rectangular-contour residue development was adapted from commit cad38f70f5a649a40dbb3b334055a8e9aff69af5; see NOTICE."
-status:
-  scope: >-
-    The submitted claim is irrationality of Li₂(1/2), expressed as the real
-    series with index k >= 0 and term (1/2)^(k+1)/(k+1)^2. No claim about
-    other parameters, transcendence, or algebraic independence is submitted.
-  sorry_count: 0
-  sorry_in_definitions: 0
-  axioms: ["propext", "Quot.sound", "Classical.choice"]
+
+# ---------------------------------------------------------------------------
+# How this was produced.
+# ---------------------------------------------------------------------------
 automation:
   methods:
     - method: "agent"
-      models: ["opus5.5", "astra"]
-      framework: "OpenAI Codex; Anthropic Claude"
-      tool_setup: "Lean code written with substantial AI assistance, as disclosed in NOTICE."
-  notes: >-
-    The Lean code was written with substantial assistance from OpenAI Codex
-    and Anthropic Claude, under the author's direction. This disclosure
-    follows the repository's NOTICE. Model names are recorded as supplied
-    by the author. Costs are not reported.
-fidelity:
-  divergences: "The real-series theorem statement is unchanged from its first presentation in this repository."
+      models: ["GPT-6 Astra (OpenAI)", "Claude Opus 5.5 (Anthropic)"]
+      framework: "Codex; Claude Code"
+      role: >-
+        Wrote and revised the Lean formalization under the author's
+        direction: formalizing the polynomial construction, proving the
+        analytic and arithmetic estimates, and combining these results
+        into the proof of the main theorem. Adapted auxiliary Lean code
+        from the projects listed under related_formalizations, with
+        attribution recorded in NOTICE. Also wrote Challenge.lean and
+        Solution.lean, prepared comparator.json for the Palomar submission,
+        and ran compilation and proof checks.
+
 review:
   status: "self-assessed"
-  notes: "The author checked that the formal statement in Challenge.lean is the intended theorem. The author has not fully reviewed the rest of the Lean code; its correctness rests on the Lean kernel and the independent checkers (Comparator, nanoda)."
+  notes: >-
+    The correspondence between the intended mathematical claim and the
+    statement in Challenge.lean was checked by the author. The author
+    has not fully reviewed the rest of the Lean code. Every formalized
+    proof step is checked by Lean.
+
+# ---------------------------------------------------------------------------
+# Limitations, stated so that a reader can calibrate the claim.
+# ---------------------------------------------------------------------------
+known_gaps: []
+
+limitations:
+  - >-
+    The proof is presented as a Lean development. No informal write-up
+    accompanies it.
+  - >-
+    The compared theorem depends on propext, Classical.choice and
+    Quot.sound, and on nothing else. There is no sorry in Li2Unified/
+    or Solution.lean, and no project-defined axiom, native_decide,
+    unsafe declaration, @[implemented_by] or Float in the proof
+    development.
+  - >-
+    The proof includes finite computations carried out using
+    decide +kernel. These computations are checked by the Lean kernel.
+  - >-
+    Challenge.lean states the result with one deliberate sorry;
+    that is the Comparator convention, and Solution.lean supplies
+    the proof.
+
+# ---------------------------------------------------------------------------
+# How the stated problem corresponds to the Lean declaration.
+# ---------------------------------------------------------------------------
 alignment:
   statements:
-    - source: "The original result presented in this repository: irrationality of Li₂(1/2)"
+    - source: "Calegari–Dimitrov–Tang, Remark 2.8.2: irrationality of Li₂(1/n), case n = 2"
       lean: "li2_one_half_irrational"
-      module: "Solution"
+      module: "Challenge (statement), Solution (proof)"
       status: "author-checked"
-      note: "The Challenge and Solution use the same literal real-series statement."
-acknowledgements: "I thank Siqi Liu for suggesting the problem and for helpful discussions. I also thank FatFish for support and discussions."
+      note: >-
+        The statement of record, compared by Comparator. The Challenge and the
+        Solution state the same real series literally. Solution.lean obtains it
+        from Li2Unified.Instances.PosHalf.irrational_series.
+
+acknowledgements: "I thank Siqi Liu for suggesting the problem and for helpful discussions. I also thank YiXiang Wei for support and discussions."
